@@ -308,9 +308,10 @@ namespace RiPRipper
                 lThreadStart = new ThreadStart(lImageDownloader.GetImageGiga);
             else if (aImageUrl.IndexOf(@"imageswitch.com/") >= 0)
                 lThreadStart = new ThreadStart(lImageDownloader.GetImageSwitch);
-
-            else if (aImageUrl.IndexOf(@"imageupper.com/") >= 0)
-                lThreadStart = new ThreadStart(lImageDownloader.GetImageUpper);
+            else if (aImageUrl.IndexOf(@"imgchili.com/") >= 0)
+            {
+                lThreadStart = new ThreadStart(lImageDownloader.GetImgChili);
+            }
                 
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
                 return;

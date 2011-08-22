@@ -582,6 +582,15 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get ImgChili Download
+        /// </summary>
+        public void GetImgChili()
+        {
+            this.xService = new ImgChili(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Get ImageUpper Download
         /// </summary>
         public void GetImageUpper()

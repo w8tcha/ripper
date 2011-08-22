@@ -315,7 +315,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RiPRipper, Version=2.9.1.9, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:RiPRipper, Version=2.9.2.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_FA88457EE55742F68A0B69FFCF4D4955"
@@ -398,15 +398,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RiP-Ripper"
-        "ProductCode" = "8:{0586475E-E6A1-4132-80AF-0D2D7C0B91CE}"
-        "PackageCode" = "8:{69C4F329-C05C-40DB-8237-1FDA76B8FFED}"
+        "ProductCode" = "8:{DAD75634-F39A-4EF0-B4FD-26FA76C5CB22}"
+        "PackageCode" = "8:{B0BD9E56-C2AB-4F04-B0EE-45E50FBC02E9}"
         "UpgradeCode" = "8:{B12502F2-0AEB-4D49-8D11-ADEBAA730285}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.9.19"
+        "ProductVersion" = "8:2.9.20"
         "Manufacturer" = "8:WatchersNET"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://ripper.watchersnet.de"

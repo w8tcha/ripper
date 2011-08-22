@@ -678,6 +678,7 @@ namespace RiPRipper
                     userSettings.bSubDirs = false;
                     userSettings.bDownInSepFolder = false;
                 }
+
                 if (!bParseAct)
                 {
                     EnqueueJob();
@@ -724,14 +725,16 @@ namespace RiPRipper
 
             EnqueueJob();
         }
+
+
         /// <summary>
         /// Enqueue Job
         /// </summary>
-        private void EnqueueJob()
+        private void EnqueueJob ()
         {
-            if (!IsValidJob())
+            if (!this.IsValidJob())
             {
-                UnlockControls();
+                this.UnlockControls();
                 return;
             }
 
@@ -740,46 +743,50 @@ namespace RiPRipper
 
             if (string.IsNullOrEmpty(sXmlUrl))
             {
-                UnlockControls();
+                this.UnlockControls();
                 return;
             }
 
             // Check Post is Ripped?!
             if (sXmlUrl.Contains("dpver=2&postid=") && userSettings.bSavePids)
             {
-                if (IsPostAlreadyRipped(sXmlUrl.Substring(sXmlUrl.IndexOf("&postid=") + 8)))
+                if (this.IsPostAlreadyRipped(sXmlUrl.Substring(sXmlUrl.IndexOf("&postid=") + 8)))
                 {
-                    DialogResult result = TopMostMessageBox.Show(rm.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = TopMostMessageBox.Show(this.rm.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result != DialogResult.Yes)
                     {
-                        UnlockControls();
+                        this.UnlockControls();
                         return;
                     }
                 }
             }
 
             ///////////////////////////////////////////////
-            LockControls();
+            this.LockControls();
             ///////////////////////////////////////////////
 
             if (mIsIndexChk.Checked)
             {
                 // Parse Job as Index Thread
-                EnqueueIndexThread(sXmlUrl);
+                this.EnqueueIndexThread(sXmlUrl);
             }
             else
             {
                 if (userSettings.bDownInSepFolder && sXmlUrl.Contains("threadid"))
                 {
-                    EnqueueThreadToPost(sXmlUrl);
+                    this.EnqueueThreadToPost(sXmlUrl);
                 }
                 else
                 {
-                    EnqueueThreadOrPost(sXmlUrl);
+                    this.EnqueueThreadOrPost(sXmlUrl);
                 }
             }
+
+
+            this.UnlockControls();
         }
+
         /// <summary>
         /// Check if Job is OK
         /// </summary>
@@ -899,8 +906,8 @@ namespace RiPRipper
        Environment.OSVersion.Version.Major >= 6 &&
        Environment.OSVersion.Version.Minor >= 1)
             {
-                windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
+                this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
             }
 #endif
 
@@ -915,15 +922,14 @@ namespace RiPRipper
                Environment.OSVersion.Version.Major >= 6 &&
                Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        windowsTaskbar.SetProgressValue(20, 100);
-                        windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                        this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                        this.windowsTaskbar.SetProgressValue(20, 100);
+                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
 
                     // Unlock Controls
-                    UnlockControls();
-                    //
+                    this.UnlockControls();
 
                     return;
                 }
@@ -939,22 +945,18 @@ namespace RiPRipper
                         Environment.OSVersion.Version.Major >= 6 &&
                         Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        windowsTaskbar.SetProgressValue(20, 100);
-                        windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                        this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                        this.windowsTaskbar.SetProgressValue(20, 100);
+                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
 
                     // Unlock Controls
-                    UnlockControls();
-                    //
+                    this.UnlockControls();
 
                     return;
                 }
             }
-
-            //g_sComposedURI = aXmlUrl;
-            ///////
 
             while (GetPostsWorker.IsBusy)
             {
@@ -1131,6 +1133,7 @@ namespace RiPRipper
         }
 
         private List<ImageInfo> arlstIndxs;
+
         /// <summary>
         /// Get All Post of a Thread and Parse them as new Job
         /// </summary>
@@ -1208,35 +1211,37 @@ namespace RiPRipper
                 continue;
             }
         }
+
         /// <summary>
         /// Timer thats fires up the LogicCode
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void TmrPageUpdateElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            //if (bWorking || mJobsList.Count > 0)
-            if (bWorking && !bParseAct || mJobsList.Count > 0 && !bParseAct)
+            ////if (bWorking || mJobsList.Count > 0)
+            if (this.bWorking && !this.bParseAct || this.mJobsList.Count > 0 && !this.bParseAct)
             {
-                LogicCode();
+                this.LogicCode();
             }
 
-            if (StatusLabelInfo.Text.Equals(rm.GetString("StatusLabelInfo")) &&
-               // !bWorking &&
-                //!bParseAct &&
-                mJobsList.Count.Equals(0) &&
-                mCurrentJob == null
-                )
+            if (this.StatusLabelInfo.Text.Equals(this.rm.GetString("StatusLabelInfo")) &&
+                this.mJobsList.Count.Equals(0) &&
+                this.mCurrentJob == null)
             {
-                IdleRipper();
+                this.IdleRipper();
             }
 
-            if (!bParseAct && File.Exists("ExtractUrls.txt") /*&&
-                !GetPostsWorker.IsBusy && !GetIdxsWorker.IsBusy*/)
+            if (!this.bParseAct && File.Exists("ExtractUrls.txt"))
             {
-                GetTxtUrls("ExtractUrls.txt");
+                this.GetTxtUrls("ExtractUrls.txt");
             }
         }
+
         /*
         /// <summary>
         /// Close Ripper on Timer Idle
@@ -1316,7 +1321,7 @@ namespace RiPRipper
                         }
 #endif
                         // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
-                        ProcessNextJob();
+                        this.ProcessNextJob();
                     }
                     else if (mCurrentJob == null && mJobsList.Count.Equals(0))
                     {
@@ -2593,8 +2598,7 @@ namespace RiPRipper
         }
         private void GetPostsWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            //bParseAct = true;
-            ThrdGetPosts(Convert.ToString(e.Argument));
+            this.ThrdGetPosts(Convert.ToString(e.Argument));
         }
 
         private void GetPostsWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -2604,7 +2608,6 @@ namespace RiPRipper
 
         private void GetIdxsWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            //bParseAct = true;
             ThrdGetIndexes(Convert.ToString(e.Argument)); 
         }
 
@@ -2729,6 +2732,7 @@ namespace RiPRipper
                 UnlockControlsElements();
             }  
         }
+
         private void UnlockControlsElements()
         {
             textBox1.Enabled = true;
@@ -2736,17 +2740,18 @@ namespace RiPRipper
 
             StatusLabelInfo.Text = string.Empty;
         }
+
         /// <summary>
         /// Unlock (Enable) Elements while Parsing
         /// </summary>
         private void LockControls()
         {
-            bParseAct = true;
+            this.bParseAct = true;
 
             textBox1.Enabled = false;
             mStartDownloadBtn.Enabled = true;
 
-            StatusLabelInfo.Text = rm.GetString("gbParse");
+            this.StatusLabelInfo.Text = this.rm.GetString("gbParse");
             StatusLabelInfo.ForeColor = Color.Green;
         }
 

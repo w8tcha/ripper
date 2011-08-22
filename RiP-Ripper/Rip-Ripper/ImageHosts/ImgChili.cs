@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // Code Named: RiP-Ripper
 // Function  : Extracts Images posted on RiP forums and attempts to fetch
 //			   them to disk.
@@ -22,24 +22,24 @@ namespace RiPRipper.ImageHosts
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from MyPixHost.com
+    /// Worker class to get images from ImgChili.com
     /// </summary>
-    public class MyPixHost : ServiceTemplate
+    public class ImgChili : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MyPixHost"/> class.
+        /// Initializes a new instance of the <see cref="ImgChili"/> class.
         /// </summary>
-        /// <param name="sSavePath">
-        /// The s save path.
+        /// <param name="savePath">
+        /// The save Path.
         /// </param>
-        /// <param name="strURL">
-        /// The str url.
+        /// <param name="imageUrl">
+        /// The image Url.
         /// </param>
-        /// <param name="hTbl">
-        /// The h tbl.
+        /// <param name="hashtable">
+        /// The hashtable.
         /// </param>
-        public MyPixHost(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
-            : base(sSavePath, strURL, ref hTbl)
+        public ImgChili(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
+            : base(savePath, imageUrl, ref hashtable)
         {
         }
 
@@ -95,9 +95,9 @@ namespace RiPRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            string strNewURL = strImgURL.Replace(".php", ".jpg");
+            string strNewURL = strImgURL.Replace("imgchili.com/show", "i1.imgchili.com");
 
-            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/") + 1);
+            strFilePath = strNewURL.Substring(strNewURL.IndexOf("_") + 1);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
@@ -113,7 +113,7 @@ namespace RiPRipper.ImageHosts
             try
             {
                 WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
+                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
