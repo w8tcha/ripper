@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="MSBuild.Community.Tasks.Targets" />
+  <Target Name="PackageModule" Condition=" '$(Configuration)|$(Platform)' == 'RiPRipper|AnyCPU' ">
+    <PropertyGroup>
+      <Major>2</Major>
+      <Minor>9</Minor>
+      <Build>2</Build>
+      <Revision>1</Revision>
+    </PropertyGroup>
+    <ItemGroup>
+      <DefaultExclude Include="**\.svn\**" />
+      <DefaultExclude Include="**\bin\**" />
+      <DefaultExclude Include="**\obj\**" />
+      <DefaultExclude Include="**\Release\**" />
+      <DefaultExclude Include="**\Debug\**" />
+      <DefaultExclude Include="**\Test\**" />
+      <DefaultExclude Include="**\TestResults\**" />
+      <DefaultExclude Include="**\doc\**" />
+      <DefaultExclude Include="**\www\**" />
+      <DefaultExclude Include="**\*.user" />
+      <DefaultExclude Include="**\*.suo" />
+      <DefaultExclude Include="**\*.zip" />
+      <DefaultExclude Include="**\*.db" />
+      <DefaultExclude Include="**\*.txt" />
+      <DefaultExclude Include="**\*ReSharper.*\**" />
+      <DefaultExclude Include="**\VRK.Controls\**" />
+    </ItemGroup>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\ICSharpCode.SharpZipLib.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\Microsoft.WindowsAPICodePack.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\Microsoft.WindowsAPICodePack.Shell.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\x64\RiPRipper64\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\64 Bit\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\x64\RiPRipper64\ICSharpCode.SharpZipLib.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\64 Bit\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\x64\RiPRipper64\Microsoft.WindowsAPICodePack.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\64 Bit\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\x64\RiPRipper64\Microsoft.WindowsAPICodePack.Shell.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\64 Bit\"/>
+    
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+   
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContent" />
+    </CreateItem>
+    <!-- Create the Install package -->    
+    <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
+    <!-- Copy the Install package to the Packages folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/packages" />
+    
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
+
+  </Target>
+</Project>

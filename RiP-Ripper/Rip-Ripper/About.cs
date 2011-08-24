@@ -61,7 +61,7 @@ namespace RiPRipper
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"));
 #else
-            this.label1.Text = String.Format(
+            this.label1.Text = string.Format(
                 "RiP-Ripper {0}.{1}.{2}{3}", 
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
@@ -116,8 +116,10 @@ namespace RiPRipper
         /// Close About Dialog
         /// </summary>
         /// <param name="sender">
+        /// The sender object.
         /// </param>
         /// <param name="e">
+        /// The Event Arguments.
         /// </param>
         private void BtnCloseClick(object sender, EventArgs e)
         {
@@ -128,8 +130,10 @@ namespace RiPRipper
         /// Open Ripper Website in Default Webbrowser
         /// </summary>
         /// <param name="sender">
+        /// The sender object.
         /// </param>
         /// <param name="e">
+        /// The Event Arguments.
         /// </param>
         private void LinkLabel1LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

@@ -1,92 +1,102 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: RiP-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Resources;
-using System.Threading;
-using System.Windows.Forms;
-using System.Xml.Serialization;
-using Microsoft.WindowsAPICodePack.Shell;
-using Microsoft.WindowsAPICodePack.Taskbar;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MainForm.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RiPRipper
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Reflection;
+    using System.Resources;
+    using System.Threading;
+    using System.Windows.Forms;
+    using System.Xml.Serialization;
+    using Microsoft.WindowsAPICodePack.Shell;
+    using Microsoft.WindowsAPICodePack.Taskbar;
     using RiPRipper.Objects;
 
     /// <summary>
     /// Summary description for MainForm.
     /// </summary>
-    /// 
     public partial class MainForm : Form
     {
-        
         public static bool bDelete;
         public static string sDeleteMessage;
         public string sLastPic = string.Empty;
 
 
         /// <summary>
+        /// String List of Urls to Rip
+        /// </summary>
+        private readonly List<string> ExtractUrls = new List<string>(); 
+
+        /// <summary>
         /// Indicates if the Browse Dialog is Already Opten
         /// </summary>
         private bool bIsBrowserOpen;
+
         /// <summary>
         /// Indicates if Ripper Currently Parsing Jobs
         /// </summary>
         private bool bParseAct;
+
         /// <summary>
         /// Indicates that Ripper is Finishing the last Threads
         /// </summary>
         private bool bEndRip;
+
         /// <summary>
         /// Indicates that users Stopping and Deleting Current Job
         /// </summary>
         private bool bStopJob;
+
         /// <summary>
         /// Indicates if all Functions currently pausing
         /// </summary>
         private bool bCurPause;
+
         /// <summary>
         /// Indicates that Disc is full and Ripping stoped
         /// </summary>
         private bool bFullDisc;
+
         /// <summary>
         /// Indicates if Ripper is Currently Ripping
         /// </summary>
         private bool bWorking = true;
+
         /// <summary>
         /// Indicates if Ripper is Currently Closing the Program
         /// </summary>
         private bool bRipperClosing;
+
         /// <summary>
         /// The Last Download Folder
         /// </summary>
         private string sLastDownFolder;
+
         /// <summary>
         /// The Resource Manger that is used for Icons and Labels etc.
         /// </summary>
         public ResourceManager rm;
+
         /// <summary>
         /// Array List of all Stored (Ripped) Post Ids
         /// </summary>
         private readonly ArrayList sRippedPosts = new ArrayList();
+
         /// <summary>
         /// All Settings
         /// </summary>
@@ -94,25 +104,25 @@ namespace RiPRipper
 
 #if (!RIPRIPPERX)
 
-        
         private TaskbarManager windowsTaskbar;
         private JumpList jumpList;
 
         public IntPtr nextClipboardViewer;
 #endif
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainForm"/> class.
+        /// </summary>
         public MainForm()
         {
-
 #if (!RIPRIPPERX)
-
 
             // Tray Menue
             trayMenu = new ContextMenu();
 
-            MenuItem hide = new MenuItem("Hide RiP-Ripper", HideClick);
-            MenuItem sDownload = new MenuItem("Start Download", SDownloadClick);
-            MenuItem exit = new MenuItem("Exit Program", ExitClick);
+            MenuItem hide = new MenuItem("Hide RiP-Ripper", this.HideClick);
+            MenuItem sDownload = new MenuItem("Start Download", this.SDownloadClick);
+            MenuItem exit = new MenuItem("Exit Program", this.ExitClick);
 
             trayMenu.MenuItems.Add(0, hide);
             trayMenu.MenuItems.Add(1, sDownload);
@@ -127,12 +137,9 @@ namespace RiPRipper
                                ContextMenu = trayMenu
                            };
 
-            trayIcon.MouseDoubleClick += HideClick;
+            this.trayIcon.MouseDoubleClick += this.HideClick;
 
 #endif
-            //
-            // Required for Windows Form Designer support
-            //
             InitializeComponent();
 
             mJobsList = new List<JobInfo>();
@@ -140,7 +147,7 @@ namespace RiPRipper
             mIdleTimer = new System.Windows.Forms.Timer();
             ExitOnIdleTimeout = -1;
 
-            SetWindow();
+            this.SetWindow();
         }
 
 #if (!RIPRIPPERX)
@@ -465,7 +472,7 @@ namespace RiPRipper
 
                 if (!bCameThroughCorrectLogin)
                 {
-                    DialogResult result = TopMostMessageBox.Show(rm.GetString("mbExit"), rm.GetString("mbExitTtl"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = TopMostMessageBox.Show(this.rm.GetString("mbExit"), this.rm.GetString("mbExitTtl"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result == DialogResult.Yes)
                     {
@@ -659,7 +666,7 @@ namespace RiPRipper
         {
             if (textBox1.InvokeRequired)
             {
-                SetFormControlsCallback d = SetFormControls;
+                SetFormControlsCallback d = this.SetFormControls;
                 Invoke(d, new object[] { aUrl, aJobPath, aAutoFolder });
             }
             else
@@ -679,9 +686,9 @@ namespace RiPRipper
                     userSettings.bDownInSepFolder = false;
                 }
 
-                if (!bParseAct)
+                if (!this.bParseAct)
                 {
-                    EnqueueJob();
+                    this.EnqueueJob();
                 }
             }
         }
@@ -705,9 +712,9 @@ namespace RiPRipper
                 textBox1.Text = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
             }
 
-            if (!string.IsNullOrEmpty(textBox1.Text) && !bParseAct)
+            if (!string.IsNullOrEmpty(this.textBox1.Text) && !this.bParseAct)
             {
-                EnqueueJob();
+                this.EnqueueJob();
             }
         }
 
@@ -716,7 +723,6 @@ namespace RiPRipper
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        /// 
         private void TextBox1KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar != '\r' || bParseAct) return;
@@ -782,9 +788,6 @@ namespace RiPRipper
                     this.EnqueueThreadOrPost(sXmlUrl);
                 }
             }
-
-
-            this.UnlockControls();
         }
 
         /// <summary>
@@ -1216,10 +1219,10 @@ namespace RiPRipper
         /// Timer thats fires up the LogicCode
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        /// The sender object.
         /// </param>
         /// <param name="e">
-        /// The e.
+        /// The Elapsed Event Arguments.
         /// </param>
         private void TmrPageUpdateElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -1236,9 +1239,10 @@ namespace RiPRipper
                 this.IdleRipper();
             }
 
-            if (!this.bParseAct && File.Exists("ExtractUrls.txt"))
+            if (!this.bParseAct && this.ExtractUrls.Count > 0 &&
+                !GetPostsWorker.IsBusy && !GetIdxsWorker.IsBusy)
             {
-                this.GetTxtUrls("ExtractUrls.txt");
+                this.GetExtractUrls();
             }
         }
 
@@ -1265,6 +1269,7 @@ namespace RiPRipper
                 mIdleTimer.Start();
             }
         }*/
+
         /// <summary>
         /// Over time, it turned into a nasty C-like code; where everything is
         /// in the same method...
@@ -2209,55 +2214,60 @@ namespace RiPRipper
 
             }
         }
-        void CheckClipboardData()
+
+        /// <summary>
+        /// Check Windows Clip board for Urls to Rip
+        /// </summary>
+        private void CheckClipboardData()
         {
-            if (userSettings.bClipBWatch)
+            if (!userSettings.bClipBWatch)
             {
-                try
+                return;
+            }
+
+            try
+            {
+                IDataObject iData = Clipboard.GetDataObject();
+
+                if (iData.GetDataPresent(DataFormats.Text))
                 {
-                    IDataObject iData = Clipboard.GetDataObject();
+                    string sClipBoardURLTemp = (string)iData.GetData(DataFormats.Text);
 
-                    if (iData.GetDataPresent(DataFormats.Text))
+                    string[] sClipBoardUrLs = sClipBoardURLTemp.Split(new[] { '\n' });
+
+                    foreach (string sClipBoardURL in
+                        sClipBoardUrLs.Where(sClipBoardURL => sClipBoardURL.StartsWith(@"http://rip-productions.net/") || sClipBoardURL.StartsWith(@"http://www.rip-productions.net/")))
                     {
-                        string sClipBoardURLTemp = (string)iData.GetData(DataFormats.Text);
-
-                        string[] sClipBoardUrLs = sClipBoardURLTemp.Split(new[] { '\n' });
-
-                        foreach (string sClipBoardURL in
-                            sClipBoardUrLs.Where(sClipBoardURL => sClipBoardURL.StartsWith(@"http://rip-productions.net/") || sClipBoardURL.StartsWith(@"http://www.rip-productions.net/")))
+                        if (!this.bParseAct)
                         {
-                            if (!bParseAct)
+                            if (this.comboBox1.SelectedIndex != 2)
                             {
+                                this.comboBox1.SelectedIndex = 2;
+                            }
 
-                                if (comboBox1.SelectedIndex != 2)
-                                {
-                                    comboBox1.SelectedIndex = 2;
-                                }
+                            this.textBox1.Text = sClipBoardURL;
 
-                                textBox1.Text = sClipBoardURL;
-                                EnqueueJob();
+                            if (InvokeRequired)
+                            {
+                                Invoke((MethodInvoker)this.EnqueueJob);
                             }
                             else
                             {
-
-                                FileStream file = new FileStream("ExtractUrls.txt", FileMode.Append);
-                                StreamWriter sw = new StreamWriter(file);
-
-                                sw.WriteLine(sClipBoardURL);
-
-                                sw.Close();
-                                file.Close();
-
-                            }
-
-                            Clipboard.Clear();
+                                this.EnqueueJob();
+                            } 
                         }
+                        else
+                        {
+                            this.ExtractUrls.Add(sClipBoardURL);
+                        }
+
+                        Clipboard.Clear();
                     }
                 }
-                catch (Exception)
-                {
-                    Clipboard.Clear();
-                }
+            }
+            catch (Exception)
+            {
+                Clipboard.Clear();
             }
         }
 #endif
@@ -2472,52 +2482,89 @@ namespace RiPRipper
             // Extract Urls from Text file for Ripping
             userSettings.sTxtFolder = string.IsNullOrEmpty(userSettings.sTxtFolder) ? "ExtractUrls.txt" : Path.Combine(userSettings.sTxtFolder, "ExtractUrls.txt");
 
-            GetTxtUrls(userSettings.sTxtFolder);
+            if (File.Exists(userSettings.sTxtFolder))
+            {
+                this.GetTxtUrls(userSettings.sTxtFolder);
+            }
             /////////////////
         }
+
+        /// <summary>
+        /// Extract The Cached Urls and Rip them.
+        /// </summary>
+        private void GetExtractUrls()
+        {
+            if (this.ExtractUrls.Count <= 0 || this.bParseAct)
+            {
+                return;
+            }
+
+            this.comboBox1.SelectedIndex = 2;
+
+            this.textBox1.Text = this.ExtractUrls[0];
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke((MethodInvoker)this.EnqueueJob);
+            }
+            else
+            {
+                this.EnqueueJob();
+            }
+
+            this.ExtractUrls.RemoveAt(0);
+
+            //this.GetExtractUrls();
+        }
+
         /// <summary>
         /// Extract Urls from Text file for Ripping
         /// </summary>
         /// <param name="sTextFolder">Path to the Text File</param>
         private void GetTxtUrls(string sTextFolder)
         {
-            if (File.Exists(sTextFolder))
+            if (!File.Exists(sTextFolder))
             {
-                try
+                return;
+            }
+
+            try
+            {
+                FileStream file = new FileStream(sTextFolder, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                StreamReader sr = new StreamReader(file);
+                string srRead = sr.ReadToEnd();
+                sr.Close();
+                file.Close();
+
+                File.Delete(sTextFolder);
+
+                string[] sRipUrls = srRead.Split(new[] { '\n' });
+
+                foreach (string sRipUrl in
+                    sRipUrls.Where(
+                        sRipUrl =>
+                        sRipUrl.StartsWith(@"http://rip-productions.net/") ||
+                        sRipUrl.StartsWith(@"http://www.rip-productions.net/")))
                 {
-                    FileStream file = new FileStream(sTextFolder, FileMode.Open, FileAccess.Read);
-                    StreamReader sr = new StreamReader(file);
-                    string srRead = sr.ReadToEnd();
-                    sr.Close();
-                    file.Close();
-
-                    File.Delete(sTextFolder);
-
-                    string[] sRipUrls = srRead.Split(new[] { '\n' });
-
-                    foreach (string sRipUrl in
-                        sRipUrls.Where(sRipUrl => sRipUrl.StartsWith(@"http://rip-productions.net/") || sRipUrl.StartsWith(@"http://www.rip-productions.net/")))
-                    {
-                        if (this.comboBox1.SelectedIndex != 2)
-                            this.comboBox1.SelectedIndex = 2;
-
-                        this.textBox1.Text = sRipUrl;
-
-                        this.EnqueueJob();
-                    }
-                }
-                finally
-                {
-                    textBox1.Text = string.Empty;
+                   this.ExtractUrls.Add(sRipUrl);
                 }
             }
+            finally
+            {
+                this.GetExtractUrls();
+            }
         }
+
         /// <summary>
         /// Catches All Unhandled Exceptions and creates a Crash Log
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void UnhandledExceptionFunction(object sender, UnhandledExceptionEventArgs e)
+        /// <param name="sender">
+        /// The sender object.
+        /// </param>
+        /// <param name="e">
+        /// The Unhandled Exception Event Arguments.
+        /// </param>
+        private void UnhandledExceptionFunction(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
 
@@ -2531,7 +2578,7 @@ namespace RiPRipper
                 tr.Close();
 
                 // If Pause
-                if (bCurPause)
+                if (this.bCurPause)
                 {
                     Utility.SaveSetting("CurrentlyPauseThreads", "true");
                 }
@@ -2539,7 +2586,7 @@ namespace RiPRipper
 
             if (userSettings.bSavePids)
             {
-                SaveHistory();
+                this.SaveHistory();
             }
 
             // Eventlog
@@ -2554,6 +2601,7 @@ namespace RiPRipper
             myLog.WriteEntry(errorMsg + ex.Message + "\n\nStack Trace:\n" + ex.StackTrace);*/
             /////////////////////
         }
+
         /// <summary>
         /// Catches All Unhandled Thread Exceptions and creates a Crash Log
         /// </summary>
@@ -2603,7 +2651,7 @@ namespace RiPRipper
 
         private void GetPostsWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            UnlockControls();
+            this.UnlockControls();
         }
 
         private void GetIdxsWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -2613,7 +2661,7 @@ namespace RiPRipper
 
         private void GetIdxsWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            UnlockControls();
+            this.UnlockControls();
 
             Application.DoEvents();
 
@@ -2694,7 +2742,7 @@ namespace RiPRipper
                             while (t.StorePath.Equals(sStorePath) ||
                                    Directory.Exists(sStorePath))
                             {
-                                sStorePath = sbegining + " Set# " + iRenameCnt;
+                                sStorePath = string.Format("{0} Set# {1}", sbegining, iRenameCnt);
                                 iRenameCnt++;
                             }
                         }
@@ -2703,7 +2751,7 @@ namespace RiPRipper
                     {
                         while (Directory.Exists(sStorePath))
                         {
-                            sStorePath = sbegining + " Set# " + iRenameCnt;
+                            sStorePath = string.Format("{0} Set# {1}", sbegining, iRenameCnt);
                             iRenameCnt++;
                         }
                     }
@@ -2716,25 +2764,30 @@ namespace RiPRipper
 
             return sStorePath;
         }
+
         /// <summary>
         /// Unlock (Enable) Elements after Parsing
         /// </summary>
         private void UnlockControls()
         {
-            bParseAct = false;
+            this.bParseAct = false;
 
             if (InvokeRequired)
             {
-                Invoke((MethodInvoker)(UnlockControlsElements));
+                Invoke((MethodInvoker)this.UnlockControlsElements);
             }
             else
             {
-                UnlockControlsElements();
+                this.UnlockControlsElements();
             }  
         }
 
+        /// <summary>
+        /// Unlock (Enable) Elements after Parsing
+        /// </summary>
         private void UnlockControlsElements()
         {
+            textBox1.Text = string.Empty;
             textBox1.Enabled = true;
             mStartDownloadBtn.Enabled = true;
 

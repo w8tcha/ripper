@@ -452,6 +452,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />
+    <None Include="BuildScripts\MSBuild.Community.Tasks.Targets" />
+    <None Include="BuildScripts\RipperPackage.targets">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\app.manifest" />
     <None Include="Resources\de.gif" />
     <Content Include="Resources\delete.png" />
@@ -505,4 +509,12 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <Extension>zip</Extension>
+    <PackageName>RiPRipper</PackageName>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\BuildScripts</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  <Import Project="BuildScripts\RipperPackage.Targets" />
+  <Target Name="AfterBuild" DependsOnTargets="PackageModule">
+  </Target>
 </Project>

@@ -15,12 +15,22 @@ using System;
 
 namespace RiPRipper
 {
+    /// <summary>
+    /// </summary>
     public class UrlHandler
     {
         /// <summary>
         /// Parse Job Url or ID to Xml Url
         /// </summary>
-        /// <returns>Xml Url</returns>
+        /// <param name="sInputUrl">
+        /// The s Input Url.
+        /// </param>
+        /// <param name="iComboBoxValue">
+        /// The i Combo Box Value.
+        /// </param>
+        /// <returns>
+        /// Xml Url
+        /// </returns>
         public static String GetXmlUrl(string sInputUrl, int iComboBoxValue)
         {
             string sXmlUrl;
@@ -29,16 +39,20 @@ namespace RiPRipper
             {
                 case 0:
                     {
-                        sXmlUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                                Convert.ToInt64(sInputUrl));
+                        sXmlUrl = string.Format(
+                            "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
+                            Convert.ToInt64(sInputUrl));
                         break;
                     }
+
                 case 1:
                     {
-                        sXmlUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
-                                                Convert.ToInt64(sInputUrl));
+                        sXmlUrl = string.Format(
+                            "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
+                            Convert.ToInt64(sInputUrl));
                         break;
                     }
+
                 default:
                     {
                         sXmlUrl = sInputUrl;
@@ -76,8 +90,10 @@ namespace RiPRipper
                                 sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                             }
 
-                            sXmlUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                                    Convert.ToInt64(sThreadId));
+                            sXmlUrl =
+                                string.Format(
+                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
+                                    Convert.ToInt64(sThreadId));
                         }
                         else if (sXmlUrl.Contains("goto=newpost") && sXmlUrl.Contains("showthread.php?"))
                         {
@@ -90,16 +106,20 @@ namespace RiPRipper
                                 sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                             }
 
-                            sXmlUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                                    Convert.ToInt64(sThreadId));
+                            sXmlUrl =
+                                string.Format(
+                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
+                                    Convert.ToInt64(sThreadId));
                         }
                         else if (sXmlUrl.Contains("&p=") && sXmlUrl.Contains("#post"))
                         {
                             // http://rip-productions.net/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
                             // Posts
                             string sPostId = sXmlUrl.Substring(sXmlUrl.IndexOf("#post") + 5);
-                            sXmlUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
-                                                    Convert.ToInt64(sPostId));
+                            sXmlUrl =
+                                string.Format(
+                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
+                                    Convert.ToInt64(sPostId));
                         }
                         else if (!sXmlUrl.Contains(".php") && !sXmlUrl.Contains("#post"))
                         {
@@ -112,22 +132,37 @@ namespace RiPRipper
                                 sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                             }
 
-                            sXmlUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                                    Convert.ToInt64(sThreadId));
+                            sXmlUrl =
+                                string.Format(
+                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
+                                    Convert.ToInt64(sThreadId));
                         }
                         else if (!sXmlUrl.Contains(".php") && sXmlUrl.Contains("#post"))
                         {
                             // Posts
                             string sPostId = sXmlUrl.Substring(sXmlUrl.IndexOf("#post") + 5);
-                            sXmlUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
-                                                    Convert.ToInt64(sPostId));
+                            sXmlUrl =
+                                string.Format(
+                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
+                                    Convert.ToInt64(sPostId));
                         }
+
                         break;
                     }
             }
 
             return sXmlUrl;
         }
+
+        /// <summary>
+        /// Get Index Url
+        /// </summary>
+        /// <param name="sInputUrl">
+        /// The s input url.
+        /// </param>
+        /// <returns>
+        /// Returns the Index Url
+        /// </returns>
         public static String GetIndexUrl(string sInputUrl)
         {
             string sNewUrl = sInputUrl;
@@ -152,8 +187,8 @@ namespace RiPRipper
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                sNewUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                        Convert.ToInt64(sThreadId));
+                sNewUrl = string.Format(
+                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}", Convert.ToInt64(sThreadId));
             }
             else if (sNewUrl.Contains("goto=newpost") && sNewUrl.Contains("showthread.php?"))
             {
@@ -165,15 +200,15 @@ namespace RiPRipper
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                sNewUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                        Convert.ToInt64(sThreadId));
+                sNewUrl = string.Format(
+                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}", Convert.ToInt64(sThreadId));
             }
             else if (sNewUrl.Contains("&p=") && sNewUrl.Contains("#post"))
             {
                 // Posts
                 string sPostId = sNewUrl.Substring(sNewUrl.IndexOf("#post") + 5);
-                sNewUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
-                                        Convert.ToInt64(sPostId));
+                sNewUrl = string.Format(
+                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}", Convert.ToInt64(sPostId));
             }
             else if (!sNewUrl.Contains(".php") && !sNewUrl.Contains("#post"))
             {
@@ -185,15 +220,15 @@ namespace RiPRipper
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                sNewUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                        Convert.ToInt64(sThreadId));
+                sNewUrl = string.Format(
+                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}", Convert.ToInt64(sThreadId));
             }
             else if (!sNewUrl.Contains(".php") && sNewUrl.Contains("#post"))
             {
                 // Posts
                 string sPostId = sNewUrl.Substring(sNewUrl.IndexOf("#post") + 5);
-                sNewUrl = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
-                                        Convert.ToInt64(sPostId));
+                sNewUrl = string.Format(
+                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}", Convert.ToInt64(sPostId));
             }
 
             return sNewUrl;
