@@ -8,24 +8,6 @@
       <Build>2</Build>
       <Revision>1</Revision>
     </PropertyGroup>
-    <ItemGroup>
-      <DefaultExclude Include="**\.svn\**" />
-      <DefaultExclude Include="**\bin\**" />
-      <DefaultExclude Include="**\obj\**" />
-      <DefaultExclude Include="**\Release\**" />
-      <DefaultExclude Include="**\Debug\**" />
-      <DefaultExclude Include="**\Test\**" />
-      <DefaultExclude Include="**\TestResults\**" />
-      <DefaultExclude Include="**\doc\**" />
-      <DefaultExclude Include="**\www\**" />
-      <DefaultExclude Include="**\*.user" />
-      <DefaultExclude Include="**\*.suo" />
-      <DefaultExclude Include="**\*.zip" />
-      <DefaultExclude Include="**\*.db" />
-      <DefaultExclude Include="**\*.txt" />
-      <DefaultExclude Include="**\*ReSharper.*\**" />
-      <DefaultExclude Include="**\VRK.Controls\**" />
-    </ItemGroup>
 
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\ICSharpCode.SharpZipLib.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
@@ -43,14 +25,66 @@
     <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
       <Output TaskParameter="Include" ItemName="OutputContent" />
     </CreateItem>
-    <!-- Create the Install package -->    
+    
+    <!-- Create the Windows Package package -->    
     <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
     <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/packages" />
     
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+    
+    <!-- Copy the Mono Version-->
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipperX\$(AssemblyName).exe" DestinationFiles="$(MSBuildProjectDirectory)\Package\$(AssemblyName)X.exe"/>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentMono" />
+    </CreateItem>
+
+    <!-- Create the Linux (MONO) Package package -->
+    <Zip Files="@(OutputContentMono)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
+    <!-- Copy the Install package to the Packages folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/packages" />
+
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+
+    <!-- Copy the Mac Version-->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipperX.app\Contents\Info.plist" DestinationFolder="$(MSBuildProjectDirectory)\Package\RiPRipperX.app\Contents"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipperX.app\Contents\MacOS\RiPRipperX" DestinationFolder="$(MSBuildProjectDirectory)\Package\RiPRipperX.app\Contents\MacOS\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipperX.app\Contents\Resources\App.icns" DestinationFolder="$(MSBuildProjectDirectory)\Package\RiPRipperX.app\Contents\Resources"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipperX.app\Contents\Resources\bin\RiPRipperX" DestinationFolder="$(MSBuildProjectDirectory)\Package\RiPRipperX.app\Contents\Resources\bin"/>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipperX\$(AssemblyName).exe" DestinationFiles="$(MSBuildProjectDirectory)\Package\RiPRipperX.app\Contents\Resources\$(AssemblyName)X.exe"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\RiPRipperX.app\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentMac" />
+    </CreateItem>
+
+    <!-- Create the Mac Package -->
+    <Zip Files="@(OutputContentMac)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X.$(Extension)" />
+    
+    <Move SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)\Package\" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentMacFinal" />
+    </CreateItem>
+
+    <!-- Create the Mac Package package -->
+    <Zip Files="@(OutputContentMacFinal)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" />
+    <!-- Copy the Install package to the Packages folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/packages" />
+
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+
 
     <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" />
 
   </Target>
 </Project>
