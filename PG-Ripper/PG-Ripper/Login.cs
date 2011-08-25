@@ -182,7 +182,7 @@ namespace PGRipper
             switch (cBForum.SelectedIndex)
             {
                 case 1:
-                    textBox3.Text = "http://www.perved.com/";
+                    textBox3.Text = "http://www.kitty-kats.com/";
                     break;
                 case 2:
                     textBox3.Text = "http://rip-productions.net/";

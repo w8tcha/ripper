@@ -54,7 +54,6 @@ namespace PGRipper
                             {
                                 // http://mydomain.com/showthread.php?t=0123456
                                 // Threats
-
                                 return sHtmlUrl;
                             }
                             if (!sHtmlUrl.Contains("#post") && sHtmlUrl.Contains("showthread.php?"))

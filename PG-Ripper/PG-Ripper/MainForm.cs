@@ -400,7 +400,7 @@ namespace PGRipper
             }
             catch (Exception)
             {
-                userSettings.sForumUrl = "http://www.perved.com/forum/";
+                userSettings.sForumUrl = "http://www.kitty-kats.com/";
             }
 
 
@@ -663,9 +663,9 @@ namespace PGRipper
         {
             tmrPageUpdate.Enabled = true;
 
-            if (!IsValidJob())
+            if (!this.IsValidJob())
             {
-                UnlockControls();
+                this.UnlockControls();
                 return;
             }
 
@@ -674,7 +674,7 @@ namespace PGRipper
 
             if (string.IsNullOrEmpty(sHtmlUrl))
             {
-                UnlockControls();
+                this.UnlockControls();
                 return;
             }
 
@@ -697,27 +697,27 @@ namespace PGRipper
                     sPostId.Remove(sHtmlUrl.IndexOf("&postcount"));
                 }
 
-                if (IsPostAlreadyRipped(sPostId))
+                if (this.IsPostAlreadyRipped(sPostId))
                 {
-                    DialogResult result = TopMostMessageBox.Show(rm.GetString("mBAlready"), "Info",
-                                                                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = TopMostMessageBox.Show(
+                        this.rm.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result != DialogResult.Yes)
                     {
-                        UnlockControls();
+                        this.UnlockControls();
                         return;
                     }
                 }
             }
 
             ///////////////////////////////////////////////
-            LockControls();
+            this.LockControls();
             ///////////////////////////////////////////////
 
             if (mIsIndexChk.Checked)
             {
                 // Parse Job as Index Thread
-                EnqueueIndexThread(sHtmlUrl);
+                this.EnqueueIndexThread(sHtmlUrl);
             }
             else
             {
@@ -726,25 +726,24 @@ namespace PGRipper
                 {
                     if (!sHtmlUrl.Contains(@"#post"))
                     {
-                        EnqueueThreadToPost(sHtmlUrl);
+                        this.EnqueueThreadToPost(sHtmlUrl);
                     }
                     else
                     {
-                        EnqueueThreadOrPost(sHtmlUrl);
+                        this.EnqueueThreadOrPost(sHtmlUrl);
                     }
                 }
                 else
                 {
                     if (sHtmlUrl.Contains(@"showthread.php"))
                     {
-                        EnqueueThreadToPost(sHtmlUrl);
+                        this.EnqueueThreadToPost(sHtmlUrl);
                     }
                     else
                     {
-                        EnqueueThreadOrPost(sHtmlUrl);
+                        this.EnqueueThreadOrPost(sHtmlUrl);
                     }
                 }
-
             }
         }
 
@@ -773,6 +772,7 @@ namespace PGRipper
 
             return true;
         }
+
         /// <summary>
         /// Parse all Threads/Posts in the Index
         /// </summary>
@@ -935,7 +935,7 @@ namespace PGRipper
 
             job.Title = Utility.ReplaceHexWithAscii(Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad));
 
-            if (userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"perved.com/") ||
+            if (userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"kitty-kats.com/") ||
                 userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"http://rip-") ||
                 userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"http://www.rip-"))
             {
@@ -1032,7 +1032,7 @@ namespace PGRipper
                 tyURL = string.Format("{0}post_thanks.php?do=post_thanks_add&p={1}", userSettings.sForumUrl, sPostId);
             }
             else if (
-                userSettings.sForumUrl.Contains(@"perved.com") ||
+                userSettings.sForumUrl.Contains(@"kitty-kats.com") ||
                 userSettings.sForumUrl.Contains(@"http://rip-") ||
                 userSettings.sForumUrl.Contains(@"http://www.rip-"))
             {
@@ -1167,7 +1167,7 @@ namespace PGRipper
 
                 job.Title = Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad);
 
-                if (userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"perved.com") ||
+                if (userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"kitty-kats.com") ||
                     userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"http://rip-") ||
                     userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"http://www.rip-"))
                 {
@@ -2750,6 +2750,7 @@ namespace PGRipper
       /// </summary>
       private void UnlockControlsElements()
       {
+          textBox1.Text = string.Empty;
           textBox1.Enabled = true;
           mStartDownloadBtn.Enabled = true;
 

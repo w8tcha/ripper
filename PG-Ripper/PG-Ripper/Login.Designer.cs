@@ -85,7 +85,7 @@ namespace PGRipper
             this.cBForum.ItemHeight = 13;
             this.cBForum.Items.AddRange(new object[] {
             "<Select a Forum>",
-            "Perved.com",
+            "The Kitty-Kats Forum (perved.com)",
             "Rip-Productions",
             "Sexy and Funny Forums",
             "Scanlover Forums",
