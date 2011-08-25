@@ -1,11 +1,13 @@
-﻿using System.Windows.Forms;
+﻿
 
 namespace RiPRipper
 {
+    using System.Windows.Forms;
+
     /// <summary>
     /// Displays MessageBox messages as a top most window
     /// </summary>
-    static public class TopMostMessageBox
+    public static class TopMostMessageBox
     {
         /// <summary>
         /// Displays a <see cref="MessageBox"/> but as a TopMost window.

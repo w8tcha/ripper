@@ -6,7 +6,7 @@
       <Major>2</Major>
       <Minor>9</Minor>
       <Build>2</Build>
-      <Revision>1</Revision>
+      <Revision>2</Revision>
     </PropertyGroup>
 
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
@@ -29,7 +29,7 @@
     <!-- Create the Windows Package package -->    
     <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/packages" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
     
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
     
@@ -47,7 +47,7 @@
     <!-- Create the Linux (MONO) Package package -->
     <Zip Files="@(OutputContentMono)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/packages" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
 
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
 
@@ -77,7 +77,43 @@
     <!-- Create the Mac Package package -->
     <Zip Files="@(OutputContentMacFinal)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/packages" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
+
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+
+    <!-- Copy the x86 Install Version-->
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\RiP-Ripper-Setup\RiP-Ripper-Install.msi" DestinationFolder="$(MSBuildProjectDirectory)\Package"/>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentInstallX86" />
+    </CreateItem>
+
+    <!-- Create the x86 Install Version package -->
+    <Zip Files="@(OutputContentInstallX86)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install.$(Extension)" />
+    <!-- Copy the Install package to the Packages folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
+
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+
+    <!-- Copy the x64 Install Version-->
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\RiP-Ripper-Setup-x64\RiP-Ripper-Install_x64.msi" DestinationFolder="$(MSBuildProjectDirectory)\Package"/>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentInstallX64" />
+    </CreateItem>
+
+    <!-- Create the x86 Install Version package -->
+    <Zip Files="@(OutputContentInstallX64)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install-x64.$(Extension)" />
+    <!-- Copy the Install package to the Packages folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install-x64.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
 
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
 
@@ -85,6 +121,8 @@
     <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
     <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
     <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)-Install.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)-Install-x64.$(Extension)" />
 
   </Target>
 </Project>

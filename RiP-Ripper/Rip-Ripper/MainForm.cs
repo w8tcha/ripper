@@ -736,7 +736,7 @@ namespace RiPRipper
         /// <summary>
         /// Enqueue Job
         /// </summary>
-        private void EnqueueJob ()
+        private void EnqueueJob()
         {
             if (!this.IsValidJob())
             {
@@ -2494,7 +2494,7 @@ namespace RiPRipper
         /// </summary>
         private void GetExtractUrls()
         {
-            if (this.ExtractUrls.Count <= 0 || this.bParseAct)
+            if (this.ExtractUrls.Count <= 0 && this.bParseAct || this.bParseAct)
             {
                 return;
             }
@@ -2514,7 +2514,10 @@ namespace RiPRipper
 
             this.ExtractUrls.RemoveAt(0);
 
-            //this.GetExtractUrls();
+            if (this.ExtractUrls.Count > 0)
+            {
+                this.GetExtractUrls();
+            }
         }
 
         /// <summary>
