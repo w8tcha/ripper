@@ -1,43 +1,42 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImageTwist.cs" company="The Watcher">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImgDepot.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
 // <summary>
-//   Code Named: PG-Ripper
-//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.ImageHosts
+namespace RiPRipper.ImageHosts
 {
     using System;
     using System.Collections;
     using System.IO;
     using System.Net;
-    using System.Text.RegularExpressions;
     using System.Threading;
-    using PGRipper.Objects;
+    using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImageTwist.com
+    /// Worker class to get images from ImgDepot.org
     /// </summary>
-    public class ImageTwist : ServiceTemplate
+    public class ImgDepot : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageTwist"/> class.
+        /// Initializes a new instance of the <see cref="ImgDepot"/> class.
         /// </summary>
-        /// <param name="sSavePath">
-        /// The s save path.
+        /// <param name="savePath">
+        /// The save Path.
         /// </param>
-        /// <param name="strURL">
-        /// The str url.
+        /// <param name="imageUrl">
+        /// The image Url.
         /// </param>
-        /// <param name="hTbl">
-        /// The h tbl.
+        /// <param name="hashtable">
+        /// The hashtable.
         /// </param>
-        public ImageTwist(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
-            : base(sSavePath, strURL, ref hTbl)
+        public ImgDepot(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
+            : base(savePath, imageUrl, ref hashtable)
         {
         }
 
@@ -45,7 +44,7 @@ namespace PGRipper.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Returns if the Image was downloaded
+        /// Return if Downloaded or not
         /// </returns>
         protected override bool DoDownload()
         {
@@ -93,27 +92,9 @@ namespace PGRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            string sPage = GetImageHostPage(ref strImgURL);
+            string strNewURL = strImgURL.Replace("imgchili.com/show", "i1.imgchili.com");
 
-            if (sPage.Length < 10)
-            {
-                return false;
-            }
-
-            string strNewURL;
-
-            var m = Regex.Match(sPage, @"src=\""(?<inner>[^\""]*)\"" class=""pic""", RegexOptions.Singleline);
-
-            if (m.Success)
-            {
-                strNewURL = m.Groups["inner"].Value;
-            }
-            else
-            {
-                return false;
-            }
-
-            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1).Replace(".html", string.Empty);
+            strFilePath = strNewURL.Substring(strNewURL.IndexOf("_") + 1);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 

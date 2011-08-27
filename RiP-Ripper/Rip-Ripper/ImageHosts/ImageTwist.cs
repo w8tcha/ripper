@@ -1,25 +1,23 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: RiP-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
-
-using System;
-using System.Collections;
-using System.IO;
-using System.Net;
-using System.Threading;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImageTwist.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RiPRipper.ImageHosts
 {
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+
     using RiPRipper.Objects;
 
     /// <summary>
@@ -27,11 +25,29 @@ namespace RiPRipper.ImageHosts
     /// </summary>
     public class ImageTwist : ServiceTemplate
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImageTwist"/> class.
+        /// </summary>
+        /// <param name="sSavePath">
+        /// The s save path.
+        /// </param>
+        /// <param name="strURL">
+        /// The str url.
+        /// </param>
+        /// <param name="hTbl">
+        /// The h tbl.
+        /// </param>
         public ImageTwist(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
             : base(sSavePath, strURL, ref hTbl)
         {
         }
 
+        /// <summary>
+        /// Do the Download
+        /// </summary>
+        /// <returns>
+        /// Returns if the Image was downloaded
+        /// </returns>
         protected override bool DoDownload()
         {
             string strImgURL = mstrURL;
@@ -46,7 +62,9 @@ namespace RiPRipper.ImageHosts
             try
             {
                 if (!Directory.Exists(mSavePath))
+                {
                     Directory.CreateDirectory(mSavePath);
+                }
             }
             catch (IOException ex)
             {
@@ -76,8 +94,6 @@ namespace RiPRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            const string sStartSrc = "<p><img src=\"";
-
             string sPage = GetImageHostPage(ref strImgURL);
 
             if (sPage.Length < 10)
@@ -85,25 +101,20 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            int iStartSrc = sPage.IndexOf(sStartSrc);
+            string strNewURL;
 
-            if (iStartSrc < 0)
+            var m = Regex.Match(sPage, @"src=\""(?<inner>[^\""]*)\"" class=""pic""", RegexOptions.Singleline);
+
+            if (m.Success)
+            {
+                strNewURL = m.Groups["inner"].Value;
+            }
+            else
             {
                 return false;
             }
 
-            iStartSrc += sStartSrc.Length;
-
-            int iEndSrc = sPage.IndexOf("\" class=\"pic\"", iStartSrc);
-
-            if (iEndSrc < 0)
-            {
-                return false;
-            }
-
-            string strNewURL = sPage.Substring(iStartSrc, iEndSrc - iStartSrc);
-
-            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1).Replace(".html", "");
+            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1).Replace(".html", string.Empty);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
@@ -119,11 +130,10 @@ namespace RiPRipper.ImageHosts
             try
             {
                 WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
+                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
-
             }
             catch (ThreadAbortException)
             {
@@ -151,12 +161,11 @@ namespace RiPRipper.ImageHosts
             }
 
             ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic =((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
         }
 
         //////////////////////////////////////////////////////////////////////////
-
     }
 }

@@ -847,7 +847,7 @@ namespace RiPRipper
                Environment.OSVersion.Version.Minor >= 1)
                     {
                         windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        windowsTaskbar.SetProgressValue(20, 100);
+                        windowsTaskbar.SetProgressValue(10, 100);
                         windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
@@ -872,7 +872,7 @@ namespace RiPRipper
                         Environment.OSVersion.Version.Minor >= 1)
                     {
                         windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        windowsTaskbar.SetProgressValue(20, 100);
+                        windowsTaskbar.SetProgressValue(10, 100);
                         windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
@@ -926,7 +926,7 @@ namespace RiPRipper
                Environment.OSVersion.Version.Minor >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        this.windowsTaskbar.SetProgressValue(20, 100);
+                        this.windowsTaskbar.SetProgressValue(10, 100);
                         this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
@@ -949,7 +949,7 @@ namespace RiPRipper
                         Environment.OSVersion.Version.Minor >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        this.windowsTaskbar.SetProgressValue(20, 100);
+                        this.windowsTaskbar.SetProgressValue(10, 100);
                         this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
@@ -1647,7 +1647,7 @@ namespace RiPRipper
                Environment.OSVersion.Version.Minor >= 1)
             {
                 windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                windowsTaskbar.SetProgressValue(20, 100);
+                windowsTaskbar.SetProgressValue(10, 100);
                 windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
             }
 

@@ -591,6 +591,15 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get ImgDepot Download
+        /// </summary>
+        public void GetImgDepot()
+        {
+            this.xService = new ImgDepot(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Get ImageUpper Download
         /// </summary>
         public void GetImageUpper()

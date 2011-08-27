@@ -608,6 +608,15 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Get ImgDepot Download
+        /// </summary>
+        public void GetImgDepot()
+        {
+            this.xService = new ImgDepot(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hotlinked image fether...
         /// </summary>
         public void GetImage()

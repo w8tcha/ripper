@@ -213,6 +213,7 @@
     <Compile Include="AutoUpdater.cs" />
     <Compile Include="ImageHosts\ImageUpper.cs" />
     <Compile Include="ImageHosts\ImgChili.cs" />
+    <Compile Include="ImageHosts\ImgDepot.cs" />
     <Compile Include="Objects\CacheObject.cs" />
     <Compile Include="Objects\CookiePairS.cs" />
     <Compile Include="ImageDownloader.cs" />

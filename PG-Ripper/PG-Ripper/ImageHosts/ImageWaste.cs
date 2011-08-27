@@ -94,9 +94,9 @@ namespace PGRipper.ImageHosts
             try
             {
                 WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
+                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.Headers.Add("Cookie: " + "popundr=1");
+                client.Headers.Add("Cookie: popundr=1");
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
 

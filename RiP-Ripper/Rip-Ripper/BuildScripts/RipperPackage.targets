@@ -121,8 +121,8 @@
     <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
     <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
     <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" />
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)-Install.$(Extension)" />
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)-Install-x64.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install-x64.$(Extension)" />
 
   </Target>
 </Project>

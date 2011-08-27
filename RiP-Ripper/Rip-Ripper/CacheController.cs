@@ -514,6 +514,10 @@ namespace RiPRipper
             {
                 lThreadStart = lImageDownloader.GetImgChili;
             }
+            else if (aImageUrl.IndexOf(@"imgdepot.org/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetImgDepot;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;

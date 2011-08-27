@@ -172,6 +172,7 @@
     </Compile>
     <Compile Include="ImageHosts\ImageUpper.cs" />
     <Compile Include="ImageHosts\ImgChili.cs" />
+    <Compile Include="ImageHosts\ImgDepot.cs" />
     <Compile Include="ItemFinder.cs" />
     <Compile Include="AutoUpdater.cs" />
     <Compile Include="Objects\CacheObject.cs" />
@@ -416,7 +417,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BuildScripts\MSBuild.Community.Tasks.Targets" />
+    <None Include="BuildScripts\MSBuild.Community.Tasks.Targets">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="BuildScripts\RipperPackage.targets">
       <SubType>Designer</SubType>
     </None>

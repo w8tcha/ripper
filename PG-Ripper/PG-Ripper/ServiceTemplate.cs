@@ -1,137 +1,116 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
-
-using System;
-using System.Collections;
-using System.Net;
-using System.Threading;
-using System.IO;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ServiceTemplate.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper
 {
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Net;
+    using System.Threading;
+
     /// <summary>
-    /// 
+    /// Service Template Class
     /// </summary>
     public abstract class ServiceTemplate
     {
+        /// <summary>
+        /// Image Link Url
+        /// </summary>
         protected string mstrURL = string.Empty;
+
+        /// <summary>
+        /// HashTable with Urls.
+        /// </summary>
         protected Hashtable eventTable;
+
+        /// <summary>
+        /// Image Save Folder Path
+        /// </summary>
         protected string mSavePath = string.Empty;
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="ServiceTemplate"/> class.
         /// </summary>
-        /// <param name="sSavePath"></param>
-        /// <param name="strURL"></param>
-        /// <param name="hTbl"></param>
-        protected ServiceTemplate(string sSavePath, string strURL, ref Hashtable hTbl)
+        /// <param name="savePath">
+        /// The save path.
+        /// </param>
+        /// <param name="url">
+        /// The url.
+        /// </param>
+        /// <param name="hTbl">
+        /// The h tbl.
+        /// </param>
+        protected ServiceTemplate(string savePath, string url, ref Hashtable hTbl)
         {
-            mstrURL = strURL;
-            eventTable = hTbl;
-            mSavePath = sSavePath;
+            this.mstrURL = url;
+            this.eventTable = hTbl;
+            this.mSavePath = savePath;
         }
 
         /// <summary>
-        /// 
+        /// Start Download
         /// </summary>
         public void StartDownload()
         {
-            /*DoDownload();
+            this.DoDownload();
 
-            for (int i = 0; i < 3; i++)
+            if (this.eventTable[this.mstrURL] != null)
             {
-                DoDownload();
-
-                if (eventTable[mstrURL] == null)
+                if (this.eventTable.Contains(this.mstrURL))
                 {
-                    ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
-                    break;
-                }
-
-                if (((CacheObject)eventTable[mstrURL]).IsDownloaded)
-                {
-                    break;
+                    this.eventTable.Remove(this.mstrURL);
                 }
             }
 
-            ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
-            if (eventTable.Contains(mstrURL))
-            {
-                eventTable.Remove(mstrURL);
-            }*/
-
-            DoDownload();
-
-            if (eventTable[mstrURL] != null)
-            {
-                if (eventTable.Contains(mstrURL))
-                {
-                    eventTable.Remove(mstrURL);
-                }
-            }
-
-            ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+            ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
         }
 
+        /// <summary>
+        /// Do the Download
+        /// </summary>
+        /// <returns>
+        /// Returns if the Image was downloaded
+        /// </returns>
         protected abstract bool DoDownload();
 
         /// <summary>
         /// a generic function to fetch urls.
         /// </summary>
-        /// <param name="strURL"></param>
-        /// <returns></returns>
+        /// <param name="strURL">
+        /// The str URL.
+        /// </param>
+        /// <returns>
+        /// Returns the Page as string.
+        /// </returns>
         protected string GetImageHostPage(ref string strURL)
         {
             string strPageRead;
 
-            /*try
-            {
-                WebClient wc = new WebClient();
-                strPageRead = wc.DownloadString(strURL);
-                wc.T
-                wc.Dispose();
-            }
-            catch (ThreadAbortException)
-            {
-                return "";
-            }
-            catch (Exception)
-            {
-                return "";
-            }*/
-
-
-            HttpWebRequest lHttpWebRequest;
-            Stream lHttpWebResponseStream;
-
             try
             {
-                lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strURL);
+                HttpWebRequest lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strURL);
 
                 lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
                 lHttpWebRequest.Referer = strURL;
                 lHttpWebRequest.KeepAlive = true;
                 lHttpWebRequest.Timeout = 20000;
 
-                lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
+                Stream lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
 
                 StreamReader streamReader = new StreamReader(lHttpWebResponseStream);
 
                 strPageRead = streamReader.ReadToEnd();
 
                 lHttpWebResponseStream.Close();
-
             }
             catch (ThreadAbortException)
             {

@@ -178,6 +178,7 @@
             "ImageWam.com",
             "ImageWaste.com",
             "ImgChili.com",
+            "ImgDepot.org",
             "Immage.de",
             "IPicture.ru",
             "JpgHosting.com",
