@@ -399,7 +399,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RiP-Ripper"
         "ProductCode" = "8:{A34BFC70-8B7A-4EB9-A2ED-56F917DFA918}"
-        "PackageCode" = "8:{F3C2CECE-0417-46F4-8559-A5CB4191966A}"
+        "PackageCode" = "8:{34C61F34-F72C-4176-A4E6-863E048BE0CB}"
         "UpgradeCode" = "8:{B12502F2-0AEB-4D49-8D11-ADEBAA730285}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

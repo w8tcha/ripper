@@ -2,6 +2,8 @@ using System;
 
 namespace PGRipper
 {
+    /// <summary>
+    /// </summary>
     public class UrlHandler
     {
         /// <summary>
@@ -16,8 +18,8 @@ namespace PGRipper
             {
                 case 0:
                     {
-                        sHtmlUrl = string.Format("{0}showthread.php?t={1}", MainForm.userSettings.sForumUrl,
-                                                 Convert.ToInt64(sInputUrl));
+                        sHtmlUrl = string.Format(
+                            "{0}showthread.php?t={1}", MainForm.userSettings.sForumUrl, Convert.ToInt64(sInputUrl));
                         break;
                     }
                 case 1:

@@ -17,7 +17,6 @@ namespace PGRipper.ImageHosts
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
-    using System.Web;
 
     using PGRipper.Objects;
 

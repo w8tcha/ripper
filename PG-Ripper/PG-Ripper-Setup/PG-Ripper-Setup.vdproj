@@ -399,7 +399,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PG-Ripper"
         "ProductCode" = "8:{E7C56D67-D7F4-431F-85C8-799E447D3418}"
-        "PackageCode" = "8:{0E1D5C05-0094-4EF3-A5B2-52C71486E7FC}"
+        "PackageCode" = "8:{99A1C2D3-77E7-4995-BE2B-7E28B07F30A6}"
         "UpgradeCode" = "8:{E6E83045-F33C-4125-9759-2F2F5F4EE661}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
