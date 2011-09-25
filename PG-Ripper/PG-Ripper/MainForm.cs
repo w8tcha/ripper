@@ -162,8 +162,17 @@ namespace PGRipper
             {
                 this.comboBox1.SelectedIndex = 2;
             }
+
             this.textBox1.Text = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
-            this.EnqueueJob();
+
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)this.EnqueueJob);
+            }
+            else
+            {
+                this.EnqueueJob();
+            }
         }
         protected void ExitClick(Object sender, EventArgs e)
         {
@@ -628,32 +637,60 @@ namespace PGRipper
         /// <summary>
         /// Starts Ripping
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// 
-        private void MStartDownloadBtnClick( object sender, EventArgs e )
+        /// <param name="sender">
+        /// The sender object.
+        /// </param>
+        /// <param name="e">
+        /// The Event Arguments.
+        /// </param>
+        private void MStartDownloadBtnClick(object sender, EventArgs e)
         {
-            if (textBox1.Text != string.Empty &&!bParseAct)
+            if (string.IsNullOrEmpty(textBox1.Text) || this.bParseAct)
             {
-                EnqueueJob();
+                return;
+            }
+
+            if (textBox1.Text.StartsWith("http"))
+            {
+                comboBox1.SelectedIndex = 2;
+            }
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke((MethodInvoker)this.EnqueueJob);
+            }
+            else
+            {
+                this.EnqueueJob();
             }
         }
 
         /// <summary>
         /// Starts the Download when Pressing Enter in Textbox URL
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// 
-        private void TextBox1KeyPress( object sender, KeyPressEventArgs e )
+        /// <param name="sender">
+        /// The sender object.
+        /// </param>
+        /// <param name="e">
+        /// The Key Press Event Arguments.
+        /// </param>
+        private void TextBox1KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != '\r' || bParseAct)
+            if (e.KeyChar != '\r' || this.bParseAct)
             {
                 return;
             }
 
             e.Handled = true;
-            this.EnqueueJob();
+
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)this.EnqueueJob);
+            }
+            else
+            {
+                this.EnqueueJob();
+            } 
         }
 
         /// <summary>
@@ -670,7 +707,7 @@ namespace PGRipper
             }
 
             // Format Url
-            string sHtmlUrl = UrlHandler.GetHtmlUrl(textBox1.Text, comboBox1.SelectedIndex);
+            var sHtmlUrl = UrlHandler.GetHtmlUrl(textBox1.Text, comboBox1.SelectedIndex);
 
             if (string.IsNullOrEmpty(sHtmlUrl))
             {
@@ -692,20 +729,23 @@ namespace PGRipper
                     sPostId = sHtmlUrl.Substring(sHtmlUrl.IndexOf("#post") + 5);
                 }
 
-                if (sPostId.Contains("&postcount"))
+                if (!string.IsNullOrEmpty(sPostId))
                 {
-                    sPostId.Remove(sHtmlUrl.IndexOf("&postcount"));
-                }
-
-                if (this.IsPostAlreadyRipped(sPostId))
-                {
-                    DialogResult result = TopMostMessageBox.Show(
-                        this.rm.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                    if (result != DialogResult.Yes)
+                    if (sPostId.Contains("&postcount"))
                     {
-                        this.UnlockControls();
-                        return;
+                        sPostId.Remove(sHtmlUrl.IndexOf("&postcount"));
+                    }
+
+                    if (this.IsPostAlreadyRipped(sPostId))
+                    {
+                        DialogResult result = TopMostMessageBox.Show(
+                            this.rm.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (result != DialogResult.Yes)
+                        {
+                            this.UnlockControls();
+                            return;
+                        }
                     }
                 }
             }
@@ -722,7 +762,8 @@ namespace PGRipper
             else
             {
                 if (userSettings.sForumUrl.Contains(@"http://rip-") ||
-                   userSettings.sForumUrl.Contains(@"http://www.rip-"))
+                   userSettings.sForumUrl.Contains(@"http://www.rip-") ||
+                userSettings.sForumUrl.Contains(@"kitty-kats.com"))
                 {
                     if (!sHtmlUrl.Contains(@"#post"))
                     {
@@ -746,8 +787,8 @@ namespace PGRipper
                 }
             }
         }
-
-	    /// <summary>
+        
+        /// <summary>
         /// Check if Job is OK
         /// </summary>
         /// <returns>Returns true or false</returns>
@@ -766,7 +807,7 @@ namespace PGRipper
 
                 if (result == DialogResult.OK)
                 {
-                    UpdateDownloadFolder();
+                    this.UpdateDownloadFolder();
                 }
             }
 
@@ -777,16 +818,15 @@ namespace PGRipper
         /// Parse all Threads/Posts in the Index
         /// </summary>
         /// <param name="sHtmlUrl">The Url to the Thread/Post</param>
-        private void EnqueueIndexThread( String sHtmlUrl )
+        private void EnqueueIndexThread(string sHtmlUrl)
         {
-
 #if (!PGRIPPERX)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
                Environment.OSVersion.Version.Major >= 6 &&
                Environment.OSVersion.Version.Minor >= 1)
             {
-                windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
+                this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
             }
 #endif
 
@@ -801,14 +841,13 @@ namespace PGRipper
                         Environment.OSVersion.Version.Major >= 6 &&
                         Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        windowsTaskbar.SetProgressValue(10, 100);
-                        windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                        this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                        this.windowsTaskbar.SetProgressValue(10, 100);
+                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
                     // Unlock Controls
-                    UnlockControls();
-                    //
+                    this.UnlockControls();
 
                     return;
                 }
@@ -822,19 +861,16 @@ namespace PGRipper
                     Environment.OSVersion.Version.Major >= 6 &&
                     Environment.OSVersion.Version.Minor >= 1)
                 {
-                    windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                    windowsTaskbar.SetProgressValue(10, 100);
-                    windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                    this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                    this.windowsTaskbar.SetProgressValue(10, 100);
+                    this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                 }
 #endif
                 // Unlock Controls
-                UnlockControls();
-                //
+                this.UnlockControls();
 
                 return;
             }
-
-            //g_sComposedURI = aXmlUrl;
 
             mIsIndexChk.Checked = false;
 
@@ -850,16 +886,15 @@ namespace PGRipper
         /// Parse all Posts of a Thread
         /// </summary>
         /// <param name="sHtmlUrl">The Thread Url</param>
-        private void EnqueueThreadToPost(String sHtmlUrl)
+        private void EnqueueThreadToPost(string sHtmlUrl)
         {
-
 #if (!PGRIPPERX)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
                Environment.OSVersion.Version.Major >= 6 &&
                Environment.OSVersion.Version.Minor >= 1)
             {
-                windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
+                this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
             }
 #endif
 
@@ -874,14 +909,13 @@ namespace PGRipper
                         Environment.OSVersion.Version.Major >= 6 &&
                         Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        windowsTaskbar.SetProgressValue(10, 100);
-                        windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                        this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                        this.windowsTaskbar.SetProgressValue(10, 100);
+                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
                     // Unlock Controls
-                    UnlockControls();
-                    //
+                    this.UnlockControls();
 
                     return;
                 }
@@ -895,19 +929,17 @@ namespace PGRipper
                     Environment.OSVersion.Version.Major >= 6 &&
                     Environment.OSVersion.Version.Minor >= 1)
                 {
-                    windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                    windowsTaskbar.SetProgressValue(10, 100);
-                    windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                    this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                    this.windowsTaskbar.SetProgressValue(10, 100);
+                    this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                 }
 #endif
                 // Unlock Controls
-                UnlockControls();
-                //
+                this.UnlockControls();
 
                 return;
             }
 
-            //g_sComposedURI = sHtmlUrl;
             ///////
             while (GetPostsWorker.IsBusy)
             {
@@ -921,7 +953,7 @@ namespace PGRipper
         /// Parse a Thread or Post as Single Job
         /// </summary>
         /// <param name="sHtmlUrl">The Thread/Post Url</param>
-        private void EnqueueThreadOrPost( String sHtmlUrl )
+        private void EnqueueThreadOrPost(string sHtmlUrl)
         {
             if (mJobsList.Any(t => t.URL == sHtmlUrl))
             {
@@ -929,7 +961,11 @@ namespace PGRipper
                 return;
             }
 
-            JobInfo job = new JobInfo {URL = sHtmlUrl, HtmlPayLoad = Maintainance.GetInstance().GetPostPages(sHtmlUrl)};
+            JobInfo job = new JobInfo
+                {
+                    URL = sHtmlUrl, 
+                    HtmlPayLoad = Maintainance.GetInstance().GetPostPages(sHtmlUrl)
+                };
 
             //job.sStorePath = sDownloadFolder;
 
@@ -956,7 +992,7 @@ namespace PGRipper
                     job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.HtmlPayLoad, true);
 
                     job.ForumTitle =
-                        job.ForumTitle.Substring(job.ForumTitle.IndexOf(job.Title + " ") + job.Title.Length + 1);
+                        job.ForumTitle.Substring(job.ForumTitle.IndexOf(string.Format("{0} ", job.Title)) + job.Title.Length + 1);
                 }
             }
             else
@@ -970,7 +1006,7 @@ namespace PGRipper
                     job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.HtmlPayLoad, false);
 
                     job.ForumTitle =
-                        job.ForumTitle.Substring(job.ForumTitle.IndexOf(job.Title + " ") + job.Title.Length + 1);
+                        job.ForumTitle.Substring(job.ForumTitle.IndexOf(string.Format("{0} ", job.Title)) + job.Title.Length + 1);
                 }
             }
 
@@ -982,37 +1018,44 @@ namespace PGRipper
             if (job.ImageCount == 0)
             {
                 // Unlock Controls
-                UnlockControls();
+                this.UnlockControls();
 
                 return;
             }
             
-            if(string.IsNullOrEmpty(job.Title))
+            if (string.IsNullOrEmpty(job.Title))
             {
                 TopMostMessageBox.Show(sHtmlUrl.IndexOf("threadid=") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
 
                 // Unlock Controls
-                UnlockControls();
+                this.UnlockControls();
 
                 return;
             }
 
-            job.StorePath = GenerateStorePath(job);
+            job.StorePath = this.GenerateStorePath(job);
 
-            //JobListAdd(job);
-
-            JobListAddDelegate newJob = JobListAdd;
+            JobListAddDelegate newJob = this.JobListAdd;
 
             Invoke(newJob, new object[] { job });
 
             ///////////////////////////////////////////////
-            UnlockControls();
+            this.UnlockControls();
             ///////////////////////////////////////////////
         }
-        
+
         /// <summary>
         /// Pushes the "Thank You" Button for the user.
         /// </summary>
+        /// <param name="sPostId">
+        /// The s post id.
+        /// </param>
+        /// <param name="iICount">
+        /// The i i count.
+        /// </param>
+        /// <param name="sSecurityToken">
+        /// The s security token.
+        /// </param>
         void ProcessAutoThankYou(string sPostId, int iICount, string sSecurityToken)
         {
             if (!userSettings.bAutoThank) { return; }
@@ -1087,16 +1130,21 @@ namespace PGRipper
         /// <summary>
         /// Parses an index and places all linked images in mDownloadsList.
         /// </summary>
-		private void ThrdGetIndexes(string sHtmlUrl)
-		{
+        /// <param name="sHtmlUrl">The s HTML URL.</param>
+        private void ThrdGetIndexes(string sHtmlUrl)
+        {
             Indexes idxs = new Indexes();
 
-            string sPagecontent = userSettings.sForumUrl.Contains(@"rip-productions.net") ? idxs.GetThreadPagesNew(sHtmlUrl) : idxs.GetThreadPages(sHtmlUrl);
+            string sPagecontent = userSettings.sForumUrl.Contains(@"rip-productions.net") ||
+                                  userSettings.sForumUrl.Contains(@"kitty-kats.com")
+                                      ? idxs.GetThreadPagesNew(sHtmlUrl)
+                                      : idxs.GetThreadPages(sHtmlUrl);
 
-            arlstIndxs = idxs.ParseHtml(sPagecontent, sHtmlUrl);
-		}
+            this.arlstIndxs = idxs.ParseHtml(sPagecontent, sHtmlUrl);
+        }
 
         private List<ImageInfo> arlstIndxs;
+        
         /// <summary>
         /// Get All Post of a Thread and Parse them as new Job
         /// </summary>
@@ -1106,8 +1154,8 @@ namespace PGRipper
 
             string sPagecontent;
 
-            if (userSettings.sForumUrl.Contains(@"http://rip-") ||
-                    userSettings.sForumUrl.Contains(@"http://www.rip-"))
+            if (userSettings.sForumUrl.Contains(@"http://rip-") || userSettings.sForumUrl.Contains(@"http://www.rip-") ||
+                userSettings.sForumUrl.Contains(@"kitty-kats.com"))
             {
                 sPagecontent = threads.GetThreadPagesNew(sHtmlUrl);
             }
@@ -1135,7 +1183,10 @@ namespace PGRipper
                 }
                 //sHtmlUrl
 
-                string sLComposedURL = userSettings.sForumUrl.Contains(@"rip-productions.net") ? string.Format("{0}#post{1}", sHtmlUrl, sLpostId) : string.Format("{0}showpost.php?p={1}", userSettings.sForumUrl, sLpostId);
+                string sLComposedURL = userSettings.sForumUrl.Contains(@"rip-productions.net") ||
+                userSettings.sForumUrl.Contains(@"kitty-kats.com")
+                                           ? string.Format("{0}#post{1}", sHtmlUrl, sLpostId)
+                                           : string.Format("{0}showpost.php?p={1}", userSettings.sForumUrl, sLpostId);
 
                 JobInfo jobInfo = mJobsList.Find(doubleJob => (doubleJob.URL.Equals(sLComposedURL)));
 
@@ -1153,10 +1204,7 @@ namespace PGRipper
                 }
 
                 JobInfo job = new JobInfo
-                                  {
-                                      URL = sLComposedURL,
-                                      HtmlPayLoad = Maintainance.GetInstance().GetPostPages(sLComposedURL)
-                                  };
+                    { URL = sLComposedURL, HtmlPayLoad = Maintainance.GetInstance().GetPostPages(sLComposedURL) };
 
                 //job.sStorePath = sDownloadFolder;
 
@@ -1174,7 +1222,11 @@ namespace PGRipper
                     job.SecurityToken = Maintainance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
                 }
 
-                job.ForumTitle = userSettings.sForumUrl.Contains(@"rip-productions.net") ? sForumTitle : sForumTitle.Substring(sForumTitle.IndexOf(job.Title + " ") + job.Title.Length + 1);
+                job.ForumTitle = userSettings.sForumUrl.Contains(@"rip-productions.net") ||
+                userSettings.sForumUrl.Contains(@"kitty-kats.com")
+                                     ? sForumTitle
+                                     : sForumTitle.Substring(
+                                         sForumTitle.IndexOf(job.Title + " ") + job.Title.Length + 1);
 
                 job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sLComposedURL);
                 job.Title = Utility.ReplaceHexWithAscii(job.Title);
@@ -1197,7 +1249,7 @@ namespace PGRipper
                 //JobListAdd(job);
 
                 //////////////////////////////////////////////////////////////////////////
-            SKIPIT:
+                SKIPIT:
                 continue;
             }
         }
@@ -1277,8 +1329,8 @@ namespace PGRipper
                            Environment.OSVersion.Version.Major >= 6 &&
                            Environment.OSVersion.Version.Minor >= 1)
                         {
-                            windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                            windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
+                            this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                            this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
                         }
 #endif
 
@@ -1435,7 +1487,7 @@ namespace PGRipper
                Environment.OSVersion.Version.Major >= 6 &&
                Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressValue(i, mImagesList.Count);
+                        this.windowsTaskbar.SetProgressValue(i, mImagesList.Count);
                     }
 #endif
                     while (!lTdm.IsSystemReadyForNewThread())
@@ -1514,8 +1566,8 @@ namespace PGRipper
                Environment.OSVersion.Version.Major >= 6 &&
                Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                        windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
+                        this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
                     }
 #endif
                     // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
@@ -1640,9 +1692,9 @@ namespace PGRipper
               Environment.OSVersion.Version.Major >= 6 &&
               Environment.OSVersion.Version.Minor >= 1)
             {
-                windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                windowsTaskbar.SetProgressValue(10, 100);
-                windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                this.windowsTaskbar.SetProgressValue(10, 100);
+                this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
             }
 
             string btleExit = rm.GetString("btleExit"),
@@ -2260,73 +2312,75 @@ namespace PGRipper
         }
         void CheckClipboardData()
         {
-            if (userSettings.bClipBWatch)
+            if (!userSettings.bClipBWatch)
             {
-                try
+                return;
+            }
+
+            try
+            {
+                IDataObject iData = Clipboard.GetDataObject();
+
+                if (iData.GetDataPresent(DataFormats.Text))
+                {
+                    string sClipBoardURLTemp = (string)iData.GetData(DataFormats.Text);
+
+                    string[] sClipBoardUrLs = sClipBoardURLTemp.Split(new[] { '\n' });
+
+                    foreach (string sClipBoardURL in sClipBoardUrLs)
                     {
-                        IDataObject iData = Clipboard.GetDataObject();
+                        if (!sClipBoardURL.StartsWith(userSettings.sForumUrl)) continue;
 
-                        if (iData.GetDataPresent(DataFormats.Text))
+                        string sClipBoardURLNew = sClipBoardURL;
+
+                        if (sClipBoardURLNew.Contains("\r"))
                         {
-                            string sClipBoardURLTemp = (string)iData.GetData(DataFormats.Text);
-
-                            string[] sClipBoardUrLs = sClipBoardURLTemp.Split(new[] { '\n' });
-
-                            foreach (string sClipBoardURL in sClipBoardUrLs)
-                            {
-                                if (!sClipBoardURL.StartsWith(userSettings.sForumUrl)) continue;
-
-                                string sClipBoardURLNew = sClipBoardURL;
-
-                                if (sClipBoardURLNew.Contains("\r"))
-                                {
-                                    sClipBoardURLNew = sClipBoardURLNew.Replace("\r", "");
-                                }
-
-                                if (sClipBoardURL.Contains(@"&postcount=") || sClipBoardURL.Contains(@"&page="))
-                                {
-                                    sClipBoardURLNew = Regex.Replace(sClipBoardURLNew, sClipBoardURLNew.Substring(sClipBoardURLNew.IndexOf("&")), "");
-                                }
-
-                                //Application.DoEvents();
-
-                                if (comboBox1.SelectedIndex != 2)
-                                {
-                                    comboBox1.SelectedIndex = 2;
-                                }
-
-                                if (!this.bParseAct)
-                                {
-                                    if (this.comboBox1.SelectedIndex != 2)
-                                    {
-                                        this.comboBox1.SelectedIndex = 2;
-                                    }
-
-                                    this.textBox1.Text = sClipBoardURLNew;
-
-                                    if (InvokeRequired)
-                                    {
-                                        Invoke((MethodInvoker)this.EnqueueJob);
-                                    }
-                                    else
-                                    {
-                                        this.EnqueueJob();
-                                    }
-                                }
-                                else
-                                {
-                                    this.ExtractUrls.Add(sClipBoardURLNew);
-                                }
-
-                                Clipboard.Clear();
-                            }
+                            sClipBoardURLNew = sClipBoardURLNew.Replace("\r", "");
                         }
 
-                    }
-                    catch (Exception)
-                    {
+                        if (sClipBoardURL.Contains(@"&postcount=") || sClipBoardURL.Contains(@"&page="))
+                        {
+                            sClipBoardURLNew = Regex.Replace(sClipBoardURLNew, sClipBoardURLNew.Substring(sClipBoardURLNew.IndexOf("&")), "");
+                        }
+
+                        //Application.DoEvents();
+
+                        if (this.comboBox1.SelectedIndex != 2)
+                        {
+                            this.comboBox1.SelectedIndex = 2;
+                        }
+
+                        if (!this.bParseAct)
+                        {
+                            if (this.comboBox1.SelectedIndex != 2)
+                            {
+                                this.comboBox1.SelectedIndex = 2;
+                            }
+
+                            this.textBox1.Text = sClipBoardURLNew;
+
+                            if (this.InvokeRequired)
+                            {
+                                this.Invoke((MethodInvoker)this.EnqueueJob);
+                            }
+                            else
+                            {
+                                this.EnqueueJob();
+                            }
+                        }
+                        else
+                        {
+                            this.ExtractUrls.Add(sClipBoardURLNew);
+                        }
+
                         Clipboard.Clear();
                     }
+                }
+
+            }
+            catch (Exception)
+            {
+                Clipboard.Clear();
             }
         }
 #endif
@@ -2638,7 +2692,15 @@ namespace PGRipper
               StatusLabelInfo.Text = string.Format("{0}{1}/{2}", "Analyse Index(es)", po, arlstIndxs.Count);
 
               textBox1.Text = arlstIndxs[po].ImageUrl;
-              EnqueueJob();
+
+              if (InvokeRequired)
+              {
+                  Invoke((MethodInvoker)this.EnqueueJob);
+              }
+              else
+              {
+                  this.EnqueueJob();
+              } 
               //////////////////////////////////////////////////////////////////////////
           }
 

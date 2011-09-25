@@ -1,191 +1,223 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
-
-using System;
-using System.Net;
-using System.Text.RegularExpressions;
-
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Maintainance.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper
 {
-	/// <summary>
-	/// Summary description for Maintainance.
-	/// </summary>
-	public class Maintainance
-	{
-		public static System.Windows.Forms.Form xform;
-		public static Maintainance mInstace;
+    using System;
+    using System.Net;
+    using System.Text.RegularExpressions;
 
-		public static Maintainance GetInstance()
-		{
-		    return mInstace ?? (mInstace = new Maintainance());
-		}
+    /// <summary>
+    /// Summary description for Maintainance.
+    /// </summary>
+    public class Maintainance
+    {
+        public static System.Windows.Forms.Form xform;
+
+        public static Maintainance mInstace;
+
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <returns>
+        /// The get instance.
+        /// </returns>
+        public static Maintainance GetInstance()
+        {
+            return mInstace ?? (mInstace = new Maintainance());
+        }
+
         /// <summary>
         /// Extract Current Page Title
         /// </summary>
-        /// <param name="sURL"></param>
-        /// <returns></returns>
-	    public string GetRipPageTitle(string sURL)
+        /// <param name="url">
+        /// The url.
+        /// </param>
+        /// <returns>
+        /// The get rip page title.
+        /// </returns>
+        public string GetRipPageTitle(string url)
         {
-            //string sPage = getRIPPage(sURL);
-
-            string sPage = sURL;
-
+            string sPage = url;
 
             int iTitleStart = sPage.IndexOf("<title>");
 
             if (iTitleStart < 0)
+            {
                 return string.Empty;
+            }
 
             iTitleStart += 7;
 
             if (MainForm.userSettings.sForumUrl.Contains(@"http://rip-") ||
-                    MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-"))
+                MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-"))
             {
                 iTitleStart += 1;
             }
 
-	        int iTitleEnd = sPage.IndexOf(@"</title>");
+            int iTitleEnd = sPage.IndexOf(@"</title>");
 
             if (iTitleEnd < 0)
+            {
                 return string.Empty;
+            }
 
             string sTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
 
-            if (MainForm.userSettings.sForumUrl.Contains("rip-productions.net"))
+            if (MainForm.userSettings.sForumUrl.Contains("rip-productions.net") ||
+                MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
             {
                 return sTitle.Trim();
             }
 
+            sTitle = sTitle.Contains(@"View Single Post")
+                         ? sTitle.Substring(sTitle.IndexOf("View Single Post - ") + 19)
+                         : Regex.Replace(sTitle, sTitle.Substring(sTitle.IndexOf("- ")), string.Empty);
 
-	        sTitle = sTitle.Contains(@"View Single Post") ? sTitle.Substring(sTitle.IndexOf("View Single Post - ") + 19) : Regex.Replace(sTitle, sTitle.Substring(sTitle.IndexOf("- ")), string.Empty);
-
-
-	        return sTitle.Trim();
+            return sTitle.Trim();
         }
+
         /// <summary>
         /// Get Current Security Token for the Thank You Button Function
         /// </summary>
-        /// <param name="sContent"></param>
-        /// <returns></returns>
-        public string GetSecurityToken(string sContent)
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <returns>
+        /// The get security token.
+        /// </returns>
+        public string GetSecurityToken(string content)
         {
-            string sPage = sContent;
-
-            
+            string sPage = content;
 
             int iSecurityTokenStart = sPage.IndexOf("securitytoken=");
 
             if (iSecurityTokenStart < 0)
+            {
                 return string.Empty;
+            }
 
             iSecurityTokenStart += 14;
-
 
             int iSecurityTokenEnd = sPage.IndexOf("\" id=\"post_thanks_button_");
 
             if (iSecurityTokenEnd < 0)
+            {
                 return string.Empty;
+            }
 
             string sSecurityToken = sPage.Substring(iSecurityTokenStart, iSecurityTokenEnd - iSecurityTokenStart);
 
             return sSecurityToken;
         }
+
         /// <summary>
         /// Extract Current Forum Title of the Current Sub Forum
         /// </summary>
-        /// <param name="sContent"></param>
-        /// <param name="bIsPost"></param>
-        /// <returns></returns>
-        public string ExtractForumTitleFromHtml(string sContent, bool bIsPost)
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <param name="isPost">
+        /// if set to <c>true</c> [is post].
+        /// </param>
+        /// <returns>
+        /// The extract forum title from html.
+        /// </returns>
+        public string ExtractForumTitleFromHtml(string content, bool isPost)
         {
             string sPage;
 
-            /*if (MainForm.userSettings.sForumUrl.Contains(@"proving-grounds.com"))
+            if (MainForm.userSettings.sForumUrl.Contains(@"rip-productions.net"))
             {
-                sPage = sContent;
+                sPage = GetRipPage(content);
 
-                if (sPage.Contains(@"proving-grounds.com"))
-                {
+                const string Start = "<span class=\"ctrlcontainer\">";
 
-                    string sForumTitleFromUrl = sPage.Substring(sPage.IndexOf("com/") + 4);
-
-                    sForumTitleFromUrl = sForumTitleFromUrl.Remove(sForumTitleFromUrl.IndexOf("/"));
-
-                    return sForumTitleFromUrl;
-                }
-            }
-            else*/ if (MainForm.userSettings.sForumUrl.Contains(@"rip-productions.net"))
-            {
-                sPage = GetRipPage(sContent);
-
-                const string sStart = "<span class=\"ctrlcontainer\">";
-
-                int iPageStart = sPage.IndexOf(sStart);
+                int iPageStart = sPage.IndexOf(Start);
 
                 if (iPageStart < 0)
+                {
                     return string.Empty;
+                }
 
-                iPageStart += sStart.Length;
+                iPageStart += Start.Length;
 
                 int iPageEnd = sPage.IndexOf("</span></a>", iPageStart);
 
-                if (iPageEnd < 0)
+                return iPageEnd < 0 ? string.Empty : sPage.Substring(iPageStart, iPageEnd - iPageStart);
+            }
+
+            if (MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
+            {
+                sPage = GetRipPage(content);
+
+                const string Start = "<li class=\"navbit\">";
+
+                int iPageStart = sPage.LastIndexOf(Start);
+
+                if (iPageStart < 0)
                 {
                     return string.Empty;
                 }
 
-                return sPage.Substring(iPageStart, iPageEnd - iPageStart);
+                iPageStart += Start.Length;
+
+                iPageStart = sPage.IndexOf(">", iPageStart);
+
+                iPageStart += 1;
+
+                int iPageEnd = sPage.IndexOf("</a></li>", iPageStart);
+
+                return iPageEnd < 0 ? string.Empty : sPage.Substring(iPageStart, iPageEnd - iPageStart);
             }
 
-            if (bIsPost)
+            if (isPost)
             {
                 // First get Thread Url of Current Post
-                int iPageStart = sContent.IndexOf("href=\"showthread.php");
+                int iPageStart = content.IndexOf("href=\"showthread.php");
 
                 if (iPageStart < 0)
+                {
                     return string.Empty;
+                }
 
                 iPageStart += 6;
 
-                int iPageEnd = sContent.IndexOf("\">", iPageStart);
+                int iPageEnd = content.IndexOf("\">", iPageStart);
 
                 if (iPageEnd < 0)
                 {
                     return string.Empty;
                 }
 
-                string sFTitleUrl = sContent.Substring(iPageStart, iPageEnd - iPageStart);
+                string sFTitleUrl = content.Substring(iPageStart, iPageEnd - iPageStart);
 
                 sPage = GetRipPage(MainForm.userSettings.sForumUrl + sFTitleUrl);
             }
             else
             {
-                sPage = GetRipPage(sContent);
+                sPage = GetRipPage(content);
             }
 
             // Now Parse Sub Forum Title
+            const string MetaStart = "<meta name=\"description\" content=\"";
 
-            const string sMetaStart = "<meta name=\"description\" content=\"";
-
-            int iTitleStart = sPage.IndexOf(sMetaStart);
+            int iTitleStart = sPage.IndexOf(MetaStart);
 
             if (iTitleStart < 0)
+            {
                 return string.Empty;
+            }
 
-            iTitleStart += sMetaStart.Length;
-
+            iTitleStart += MetaStart.Length;
 
             int iTitleEnd = sPage.IndexOf("\" />", iTitleStart);
 
@@ -198,52 +230,62 @@ namespace PGRipper
 
             return Utility.ReplaceHexWithAscii(sForumTitle);
         }
+
         /// <summary>
-        /// Extract the Current Post Title if there is any 
+        /// Extract the Current Post Title if there is any
         /// if not use PostId As Title
         /// </summary>
-        /// <param name="sContent"></param>
-        /// <param name="sURL"></param>
-        /// <returns></returns>
-        public string ExtractPostTitleFromHtml(string sContent, string sURL)
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <param name="url">
+        /// The url.
+        /// </param>
+        /// <returns>
+        /// The extract post title from html.
+        /// </returns>
+        public string ExtractPostTitleFromHtml(string content, string url)
         {
-            string sPage = sContent;
-            //string sPage = getRIPPage(sURL);
+            string sPage = content;
 
             string sPostTitle;
 
             if (MainForm.userSettings.sForumUrl.Contains(@"http://rip-") ||
-                    MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-"))
+                MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-") ||
+                MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
             {
                 ////////////////////////////////////
                 // Extract Current Post first
-                string sPostId = sURL.Substring(sURL.IndexOf("#post") + 5);
+                string sPostId = url.Substring(url.IndexOf("#post") + 5);
 
                 // use only message content
-                string sMessageStart = string.Format("<li class=\"postbitlegacy postbitim postcontainer\" id=\"post_{0}\">", sPostId);
-                const string sMessageEnd = "</blockquote>";
+                string sMessageStart =
+                    string.Format("<li class=\"postbitlegacy postbitim postcontainer\" id=\"post_{0}\">", sPostId);
+                const string MessageEnd = "</blockquote>";
 
-                int iStart = sContent.IndexOf(sMessageStart);
+                int iStart = content.IndexOf(sMessageStart);
 
                 iStart += sMessageStart.Length;
 
-                int iEnd = sContent.IndexOf(sMessageEnd, iStart);
+                int iEnd = content.IndexOf(MessageEnd, iStart);
 
-                sPage = sContent.Substring(iStart, iEnd - iStart);
+                sPage = content.Substring(iStart, iEnd - iStart);
 
                 /////////////////////////////////
 
-                const string sTitleStart = "<h2 class=\"title icon\">";
+                const string TitleStart = "<h2 class=\"title icon\">";
 
-                int iTitleStart = sPage.IndexOf(sTitleStart);
+                int iTitleStart = sPage.IndexOf(TitleStart);
 
-                iTitleStart += sTitleStart.Length;
+                iTitleStart += TitleStart.Length;
 
                 int iTitleEnd = sPage.IndexOf("</h2>", iTitleStart);
 
                 try
                 {
-                    sPostTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart).Replace("\r", string.Empty).Replace("\t", string.Empty).Replace("\n", string.Empty);
+                    sPostTitle =
+                        sPage.Substring(iTitleStart, iTitleEnd - iTitleStart).Replace("\r", string.Empty).Replace(
+                            "\t", string.Empty).Replace("\n", string.Empty);
 
                     // Remove Post Icon
                     if (sPostTitle.StartsWith("<img src="))
@@ -255,13 +297,14 @@ namespace PGRipper
                 {
                     sPostTitle = string.Empty;
                 }
-               
             }
             else
             {
                 try
                 {
-                    int iTitleStart = sPage.IndexOf("<td width=\"100%\" valign=\"middle\"><div class=\"smallfont\" align=\"center\"> <strong>");
+                    int iTitleStart =
+                        sPage.IndexOf(
+                            "<td width=\"100%\" valign=\"middle\"><div class=\"smallfont\" align=\"center\"> <strong>");
 
                     iTitleStart += 80;
 
@@ -275,66 +318,85 @@ namespace PGRipper
                 }
             }
 
-            
-
             if (string.IsNullOrEmpty(sPostTitle))
             {
                 if (MainForm.userSettings.sForumUrl.Contains(@"http://rip-") ||
-                    MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-"))
+                    MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-") ||
+                    MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
                 {
-                    sPostTitle = "post# " + sURL.Substring(sURL.IndexOf(@"#post") + 5);
+                    sPostTitle = "post# " + url.Substring(url.IndexOf(@"#post") + 5);
                 }
                 else
                 {
-                    if (sURL.Contains(@"&postcount="))
+                    if (url.Contains(@"&postcount="))
                     {
-                        int iTitleStart = sURL.IndexOf("showpost.php?p=");
+                        int iTitleStart = url.IndexOf("showpost.php?p=");
 
                         if (iTitleStart < 0)
+                        {
                             return string.Empty;
+                        }
 
                         iTitleStart += 16;
 
-
-                        int iTitleEnd = sURL.IndexOf("&postcount=");
+                        int iTitleEnd = url.IndexOf("&postcount=");
 
                         if (iTitleEnd < 0)
+                        {
                             return string.Empty;
+                        }
 
-                        sPostTitle = "post# " + sURL.Substring(iTitleStart, iTitleEnd - iTitleStart);
+                        sPostTitle = "post# " + url.Substring(iTitleStart, iTitleEnd - iTitleStart);
                     }
                     else
                     {
-                        sPostTitle = "post# " + sURL.Substring(sURL.IndexOf(@"showpost.php?p=") + 15);
+                        sPostTitle = "post# " + url.Substring(url.IndexOf(@"showpost.php?p=") + 15);
                     }
                 }
-
             }
             else
             {
                 return Utility.ReplaceHexWithAscii(sPostTitle);
             }
 
-
             return Utility.ReplaceHexWithAscii(sPostTitle);
         }
-          
-        public string GetPostPages(string sURL)
+
+        /// <summary>
+        /// Gets the post pages.
+        /// </summary>
+        /// <param name="url">
+        /// The URL.
+        /// </param>
+        /// <returns>
+        /// The get post pages.
+        /// </returns>
+        public string GetPostPages(string url)
         {
-            return GetRipPage(sURL);
+            return GetRipPage(url);
         }
 
-        private static string GetRipPage(string strURL)
+        /// <summary>
+        /// Gets the rip page.
+        /// </summary>
+        /// <param name="url">
+        /// The URL.
+        /// </param>
+        /// <returns>
+        /// The get rip page.
+        /// </returns>
+        private static string GetRipPage(string url)
         {
             string sPageRead;
 
             try
             {
                 WebClient wc = new WebClient();
-                wc.Headers.Add("Referer: " + strURL);
-                wc.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
+                wc.Headers.Add("Referer: " + url);
+                wc.Headers.Add(
+                    "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 wc.Headers.Add("Cookie: " + CookieManager.GetInstance().GetCookieString());
-                sPageRead = wc.DownloadString(strURL);
+                sPageRead = wc.DownloadString(url);
             }
             catch (Exception)
             {
@@ -343,5 +405,5 @@ namespace PGRipper
 
             return sPageRead;
         }
-	}
+    }
 }

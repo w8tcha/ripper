@@ -295,7 +295,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PGRipper, Version=1.3.1.6, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:PGRipper, Version=1.3.1.7, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_A31D98E170F14C54A8AEB26FCB8635F9"
@@ -398,15 +398,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PG-Ripper"
-        "ProductCode" = "8:{DA53DAF8-CBF6-4469-97E2-237C37B80ACC}"
-        "PackageCode" = "8:{95F2E3DA-DF96-4DBF-9D5F-617D5F5D098B}"
+        "ProductCode" = "8:{79C0FE9C-CDB5-4FF6-94BD-B6FAD4C9E7E6}"
+        "PackageCode" = "8:{1955B048-DB3B-4367-957B-254C6CE1D41B}"
         "UpgradeCode" = "8:{F819C6F0-BFDA-4CDA-8AE8-756980ED0F55}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.3.16"
+        "ProductVersion" = "8:1.3.17"
         "Manufacturer" = "8:WatchersNET"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://ripper.watchersnet.de"

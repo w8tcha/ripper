@@ -617,24 +617,37 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Get ImagePad Download
+        /// </summary>
+        public void GetImagePad()
+        {
+            this.xService = new ImagePad(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hotlinked image fether...
         /// </summary>
         public void GetImage()
         {
-            string strImgURL = mstrURL;
+            string strImgURL = this.mstrURL;
 
-            if (eventTable.ContainsKey(strImgURL))	
+            if (this.eventTable.ContainsKey(strImgURL))
             {
-                if (((CacheObject)eventTable[strImgURL]).IsDownloaded)
+                if (((CacheObject)this.eventTable[strImgURL]).IsDownloaded)
+                {
                     return;
+                }
             }
 
-            string strFilePath = strImgURL.Substring(  strImgURL.LastIndexOf("/") + 1 );
+            string strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1);
 
             try
             {
-                if (!Directory.Exists(mSavePath))
-                    Directory.CreateDirectory(mSavePath);
+                if (!Directory.Exists(this.mSavePath))
+                {
+                    Directory.CreateDirectory(this.mSavePath);
+                }
             }
             catch (IOException ex)
             {
@@ -644,86 +657,81 @@ namespace PGRipper
                 return;
             }
 
-            if (mSavePath.Contains("/"))
-                strFilePath = mSavePath + "/" + Utility.RemoveIllegalCharecters(strFilePath); //strFilePath;
-            else
-                strFilePath = mSavePath + "\\" + Utility.RemoveIllegalCharecters(strFilePath); //strFilePath;
+            strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
-            CacheObject ccObj = new CacheObject {IsDownloaded = false, FilePath = strFilePath, Url = strImgURL};
+            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+
             try
             {
-                eventTable.Add(strImgURL, ccObj);
+                this.eventTable.Add(strImgURL, ccObj);
             }
             catch (ThreadAbortException)
             {
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
                 return;
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
-                if (eventTable.ContainsKey(strImgURL))	
+                if (this.eventTable.ContainsKey(strImgURL))
                 {
-                    ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                    ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
                     return;
                 }
-                eventTable.Add(strImgURL, ccObj);
+
+                this.eventTable.Add(strImgURL, ccObj);
             }
 
 
             //////////////////////////////////////////////////////////////////////////
 
-            HttpWebRequest lHttpWebRequest;
-            HttpWebResponse lHttpWebResponse;
-            Stream lHttpWebResponseStream;
-
             try
             {
-                lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strImgURL);
+                var lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strImgURL);
 
                 lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
                 lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
                 lHttpWebRequest.Headers.Add("Accept-Encoding: gzip,deflate");
                 lHttpWebRequest.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
                 lHttpWebRequest.Accept = "image/png,*/*;q=0.5";
-                //lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
+                ////lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
                 lHttpWebRequest.KeepAlive = true;
-                if (strImgURL.IndexOf("www.ripnetwork.net:82") >= 0)
-                    lHttpWebRequest.Referer = MainForm.userSettings.sForumUrl + "showthread.php";
-                else
-                    lHttpWebRequest.Referer = strImgURL;
-				
-                lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
-                lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
-				
+                lHttpWebRequest.Referer = strImgURL.IndexOf("www.ripnetwork.net:82") >= 0
+                                              ? string.Format("{0}showthread.php", MainForm.userSettings.sForumUrl)
+                                              : strImgURL;
+
+                var lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
+                var lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
+
                 if (lHttpWebResponse.ContentType.IndexOf("image") < 0)
                 {
                     lHttpWebResponse.Close();
                     lHttpWebResponseStream.Close();
 
-                    ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
-                    ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
-					
+                    ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = false;
+                    ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
                     return;
                 }
+
                 string sNewAlteredPath = Utility.GetSuitableName(strFilePath);
+
                 if (strFilePath != sNewAlteredPath)
                 {
                     strFilePath = sNewAlteredPath;
-                    ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+                    ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
                 }
 
                 lHttpWebResponse.Close();
                 lHttpWebResponseStream.Close();
 
-                WebClient client = new WebClient();
+                var client = new WebClient();
                 client.Headers.Add("Accept-Language: en-us,en;q=0.5");
                 client.Headers.Add("Accept-Encoding: gzip,deflate");
                 client.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-                //client.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
-                if (strImgURL.IndexOf("www.ripnetwork.net:82") >= 0)
-                    client.Headers.Add(string.Format("Referer: {0}showthread.php", MainForm.userSettings.sForumUrl));
-                else
-                    client.Headers.Add(string.Format("Referer: {0}", strImgURL));
+                ////client.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
+                client.Headers.Add(
+                    strImgURL.IndexOf("www.ripnetwork.net:82") >= 0
+                        ? string.Format("Referer: {0}showthread.php", MainForm.userSettings.sForumUrl)
+                        : string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strImgURL, strFilePath);
                 /*do
@@ -734,24 +742,23 @@ namespace PGRipper
 				}while(bytesRead > 0);
 
 				lHttpWebResponseStream.Close();*/
-
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
                 return;
             }
             catch (System.Exception)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
                 return;
             }
 
-            ((CacheObject)eventTable[strImgURL]).IsDownloaded = true;
-            ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
-            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = true;
+            ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
+            CacheController.GetInstance().uSLastPic = ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
             return;
         }
     }

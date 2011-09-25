@@ -522,6 +522,10 @@ namespace PGRipper
             {
                 lThreadStart = lImageDownloader.GetImgDepot;
             }
+            else if (aImageUrl.IndexOf(@"imagepad.us/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetImagePad;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
