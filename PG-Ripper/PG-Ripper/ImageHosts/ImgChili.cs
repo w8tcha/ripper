@@ -15,6 +15,7 @@ namespace PGRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
+    using System.Text.RegularExpressions;
     using System.Threading;
 
     using PGRipper.Objects;
@@ -93,7 +94,25 @@ namespace PGRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            string strNewURL = strImgURL.Replace("imgchili.com/show", "i1.imgchili.com");
+            string sPage = this.GetImageHostsPage(ref strImgURL);
+
+            if (sPage.Length < 10)
+            {
+                return false;
+            }
+
+            string strNewURL;
+
+            var m = Regex.Match(sPage, @"src=\""http://i(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+
+            if (m.Success)
+            {
+                strNewURL = string.Format("http://i{0}", m.Groups["inner"].Value);
+            }
+            else
+            {
+                return false;
+            }
 
             strFilePath = strNewURL.Substring(strNewURL.IndexOf("_") + 1);
 
@@ -145,6 +164,49 @@ namespace PGRipper.ImageHosts
             CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
+        }
+
+        /// <summary>
+        /// a generic function to fetch urls.
+        /// </summary>
+        /// <param name="strURL">
+        /// The str URL.
+        /// </param>
+        /// <returns>
+        /// Returns the Page as string.
+        /// </returns>
+        protected string GetImageHostsPage(ref string strURL)
+        {
+            string strPageRead;
+
+            try
+            {
+                var req = (HttpWebRequest)WebRequest.Create(strURL);
+
+                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
+                req.Headers["Cookie"] = "chililast=1318769375.861;";
+                req.Referer = strURL;
+
+                var res = (HttpWebResponse)req.GetResponse();
+
+                var stream = res.GetResponseStream();
+                var reader = new StreamReader(stream);
+
+                strPageRead = reader.ReadToEnd();
+
+                res.Close();
+                reader.Close();
+            }
+            catch (ThreadAbortException)
+            {
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return strPageRead;
         }
 
         //////////////////////////////////////////////////////////////////////////

@@ -32,10 +32,23 @@ namespace RiPRipper
     /// </summary>
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool bDelete;
+        /// <summary>
+        /// 
+        /// </summary>
         public static string sDeleteMessage;
+        /// <summary>
+        /// 
+        /// </summary>
         public string sLastPic = string.Empty;
 
+        /// <summary>
+        /// Array List of all Stored (Ripped) Post Ids
+        /// </summary>
+        private readonly ArrayList sRippedPosts = new ArrayList();
 
         /// <summary>
         /// String List of Urls to Rip
@@ -90,12 +103,7 @@ namespace RiPRipper
         /// <summary>
         /// The Resource Manger that is used for Icons and Labels etc.
         /// </summary>
-        public ResourceManager rm;
-
-        /// <summary>
-        /// Array List of all Stored (Ripped) Post Ids
-        /// </summary>
-        private readonly ArrayList sRippedPosts = new ArrayList();
+        private ResourceManager rm;
 
         /// <summary>
         /// All Settings
@@ -151,33 +159,59 @@ namespace RiPRipper
         }
 
 #if (!RIPRIPPERX)
+        /// <summary>
+        /// The download click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void SDownloadClick(Object sender, EventArgs e)
         {
             if (!Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) ||
-                Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(@"http://rip-productions.net/") < 0 ||
-                bParseAct) return;
-
-            if (comboBox1.SelectedIndex != 2)
+                Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(@"http://rip-productions.net/") <
+                0 || this.bParseAct)
             {
-                comboBox1.SelectedIndex = 2;
+                return;
             }
+
+            comboBox1.SelectedIndex = 2;
+
             textBox1.Text = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
-            EnqueueJob();
+
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)this.EnqueueJob);
+            }
+            else
+            {
+                this.EnqueueJob();
+            } 
         }
+
+        /// <summary>
+        /// Exits the click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void ExitClick(Object sender, EventArgs e)
         {
             Close();
         }
+
+        /// <summary>
+        /// Hides the click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void HideClick(Object sender, EventArgs e)
         {
             Hide();
 
             trayMenu.MenuItems.RemoveAt(0);
-            MenuItem show = new MenuItem("Show RiP-Ripper", ShowClick);
+            MenuItem show = new MenuItem("Show RiP-Ripper", this.ShowClick);
             trayMenu.MenuItems.Add(0, show);
 
-            trayIcon.MouseDoubleClick -= HideClick;
-            trayIcon.MouseDoubleClick += ShowClick;
+            this.trayIcon.MouseDoubleClick -= this.HideClick;
+            this.trayIcon.MouseDoubleClick += this.ShowClick;
 
             if (!userSettings.bShowPopUps) return;
 
@@ -187,6 +221,11 @@ namespace RiPRipper
             trayIcon.ShowBalloonTip(10);
         }
 
+        /// <summary>
+        /// Shows the click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void ShowClick(Object sender, EventArgs e)
         {
             Show();
@@ -688,7 +727,14 @@ namespace RiPRipper
 
                 if (!this.bParseAct)
                 {
-                    this.EnqueueJob();
+                    if (InvokeRequired)
+                    {
+                        Invoke((MethodInvoker)this.EnqueueJob);
+                    }
+                    else
+                    {
+                        this.EnqueueJob();
+                    } 
                 }
             }
         }
@@ -697,22 +743,35 @@ namespace RiPRipper
         /// <summary>
         /// Starts Ripping
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// 
+        /// <param name="sender">
+        /// The sender object.
+        /// </param>
+        /// <param name="e">
+        /// The Event Arguments.
+        /// </param>
         private void MStartDownloadBtnClick(object sender, EventArgs e)
         {
             if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) && Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(@"http://rip-productions.net/") >= 0)
             {
-                if (comboBox1.SelectedIndex != 2)
-                {
-                    comboBox1.SelectedIndex = 2;
-                }
+                comboBox1.SelectedIndex = 2;
 
                 textBox1.Text = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
             }
 
-            if (!string.IsNullOrEmpty(this.textBox1.Text) && !this.bParseAct)
+            if (textBox1.Text.StartsWith("http"))
+            {
+                comboBox1.SelectedIndex = 2;
+            }
+
+            if (string.IsNullOrEmpty(this.textBox1.Text) || this.bParseAct)
+            {
+                return;
+            }
+            if (this.InvokeRequired)
+            {
+                this.Invoke((MethodInvoker)this.EnqueueJob);
+            }
+            else
             {
                 this.EnqueueJob();
             }
@@ -721,15 +780,29 @@ namespace RiPRipper
         /// <summary>
         /// Starts the Download when Pressing Enter in Textbox URL
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">
+        /// The sender object.
+        /// </param>
+        /// <param name="e">
+        /// The Key Press Event Arguments.
+        /// </param>
         private void TextBox1KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != '\r' || bParseAct) return;
+            if (e.KeyChar != '\r' || this.bParseAct)
+            {
+                return;
+            }
 
             e.Handled = true;
 
-            EnqueueJob();
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)this.EnqueueJob);
+            }
+            else
+            {
+                this.EnqueueJob();
+            } 
         }
 
 
@@ -745,7 +818,7 @@ namespace RiPRipper
             }
 
             // Format Url
-            string sXmlUrl = UrlHandler.GetXmlUrl(textBox1.Text, comboBox1.SelectedIndex);
+            var sXmlUrl = UrlHandler.GetXmlUrl(textBox1.Text, comboBox1.SelectedIndex);
 
             if (string.IsNullOrEmpty(sXmlUrl))
             {
@@ -809,27 +882,26 @@ namespace RiPRipper
 
                 if (result == DialogResult.OK)
                 {
-                    UpdateDownloadFolder();
+                    this.UpdateDownloadFolder();
                 }
             }
 
             return true;
-
         }
+
         /// <summary>
         /// Parse all Threads/Posts in the Index
         /// </summary>
         /// <param name="sXmlUrl">The Url to the Thread/Post</param>
-        private void EnqueueIndexThread(String sXmlUrl)
+        private void EnqueueIndexThread(string sXmlUrl)
         {
-
 #if (!RIPRIPPERX)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
        Environment.OSVersion.Version.Major >= 6 &&
        Environment.OSVersion.Version.Minor >= 1)
             {
-                windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
+                this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
             }
 #endif
 
@@ -846,16 +918,14 @@ namespace RiPRipper
                Environment.OSVersion.Version.Major >= 6 &&
                Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        windowsTaskbar.SetProgressValue(10, 100);
-                        windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                        this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                        this.windowsTaskbar.SetProgressValue(10, 100);
+                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
 
                     // Unlock Controls
-                    UnlockControls();
-
-                    //
+                    this.UnlockControls();
 
                     return;
                 }
@@ -871,20 +941,19 @@ namespace RiPRipper
                         Environment.OSVersion.Version.Major >= 6 &&
                         Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        windowsTaskbar.SetProgressValue(10, 100);
-                        windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                        this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                        this.windowsTaskbar.SetProgressValue(10, 100);
+                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
 
                     // Unlock Controls
-                    UnlockControls();
+                    this.UnlockControls();
 
                     return;
                 }
             }
           
-            //g_sComposedURI = sXmlUrl;
             //////////////////////////////////////////////////////////////////////////
 
             mIsIndexChk.Checked = false;
@@ -901,9 +970,8 @@ namespace RiPRipper
         /// Parse all Posts of a Thread
         /// </summary>
         /// <param name="sXmlUrl">The Thread Url</param>
-        private void EnqueueThreadToPost(String sXmlUrl)
+        private void EnqueueThreadToPost(string sXmlUrl)
         {
-
 #if (!RIPRIPPERX)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
        Environment.OSVersion.Version.Major >= 6 &&
@@ -973,13 +1041,13 @@ namespace RiPRipper
         /// Parse a Thread or Post as Single Job
         /// </summary>
         /// <param name="sXmlUrl">The Thread/Post Url</param>
-        private void EnqueueThreadOrPost(String sXmlUrl)
+        private void EnqueueThreadOrPost(string sXmlUrl)
         {
-
             if (mJobsList.Any(t => t.URL == sXmlUrl))
             {
                 TopMostMessageBox.Show(mAlreadyQueuedMsg, "Info");
-                UnlockControls();
+
+                this.UnlockControls();
 
                 return;
             }
@@ -997,30 +1065,27 @@ namespace RiPRipper
 
             if (job.ImageCount.Equals(0))
             {
-                UnlockControls();
+                this.UnlockControls();
             }
 
-            job.StorePath = GenerateStorePath(job);
+            job.StorePath = this.GenerateStorePath(job);
 
             if (string.IsNullOrEmpty(job.Title))
             {
                 TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
 
-                UnlockControls();
+                this.UnlockControls();
 
                 return;
             }
 
-            ProcessAutoThankYou(null, job.ImageCount, job.URL, null);
+            this.ProcessAutoThankYou(null, job.ImageCount, job.URL, null);
 
-
-            //JobListAdd(job);
-
-           JobListAddDelegate newJob = JobListAdd;
+            JobListAddDelegate newJob = this.JobListAdd;
            Invoke(newJob, new object[] { job });
 
             ///////////////////////////////////////////////
-            UnlockControls();
+           this.UnlockControls();
             ///////////////////////////////////////////////
         }
 
@@ -1140,6 +1205,9 @@ namespace RiPRipper
         /// <summary>
         /// Get All Post of a Thread and Parse them as new Job
         /// </summary>
+        /// <param name="sXmlUrl">
+        /// The s Xml Url.
+        /// </param>
         private void ThrdGetPosts(string sXmlUrl)
         {
             ThreadToPost threadPosts = new ThreadToPost();
@@ -1153,7 +1221,15 @@ namespace RiPRipper
             for (int po = 0; po < arlst.Count; po++)
             {
                 StatusLabelInfo.ForeColor = Color.Green;
-                StatusLabelInfo.Text = string.Format("{0}{1}/{2}", rm.GetString("gbParse"), po, arlst.Count);
+
+                try
+                {
+                    this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this.rm.GetString("gbParse"), po, arlst.Count);
+                }
+                catch (Exception)
+                {
+                    
+                }
 
                 string sLpostId = arlst[po].ImageUrl;
 
@@ -1304,9 +1380,9 @@ namespace RiPRipper
             else
             {
                 // Check if Last sDownloadFolder is Empty
-                if (!string.IsNullOrEmpty(sLastDownFolder))
+                if (!string.IsNullOrEmpty(this.sLastDownFolder))
                 {
-                    CheckCurJobFolder(sLastDownFolder);
+                    CheckCurJobFolder(this.sLastDownFolder);
                 }
 
                 if (!bCurPause)
@@ -1321,8 +1397,8 @@ namespace RiPRipper
                    Environment.OSVersion.Version.Major >= 6 &&
                    Environment.OSVersion.Version.Minor >= 1)
                         {
-                            windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                            windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
+                            this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                            this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
                         }
 #endif
                         // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
@@ -1335,6 +1411,7 @@ namespace RiPRipper
                 }
             }
         }
+
         /// <summary>
         ///  Checks the Download Folder of the Current Finished Job, if Empty delete the folder.
         /// </summary>
@@ -1351,6 +1428,7 @@ namespace RiPRipper
                 Directory.Delete(sCheckFolder);
             }
         }
+
         //delegate void ProcessNextJobDelegate();
         /// <summary>
         /// STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
@@ -1417,28 +1495,30 @@ namespace RiPRipper
 
             ProcessCurImgLst();
         }
+
         private void ParseJobXml()
         {
             mImagesList = Utility.ExtractImages(mCurrentJob.XMLPayLoad);
         }
+
         /// <summary>
         /// Processing the Images list of the Current Job
         /// </summary>
         private void ProcessCurImgLst()
         {
             stopCurrentThreads.Enabled = true;
-            bStopJob = false;
-            bWorking = true;
+            this.bStopJob = false;
+            this.bWorking = true;
 
-            sLastDownFolder = null;
+            this.sLastDownFolder = null;
 
             ThreadManager lTdm = ThreadManager.GetInstance();
 
-            sLastDownFolder = mCurrentJob.StorePath;
+            this.sLastDownFolder = this.mCurrentJob.StorePath;
 
             if (mImagesList.Count > 0)
             {
-                string tiImagesRemain = rm.GetString("tiImagesRemain");
+                string tiImagesRemain = this.rm.GetString("tiImagesRemain");
 
                 ////////////////
                 lvCurJob.Items.Clear();
@@ -1456,19 +1536,19 @@ namespace RiPRipper
 
                 for (int i = 0; i < mImagesList.Count; i++)
                 {
-                    if (bStopJob || bRipperClosing)
+                    if (this.bStopJob || this.bRipperClosing)
                     {
                         break;
                     }
 
 #if (!RIPRIPPERX)
-                    trayIcon.Text = String.Format(tiImagesRemain, mImagesList.Count - i, i * 100 / mImagesList.Count);
+                    trayIcon.Text = string.Format(tiImagesRemain, mImagesList.Count - i, i * 100 / mImagesList.Count);
 
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
                         Environment.OSVersion.Version.Major >= 6 &&
                         Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressValue(i, mImagesList.Count);
+                        this.windowsTaskbar.SetProgressValue(i, mImagesList.Count);
                     }
 #endif
 
@@ -1477,15 +1557,15 @@ namespace RiPRipper
                         Application.DoEvents();
                     }
 
-                    if (!bRipperClosing)
+                    if (!this.bRipperClosing)
                     {
                         if (progressBar1 != null)
                         {
                             progressBar1.Value = i;
                         }
 
-                        StatusLabelImageC.Text = String.Format(tiImagesRemain, mImagesList.Count - i,
-                                                                  i * 100 / mImagesList.Count);
+                        StatusLabelImageC.Text = string.Format(
+                            tiImagesRemain, mImagesList.Count - i, i * 100 / mImagesList.Count);
                     }
 
 
@@ -1496,44 +1576,40 @@ namespace RiPRipper
                         {
                             if (!(i > lvCurJob.Items.Count))
                             {
-
                                 lvCurJob.Items[i].Selected = true;
                                 lvCurJob.EnsureVisible(i);
                             }
 
                             CacheController.GetInstance().DownloadImage(mImagesList[i].ImageUrl, mCurrentJob.StorePath);
-
-                            
                         }
 
                         if (!(i > lvCurJob.Items.Count))
                         {
                             if (InvokeRequired)
                             {
-                               Invoke((MethodInvoker)(ShowLastPic));
+                               this.Invoke((MethodInvoker)this.ShowLastPic);
                             }
                             else
                             {
-                                ShowLastPic();
+                                this.ShowLastPic();
                             }
 
-                            if (!bRipperClosing)
+                            if (!this.bRipperClosing)
                             {
                                 lvCurJob.Items[i].ForeColor = Color.Green;
                             }
                         }
-
                     }
                     catch (ArgumentOutOfRangeException)
                     {
-                        if (bStopJob || bRipperClosing)
+                        if (this.bStopJob || this.bRipperClosing)
                         {
                             break;
                         }
                     }
                     catch (NullReferenceException)
                     {
-                        if (bStopJob || bRipperClosing)
+                        if (this.bStopJob || this.bRipperClosing)
                         {
                             break;
                         }
@@ -1545,6 +1621,11 @@ namespace RiPRipper
                 // FINISED A THREAD/POST DOWNLOAD JOB
                 mCurrentJob = null;
 
+                if (!string.IsNullOrEmpty(this.sLastDownFolder))
+                {
+                    CheckCurJobFolder(this.sLastDownFolder);
+                }
+
                 if (mJobsList.Count > 0)
                 {
 #if (!RIPRIPPERX)
@@ -1552,12 +1633,12 @@ namespace RiPRipper
                Environment.OSVersion.Version.Major >= 6 &&
                Environment.OSVersion.Version.Minor >= 1)
                     {
-                        windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                        windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
+                        this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
                     }
 #endif
                     // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
-                    ProcessNextJob();
+                    this.ProcessNextJob();
                 }
             }
             else
@@ -1646,9 +1727,9 @@ namespace RiPRipper
                Environment.OSVersion.Version.Major >= 6 &&
                Environment.OSVersion.Version.Minor >= 1)
             {
-                windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                windowsTaskbar.SetProgressValue(10, 100);
-                windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                this.windowsTaskbar.SetProgressValue(10, 100);
+                this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
             }
 
             string btleExit = rm.GetString("btleExit"),
@@ -1887,13 +1968,16 @@ namespace RiPRipper
         /// <summary>
         /// Kill and Deletes the Current Job
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void StopCurrentThreadsClick(object sender, EventArgs e)
         {
-            if (mCurrentJob == null) return;
+            if (mCurrentJob == null)
+            {
+                return;
+            }
 
-            bStopJob = true;
+            this.bStopJob = true;
             stopCurrentThreads.Enabled = false;
 
             ThreadManager.GetInstance().DismantleAllThreads();
@@ -1906,6 +1990,7 @@ namespace RiPRipper
 
             CheckCurJobFolder(sLastJobFolder);
         }
+
         /// <summary>
         /// Pause/Resumes Downloading
         /// </summary>
@@ -2676,7 +2761,15 @@ namespace RiPRipper
                 StatusLabelInfo.Text = string.Format("{0}{1}/{2}", "Analyse Index(es)", po, arlstIndxs.Count);
 
                 textBox1.Text = arlstIndxs[po].ImageUrl;
-                EnqueueJob();
+
+                if (InvokeRequired)
+                {
+                    Invoke((MethodInvoker)this.EnqueueJob);
+                }
+                else
+                {
+                    this.EnqueueJob();
+                } 
                 //////////////////////////////////////////////////////////////////////////
             }
 

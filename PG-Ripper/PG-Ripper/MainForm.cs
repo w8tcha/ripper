@@ -1171,7 +1171,15 @@ namespace PGRipper
             for (int po = 0; po < arlst.Count; po++)
             {
                 StatusLabelInfo.ForeColor = Color.Green;
-                StatusLabelInfo.Text = string.Format("{0}{1}/{2}", rm.GetString("gbParse"), po, arlst.Count);
+
+                try
+                {
+                    this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this.rm.GetString("gbParse"), po, arlst.Count);
+                }
+                catch (Exception)
+                {
+
+                }
 
                 string sLpostId = arlst[po].ImageUrl;
 
@@ -1558,6 +1566,11 @@ namespace PGRipper
 
                 // FINISED A THREAD/POST DOWNLOAD JOB
                 mCurrentJob = null;
+
+                if (!string.IsNullOrEmpty(this.sLastDownFolder))
+                {
+                    CheckCurJobFolder(this.sLastDownFolder);
+                }
 
                 if (mJobsList.Count > 0)
                 {
