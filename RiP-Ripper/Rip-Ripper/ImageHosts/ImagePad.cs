@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ShareNxs.cs" company="The Watcher">
+// <copyright file="ImagePad.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -21,12 +21,12 @@ namespace RiPRipper.ImageHosts
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ShareNxs.com
+    /// Worker class to get images from ImageTwist.com
     /// </summary>
-    public class ShareNxs : ServiceTemplate
+    public class ImagePad : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShareNxs"/> class.
+        /// Initializes a new instance of the <see cref="ImagePad"/> class.
         /// </summary>
         /// <param name="sSavePath">
         /// The s save path.
@@ -37,7 +37,7 @@ namespace RiPRipper.ImageHosts
         /// <param name="hTbl">
         /// The h tbl.
         /// </param>
-        public ShareNxs(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
+        public ImagePad(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
             : base(sSavePath, strURL, ref hTbl)
         {
         }
@@ -74,12 +74,7 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject
-            {
-                IsDownloaded = false,
-                FilePath = strFilePath,
-                Url = strImgURL
-            };
+            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
 
             try
             {
@@ -99,9 +94,7 @@ namespace RiPRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            string sLargeUrl = string.Format("{0}&pjk=l", strImgURL).Replace("view/?id", "view/index.php?id");
-
-            string sPage = this.GetImageHostsPage(ref sLargeUrl, strImgURL);
+            string sPage = GetImageHostPage(ref strImgURL);
 
             if (sPage.Length < 10)
             {
@@ -110,7 +103,7 @@ namespace RiPRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"src=\""(?<inner>[^\""]*)\"" id=img1", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"src=\""(?<inner>[^\""]*)\"" class=""pic""", RegexOptions.Singleline);
 
             if (m.Success)
             {
@@ -121,26 +114,25 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/") + 1);
+            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1).Replace(".html", string.Empty);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
+            string newAlteredPath = Utility.GetSuitableName(strFilePath);
+            if (strFilePath != newAlteredPath)
+            {
+                strFilePath = newAlteredPath;
+                ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            }
+
             try
             {
-                string sNewAlteredPath = Utility.GetSuitableName(strFilePath);
-                if (strFilePath != sNewAlteredPath)
-                {
-                    strFilePath = sNewAlteredPath;
-                    ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
-                }
-
                 WebClient client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", sLargeUrl));
+                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
-
                 client.Dispose();
             }
             catch (ThreadAbortException)
@@ -172,52 +164,6 @@ namespace RiPRipper.ImageHosts
             CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
-        }
-
-        /// <summary>
-        /// a generic function to fetch urls.
-        /// </summary>
-        /// <param name="strURL">
-        /// The str URL.
-        /// </param>
-        /// <param name="referrerUrl">
-        /// The referrer Url.
-        /// </param>
-        /// <returns>
-        /// Returns the Page as string.
-        /// </returns>
-        protected string GetImageHostsPage(ref string strURL, string referrerUrl)
-        {
-            string strPageRead;
-
-            try
-            {
-                var req = (HttpWebRequest)WebRequest.Create(strURL);
-
-                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-                req.Headers["Cookie"] = "ad_redirect_st_nxs";
-                req.Referer = referrerUrl;
-
-                var res = (HttpWebResponse)req.GetResponse();
-
-                var stream = res.GetResponseStream();
-                var reader = new StreamReader(stream);
-
-                strPageRead = reader.ReadToEnd();
-
-                res.Close();
-                reader.Close();
-            }
-            catch (ThreadAbortException)
-            {
-                return string.Empty;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-
-            return strPageRead;
         }
 
         //////////////////////////////////////////////////////////////////////////

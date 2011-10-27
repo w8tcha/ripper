@@ -62,9 +62,9 @@ namespace RiPRipper
         #region Public Methods
 
         /// <summary>
+        /// Gets the instance.
         /// </summary>
-        /// <returns>
-        /// </returns>
+        /// <returns></returns>
         public static CacheController GetInstance()
         {
             return _mInstance ?? (_mInstance = new CacheController());
@@ -517,6 +517,10 @@ namespace RiPRipper
             else if (aImageUrl.IndexOf(@"imgdepot.org/") >= 0)
             {
                 lThreadStart = lImageDownloader.GetImgDepot;
+            }
+            else if (aImageUrl.IndexOf(@"imagepad.us/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetImagePad;
             }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
