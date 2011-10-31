@@ -21,6 +21,7 @@ namespace PGRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using System.Web;
 
@@ -109,38 +110,37 @@ namespace PGRipper.ImageHosts
                 this.eventTable.Add(strImgURL, ccObj);
             }
 
-            string strIvPage = this.GetImageHostPage(ref strImgURL);
+            string pageContent = this.GetImageHostPage(ref strImgURL);
 
-            if (strIvPage.Length < 10)
+            if (pageContent.Length < 10)
             {
                 return false;
             }
 
-            const string Start = ";\" src=\"";
+            string strNewURL;
 
-            int iStartSrc = strIvPage.IndexOf(Start);
+            var m = Regex.Match(pageContent, @";\"" src=\""(?<inner>[^\""]*)\"" alt=\""loading\""", RegexOptions.Singleline);
 
-            if (iStartSrc < 0)
+            if (m.Success)
+            {
+                strNewURL = m.Groups["inner"].Value;
+            }
+            else
             {
                 return false;
             }
-
-            iStartSrc += Start.Length;
-
-            int iEndSrc = strIvPage.IndexOf("\"", iStartSrc);
-
-            if (iEndSrc < 0)
-            {
-                return false;
-            }
-
-            string strNewURL = HttpUtility.HtmlDecode(strIvPage.Substring(iStartSrc, iEndSrc - iStartSrc));
 
             strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/") + 1);
 
-            if (strFilePath.Contains("filename="))
+            if (strNewURL.Contains("amazonaws.com/bambackup/"))
             {
-                strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("=") + 1);
+                var fileMatch = Regex.Match(
+                    strNewURL, @"bambackup/(?<inner>[^AWS]*)AWSAccessKeyId", RegexOptions.Singleline);
+
+                if (fileMatch.Success)
+                {
+                    strFilePath = string.Format("{0}.jpg", fileMatch.Groups["inner"].Value);
+                }
             }
 
             strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
