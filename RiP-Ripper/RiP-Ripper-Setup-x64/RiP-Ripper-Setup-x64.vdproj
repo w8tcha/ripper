@@ -58,7 +58,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C2EED6CE6A209EABCEDD6CE7ABEB8EF5"
+        "OwnerKey" = "8:_68AC53BD3F9484CCC18425CA029F56B4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -70,7 +70,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_68AC53BD3F9484CCC18425CA029F56B4"
+        "OwnerKey" = "8:_C2EED6CE6A209EABCEDD6CE7ABEB8EF5"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -185,11 +185,6 @@
             "AssemblyAsmDisplayName" = "8:Microsoft.WindowsAPICodePack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_3E5428B0716402D19305A36ACC086995"
-                    {
-                    "Name" = "8:Microsoft.WindowsAPICodePack.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Microsoft.WindowsAPICodePack.DLL"
             "TargetName" = "8:"
@@ -236,11 +231,6 @@
             "AssemblyAsmDisplayName" = "8:ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_68AC53BD3F9484CCC18425CA029F56B4"
-                    {
-                    "Name" = "8:ICSharpCode.SharpZipLib.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ICSharpCode.SharpZipLib.DLL"
             "TargetName" = "8:"
@@ -287,11 +277,6 @@
             "AssemblyAsmDisplayName" = "8:Microsoft.WindowsAPICodePack.Shell, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_C2EED6CE6A209EABCEDD6CE7ABEB8EF5"
-                    {
-                    "Name" = "8:Microsoft.WindowsAPICodePack.Shell.DLL"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Microsoft.WindowsAPICodePack.Shell.DLL"
             "TargetName" = "8:"
@@ -315,7 +300,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RiPRipper, Version=2.9.2.2, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:RiPRipper, Version=2.9.2.3, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_FA88457EE55742F68A0B69FFCF4D4955"
@@ -398,15 +383,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RiP-Ripper"
-        "ProductCode" = "8:{A34BFC70-8B7A-4EB9-A2ED-56F917DFA918}"
-        "PackageCode" = "8:{34C61F34-F72C-4176-A4E6-863E048BE0CB}"
+        "ProductCode" = "8:{EDBA8063-C0A6-4638-BF2D-2B299347A068}"
+        "PackageCode" = "8:{A66AA386-355B-4567-AEF3-D5C39CBF803E}"
         "UpgradeCode" = "8:{B12502F2-0AEB-4D49-8D11-ADEBAA730285}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.9.22"
+        "ProductVersion" = "8:2.9.23"
         "Manufacturer" = "8:WatchersNET"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://ripper.watchersnet.de"
