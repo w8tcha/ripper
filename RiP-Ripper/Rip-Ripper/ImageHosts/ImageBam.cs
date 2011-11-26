@@ -142,6 +142,12 @@ namespace RiPRipper.ImageHosts
                 }
             }
 
+            if (strNewURL.Contains("filename="))
+            {
+                strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("=") + 1);
+                strNewURL = HttpUtility.HtmlDecode(strNewURL);
+            }
+
             strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////

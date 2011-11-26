@@ -1,25 +1,23 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
-
-using System.Collections;
-using System.IO;
-using System.Net;
-using System.Threading;
-using System;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImagePorter.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper.ImageHosts
 {
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+
     using PGRipper.Objects;
 
     /// <summary>
@@ -27,11 +25,29 @@ namespace PGRipper.ImageHosts
     /// </summary>
     public class ImagePorter : ServiceTemplate
     {
-        public ImagePorter(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
-            : base(sSavePath, strURL, ref hTbl)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImagePorter"/> class.
+        /// </summary>
+        /// <param name="savePath">
+        /// The save Path.
+        /// </param>
+        /// <param name="imageUrl">
+        /// The image Url.
+        /// </param>
+        /// <param name="hashtable">
+        /// The hashtable.
+        /// </param>
+        public ImagePorter(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
+            : base(savePath, imageUrl, ref hashtable)
         {
         }
 
+        /// <summary>
+        /// Do the Download
+        /// </summary>
+        /// <returns>
+        /// Return if Downloaded or not
+        /// </returns>
         protected override bool DoDownload()
         {
             string strImgURL = mstrURL;
@@ -46,7 +62,9 @@ namespace PGRipper.ImageHosts
             try
             {
                 if (!Directory.Exists(mSavePath))
+                {
                     Directory.CreateDirectory(mSavePath);
+                }
             }
             catch (IOException ex)
             {
@@ -76,59 +94,46 @@ namespace PGRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            const string sStartSrc = "<p><img src=\"";
-
-            string sPage = GetImageHostPage(ref strImgURL);
+            string sPage = this.GetImageHostsPage(ref strImgURL);
 
             if (sPage.Length < 10)
             {
                 return false;
             }
 
-            int iStartSrc = sPage.IndexOf(sStartSrc);
+            string strNewURL;
 
-            if (iStartSrc < 0)
+            var m = Regex.Match(sPage, @"src=\""http://img(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+
+            if (m.Success)
+            {
+                strNewURL = string.Format("http://img{0}", m.Groups["inner"].Value);
+            }
+            else
             {
                 return false;
             }
 
-            iStartSrc += sStartSrc.Length;
-
-            int iEndSrc = sPage.IndexOf("\" class=\"pic\"", iStartSrc);
-
-            if (iEndSrc < 0)
-            {
-                return false;
-            }
-
-            string strNewURL = sPage.Substring(iStartSrc, iEndSrc - iStartSrc);
-
-            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1);
+            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1).Replace(".html", string.Empty);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
             string newAlteredPath = Utility.GetSuitableName(strFilePath);
-
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
                 ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
             }
 
-            strFilePath = Utility.CheckPathLength(strFilePath);
-            ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
-
-
             try
             {
                 WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
+                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
-
             }
             catch (ThreadAbortException)
             {
@@ -161,7 +166,49 @@ namespace PGRipper.ImageHosts
             return true;
         }
 
-        //////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// a generic function to fetch urls.
+        /// </summary>
+        /// <param name="strURL">
+        /// The str URL.
+        /// </param>
+        /// <returns>
+        /// Returns the Page as string.
+        /// </returns>
+        protected string GetImageHostsPage(ref string strURL)
+        {
+            string strPageRead;
 
+            try
+            {
+                var req = (HttpWebRequest)WebRequest.Create(strURL);
+
+                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
+                req.Headers["Cookie"] = "porter8078_s=loaded;";
+                req.Referer = strURL;
+
+                var res = (HttpWebResponse)req.GetResponse();
+
+                var stream = res.GetResponseStream();
+                var reader = new StreamReader(stream);
+
+                strPageRead = reader.ReadToEnd();
+
+                res.Close();
+                reader.Close();
+            }
+            catch (ThreadAbortException)
+            {
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return strPageRead;
+        }
+
+        //////////////////////////////////////////////////////////////////////////
     }
 }

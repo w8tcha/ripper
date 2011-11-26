@@ -62,7 +62,7 @@ namespace PGRipper.ImageHosts
         /// The do download.
         /// </summary>
         /// <returns>
-        /// The do download.
+        /// Returns Value if the Image was downloaded.
         /// </returns>
         protected override bool DoDownload()
         {
@@ -141,6 +141,12 @@ namespace PGRipper.ImageHosts
                 {
                     strFilePath = string.Format("{0}.jpg", fileMatch.Groups["inner"].Value);
                 }
+            }
+
+            if (strNewURL.Contains("filename="))
+            {
+                strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("=") + 1);
+                strNewURL = HttpUtility.HtmlDecode(strNewURL);
             }
 
             strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
