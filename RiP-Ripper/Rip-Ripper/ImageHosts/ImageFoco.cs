@@ -1,25 +1,23 @@
-﻿//////////////////////////////////////////////////////////////////////////
-// Code Named: RiP-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImageFoco.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.IO;
-using System.Net;
-using System.Threading;
-
-namespace RiPRipper
+namespace RiPRipper.ImageHosts
 {
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+
     using RiPRipper.Objects;
 
     /// <summary>
@@ -27,13 +25,23 @@ namespace RiPRipper
     /// </summary>
     public class ImageFoco : ServiceTemplate
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImageFoco"/> class.
+        /// </summary>
+        /// <param name="sSavePath">The s save path.</param>
+        /// <param name="strURL">The STR URL.</param>
+        /// <param name="hTbl">The h TBL.</param>
         public ImageFoco(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
             : base(sSavePath, strURL, ref hTbl)
         {
-            //
-            // Add constructor logic here
-            //
         }
+
+        /// <summary>
+        /// Do the Download
+        /// </summary>
+        /// <returns>
+        /// Return if Downloaded or not
+        /// </returns>
         protected override bool DoDownload()
         {
             string strImgURL = mstrURL;
@@ -46,7 +54,9 @@ namespace RiPRipper
             try
             {
                 if (!Directory.Exists(mSavePath))
+                {
                     Directory.CreateDirectory(mSavePath);
+                }
             }
             catch (IOException ex)
             {
@@ -58,13 +68,11 @@ namespace RiPRipper
 
             string strFilePath = string.Empty;
 
-            CacheObject CCObj = new CacheObject();
-            CCObj.IsDownloaded = false;
-            CCObj.FilePath = strFilePath;
-            CCObj.Url = strImgURL;
+            CacheObject cacheItem = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+
             try
             {
-                eventTable.Add(strImgURL, CCObj);
+                eventTable.Add(strImgURL, cacheItem);
             }
             catch (ThreadAbortException)
             {
@@ -76,93 +84,49 @@ namespace RiPRipper
                 {
                     return false;
                 }
-                else
-                {
-                    eventTable.Add(strImgURL, CCObj);
-                }
+
+                this.eventTable.Add(strImgURL, cacheItem);
             }
 
-            string sNewURL;
+            string newPage = this.GetImageHostPage(strImgURL);
 
-            try
-            {
-                sNewURL = GetRealLink(strImgURL);
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    sNewURL = GetRealLink(strImgURL);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-
-            Thread.Sleep(900);
-
-            string sNewPage = GetImageHostPage(sNewURL);
-
-            if (sNewPage.Length < 10)
-            {
-               
-                return false;
-            }
-
-            int iStartSRC2 = 0;
-            int iEndSRC2 = 0;
-
-            iStartSRC2 = sNewPage.IndexOf(")\" src=\"");
-
-            if (iStartSRC2 < 0)
+            if (newPage.Length < 10)
             {
                 return false;
             }
 
-            iStartSRC2 += 8;
+            string strNewURL;
+            var m = Regex.Match(newPage, @"onLoad=\""ImgFitWin\('img',([0-9]*)\)\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
-            iEndSRC2 = sNewPage.IndexOf("\" >", iStartSRC2);
-
-            if (iEndSRC2 < 0)
+            if (m.Success)
             {
-                return false;
-            }
-
-            string strNewURL = sNewPage.Substring(iStartSRC2, iEndSRC2 - iStartSRC2);
-
-            if (strNewURL.Contains("img_trans.php?"))
-            {
-                strFilePath = strNewURL.Substring(strNewURL.IndexOf("&file=") + 6).Remove(strNewURL.IndexOf("&server="));
+                strNewURL = m.Groups["inner"].Value;
             }
             else
             {
-                strFilePath = strNewURL.Substring(strNewURL.IndexOf("&v=") + 3).Replace("&ext=", ".");
-
-                if (strFilePath.Contains("&dt="))
-                {
-                    strFilePath = strFilePath.Remove(strFilePath.IndexOf("&dt="));
-                }
+                return false;
             }
+
+            strFilePath = string.Format("{0}.{1}", strImgURL.Substring(strImgURL.IndexOf("id=") + 3), strNewURL.Substring(strNewURL.IndexOf("ext=") + 4, 3));
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
-            string NewAlteredPath = Utility.GetSuitableName(strFilePath);
-            if (strFilePath != NewAlteredPath)
+            string newAlteredPath = Utility.GetSuitableName(strFilePath);
+
+            if (strFilePath != newAlteredPath)
             {
-                strFilePath = NewAlteredPath;
+                strFilePath = newAlteredPath;
                 ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
             }
 
             try
             {
                 WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
+                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
-
             }
             catch (ThreadAbortException)
             {
@@ -190,14 +154,21 @@ namespace RiPRipper
             }
 
             ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
-            //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.GetInstance().uSLastPic =((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
         }
+
+        /// <summary>
+        /// a generic function to fetch urls.
+        /// </summary>
+        /// <param name="strURL">The str URL.</param>
+        /// <returns>
+        /// Returns the Page as string.
+        /// </returns>
         protected string GetImageHostPage(string strURL)
         {
-            string strPageRead = string.Empty;
+            string strPageRead;
 
             try
             {
@@ -210,54 +181,15 @@ namespace RiPRipper
             }
             catch (ThreadAbortException)
             {
-                return "";
+                return string.Empty;
             }
             catch (Exception)
             {
-                // Debug only
-                //MessageBox.Show(ex.Message);
+                return string.Empty;
             }
+
             return strPageRead;
         }
-        protected string GetRealLink(string strURL)
-        {
-
-            HttpWebRequest lHttpWebRequest;
-            HttpWebResponse lHttpWebResponse;
-            Stream lHttpWebResponseStream;
-
-            lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strURL);
-
-            lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
-            lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
-            lHttpWebRequest.Headers.Add("Accept-Encoding: gzip,deflate");
-            lHttpWebRequest.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-            lHttpWebRequest.Referer = strURL;
-            lHttpWebRequest.KeepAlive = true;
-
-            lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
-            lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
-
-            StreamReader streamReader = new StreamReader(lHttpWebResponseStream);
-
-            string sPage = streamReader.ReadToEnd();
-
-            lHttpWebResponseStream.Close();
-
-            int iStartSRC = 0;
-            int iEndSRC = 0;
-
-            iStartSRC = sPage.IndexOf("window.location=\"");
-
-            iStartSRC += 17;
-
-            iEndSRC = sPage.IndexOf("\";", iStartSRC);
-
-            return sPage.Substring(iStartSRC, iEndSRC - iStartSRC);
-        }
-
-
         //////////////////////////////////////////////////////////////////////////
-
     }
 }

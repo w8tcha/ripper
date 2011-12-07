@@ -1,16 +1,13 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: RiP-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Maintainance.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RiPRipper
 {
@@ -26,7 +23,7 @@ namespace RiPRipper
     #endregion
 
     /// <summary>
-    /// Summary description for Maintainance.
+    /// Maintainance Class.
     /// </summary>
     public class Maintainance
     {
@@ -47,9 +44,10 @@ namespace RiPRipper
         #region Public Methods
 
         /// <summary>
-        /// The get instance.
+        /// Gets the instance.
         /// </summary>
         /// <returns>
+        /// The get instance.
         /// </returns>
         public static Maintainance GetInstance()
         {
@@ -57,15 +55,15 @@ namespace RiPRipper
         }
 
         /// <summary>
-        /// The count images from xml.
+        /// count The Images from xml.
         /// </summary>
-        /// <param name="sXmlPayload">
-        /// The s xml payload.
+        /// <param name="xmlPayload">
+        /// The xml payload.
         /// </param>
         /// <returns>
-        /// The count images from xml.
+        /// Returns How Many Images the Post contains
         /// </returns>
-        public int CountImagesFromXML(string sXmlPayload)
+        public int CountImagesFromXML(string xmlPayload)
         {
             int iImgCount;
 
@@ -73,7 +71,7 @@ namespace RiPRipper
             {
                 DataSet ds = new DataSet();
 
-                ds.ReadXml(new StringReader(sXmlPayload));
+                ds.ReadXml(new StringReader(xmlPayload));
 
                 // iImageCount = ds.Tables["Image"].Rows.Count;
                 iImgCount =
@@ -95,7 +93,7 @@ namespace RiPRipper
         /// The s xml payload.
         /// </param>
         /// <returns>
-        /// The extract forum title from xml.
+        /// Returns the Forum Title
         /// </returns>
         public string ExtractForumTitleFromXML(string sXmlPayload)
         {
@@ -129,7 +127,7 @@ namespace RiPRipper
         /// The s xml payload.
         /// </param>
         /// <returns>
-        /// The extract post title from xml.
+        /// Returns the Post Title
         /// </returns>
         public string ExtractPostTitleFromXML(string sXmlPayload)
         {
@@ -172,7 +170,7 @@ namespace RiPRipper
         /// The s xml payload.
         /// </param>
         /// <returns>
-        /// The extract title from xml.
+        /// Returns the Title
         /// </returns>
         public string ExtractTitleFromXML(string sXmlPayload)
         {
@@ -204,7 +202,7 @@ namespace RiPRipper
         /// The s url.
         /// </param>
         /// <returns>
-        /// The get post pages.
+        /// Returns the Post Pages Content
         /// </returns>
         public string GetPostPages(string sURL)
         {
@@ -222,7 +220,7 @@ namespace RiPRipper
         /// The str url.
         /// </param>
         /// <returns>
-        /// The get rip page.
+        /// Returns the Page Content as String
         /// </returns>
         private static string GetRipPage(string strURL)
         {

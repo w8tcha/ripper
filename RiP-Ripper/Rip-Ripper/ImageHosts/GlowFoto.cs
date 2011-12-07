@@ -1,30 +1,23 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: RiP-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GlowFoto.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.Web;
-using System.Net;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Text.RegularExpressions;
-
-namespace RiPRipper
+namespace RiPRipper.ImageHosts
 {
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+
     using RiPRipper.Objects;
 
     /// <summary>
@@ -32,14 +25,23 @@ namespace RiPRipper
     /// </summary>
     public class GlowFoto : ServiceTemplate
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GlowFoto"/> class.
+        /// </summary>
+        /// <param name="sSavePath">The s save path.</param>
+        /// <param name="strURL">The STR URL.</param>
+        /// <param name="hTbl">The h TBL.</param>
         public GlowFoto(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
             : base(sSavePath, strURL, ref hTbl)
         {
         }
 
-        public string strNewURL;
-
-
+        /// <summary>
+        /// Do the Download
+        /// </summary>
+        /// <returns>
+        /// Return if Downloaded or not
+        /// </returns>
         protected override bool DoDownload()
         {
             string strImgURL = mstrURL;
@@ -49,14 +51,12 @@ namespace RiPRipper
                 return true;
             }
 
-            string strFilePath = string.Empty;
-
-            strFilePath = strImgURL.Substring(strImgURL.IndexOf("?img=") + 5, 9) + strImgURL.Substring(strImgURL.IndexOf("&rand=") + 6) + "L";
-
             try
             {
                 if (!Directory.Exists(mSavePath))
+                {
                     Directory.CreateDirectory(mSavePath);
+                }
             }
             catch (IOException ex)
             {
@@ -66,15 +66,13 @@ namespace RiPRipper
                 return false;
             }
 
-            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            string filePath = string.Empty;
+    
+            CacheObject cCObj = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = strImgURL };
 
-            CacheObject CCObj = new CacheObject();
-            CCObj.IsDownloaded = false;
-            CCObj.FilePath = strFilePath;
-            CCObj.Url = strImgURL;
             try
             {
-                eventTable.Add(strImgURL, CCObj);
+                eventTable.Add(strImgURL, cCObj);
             }
             catch (ThreadAbortException)
             {
@@ -86,81 +84,65 @@ namespace RiPRipper
                 {
                     return false;
                 }
+
+                this.eventTable.Add(strImgURL, cCObj);
+            }
+
+            string newURL;
+
+            var m = Regex.Match(strImgURL, @"img=(?<img>[^&]*)&y=(?<year>[0-9]*)&m=(?<month>[0-9]*)&t=(?<type>[^&]*)&rand=(?<rand>([0-9]*))", RegexOptions.Singleline);
+
+            if (m.Success)
+            {
+                var img = m.Groups["img"].Value.Remove(m.Groups["img"].Value.Length - 1);
+                filePath = string.Format(
+                    "{0}{1}L.{2}", img, m.Groups["rand"].Value, m.Groups["type"].Value);
+
+                if (strImgURL.Contains("&srv="))
+                {
+                    newURL = string.Format(
+                        "http://{5}.glowfoto.com/images/{0}/{1}/{2}{3}L.{4}",
+                        m.Groups["year"].Value,
+                        m.Groups["month"].Value,
+                        img,
+                        m.Groups["rand"].Value,
+                        m.Groups["type"].Value,
+                        strImgURL.Substring(strImgURL.IndexOf("&srv=") + 5));
+                }
                 else
                 {
-                    eventTable.Add(strImgURL, CCObj);
+                    newURL = string.Format(
+                        "http://www.glowfoto.com/images/{0}/{1}/{2}{3}L.{4}",
+                        m.Groups["year"].Value,
+                        m.Groups["month"].Value,
+                        img,
+                        m.Groups["rand"].Value,
+                        m.Groups["type"].Value);
                 }
-            }
-            if (strImgURL.Contains("&srv="))
-            {
-                strNewURL = "http://" + strImgURL.Substring(strImgURL.IndexOf("&srv=") + 5) + ".glowfoto.com/images/" + strImgURL.Substring(strImgURL.IndexOf("&y=") + 3, 4) + "/" + strImgURL.Substring(strImgURL.IndexOf("&m=") + 3, 2) + "/" +
-                    strImgURL.Substring(strImgURL.IndexOf("?img=") + 5, 9) + strImgURL.Substring(strImgURL.IndexOf("&rand=") + 6, 4) + "L.jpg";
             }
             else
             {
-                strNewURL = "http://www.glowfoto.com/images/" + strImgURL.Substring(strImgURL.IndexOf("&y=") + 3, 4) + "/" + strImgURL.Substring(strImgURL.IndexOf("&m=") + 3, 2) + "/" +
-                    strImgURL.Substring(strImgURL.IndexOf("?img=") + 5, 9) + strImgURL.Substring(strImgURL.IndexOf("&rand=") + 6) + "L.jpg";
+                return false;
             }
 
+            filePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(filePath));
+
             //////////////////////////////////////////////////////////////////////////
-            HttpWebRequest lHttpWebRequest;
-            HttpWebResponse lHttpWebResponse;
-            Stream lHttpWebResponseStream;
-
-            //FileStream lFileStream = null;
-
-            
-            //int bytesRead;
+            string newAlteredPath = Utility.GetSuitableName(filePath);
+            if (filePath != newAlteredPath)
+            {
+                filePath = newAlteredPath;
+                ((CacheObject)eventTable[mstrURL]).FilePath = filePath;
+            }
 
             try
             {
-                lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strNewURL);
-
-                lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
-                lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
-                lHttpWebRequest.Headers.Add("Accept-Encoding: gzip,deflate");
-                lHttpWebRequest.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-                lHttpWebRequest.Referer = strImgURL;
-                lHttpWebRequest.Accept = "image/png,*/*;q=0.5";
-                lHttpWebRequest.KeepAlive = true;
-
-                lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
-                lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
-
-                if (lHttpWebResponse.ContentType.IndexOf("image") < 0)
-                {
-                    //if (lFileStream != null)
-                    //	lFileStream.Close();
-                    return false;
-                }
-                if (lHttpWebResponse.ContentType.ToLower() == "image/jpeg")
-                    strFilePath += ".jpg";
-                else if (lHttpWebResponse.ContentType.ToLower() == "image/gif")
-                    strFilePath += ".gif";
-                else if (lHttpWebResponse.ContentType.ToLower() == "image/png")
-                    strFilePath += ".png";
-
-                string NewAlteredPath = Utility.GetSuitableName(strFilePath);
-                if (strFilePath != NewAlteredPath)
-                {
-                    strFilePath = NewAlteredPath;
-                    ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
-                }
-
-                //lFileStream = new FileStream(strFilePath, FileMode.Create);
-
-                lHttpWebResponseStream.Close();
-
-                System.Net.WebClient client = new WebClient();
-                client.Headers.Add("Accept-Language: en-us,en;q=0.5");
-                client.Headers.Add("Accept-Encoding: gzip,deflate");
-                client.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-                client.Headers.Add("Referer: " + strImgURL);
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(strNewURL, strFilePath);
-
+                WebClient client = new WebClient();
+                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
+                client.Headers.Add(
+                    "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
+                client.DownloadFile(newURL, filePath);
                 client.Dispose();
-
             }
             catch (ThreadAbortException)
             {
@@ -188,13 +170,10 @@ namespace RiPRipper
             }
 
             ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
-            //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.GetInstance().uSLastPic =((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = filePath;
 
             return true;
         }
-
         //////////////////////////////////////////////////////////////////////////
-
     }
 }
