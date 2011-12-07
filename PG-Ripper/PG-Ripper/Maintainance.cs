@@ -16,12 +16,18 @@ namespace PGRipper
     using System.Text.RegularExpressions;
 
     /// <summary>
-    /// Summary description for Maintainance.
+    /// Maintainance Class.
     /// </summary>
     public class Maintainance
     {
+        /// <summary>
+        /// The MainForm Instance
+        /// </summary>
         public static System.Windows.Forms.Form xform;
 
+        /// <summary>
+        /// The Maintainance Instance
+        /// </summary>
         public static Maintainance mInstace;
 
         /// <summary>

@@ -76,7 +76,7 @@ namespace PGRipper
         {
             var anchorList = new List<LinkItem>();
 
-            var m1 = Regex.Matches(page, @"(<img.*?>)", RegexOptions.IgnoreCase);
+            var m1 = Regex.Matches(page, @"^(?!<a.*?>)(<img.*?>)", RegexOptions.IgnoreCase);
 
             foreach (Match m in m1)
             {

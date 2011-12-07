@@ -103,7 +103,7 @@ namespace PGRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"src=\""http://i(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"onclick=\""scale\(this\);\""  src=\""http://i(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {

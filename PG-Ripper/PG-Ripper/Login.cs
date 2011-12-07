@@ -12,28 +12,29 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of the PG-Ripper project base.
 
-using System;
-using System.Drawing;
-using System.Reflection;
-using System.Resources;
-using System.Windows.Forms;
-
 namespace PGRipper
 {
-	/// <summary>
-	/// Summary description for Login.
-	/// </summary>
-	public partial class Login : Form
-	{
+    using System;
+    using System.Drawing;
+    using System.Reflection;
+    using System.Resources;
+    using System.Windows.Forms;
+
+    /// <summary>
+    /// Summary description for Login.
+    /// </summary>
+    public partial class Login : Form
+    {
         private ResourceManager rm;
 
         public Login()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
-		}
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
+        }
+
         /// <summary>
         /// Set Language Strings
         /// </summary>
@@ -47,13 +48,14 @@ namespace PGRipper
             label5.Text = rm.GetString("gbLanguage");
             label6.Text = rm.GetString("lblForums");
         }
+
         /// <summary>
         /// Loads the Form
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void LoginLoad(object sender, EventArgs e)
-		{
+        {
             // Set Default Forum
             cBForum.SelectedIndex = 0;
 
@@ -83,7 +85,8 @@ namespace PGRipper
             {
                 comboBox2.SelectedIndex = 2;
             }
-		}
+        }
+
         /// <summary>
         /// Trys to Login to the Forums
         /// </summary>
@@ -106,8 +109,7 @@ namespace PGRipper
 
             LoginManager lgnMgr = new LoginManager(textBox1.Text, textBox2.Text);
 
-            string lblWelcome = rm.GetString("lblWelcome"),
-                lblFailed = rm.GetString("lblFailed");
+            string lblWelcome = this.rm.GetString("lblWelcome"), lblFailed = this.rm.GetString("lblFailed");
 
             if (lgnMgr.DoLogin())
             {
@@ -126,6 +128,7 @@ namespace PGRipper
                 label3.ForeColor = Color.Red;
             }
         }
+
         /// <summary>
         /// If Login sucessfully send user data to MainForm
         /// </summary>
@@ -135,7 +138,7 @@ namespace PGRipper
         {
             timer1.Enabled = false;
 
-            ((MainForm) Owner).bCameThroughCorrectLogin = true;
+            ((MainForm)Owner).bCameThroughCorrectLogin = true;
 
             MainForm.userSettings.sUser = textBox1.Text;
             MainForm.userSettings.sPass = textBox2.Text;
@@ -143,35 +146,37 @@ namespace PGRipper
 
             Close();
         }
-	    /// <summary>
+
+        /// <summary>
         /// Changes the UI Language based on the selected Language
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-		private void ComboBox2SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox2SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (comboBox2.SelectedIndex)
             {
                 case 0:
-                    rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "de-DE");
                     break;
                 case 1:
-                    rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "fr-FR");
                     break;
                 case 2:
-                    rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "en-EN");
                     break;
                 default:
-                    rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "en-EN");
                     break;
             }
 
-            AdjustCulture();
+            this.AdjustCulture();
         }
+
         /// <summary>
         /// Forum Chooser
         /// </summary>
@@ -201,5 +206,5 @@ namespace PGRipper
                     break;
             }
         }
-	}
+    }
 }

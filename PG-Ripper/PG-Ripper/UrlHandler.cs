@@ -41,7 +41,8 @@ namespace PGRipper
 
                 case 1:
                     {
-                        sHtmlUrl = string.Format("{0}showpost.php?p={1}", MainForm.userSettings.sForumUrl, Convert.ToInt64(inputUrl));
+                        sHtmlUrl = string.Format(
+                            "{0}showpost.php?p={1}", MainForm.userSettings.sForumUrl, Convert.ToInt64(inputUrl));
                         break;
                     }
 
@@ -57,7 +58,7 @@ namespace PGRipper
 
                         if (MainForm.userSettings.sForumUrl.Contains(@"http://rip-") ||
                             MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-") ||
-                MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
+                            MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
                         {
                             if (sHtmlUrl.Contains(".html") && !sHtmlUrl.Contains(".php"))
                             {
