@@ -1,16 +1,13 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImageHyper.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper.ImageHosts
 {
@@ -18,6 +15,7 @@ namespace PGRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
+    using System.Text.RegularExpressions;
     using System.Threading;
 
     using PGRipper.Objects;
@@ -96,34 +94,22 @@ namespace PGRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            const string StartSrc = "<img src=\"http://img";
+            var newPage = GetImageHostPage(ref strImgURL);
 
-            string sPage = GetImageHostPage(ref strImgURL);
+            string newURL;
 
-            if (sPage.Length < 10)
+            var m = Regex.Match(newPage, @"<img class=\""mainimg\"" id=""mainimg\"" src=\""(?<inner>[^\""]*)\"" />", RegexOptions.Singleline);
+
+            if (m.Success)
+            {
+                newURL = m.Groups["inner"].Value;
+            }
+            else
             {
                 return false;
             }
 
-            int iStartSrc = sPage.IndexOf(StartSrc);
-
-            if (iStartSrc < 0)
-            {
-                return false;
-            }
-
-            iStartSrc += StartSrc.Length;
-
-            int iEndSrc = sPage.IndexOf("\" />", iStartSrc);
-
-            if (iEndSrc < 0)
-            {
-                return false;
-            }
-
-            string strNewURL = string.Format("http://img{0}", sPage.Substring(iStartSrc, iEndSrc - iStartSrc));
-
-            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/") + 1);
+            strFilePath = newURL.Substring(newURL.LastIndexOf("/") + 1);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
@@ -143,9 +129,9 @@ namespace PGRipper.ImageHosts
             try
             {
                 WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
+                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(strNewURL, strFilePath);
+                client.DownloadFile(newURL, strFilePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
