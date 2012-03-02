@@ -32,8 +32,8 @@ using System.Reflection;
 [assembly: AssemblyCulture("")]
 
 
-[assembly: AssemblyVersion("2.9.2.4")]
-[assembly: AssemblyFileVersionAttribute("2.9.2.4")]
+[assembly: AssemblyVersion("2.9.2.6")]
+[assembly: AssemblyFileVersionAttribute("2.9.2.6")]
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyName("")]

@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImageHyper.cs" company="The Watcher">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImageBunk.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -13,32 +13,31 @@ namespace RiPRipper.ImageHosts
 {
     using System;
     using System.Collections;
+    using System.ComponentModel;
     using System.IO;
     using System.Net;
-    using System.Text.RegularExpressions;
     using System.Threading;
-
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImageHyper.com
+    /// Worker class to get images from ImageBunk.com
     /// </summary>
-    public class ImageHyper : ServiceTemplate
+    public class ImageBunk : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageHyper"/> class.
+        /// Initializes a new instance of the <see cref="ImageBunk"/> class.
         /// </summary>
-        /// <param name="sSavePath">
-        /// The s save path.
+        /// <param name="savePath">
+        /// The save Path.
         /// </param>
-        /// <param name="strURL">
-        /// The str url.
+        /// <param name="imageUrl">
+        /// The image Url.
         /// </param>
-        /// <param name="hTbl">
-        /// The h tbl.
+        /// <param name="hashtable">
+        /// The hashtable.
         /// </param>
-        public ImageHyper(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
-            : base(sSavePath, strURL, ref hTbl)
+        public ImageBunk(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
+            : base(savePath, imageUrl, ref hashtable)
         {
         }
 
@@ -94,44 +93,27 @@ namespace RiPRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            string newPage = GetImageHostPage(ref strImgURL);
-            
-            string newURL;
-            
-            var m = Regex.Match(newPage, @"<img class=\""mainimg\"" id=""mainimg\"" src=\""(?<inner>[^\""]*)\"" />", RegexOptions.Singleline);
+            string strNewURL = strImgURL.Replace("/image/", @"/out.php/i");
 
-            if (m.Success)
-            {
-                newURL = m.Groups["inner"].Value;
-            }
-            else
-            {
-                return false;
-            }
-
-            strFilePath = newURL.Substring(newURL.LastIndexOf("/") + 1);
+            strFilePath = strNewURL.Substring(strNewURL.IndexOf("_") + 1);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
             string newAlteredPath = Utility.GetSuitableName(strFilePath);
-
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
                 ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
             }
 
-            strFilePath = Utility.CheckPathLength(strFilePath);
-            ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
-
             try
             {
                 WebClient client = new WebClient();
                 client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(newURL, strFilePath);
+                client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)

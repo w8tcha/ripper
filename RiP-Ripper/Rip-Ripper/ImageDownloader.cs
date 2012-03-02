@@ -618,6 +618,33 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get ImageBunk Download
+        /// </summary>
+        public void GetImageBunk()
+        {
+            this.xService = new ImageBunk(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get PimpAndHost Download
+        /// </summary>
+        public void GetPimpAndHost()
+        {
+            this.xService = new PimpAndHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get DumpPix Download
+        /// </summary>
+        public void GetDumpPix()
+        {
+            this.xService = new DumpPix(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hotlinked image fether...
         /// </summary>
         public void GetImage()

@@ -4,3 +4,12 @@ PG-Ripper/Core/bin/Debug/Microsoft.WindowsAPICodePack.XML
 _ReSharper
 PG-Ripper/PG-Ripper/_ReSharper.PG-Ripper/
 RiP-Ripper/Rip-Ripper/RiPRipper.csproj.user
+RiP-Ripper/RiP-Ripper-Setup-x64/RiP-Ripper-Install_x64.msi
+RiP-Ripper/RiP-Ripper-Setup-x64/setup.exe
+RiP-Ripper-Install.msi
+setup.exe
+Debug/
+bin/RiPRipper/
+bin/RiPRipperX/
+bin/x64/
+obj/

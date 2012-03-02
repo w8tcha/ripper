@@ -522,6 +522,18 @@ namespace RiPRipper
             {
                 lThreadStart = lImageDownloader.GetImagePad;
             }
+            else if (aImageUrl.IndexOf(@"imagebunk.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetImageBunk;
+            }
+            else if (aImageUrl.IndexOf(@"pimpandhost.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetPimpAndHost;
+            }
+            else if (aImageUrl.IndexOf(@"dumppix.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetDumpPix;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
