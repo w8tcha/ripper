@@ -170,6 +170,10 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageHosts\Hoooster.cs" />
+    <Compile Include="ImageHosts\PimpAndHost.cs" />
+    <Compile Include="ImageHosts\DumpPix.cs" />
+    <Compile Include="ImageHosts\ImageBunk.cs" />
     <Compile Include="ImageHosts\ImagePad.cs" />
     <Compile Include="ImageHosts\ImageUpper.cs" />
     <Compile Include="ImageHosts\ImgChili.cs" />

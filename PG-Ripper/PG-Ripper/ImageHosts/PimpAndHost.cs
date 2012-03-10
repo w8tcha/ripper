@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImageHyper.cs" company="The Watcher">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PimpAndHost.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -17,28 +17,21 @@ namespace PGRipper.ImageHosts
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
-
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImageHyper.com
+    /// Worker class to get images from PimpAndHost.com
     /// </summary>
-    public class ImageHyper : ServiceTemplate
+    public class PimpAndHost : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageHyper"/> class.
+        /// Initializes a new instance of the <see cref="PimpAndHost"/> class.
         /// </summary>
-        /// <param name="sSavePath">
-        /// The s save path.
-        /// </param>
-        /// <param name="strURL">
-        /// The str url.
-        /// </param>
-        /// <param name="hTbl">
-        /// The h tbl.
-        /// </param>
-        public ImageHyper(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
-            : base(sSavePath, strURL, ref hTbl)
+        /// <param name="savePath">The save path.</param>
+        /// <param name="imageURL">The image URL.</param>
+        /// <param name="hashtable">The hashtable.</param>
+        public PimpAndHost(ref string savePath, ref string imageURL, ref Hashtable hashtable)
+            : base(savePath, imageURL, ref hashtable)
         {
         }
 
@@ -46,7 +39,7 @@ namespace PGRipper.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Return if Downloaded or not
+        /// Returns if the Image was downloaded
         /// </returns>
         protected override bool DoDownload()
         {
@@ -57,7 +50,7 @@ namespace PGRipper.ImageHosts
                 return true;
             }
 
-            string strFilePath = string.Empty;
+            var filePath = string.Empty;
 
             try
             {
@@ -74,7 +67,7 @@ namespace PGRipper.ImageHosts
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = strImgURL };
 
             try
             {
@@ -94,44 +87,45 @@ namespace PGRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            var newPage = GetImageHostPage(ref strImgURL);
+            string sPage = GetImageHostPage(ref strImgURL);
 
-            string newURL;
+            if (sPage.Length < 10)
+            {
+                return false;
+            }
 
-            var m = Regex.Match(newPage, @"id=""mainimg\"" src=\""(?<inner>[^\""]*)\"" />", RegexOptions.Singleline);
+            string strNewURL;
+
+            var m = Regex.Match(sPage, @"id=\""image\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
-                newURL = m.Groups["inner"].Value;
+                strNewURL = m.Groups["inner"].Value;
             }
             else
             {
                 return false;
             }
 
-            strFilePath = newURL.Substring(newURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            filePath = strNewURL.Substring(strNewURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
-            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            filePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(filePath));
 
             //////////////////////////////////////////////////////////////////////////
 
-            string newAlteredPath = Utility.GetSuitableName(strFilePath);
-
-            if (strFilePath != newAlteredPath)
+            string newAlteredPath = Utility.GetSuitableName(filePath);
+            if (filePath != newAlteredPath)
             {
-                strFilePath = newAlteredPath;
-                ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+                filePath = newAlteredPath;
+                ((CacheObject)eventTable[mstrURL]).FilePath = filePath;
             }
-
-            strFilePath = Utility.CheckPathLength(strFilePath);
-            ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
 
             try
             {
                 WebClient client = new WebClient();
                 client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(newURL, strFilePath);
+                client.DownloadFile(strNewURL, filePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
@@ -160,7 +154,7 @@ namespace PGRipper.ImageHosts
             }
 
             ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = filePath;
 
             return true;
         }

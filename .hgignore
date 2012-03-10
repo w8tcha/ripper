@@ -13,3 +13,8 @@ bin/RiPRipper/
 bin/RiPRipperX/
 bin/x64/
 obj/
+PG-Ripper/PG-Ripper-Setup-x64/PG-Ripper-Install_x64.msi
+PG-Ripper/PG-Ripper-Setup/PG-Ripper-Install.msi
+PG-Ripper/PG-Ripper/PG-Ripper.csproj.user
+PG-Ripper/PG-Ripper/bin/PG-Ripper/
+PG-Ripper/PG-Ripper/bin/PG-RipperX/

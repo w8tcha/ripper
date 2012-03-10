@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImageHyper.cs" company="The Watcher">
+// <copyright file="Hoooster.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -21,24 +21,24 @@ namespace PGRipper.ImageHosts
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImageHyper.com
+    /// Worker class to get images from Hooster.com
     /// </summary>
-    public class ImageHyper : ServiceTemplate
+    public class Hoooster : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageHyper"/> class.
+        /// Initializes a new instance of the <see cref="Hoooster"/> class.
         /// </summary>
-        /// <param name="sSavePath">
-        /// The s save path.
+        /// <param name="savePath">
+        /// The save Path.
         /// </param>
-        /// <param name="strURL">
-        /// The str url.
+        /// <param name="imageUrl">
+        /// The image Url.
         /// </param>
-        /// <param name="hTbl">
-        /// The h tbl.
+        /// <param name="hashtable">
+        /// The hashtable.
         /// </param>
-        public ImageHyper(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
-            : base(sSavePath, strURL, ref hTbl)
+        public Hoooster(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
+            : base(savePath, imageUrl, ref hashtable)
         {
         }
 
@@ -94,44 +94,50 @@ namespace PGRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            var newPage = GetImageHostPage(ref strImgURL);
+            string sPage = this.GetImageHostsPage(ref strImgURL);
 
-            string newURL;
+            if (sPage.Length < 10)
+            {
+                return false;
+            }
 
-            var m = Regex.Match(newPage, @"id=""mainimg\"" src=\""(?<inner>[^\""]*)\"" />", RegexOptions.Singleline);
+            string strNewURL;
+
+            var m = Regex.Match(sPage, @"id=\""show_image\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
-                newURL = m.Groups["inner"].Value;
+                strNewURL = m.Groups["inner"].Value;
             }
             else
             {
                 return false;
             }
 
-            strFilePath = newURL.Substring(newURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            if (strNewURL.StartsWith(" "))
+            {
+                strNewURL = strNewURL.Replace(" ", string.Empty);
+            }
+
+            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
             string newAlteredPath = Utility.GetSuitableName(strFilePath);
-
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
                 ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
             }
 
-            strFilePath = Utility.CheckPathLength(strFilePath);
-            ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
-
             try
             {
                 WebClient client = new WebClient();
                 client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(newURL, strFilePath);
+                client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
@@ -163,6 +169,49 @@ namespace PGRipper.ImageHosts
             CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
+        }
+
+        /// <summary>
+        /// a generic function to fetch urls.
+        /// </summary>
+        /// <param name="strURL">
+        /// The str URL.
+        /// </param>
+        /// <returns>
+        /// Returns the Page as string.
+        /// </returns>
+        protected string GetImageHostsPage(ref string strURL)
+        {
+            string strPageRead;
+
+            try
+            {
+                var req = (HttpWebRequest)WebRequest.Create(strURL);
+
+                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
+                req.Headers["Cookie"] = "hoosterads=1;";
+                req.Referer = strURL;
+
+                var res = (HttpWebResponse)req.GetResponse();
+
+                var stream = res.GetResponseStream();
+                var reader = new StreamReader(stream);
+
+                strPageRead = reader.ReadToEnd();
+
+                res.Close();
+                reader.Close();
+            }
+            catch (ThreadAbortException)
+            {
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return strPageRead;
         }
 
         //////////////////////////////////////////////////////////////////////////

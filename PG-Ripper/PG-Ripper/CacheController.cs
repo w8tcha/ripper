@@ -58,8 +58,10 @@ namespace PGRipper
         #region Public Methods
 
         /// <summary>
+        /// Gets the instance.
         /// </summary>
         /// <returns>
+        /// The get instance.
         /// </returns>
         public static CacheController GetInstance()
         {
@@ -526,6 +528,22 @@ namespace PGRipper
             {
                 lThreadStart = lImageDownloader.GetImagePad;
             }
+            else if (aImageUrl.IndexOf(@"imagebunk.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetImageBunk;
+            }
+            else if (aImageUrl.IndexOf(@"pimpandhost.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetPimpAndHost;
+            }
+            else if (aImageUrl.IndexOf(@"dumppix.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetDumpPix;
+            }
+            else if (aImageUrl.IndexOf(@"hoooster.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetHoooster;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
@@ -540,6 +558,7 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Erases the event table.
         /// </summary>
         public void EraseEventTable()
         {
@@ -547,12 +566,10 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Gets the obj.
         /// </summary>
-        /// <param name="strURL">
-        /// The str url.
-        /// </param>
-        /// <returns>
-        /// </returns>
+        /// <param name="strURL">The str url.</param>
+        /// <returns></returns>
         public CacheObject GetObj(string strURL)
         {
             if (this.mEventTable.ContainsKey(strURL))
