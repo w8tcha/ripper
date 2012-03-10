@@ -150,6 +150,7 @@
             "FreePornDumpster.com",
             "FreeShare.us",
             "GlowFoto.com",
+            "Hoooster.com",
             "HotLinkImage.com",
             "Image2Share.com",
             "ImageBam.com",

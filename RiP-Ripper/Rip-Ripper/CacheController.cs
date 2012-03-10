@@ -534,6 +534,10 @@ namespace RiPRipper
             {
                 lThreadStart = lImageDownloader.GetDumpPix;
             }
+            else if (aImageUrl.IndexOf(@"hoooster.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetHoooster;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;

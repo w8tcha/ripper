@@ -98,7 +98,7 @@ namespace RiPRipper.ImageHosts
             
             string newURL;
             
-            var m = Regex.Match(newPage, @"<img class=\""mainimg\"" id=""mainimg\"" src=\""(?<inner>[^\""]*)\"" />", RegexOptions.Singleline);
+            var m = Regex.Match(newPage, @"id=""mainimg\"" src=\""(?<inner>[^\""]*)\"" />", RegexOptions.Singleline);
 
             if (m.Success)
             {
@@ -109,7 +109,7 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            strFilePath = newURL.Substring(newURL.LastIndexOf("/") + 1);
+            strFilePath = newURL.Substring(newURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 

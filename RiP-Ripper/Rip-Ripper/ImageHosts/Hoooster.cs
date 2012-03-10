@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImagePorter.cs" company="The Watcher">
+// <copyright file="Hoooster.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -20,12 +20,12 @@ namespace RiPRipper.ImageHosts
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImagePorter.com
+    /// Worker class to get images from Hooster.com
     /// </summary>
-    public class ImagePorter : ServiceTemplate
+    public class Hoooster : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImagePorter"/> class.
+        /// Initializes a new instance of the <see cref="Hoooster"/> class.
         /// </summary>
         /// <param name="savePath">
         /// The save Path.
@@ -36,7 +36,7 @@ namespace RiPRipper.ImageHosts
         /// <param name="hashtable">
         /// The hashtable.
         /// </param>
-        public ImagePorter(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
+        public Hoooster(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
             : base(savePath, imageUrl, ref hashtable)
         {
         }
@@ -102,18 +102,23 @@ namespace RiPRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"src=\""http://img(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"id=\""show_image\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
-                strNewURL = string.Format("http://img{0}", m.Groups["inner"].Value);
+                strNewURL = m.Groups["inner"].Value;
             }
             else
             {
                 return false;
             }
 
-            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/", StringComparison.Ordinal) + 1).Replace(".html", string.Empty);
+            if (strNewURL.StartsWith(" "))
+            {
+                strNewURL = strNewURL.Replace(" ", string.Empty);
+            }
+
+            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
@@ -183,7 +188,7 @@ namespace RiPRipper.ImageHosts
                 var req = (HttpWebRequest)WebRequest.Create(strURL);
 
                 req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-                req.Headers["Cookie"] = "porter8078_s=loaded;";
+                req.Headers["Cookie"] = "hoosterads=1;";
                 req.Referer = strURL;
 
                 var res = (HttpWebResponse)req.GetResponse();

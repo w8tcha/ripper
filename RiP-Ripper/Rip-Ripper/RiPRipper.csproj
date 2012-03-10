@@ -209,6 +209,7 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoUpdater.cs" />
+    <Compile Include="ImageHosts\Hoooster.cs" />
     <Compile Include="ImageHosts\PimpAndHost.cs" />
     <Compile Include="ImageHosts\DumpPix.cs" />
     <Compile Include="ImageHosts\ImageBunk.cs" />

@@ -645,6 +645,15 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get Hoooster Download
+        /// </summary>
+        public void GetHoooster()
+        {
+            this.xService = new Hoooster(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hotlinked image fether...
         /// </summary>
         public void GetImage()
