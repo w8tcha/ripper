@@ -64,7 +64,9 @@ namespace RiPRipper
         /// <summary>
         /// Gets the instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns the instance.
+        /// </returns>
         public static CacheController GetInstance()
         {
             return _mInstance ?? (_mInstance = new CacheController());
@@ -538,6 +540,10 @@ namespace RiPRipper
             {
                 lThreadStart = lImageDownloader.GetHoooster;
             }
+            else if (aImageUrl.IndexOf(@"pixhub.eu/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetPixHub;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
@@ -560,17 +566,17 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Gets the object.
         /// </summary>
-        /// <param name="strURL">
-        /// The str url.
-        /// </param>
+        /// <param name="url">The url.</param>
         /// <returns>
+        /// Returns the Object
         /// </returns>
-        public CacheObject GetObj(string strURL)
+        public CacheObject GetObject(string url)
         {
-            if (this.mEventTable.ContainsKey(strURL))
+            if (this.mEventTable.ContainsKey(url))
             {
-                return (CacheObject)this.mEventTable[strURL];
+                return (CacheObject)this.mEventTable[url];
             }
 
             return null;

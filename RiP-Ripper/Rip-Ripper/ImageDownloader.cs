@@ -1,28 +1,26 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: RiP-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
-
-using System.Collections;
-using System.IO;
-using System.Net;
-using System.Threading;
-using System;
-using RiPRipper.ImageHosts;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImageDownloader.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RiPRipper
 {
+    using System.Collections;
+    using System.IO;
+    using System.Net;
+    using System.Threading;
+    using RiPRipper.ImageHosts;
     using RiPRipper.Objects;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ImageDownloader
     {
         private string mstrURL = string.Empty;
@@ -30,24 +28,40 @@ namespace RiPRipper
         private string mSavePath = string.Empty;
         private ServiceTemplate xService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImageDownloader"/> class.
+        /// </summary>
+        /// <param name="sSavePath">The s save path.</param>
+        /// <param name="strURL">The STR URL.</param>
+        /// <param name="hTbl">The h TBL.</param>
         public ImageDownloader( string sSavePath, string strURL, ref Hashtable hTbl )
         {
-            mstrURL = strURL;
-            eventTable = hTbl;
-            mSavePath = sSavePath;
+            this.mstrURL = strURL;
+            this.eventTable = hTbl;
+            this.mSavePath = sSavePath;
         }
 
+        /// <summary>
+        /// Generals the downloader.
+        /// </summary>
         public void GeneralDownloader()
         {
-            xService = new uploadimages_net(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new uploadimages_net(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the upload image.
+        /// </summary>
         public void GetUploadImage()
         {
             xService = new uploadimages_net( ref mSavePath, ref mstrURL, ref eventTable );
             xService.StartDownload();
         }
+
+        /// <summary>
+        /// Gets the fapomatic.
+        /// </summary>
         public void GetFapomatic()
         {
             xService = new fapomatic( ref mSavePath, ref mstrURL, ref eventTable );
@@ -650,6 +664,15 @@ namespace RiPRipper
         public void GetHoooster()
         {
             this.xService = new Hoooster(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get PixHub Download
+        /// </summary>
+        public void GetPixHub()
+        {
+            this.xService = new PixHub(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 

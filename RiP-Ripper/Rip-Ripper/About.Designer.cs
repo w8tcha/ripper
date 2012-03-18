@@ -210,6 +210,7 @@
             "PimpAndHost.com",
             "PixHost.org",
             "PixHosting.info",
+            "PixHub.eu",
             "PixSlam.com",
             "PixUp.info",
             "PornImgHost.com",
