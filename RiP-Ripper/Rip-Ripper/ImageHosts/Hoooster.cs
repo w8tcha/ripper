@@ -102,7 +102,7 @@ namespace RiPRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"id=\""show_image\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"img src=\""(?<inner>[^\""]*)\"" alt=\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
