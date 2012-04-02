@@ -4,9 +4,9 @@
   <Target Name="PackageModule" Condition=" '$(Configuration)|$(Platform)' == 'PG-Ripper|AnyCPU' ">
     <PropertyGroup>
       <Major>1</Major>
-      <Minor>3</Minor>
-      <Build>1</Build>
-      <Revision>9</Revision>
+      <Minor>4</Minor>
+      <Build>0</Build>
+      <Revision>0</Revision>
     </PropertyGroup>
 
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>

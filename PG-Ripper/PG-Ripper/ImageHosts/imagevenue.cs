@@ -250,8 +250,8 @@ namespace PGRipper
             }
             catch (IOException ex)
             {
-                MainForm.sDeleteMessage = ex.Message;
-                 MainForm.bDelete = true;
+                MainForm.DeleteMessage = ex.Message;
+                 MainForm.Delete = true;
 
                 return false;
             }
@@ -383,8 +383,8 @@ namespace PGRipper
             }
             catch (IOException ex)
             {
-                MainForm.sDeleteMessage = ex.Message;
-                MainForm.bDelete = true;
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
 
                 ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);

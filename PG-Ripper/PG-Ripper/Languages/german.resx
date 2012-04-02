@@ -324,4 +324,7 @@
   <data name="gbParse2" xml:space="preserve">
     <value>Analysiert die jobs.xml...</value>
   </data>
+  <data name="MenuAccounts" xml:space="preserve">
+    <value>Konten</value>
+  </data>
 </root>

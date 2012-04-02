@@ -68,8 +68,8 @@ namespace PGRipper.ImageHosts
             }
             catch (IOException ex)
             {
-                MainForm.sDeleteMessage = ex.Message;
-                MainForm.bDelete = true;
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
 
                 return false;
             }
@@ -103,7 +103,7 @@ namespace PGRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"id=\""show_image\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"img src=\""(?<inner>[^\""]*)\"" alt=\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
@@ -149,8 +149,8 @@ namespace PGRipper.ImageHosts
             }
             catch (IOException ex)
             {
-                MainForm.sDeleteMessage = ex.Message;
-                MainForm.bDelete = true;
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
 
                 ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
@@ -195,12 +195,20 @@ namespace PGRipper.ImageHosts
                 var res = (HttpWebResponse)req.GetResponse();
 
                 var stream = res.GetResponseStream();
-                var reader = new StreamReader(stream);
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
 
-                strPageRead = reader.ReadToEnd();
+                    strPageRead = reader.ReadToEnd();
 
-                res.Close();
-                reader.Close();
+                    res.Close();
+                    reader.Close();
+                }
+                else
+                {
+                    res.Close();
+                    return string.Empty;
+                }
             }
             catch (ThreadAbortException)
             {

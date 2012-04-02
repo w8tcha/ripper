@@ -1,140 +1,171 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
-
-using System.Collections;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CookieManager.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper
 {
+    using System.Collections;
     using PGRipper.Objects;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class CookieManager
-	{
-		private readonly Hashtable cookieTable;
+    {
+        private readonly Hashtable cookieTable;
 
-		IDictionaryEnumerator ckieEnumerator;
+        private IDictionaryEnumerator ckieEnumerator;
 
-		public static CookieManager mInstance;
-		public static CookieManager GetInstance()
-		{
-		    return mInstance ?? (mInstance = new CookieManager());
-		}
+        public static CookieManager mInstance;
 
+        public static CookieManager GetInstance()
+        {
+            return mInstance ?? (mInstance = new CookieManager());
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CookieManager"/> class.
+        /// </summary>
         public CookieManager()
-		{
-			cookieTable = new Hashtable();
-		}
+        {
+            this.cookieTable = new Hashtable();
+        }
 
-		public void SetCookie(string sKey, string sValue)
-		{
-			if ( cookieTable.ContainsKey(sKey) )
-			{
-				// Just Update
-				cookieTable[sKey] = sValue;
-			}
-			else
-			{
-				cookieTable.Add(sKey, sValue);
-			}
-		}
-
-		public string GetCookie(string sKey)
-		{
-			if ( cookieTable.ContainsKey(sKey) )
-				return (string)cookieTable[sKey];
-
-			return string.Empty;
-		}
-
-		public void DeleteCookie(string sKey)
-		{
-            if (cookieTable.ContainsKey(sKey))
+        /// <summary>
+        /// Sets the cookie.
+        /// </summary>
+        /// <param name="sKey">The s key.</param>
+        /// <param name="sValue">The s value.</param>
+        public void SetCookie(string sKey, string sValue)
+        {
+            if (this.cookieTable.ContainsKey(sKey))
             {
-                cookieTable.Remove(sKey);
+                // Just Update
+                this.cookieTable[sKey] = sValue;
             }
-		}
+            else
+            {
+                this.cookieTable.Add(sKey, sValue);
+            }
+        }
 
-		public void DeleteAllCookies()
-		{
-			ResetCookiePos();
+        /// <summary>
+        /// Gets the cookie.
+        /// </summary>
+        /// <param name="sKey">The s key.</param>
+        /// <returns></returns>
+        public string GetCookie(string sKey)
+        {
+            return this.cookieTable.ContainsKey(sKey) ? (string)this.cookieTable[sKey] : string.Empty;
+        }
 
-		    ArrayList arrCookieKeys = new ArrayList();
+        /// <summary>
+        /// Deletes the cookie.
+        /// </summary>
+        /// <param name="sKey">The s key.</param>
+        public void DeleteCookie(string sKey)
+        {
+            if (this.cookieTable.ContainsKey(sKey))
+            {
+                this.cookieTable.Remove(sKey);
+            }
+        }
 
-			CookiePairS cPair = NextCookie();
+        /// <summary>
+        /// Deletes all cookies.
+        /// </summary>
+        public void DeleteAllCookies()
+        {
+            this.ResetCookiePos();
 
-			while (cPair != null)
-			{
-				arrCookieKeys.Add( cPair.Key );
+            ArrayList arrCookieKeys = new ArrayList();
 
-				cPair = NextCookie();
-			}
+            CookiePair cPair = NextCookie();
+
+            while (cPair != null)
+            {
+                arrCookieKeys.Add(cPair.Key);
+
+                cPair = this.NextCookie();
+            }
 
             if (arrCookieKeys.Count <= 0)
             {
                 return;
             }
 
-		    foreach (object t in arrCookieKeys)
+            foreach (object t in arrCookieKeys)
             {
-                DeleteCookie((string) t);
+                this.DeleteCookie((string)t);
             }
-		}
+        }
 
-		public string GetCookieString()
-		{
-			ResetCookiePos();
+        /// <summary>
+        /// Gets the cookie string.
+        /// </summary>
+        /// <returns></returns>
+        public string GetCookieString()
+        {
+            this.ResetCookiePos();
 
-		    string sCookies = string.Empty;
+            string sCookies = string.Empty;
 
-			CookiePairS cPair = NextCookie();
+            CookiePair cPair = this.NextCookie();
 
             while (cPair != null)
             {
                 sCookies += string.Format("{0}={1};", cPair.Key, cPair.Value);
 
-                cPair = NextCookie();
+                cPair = this.NextCookie();
             }
 
-			if ( sCookies.Substring( sCookies.Length-1, 1 ) == ";" )
-				sCookies = sCookies.Substring(0, sCookies.Length-1);
-
-			return sCookies;
-		}
-
-		public CookiePairS NextCookie()
-		{
-			if (ckieEnumerator == null)
-				ResetCookiePos();
-
-			CookiePairS newpair = null;
-
-			if (ckieEnumerator.MoveNext())
-			{
-				newpair = new CookiePairS {Key = (string) ckieEnumerator.Key, Value = (string) ckieEnumerator.Value};
-			}
-				
-			return newpair;
-		}
-
-		public void ResetCookiePos()
-		{
-            if (ckieEnumerator == null)
+            if (sCookies.Substring(sCookies.Length - 1, 1) == ";")
             {
-                ckieEnumerator = cookieTable.GetEnumerator();
+                sCookies = sCookies.Substring(0, sCookies.Length - 1);
             }
 
-		    ckieEnumerator.Reset();
-		}
+            return sCookies;
+        }
 
-	}
+        /// <summary>
+        /// Nexts the cookie.
+        /// </summary>
+        /// <returns></returns>
+        public CookiePair NextCookie()
+        {
+            if (this.ckieEnumerator == null)
+            {
+                this.ResetCookiePos();
+            }
+
+            CookiePair newpair = null;
+
+            if (this.ckieEnumerator.MoveNext())
+            {
+                newpair = new CookiePair { Key = (string)this.ckieEnumerator.Key, Value = (string)this.ckieEnumerator.Value };
+            }
+
+            return newpair;
+        }
+
+        /// <summary>
+        /// Resets the cookie pos.
+        /// </summary>
+        public void ResetCookiePos()
+        {
+            if (this.ckieEnumerator == null)
+            {
+                this.ckieEnumerator = this.cookieTable.GetEnumerator();
+            }
+
+            this.ckieEnumerator.Reset();
+        }
+    }
 }

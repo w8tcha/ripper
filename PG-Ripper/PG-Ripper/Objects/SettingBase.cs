@@ -1,124 +1,138 @@
-﻿//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SettingBase.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper.Objects
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The Settings Base
     /// </summary>
     public class SettingBase : object
     {
         /// <summary>
-        /// Current Forum Url Setting
+        /// Gets or sets the forum Url.
         /// </summary>
-        public string sForumUrl { get; set; }
-
-
-        /// <summary>
-        /// "Clipboard Watch" Setting
-        /// </summary>
-        public bool bClipBWatch { get; set; }
+        /// <value>
+        /// The forum Url.
+        /// </value>
+        public string CurrentForumUrl { get; set; }
 
         /// <summary>
-        /// Create Folder for Every Post Setting
+        /// Gets or sets the name of the current user.
         /// </summary>
-        public bool bSubDirs { get; set; }
+        /// <value>
+        /// The name of the current user.
+        /// </value>
+        public string CurrentUserName { get; set; }
 
         /// <summary>
-        /// Create New Folder for Every Thread Setting
+        /// Gets or sets the forums account.
         /// </summary>
-        public bool bDownInSepFolder { get; set; }
+        /// <value>
+        /// The forums account.
+        /// </value>
+        public List<ForumAccount> ForumsAccount { get; set; }
 
         /// <summary>
-        /// Automatically presses Thank You Button Setting
+        /// Gets or sets a value indicating whether "Clipboard Watch" Setting
         /// </summary>
-        public bool bAutoThank { get; set; }
+        /// <value>
+        ///   <c>true</c> if [clip B watch]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ClipBWatch { get; set; }
 
         /// <summary>
-        /// Save PostIDs for Checking Setting
+        ///  Gets or sets a value indicating whether Create Folder for Every Post Setting
         /// </summary>
-        public bool bSavePids { get; set; }
+        public bool SubDirs { get; set; }
 
         /// <summary>
-        /// Show Tray PopUps Setting
+        ///  Gets or sets a value indicating whether Create New Folder for Every Thread Setting
         /// </summary>
-        public bool bShowPopUps { get; set; }
+        public bool DownInSepFolder { get; set; }
 
         /// <summary>
-        /// Show Complete all Downloads PopUp Setting
+        ///  Gets or sets a value indicating whether Automatically presses Thank You Button Setting
         /// </summary>
-        public bool bShowCompletePopUp { get; set; }
+        public bool AutoThank { get; set; }
 
         /// <summary>
-        /// "Always on Top" Setting
+        ///  Gets or sets a value indicating whether Save PostIDs for Checking Setting
         /// </summary>
-        public bool bTopMost { get; set; }
+        public bool SavePids { get; set; }
 
         /// <summary>
-        /// min. Image Count for Thanks Setting
+        /// Gets or sets a value indicating whether Show Tray PopUps Setting
         /// </summary>
-        public int iMinImageCount { get; set; }
+        public bool ShowPopUps { get; set; }
 
         /// <summary>
-        /// Max. Multi. Downloads Setting
+        ///  Gets or sets a value indicating whether Show Complete all Downloads PopUp Setting
         /// </summary>
-        public int iThreadLimit { get; set; }
+        public bool ShowCompletePopUp { get; set; }
 
         /// <summary>
-        /// The Downloadfolder Location
+        ///  Gets or sets a value indicating whether "Always on Top" Setting
         /// </summary>
-        public string sDownloadFolder { get; set; }
+        public bool TopMost { get; set; }
 
         /// <summary>
-        /// "Download Options" Setting
+        ///  Gets or sets the min. Image Count for Thanks Setting
         /// </summary>
-        public string sDownloadOptions { get; set; }
+        public int MinImageCount { get; set; }
 
         /// <summary>
-        /// Current Language Setting
+        ///  Gets or sets the Max. Multi. Downloads Setting
         /// </summary>
-        public string sLanguage { get; set; }
+        public int ThreadLimit { get; set; }
 
         /// <summary>
-        /// Username
+        ///  Gets or sets the The Downloadfolder Location
         /// </summary>
-        public string sUser { get; set; }
+        public string DownloadFolder { get; set; }
 
         /// <summary>
-        /// User Password
+        ///  Gets or sets the "Download Options" Setting
         /// </summary>
-        public string sPass { get; set; }
+        public string DownloadOptions { get; set; }
 
         /// <summary>
-        /// Window Position Left
+        ///  Gets or sets the Current Language Setting
         /// </summary>
-        public int iWindowLeft { get; set; }
+        public string Language { get; set; }
 
         /// <summary>
-        /// Window Position Top
+        ///  Gets or sets the Window Position Left
         /// </summary>
-        public int iWindowTop { get; set; }
+        public int WindowLeft { get; set; }
 
         /// <summary>
-        /// Window Width
+        ///  Gets or sets the Window Position Top
         /// </summary>
-        public int iWindowWidth { get; set; }
+        public int WindowTop { get; set; }
 
         /// <summary>
-        /// Window Height
+        ///  Gets or sets the Window Width
         /// </summary>
-        public int iWindowHeight { get; set; }
+        public int WindowWidth { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the Window Height
+        /// </summary>
+        public int WindowHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [currently pause threads].
+        /// </summary>
+        public bool CurrentlyPauseThreads { get; set; }
     }
 }

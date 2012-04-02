@@ -1,4 +1,4 @@
-PG-Ripper and PG-Ripper X
+PG-Ripper and PG-Ripper X (http://ripper.codeplex.com/)
 ------------------------
 
 Features

@@ -1,16 +1,13 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImageInfo.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper.Objects
 {
@@ -29,5 +26,4 @@ namespace PGRipper.Objects
         /// </summary>
         public string ImageUrl { get; set; }
     }
-
 }

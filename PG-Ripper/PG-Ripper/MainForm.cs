@@ -1,16 +1,13 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MainForm.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper
 {
@@ -34,86 +31,76 @@ namespace PGRipper
     using PGRipper.Objects;
 
     /// <summary>
-    /// Summary description for MainForm.
+    /// The Main Form
     /// </summary>
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// All Settings
+        /// </summary>
+        public static SettingBase userSettings = new SettingBase();
+
         /// <summary>
         /// String List of Urls to Rip
         /// </summary>
         private readonly List<string> ExtractUrls = new List<string>();
 
 #if (!PGRIPPERX)
-        private TaskbarManager windowsTaskbar;
-
-        private JumpList jumpList;
-
+        /// <summary>
+        /// Clipboard Viewer Instance
+        /// </summary>
         public IntPtr nextClipboardViewer;
-#endif
-
-        public static bool bDelete;
-
-        public static string sDeleteMessage;
 
         /// <summary>
-        /// Indicates if the Browse Dialog is Already Opten
+        /// TaskBar Manager Instance
         /// </summary>
-        public bool bIsBrowserOpen;
+        private TaskbarManager windowsTaskbar;
+
+        /// <summary>
+        /// The Jump List
+        /// </summary>
+        private JumpList jumpList;
+#endif
 
         /// <summary>
         /// Indicates if Ripper Currently Parsing Jobs
         /// </summary>
-        private bool bParseAct;
+        private bool parseActive;
 
         /// <summary>
         /// Indicates that Ripper is Finishing the last Threads
         /// </summary>
-        private bool bEndRip;
+        private bool endingRip;
 
         /// <summary>
         /// Indicates that users Stopping and Deleting Current Job
         /// </summary>
-        private bool bStopJob;
-
-        /// <summary>
-        /// Indicates if all Functions currently pausing
-        /// </summary>
-        private bool bCurPause;
+        private bool stopingJob;
 
         /// <summary>
         /// Indicates that Disc is full and Ripping stoped
         /// </summary>
-        private bool bFullDisc;
+        private bool fullDisc;
 
         /// <summary>
         /// Indicates if Ripper is Currently Ripping
         /// </summary>
-        private bool bWorking = true;
+        private bool working = true;
 
         /// <summary>
         /// Indicates if Ripper is Currently Closing the Program
         /// </summary>
-        private bool bRipperClosing;
+        private bool ripperClosing;
 
         /// <summary>
         /// The Last Download Folder
         /// </summary>
-        private string sLastDownFolder;
-
-        /// <summary>
-        /// The Resource Manger that is used for Icons and Labels etc.
-        /// </summary>
-        public ResourceManager rm;
+        private string lastDownFolder;
 
         /// <summary>
         /// Array List of all Stored (Ripped) Post Ids
         /// </summary>
         private readonly ArrayList sRippedPosts = new ArrayList();
-
-        /// <summary>
-        /// All Settings
-        /// </summary>
-        public static SettingBase userSettings = new SettingBase();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -124,9 +111,9 @@ namespace PGRipper
             // Tray Menue
             trayMenu = new ContextMenu();
 
-            MenuItem hide = new MenuItem("Hide PG-Ripper", HideClick);
-            MenuItem sDownload = new MenuItem("Start Download", SDownloadClick);
-            MenuItem exit = new MenuItem("Exit Program", ExitClick);
+            MenuItem hide = new MenuItem("Hide PG-Ripper", this.HideClick);
+            MenuItem sDownload = new MenuItem("Start Download", this.SDownloadClick);
+            MenuItem exit = new MenuItem("Exit Program", this.ExitClick);
 
             trayMenu.MenuItems.Add(0, hide);
             trayMenu.MenuItems.Add(1, sDownload);
@@ -141,24 +128,47 @@ namespace PGRipper
                     ContextMenu = trayMenu
                 };
 
-            trayIcon.MouseDoubleClick += HideClick;
+            this.trayIcon.MouseDoubleClick += this.HideClick;
 #endif
-            //
-            // Required for Windows Form Designer support
-            //
             InitializeComponent();
 
             mJobsList = new List<JobInfo>();
-
-            SetWindow();
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="MainForm"/> is delete.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if delete; otherwise, <c>false</c>.
+        /// </value>
+        public static bool Delete { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Delete Message
+        /// </summary>
+        public static string DeleteMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether if the Browse Dialog is Already Opten
+        /// </summary>
+        public bool IsBrowserOpen { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Resource Manger that is used for Icons and Labels etc.
+        /// </summary>
+        public ResourceManager _ResourceManager { get; set; }
+
 #if (!PGRIPPERX)
-        protected void SDownloadClick(Object sender, EventArgs e)
+        /// <summary>
+        /// the download click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected void SDownloadClick(object sender, EventArgs e)
         {
             if (!Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) ||
-                Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(userSettings.sForumUrl) < 0 ||
-                bParseAct)
+                Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(userSettings.CurrentForumUrl) < 0 ||
+                this.parseActive)
             {
                 return;
             }
@@ -180,23 +190,36 @@ namespace PGRipper
             }
         }
 
-        protected void ExitClick(Object sender, EventArgs e)
+        /// <summary>
+        /// Exits Ripper
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected void ExitClick(object sender, EventArgs e)
         {
             Close();
         }
 
-        protected void HideClick(Object sender, EventArgs e)
+        /// <summary>
+        /// Hides Ripper in tray
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected void HideClick(object sender, EventArgs e)
         {
             Hide();
 
             trayMenu.MenuItems.RemoveAt(0);
-            MenuItem show = new MenuItem("Show PG-Ripper", ShowClick);
+            MenuItem show = new MenuItem("Show PG-Ripper", this.ShowClick);
             trayMenu.MenuItems.Add(0, show);
 
-            trayIcon.MouseDoubleClick -= HideClick;
-            trayIcon.MouseDoubleClick += ShowClick;
+            this.trayIcon.MouseDoubleClick -= this.HideClick;
+            this.trayIcon.MouseDoubleClick += this.ShowClick;
 
-            if (!userSettings.bShowPopUps) return;
+            if (!userSettings.ShowPopUps)
+            {
+                return;
+            }
 
             trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
             trayIcon.BalloonTipTitle = "Hidden in Tray";
@@ -204,312 +227,50 @@ namespace PGRipper
             trayIcon.ShowBalloonTip(10);
         }
 
-        protected void ShowClick(Object sender, EventArgs e)
+        /// <summary>
+        /// Shows the Ripper.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected void ShowClick(object sender, EventArgs e)
         {
             Show();
 
             trayMenu.MenuItems.RemoveAt(0);
-            MenuItem hide = new MenuItem("Hide PG-Ripper", HideClick);
+            MenuItem hide = new MenuItem("Hide PG-Ripper", this.HideClick);
             trayMenu.MenuItems.Add(0, hide);
 
-            trayIcon.MouseDoubleClick -= ShowClick;
-            trayIcon.MouseDoubleClick += HideClick;
+            this.trayIcon.MouseDoubleClick -= this.ShowClick;
+            this.trayIcon.MouseDoubleClick += this.HideClick;
 
-            if (WindowState == FormWindowState.Minimized) WindowState = FormWindowState.Normal;
+            if (WindowState == FormWindowState.Minimized)
+            {
+                WindowState = FormWindowState.Normal;
+            }
         }
 #endif
-
 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// <param name="args">The args.</param>
         [STAThread]
         private static void Main(string[] args)
         {
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
-            CacheController.xform = new MainForm();
-            ProcessArgs(args, CacheController.xform);
+            CacheController.Xform = new MainForm();
+            ProcessArgs(args, CacheController.Xform);
 
-            Application.Run(CacheController.xform);
+            Application.Run(CacheController.Xform);
         }
 
-        public void LoadSettings()
-        {
-            // Load "Clipboard Watch" Setting
-            try
-            {
-                userSettings.bClipBWatch = bool.Parse(Utility.LoadSetting("clipBoardWatch"));
-            }
-            catch (Exception)
-            {
-                userSettings.bClipBWatch = true;
-            }
-
-            try
-            {
-                userSettings.bShowPopUps = bool.Parse(Utility.LoadSetting("Show Popups"));
-            }
-            catch (Exception)
-            {
-                userSettings.bShowPopUps = true;
-            }
-            try
-            {
-                userSettings.bSubDirs = bool.Parse(Utility.LoadSetting("SubDirs"));
-            }
-            catch (Exception)
-            {
-                userSettings.bSubDirs = true;
-            }
-            try
-            {
-                userSettings.bAutoThank = bool.Parse(Utility.LoadSetting("Auto TK Button"));
-            }
-            catch (Exception)
-            {
-                userSettings.bAutoThank = false;
-            }
-            try
-            {
-                userSettings.bDownInSepFolder = bool.Parse(Utility.LoadSetting("DownInSepFolder"));
-            }
-            catch (Exception)
-            {
-                userSettings.bDownInSepFolder = true;
-            }
-            try
-            {
-                userSettings.bSavePids = bool.Parse(Utility.LoadSetting("SaveRippedPosts"));
-            }
-            catch (Exception)
-            {
-                userSettings.bSavePids = true;
-            }
-            try
-            {
-                userSettings.bShowCompletePopUp = bool.Parse(Utility.LoadSetting("Show Downloads Complete PopUp"));
-            }
-            catch (Exception)
-            {
-                userSettings.bShowCompletePopUp = true;
-            }
-            // min. Image Count for Thanks
-            try
-            {
-                userSettings.iMinImageCount = !string.IsNullOrEmpty(Utility.LoadSetting("minImageCountThanks"))
-                                                  ? int.Parse(Utility.LoadSetting("minImageCountThanks"))
-                                                  : 3;
-            }
-            catch (Exception)
-            {
-                userSettings.iMinImageCount = 3;
-            }
-            // Max. Threads
-            try
-            {
-                userSettings.iThreadLimit = -1;
-
-                userSettings.iThreadLimit = Convert.ToInt32(Utility.LoadSetting("Thread Limit"));
-
-                ThreadManager.GetInstance().SetThreadThreshHold(
-                    userSettings.iThreadLimit == -1 ? 3 : userSettings.iThreadLimit);
-            }
-            catch (Exception)
-            {
-                userSettings.iThreadLimit = 3;
-                ThreadManager.GetInstance().SetThreadThreshHold(3);
-            }
-
-            try
-            {
-                userSettings.sDownloadFolder = Utility.LoadSetting("Download Folder");
-
-                if (string.IsNullOrEmpty(userSettings.sDownloadFolder))
-                {
-                    userSettings.sDownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-
-                    textBox2.Text = userSettings.sDownloadFolder;
-
-                    Utility.SaveSetting("Download Folder", textBox2.Text);
-                }
-
-                textBox2.Text = userSettings.sDownloadFolder;
-            }
-            catch (Exception)
-            {
-                userSettings.sDownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-
-                textBox2.Text = userSettings.sDownloadFolder;
-
-                Utility.SaveSetting("Download Folder", textBox2.Text);
-            }
-            // Load "Download Options"
-            try
-            {
-                userSettings.sDownloadOptions = Utility.LoadSetting("Download Options");
-
-                switch (userSettings.sDownloadOptions)
-                {
-                    case "0":
-                        comboBox1.SelectedIndex = 0;
-                        break;
-                    case "1":
-                        comboBox1.SelectedIndex = 1;
-                        break;
-                    case "2":
-                        comboBox1.SelectedIndex = 2;
-                        break;
-                    default:
-                        comboBox1.SelectedIndex = 0;
-                        break;
-                }
-            }
-            catch (Exception)
-            {
-                userSettings.sDownloadOptions = "0";
-                comboBox1.SelectedIndex = 0;
-            }
-            // Load "Always on Top" Setting
-            try
-            {
-                userSettings.bTopMost = bool.Parse(Utility.LoadSetting("Always OnTop"));
-                TopMost = userSettings.bTopMost;
-            }
-            catch (Exception)
-            {
-                userSettings.bTopMost = false;
-                TopMost = false;
-            }
-
-            // Load Language Setting
-            try
-            {
-                userSettings.sLanguage = Utility.LoadSetting("UserLanguage");
-
-                switch (userSettings.sLanguage)
-                {
-                    case "de-DE":
-                        rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
-                        break;
-                    case "fr-FR":
-                        rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
-                        break;
-                    case "en-EN":
-                        rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
-                        break;
-                    default:
-                        rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
-                        break;
-                }
-
-                AdjustCulture();
-            }
-            catch (Exception)
-            {
-                rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
-            }
-
-            try
-            {
-                userSettings.sForumUrl = Utility.LoadSetting("forumURL");
-            }
-            catch (Exception)
-            {
-                userSettings.sForumUrl = "http://www.kitty-kats.com/";
-            }
-
-
-            try
-            {
-                userSettings.sUser = Utility.LoadSetting("User");
-
-                // Import old Password
-                try
-                {
-                    string sOldPass =
-                        Utility.EncodePassword(Utility.LoadSetting("Pass")).Replace("-", string.Empty).ToLower();
-
-                    Utility.SaveSetting("Password", sOldPass);
-                    Utility.DeleteSetting("Pass");
-
-                    userSettings.sPass = sOldPass;
-                }
-                catch (Exception)
-                {
-                    userSettings.sPass = null;
-                }
-
-                userSettings.sPass = Utility.LoadSetting("Password");
-
-                if (string.IsNullOrEmpty(userSettings.sUser) || string.IsNullOrEmpty(userSettings.sPass))
-                {
-                    Login frmLgn = new Login();
-                    frmLgn.ShowDialog(this);
-
-                    if (!bCameThroughCorrectLogin)
-                    {
-                        DialogResult result = TopMostMessageBox.Show(
-                            this.rm.GetString("mbExit"),
-                            this.rm.GetString("mbExitTtl"),
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question);
-
-                        if (result == DialogResult.Yes)
-                        {
-                            Application.Exit();
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                Login frmLgn = new Login();
-                frmLgn.ShowDialog(this);
-
-                if (!bCameThroughCorrectLogin)
-                {
-                    DialogResult result = TopMostMessageBox.Show(
-                        this.rm.GetString("mbExit"),
-                        this.rm.GetString("mbExitTtl"),
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        Application.Exit();
-                    }
-                }
-            }
-
-        }
-
-        private void AdjustCulture()
-        {
-            mStartDownloadBtn.Text = rm.GetString("btnStartDownload");
-            groupBox1.Text = rm.GetString("downloadOptions");
-            groupBox5.Text = string.Format("{0} (-):", rm.GetString("lblRippingQue"));
-            stopCurrentThreads.Text = rm.GetString("btnStop");
-            groupBox4.Text = rm.GetString("lblLastPicture");
-            groupBox2.Text = rm.GetString("gbCurrently");
-            mInvalidDestinationMsg = rm.GetString("mbInvalidDes");
-            mIncorrectUrlMsg = rm.GetString("mbIncorrectURL");
-            mNoThreadMsg = rm.GetString("mbNoThread");
-            mNoPostMsg = rm.GetString("mbNoPost");
-            mAlreadyQueuedMsg = rm.GetString("mbAlreadyQueued");
-            mTNumericMsg = rm.GetString("mbTNumeric");
-
-            // Menue
-            fileToolStripMenuItem.Text = rm.GetString("MenuFile");
-            settingsToolStripMenuItem1.Text = rm.GetString("MenuSettings");
-            exitToolStripMenuItem.Text = rm.GetString("MenuExit");
-
-            settingsToolStripMenuItem.Text = rm.GetString("MenuHelp");
-            helpToolStripMenuItem.Text = rm.GetString("MenuAbout");
-        }
-
-
+        /// <summary>
+        /// Processes the args.
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <param name="aForm">A form.</param>
         private static void ProcessArgs(string[] args, MainForm aForm)
         {
             if (args.Length == 0)
@@ -527,6 +288,21 @@ namespace PGRipper
             }
         }
 
+        /// <summary>
+        /// Checks the arg.
+        /// </summary>
+        /// <param name="aExpected">
+        /// A expected.
+        /// </param>
+        /// <param name="aSupplied">
+        /// A supplied.
+        /// </param>
+        /// <param name="aSuppliedValue">
+        /// A supplied value.
+        /// </param>
+        /// <returns>
+        /// The check arg.
+        /// </returns>
         private static bool CheckArg(string aExpected, string aSupplied, out string aSuppliedValue)
         {
             int equalsPos = aSupplied.IndexOf("=");
@@ -536,33 +312,201 @@ namespace PGRipper
                 aSuppliedValue = aSupplied.Substring(equalsPos + 1);
                 lSupplied = aSupplied.Substring(0, equalsPos);
             }
-
             else
             {
                 aSuppliedValue = string.Empty;
                 lSupplied = aSupplied;
             }
 
-            return (lSupplied == aExpected || lSupplied == "/" + aExpected || lSupplied == "\\" + aExpected);
+            return lSupplied == aExpected || lSupplied == string.Format("/{0}", aExpected) || lSupplied == string.Format("\\{0}", aExpected);
         }
 
+        /// <summary>
+        /// Checks the Download Folder of the Current Finished Job, if Empty delete the folder.
+        /// </summary>
+        /// <param name="checkFolder">The check folder.</param>
+        private static void CheckCurJobFolder(string checkFolder)
+        {
+            if (!Directory.Exists(checkFolder))
+            {
+                return;
+            }
 
+            if (Directory.GetFiles(checkFolder).Length == 0)
+            {
+                Directory.Delete(checkFolder);
+            }
+        }
+
+        /// <summary>
+        /// Loads the settings.
+        /// </summary>
+        private void LoadSettings()
+        {
+            userSettings = Utility.LoadSettings();
+
+            // Max. Threads
+            userSettings.ThreadLimit = userSettings.ThreadLimit == -1 ? 3 : userSettings.ThreadLimit;
+            ThreadManager.GetInstance().SetThreadThreshHold(userSettings.ThreadLimit);
+
+            if (string.IsNullOrEmpty(userSettings.DownloadFolder))
+            {
+                userSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+
+                textBox2.Text = userSettings.DownloadFolder;
+
+                Utility.SaveSettings(userSettings);
+            }
+
+            textBox2.Text = userSettings.DownloadFolder;
+
+            // Load "Download Options"
+            try
+            {
+                comboBox1.SelectedIndex = Convert.ToInt32(userSettings.DownloadOptions);
+            }
+            catch (Exception)
+            {
+                userSettings.DownloadOptions = "0";
+                comboBox1.SelectedIndex = 0;
+            }
+
+            TopMost = userSettings.TopMost;
+
+            // Load Language Setting
+            try
+            {
+                switch (userSettings.Language)
+                {
+                    case "de-DE":
+                        this._ResourceManager = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
+                        break;
+                    case "fr-FR":
+                        this._ResourceManager = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
+                        break;
+                    case "en-EN":
+                        this._ResourceManager = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        break;
+                    default:
+                        this._ResourceManager = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        break;
+                }
+
+                this.AdjustCulture();
+            }
+            catch (Exception)
+            {
+                this._ResourceManager = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+            }
+
+            try
+            {
+                bool accountNotFound = false;
+
+                foreach (var forumAccount in userSettings.ForumsAccount.Where(
+                    forumAccount => 
+                        forumAccount.ForumURL.Equals(userSettings.CurrentForumUrl)).Where(
+                        forumAccount => !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
+                {
+                    accountNotFound = true;
+                }
+
+                if (!accountNotFound)
+                {
+                    Login frmLgn = new Login();
+                    frmLgn.ShowDialog(this);
+
+                    if (!bCameThroughCorrectLogin)
+                    {
+                        DialogResult result = TopMostMessageBox.Show(
+                            this._ResourceManager.GetString("mbExit"),
+                            this._ResourceManager.GetString("mbExitTtl"),
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                        if (result == DialogResult.Yes)
+                        {
+                            Application.Exit();
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Login frmLgn = new Login();
+                frmLgn.ShowDialog(this);
+
+                if (bCameThroughCorrectLogin)
+                {
+                    this.CheckAccountMenu();
+
+                    return;
+                }
+
+                DialogResult result = TopMostMessageBox.Show(
+                    this._ResourceManager.GetString("mbExit"),
+                    this._ResourceManager.GetString("mbExitTtl"),
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    Application.Exit();
+                }
+            }            
+        }
+
+        /// <summary>
+        /// Adjusts the culture.
+        /// </summary>
+        private void AdjustCulture()
+        {
+            this.mStartDownloadBtn.Text = this._ResourceManager.GetString("btnStartDownload");
+            this.groupBox1.Text = this._ResourceManager.GetString("downloadOptions");
+            this.groupBox5.Text = string.Format("{0} (-):", this._ResourceManager.GetString("lblRippingQue"));
+            this.stopCurrentThreads.Text = this._ResourceManager.GetString("btnStop");
+            this.groupBox4.Text = this._ResourceManager.GetString("lblLastPicture");
+            this.groupBox2.Text = this._ResourceManager.GetString("gbCurrently");
+            this.mInvalidDestinationMsg = this._ResourceManager.GetString("mbInvalidDes");
+            this.mIncorrectUrlMsg = this._ResourceManager.GetString("mbIncorrectURL");
+            this.mNoThreadMsg = this._ResourceManager.GetString("mbNoThread");
+            this.mNoPostMsg = this._ResourceManager.GetString("mbNoPost");
+            this.mAlreadyQueuedMsg = this._ResourceManager.GetString("mbAlreadyQueued");
+            this.mTNumericMsg = this._ResourceManager.GetString("mbTNumeric");
+
+            // Menue
+            this.fileToolStripMenuItem.Text = this._ResourceManager.GetString("MenuFile");
+            this.settingsToolStripMenuItem1.Text = this._ResourceManager.GetString("MenuSettings");
+            this.exitToolStripMenuItem.Text = this._ResourceManager.GetString("MenuExit");
+            accountsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuAccounts");
+
+            this.settingsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuHelp");
+            this.helpToolStripMenuItem.Text = this._ResourceManager.GetString("MenuAbout");
+        }
+
+        /// <summary>
+        /// Mains the form load.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void MainFormLoad(object sender, EventArgs e)
         {
-            AppDomain.CurrentDomain.UnhandledException += (UnhandledExceptionFunction);
-            Application.ThreadException += (ThreadExceptionFunction);
+            AppDomain.CurrentDomain.UnhandledException += this.UnhandledExceptionFunction;
+            Application.ThreadException += this.ThreadExceptionFunction;
 
             LastWorkingTime = DateTime.Now;
 
             mrefCC = CacheController.GetInstance();
             mrefTM = ThreadManager.GetInstance();
 
-            LoadSettings();
+            this.LoadSettings();
+
+            this.SetWindow();
 
 #if (!PGRIPPERX)
-            string mbUpdate = rm.GetString("mbUpdate"), mbUpdate2 = rm.GetString("mbUpdate2");
+            string mbUpdate = this._ResourceManager.GetString("mbUpdate"), mbUpdate2 = this._ResourceManager.GetString("mbUpdate2");
 
-            if (VersionCheck.UpdateAvailable() && File.Exists(Application.StartupPath + "\\ICSharpCode.SharpZipLib.dll"))
+            if (VersionCheck.UpdateAvailable() && File.Exists(Path.Combine(Application.StartupPath, "ICSharpCode.SharpZipLib.dll")))
             {
                 DialogResult result = TopMostMessageBox.Show(
                     mbUpdate, mbUpdate2, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -584,20 +528,24 @@ namespace PGRipper
             }
 #endif
 
-            AutoLogin();
+            this.AutoLogin();
 
             if (!bCameThroughCorrectLogin)
             {
                 Application.Exit();
             }
-
-            if (userSettings.bSavePids)
+            else
             {
-                LoadHistory();
+                this.CheckAccountMenu();
+            }
+
+            if (userSettings.SavePids)
+            {
+                this.LoadHistory();
             }
 
             // Hide Index Thread Checkbox if not RiP Forums
-            if (!userSettings.sForumUrl.Contains(@"rip-productions.net"))
+            if (!userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
             {
                 mIsIndexChk.Visible = false;
             }
@@ -608,15 +556,179 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Add Forum Accounts to the Menu to allow switching.
+        /// </summary>
+        private void CheckAccountMenu()
+        {
+            this.accountsToolStripMenuItem.DropDownItems.Clear();
+
+            var newAccountMenuItem = new ToolStripMenuItem
+            {
+                Text = "Add New Forum Account",
+                Checked = false
+            };
+
+            newAccountMenuItem.Click += this.AddNewAccount_Click;
+
+            this.accountsToolStripMenuItem.DropDownItems.Add(newAccountMenuItem);
+
+            foreach (var accounts in userSettings.ForumsAccount)
+            {
+                var forumName = accounts.ForumURL.Replace("http://", string.Empty);
+
+                if (forumName.Contains("www."))
+                {
+                    forumName = forumName.Replace("www.", string.Empty);
+                }
+
+                if (forumName.EndsWith("/"))
+                {
+                    forumName = forumName.Remove(forumName.Length - 1);
+                }
+
+                var forumMenuItem = new ToolStripMenuItem
+                    {
+                        Tag = accounts.ForumURL,
+                        Text = forumName, 
+                        Checked = userSettings.CurrentForumUrl.Equals(accounts.ForumURL)
+                    };
+
+                forumMenuItem.Click += this.ForumMenuItem_Click;
+
+                this.accountsToolStripMenuItem.DropDownItems.Add(forumMenuItem);
+            }
+        }
+
+        /// <summary>
+        /// Go To the Login Dialog to add a New Forum Account
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void AddNewAccount_Click(object sender, EventArgs e)
+        {
+            // Kill all current downloads 
+            if (mCurrentJob != null)
+            {
+                stopCurrentThreads.Enabled = false;
+                this.stopingJob = true;
+
+                ThreadManager.GetInstance().DismantleAllThreads();
+
+                lvCurJob.Items.Clear();
+                mCurrentJob = null;
+                StatusLabelImageC.Text = string.Empty;
+
+                this.IdleRipper();
+            }
+            ////
+            this.Visible = false;
+
+            Login frmLgn = new Login();
+            frmLgn.ShowDialog(this);
+
+            this.Visible = true;
+        }
+
+        /// <summary>
+        /// Switch Login with Selected Account
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void ForumMenuItem_Click(object sender, EventArgs e)
+        {
+            // Kill all current downloads 
+            if (mCurrentJob != null)
+            {
+                stopCurrentThreads.Enabled = false;
+                this.stopingJob = true;
+
+                ThreadManager.GetInstance().DismantleAllThreads();
+
+                lvCurJob.Items.Clear();
+                mCurrentJob = null;
+                StatusLabelImageC.Text = string.Empty;
+
+                this.IdleRipper();
+            }
+            ////
+
+            var menuItem = (ToolStripMenuItem)sender;
+
+            foreach (var forumAccount in userSettings.ForumsAccount.Where(
+                    forumAccount =>
+                        forumAccount.ForumURL.Equals(menuItem.Tag)).Where(
+                        forumAccount => !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
+            {
+                userSettings.CurrentForumUrl = forumAccount.ForumURL;
+                userSettings.CurrentUserName = forumAccount.UserName;
+
+                LoginManager lgnMgr = new LoginManager(forumAccount.UserName, forumAccount.UserPassWord);
+
+                if (lgnMgr.DoLogin())
+                {
+                    bCameThroughCorrectLogin = true;
+                    this.CheckAccountMenu();
+                }
+                else
+                {
+                    this.Visible = false;
+
+                    Login frmLgn = new Login();
+                    frmLgn.ShowDialog(this);
+
+                    this.Visible = true;
+                }
+
+                var header = this._ResourceManager.GetString("ttlHeader");
+
+#if (PGRIPPER)
+            Text = string.Format(
+                "PG-Ripper {0}.{1}.{2}{3}{4}",
+                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
+                string.Format("{0}{1}\" @ {2} ]", header, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+#elif (PGRIPPERX)
+                Text = string.Format("PG-Ripper X {0}.{1}.{2}{3}{4}", 
+                    Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
+                    Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
+                    Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
+                    Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
+                    string.Format("{0}{1}\" @ {2} ]", header, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+#else
+                Text = string.Format(
+                    "PG-Ripper {0}.{1}.{2}{3}{4}",
+                    Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
+                    string.Format("{0}{1}\" @ {2} ]", header, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+#endif
+            }
+        }
+
+        /// <summary>
         /// Auto login if User Credentials exists in Config file.
         /// if no Data show Login Form
         /// </summary>
-        public void AutoLogin()
+        private void AutoLogin()
         {
+            bool accountExists = false;
+            var currentForumAccount = new ForumAccount();
 
-            if (userSettings.sUser != null && userSettings.sPass != null)
+            foreach (var forumAccount in userSettings.ForumsAccount.Where(
+                    forumAccount =>
+                        forumAccount.ForumURL.Equals(userSettings.CurrentForumUrl)).Where(
+                        forumAccount => !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
             {
-                LoginManager lgnMgr = new LoginManager(userSettings.sUser, userSettings.sPass);
+                currentForumAccount = forumAccount;
+                accountExists = true;
+            }
+
+            if (accountExists)
+            {
+                LoginManager lgnMgr = new LoginManager(currentForumAccount.UserName, currentForumAccount.UserPassWord);
 
                 if (lgnMgr.DoLogin())
                 {
@@ -628,8 +740,8 @@ namespace PGRipper
                     frmLgn.ShowDialog(this);
 
                     DialogResult result = TopMostMessageBox.Show(
-                        rm.GetString("mbExit"),
-                        rm.GetString("mbExitTtl"),
+                        this._ResourceManager.GetString("mbExit"),
+                        this._ResourceManager.GetString("mbExitTtl"),
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question);
 
@@ -648,7 +760,6 @@ namespace PGRipper
             }
         }
 
-
         /// <summary>
         /// Starts Ripping
         /// </summary>
@@ -660,7 +771,7 @@ namespace PGRipper
         /// </param>
         private void MStartDownloadBtnClick(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(textBox1.Text) || this.bParseAct)
+            if (string.IsNullOrEmpty(textBox1.Text) || this.parseActive)
             {
                 return;
             }
@@ -691,7 +802,7 @@ namespace PGRipper
         /// </param>
         private void TextBox1KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != '\r' || this.bParseAct)
+            if (e.KeyChar != '\r' || this.parseActive)
             {
                 return;
             }
@@ -731,7 +842,7 @@ namespace PGRipper
             }
 
             // Check Post is Ripped?!
-            if (userSettings.bSavePids)
+            if (userSettings.SavePids)
             {
                 string sPostId = null;
 
@@ -754,7 +865,7 @@ namespace PGRipper
                     if (this.IsPostAlreadyRipped(sPostId))
                     {
                         DialogResult result = TopMostMessageBox.Show(
-                            this.rm.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            this._ResourceManager.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                         if (result != DialogResult.Yes)
                         {
@@ -776,9 +887,9 @@ namespace PGRipper
             }
             else
             {
-                if (userSettings.sForumUrl.Contains(@"http://rip-") ||
-                    userSettings.sForumUrl.Contains(@"http://www.rip-") ||
-                    userSettings.sForumUrl.Contains(@"kitty-kats.com"))
+                if (userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                    userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                    userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
                 {
                     if (!sHtmlUrl.Contains(@"#post"))
                     {
@@ -816,7 +927,7 @@ namespace PGRipper
                 return false;
             }
 
-            if (string.IsNullOrEmpty(userSettings.sDownloadFolder))
+            if (string.IsNullOrEmpty(userSettings.DownloadFolder))
             {
                 DialogResult result = TopMostMessageBox.Show(
                     "Please Set Up Download Folder before starting download",
@@ -981,14 +1092,12 @@ namespace PGRipper
             JobInfo job = new JobInfo
                 { URL = sHtmlUrl, HtmlPayLoad = Maintainance.GetInstance().GetPostPages(sHtmlUrl) };
 
-            //job.sStorePath = sDownloadFolder;
-
             job.Title = Utility.ReplaceHexWithAscii(Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad));
 
-            if (userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"kitty-kats.com/") ||
-                userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"passesforthemasses.com/") ||
-                userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"http://rip-") ||
-                userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"http://www.rip-"))
+            if (userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"kitty-kats.com/") ||
+                userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
+                userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
             {
                 job.SecurityToken = Maintainance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
             }
@@ -999,7 +1108,7 @@ namespace PGRipper
                     Utility.ReplaceHexWithAscii(
                         Maintainance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sHtmlUrl));
 
-                if (userSettings.sForumUrl.Contains(@"rip-productions.net"))
+                if (userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
                 {
                     job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.URL, true);
                 }
@@ -1014,7 +1123,7 @@ namespace PGRipper
             }
             else
             {
-                if (userSettings.sForumUrl.Contains(@"rip-productions.net"))
+                if (userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
                 {
                     job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.URL, false);
                 }
@@ -1027,8 +1136,6 @@ namespace PGRipper
                             job.ForumTitle.IndexOf(string.Format("{0} ", job.Title)) + job.Title.Length + 1);
                 }
             }
-
-
 
             job.ImageList = Utility.ExtractImagesHtml(job.HtmlPayLoad, sHtmlUrl);
             job.ImageCount = job.ImageList.Count;
@@ -1076,12 +1183,12 @@ namespace PGRipper
         /// </param>
         private void ProcessAutoThankYou(string sPostId, int iICount, string sSecurityToken)
         {
-            if (!userSettings.bAutoThank)
+            if (!userSettings.AutoThank)
             {
                 return;
             }
 
-            if (iICount < userSettings.iMinImageCount)
+            if (iICount < userSettings.MinImageCount)
             {
                 return;
             }
@@ -1094,18 +1201,18 @@ namespace PGRipper
             }
 
             string tyURL;
-            if (userSettings.sForumUrl.Contains(@"scanlover.com"))
+            if (userSettings.CurrentForumUrl.Contains(@"scanlover.com"))
             {
-                tyURL = string.Format("{0}post_thanks.php?do=post_thanks_add&p={1}", userSettings.sForumUrl, sPostId);
+                tyURL = string.Format("{0}post_thanks.php?do=post_thanks_add&p={1}", userSettings.CurrentForumUrl, sPostId);
             }
-            else if (userSettings.sForumUrl.Contains(@"kitty-kats.com") ||
-                     userSettings.sForumUrl.Contains(@"passesforthemasses.com/") ||
-                     userSettings.sForumUrl.Contains(@"http://rip-") ||
-                     userSettings.sForumUrl.Contains(@"http://www.rip-"))
+            else if (userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
+                     userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
+                     userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                     userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
             {
                 tyURL = string.Format(
                     "{0}post_thanks.php?do=post_thanks_add&p={1}&securitytoken={2}",
-                    userSettings.sForumUrl,
+                    userSettings.CurrentForumUrl,
                     sPostId,
                     sSecurityToken);
             }
@@ -1117,27 +1224,32 @@ namespace PGRipper
             this.Invoke(lSendThankYouDel, new object[] { tyURL });
         }
 
-        // This delegate enables asynchronous calls for automatically sending thank yous
+        /// <summary>
+        /// This delegate enables asynchronous calls for automatically sending thank yous
+        /// </summary>
+        /// <param name="aUrl">A URL.</param>
         private delegate void SendThankYouDelegate(string aUrl);
 
+        /// <summary>
+        /// Sends the thank you.
+        /// </summary>
+        /// <param name="aUrl">A URL.</param>
         private static void SendThankYou(string aUrl)
         {
-            string tyURLRef = userSettings.sForumUrl;
+            string tyURLRef = userSettings.CurrentForumUrl;
 
             HttpWebResponse lHttpWebResponse = null;
             Stream lHttpWebResponseStream = null;
-
 
             HttpWebRequest lHttpWebRequest = (HttpWebRequest)WebRequest.Create(aUrl);
             lHttpWebRequest.UserAgent =
                 "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
             lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
             lHttpWebRequest.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-            lHttpWebRequest.Headers.Add("Cookie: " + CookieManager.GetInstance().GetCookieString());
+            lHttpWebRequest.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));
             lHttpWebRequest.Accept =
                 "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
             lHttpWebRequest.KeepAlive = true;
-            //lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
             lHttpWebRequest.Referer = tyURLRef;
             lHttpWebRequest.AllowAutoRedirect = false;
             lHttpWebRequest.Timeout = 1500;
@@ -1155,7 +1267,6 @@ namespace PGRipper
             }
         }
 
-
         /// <summary>
         /// Parses an index and places all linked images in mDownloadsList.
         /// </summary>
@@ -1164,14 +1275,17 @@ namespace PGRipper
         {
             Indexes idxs = new Indexes();
 
-            string sPagecontent = userSettings.sForumUrl.Contains(@"rip-productions.net") ||
-                                  userSettings.sForumUrl.Contains(@"kitty-kats.com")
+            string sPagecontent = userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
+                                  userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
                                       ? idxs.GetThreadPagesNew(sHtmlUrl)
                                       : idxs.GetThreadPages(sHtmlUrl);
 
             this.arlstIndxs = idxs.ParseHtml(sPagecontent, sHtmlUrl);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private List<ImageInfo> arlstIndxs;
 
         /// <summary>
@@ -1186,8 +1300,8 @@ namespace PGRipper
 
             string sPagecontent;
 
-            if (userSettings.sForumUrl.Contains(@"http://rip-") || userSettings.sForumUrl.Contains(@"http://www.rip-") ||
-                userSettings.sForumUrl.Contains(@"kitty-kats.com"))
+            if (userSettings.CurrentForumUrl.Contains(@"http://rip-") || userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
             {
                 sPagecontent = threads.GetThreadPagesNew(htmlUrl);
             }
@@ -1207,26 +1321,25 @@ namespace PGRipper
                 try
                 {
                     this.StatusLabelInfo.Text = string.Format(
-                        "{0}{1}/{2}", this.rm.GetString("gbParse"), po, arlst.Count);
+                        "{0}{1}/{2}", this._ResourceManager.GetString("gbParse"), po, arlst.Count);
                 }
                 catch (Exception)
                 {
-
                 }
 
                 string sLpostId = arlst[po].ImageUrl;
 
                 //////////////////////////////////////////////////////////////////////////
 
-                if (userSettings.bSavePids && this.IsPostAlreadyRipped(sLpostId))
+                if (userSettings.SavePids && this.IsPostAlreadyRipped(sLpostId))
                 {
                     goto SKIPIT;
                 }
 
-                string sLComposedURL = userSettings.sForumUrl.Contains(@"rip-productions.net") ||
-                                       userSettings.sForumUrl.Contains(@"kitty-kats.com")
+                string sLComposedURL = userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
+                                       userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
                                            ? string.Format("{0}#post{1}", htmlUrl, sLpostId)
-                                           : string.Format("{0}showpost.php?p={1}", userSettings.sForumUrl, sLpostId);
+                                           : string.Format("{0}showpost.php?p={1}", userSettings.CurrentForumUrl, sLpostId);
 
                 JobInfo jobInfo = mJobsList.Find(doubleJob => doubleJob.URL.Equals(sLComposedURL));
 
@@ -1246,8 +1359,6 @@ namespace PGRipper
                 JobInfo job = new JobInfo
                     { URL = sLComposedURL, HtmlPayLoad = Maintainance.GetInstance().GetPostPages(sLComposedURL) };
 
-                //job.sStorePath = sDownloadFolder;
-
                 if (string.IsNullOrEmpty(job.HtmlPayLoad))
                 {
                     goto SKIPIT;
@@ -1255,19 +1366,19 @@ namespace PGRipper
 
                 job.Title = Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad);
 
-                if (userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"kitty-kats.com") ||
-                    userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"passesforthemasses.com/") ||
-                    userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"http://rip-") ||
-                    userSettings.bAutoThank & userSettings.sForumUrl.Contains(@"http://www.rip-"))
+                if (userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
+                    userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
+                    userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                    userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
                 {
                     job.SecurityToken = Maintainance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
                 }
 
-                job.ForumTitle = userSettings.sForumUrl.Contains(@"rip-productions.net") ||
-                                 userSettings.sForumUrl.Contains(@"kitty-kats.com")
+                job.ForumTitle = userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
+                                 userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
                                      ? sForumTitle
                                      : sForumTitle.Substring(
-                                         sForumTitle.IndexOf(job.Title + " ") + job.Title.Length + 1);
+                                         sForumTitle.IndexOf(string.Format("{0} ", job.Title)) + job.Title.Length + 1);
 
                 job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sLComposedURL);
                 job.Title = Utility.ReplaceHexWithAscii(job.Title);
@@ -1286,7 +1397,7 @@ namespace PGRipper
 
                 Invoke(newJob, new object[] { job });
 
-                //JobListAdd(job);
+                //// JobListAdd(job);
 
                 //////////////////////////////////////////////////////////////////////////
                 SKIPIT:
@@ -1305,12 +1416,12 @@ namespace PGRipper
         /// </param>
         private void TmrPageUpdateElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            if (this.bWorking && !this.bParseAct || this.mJobsList.Count > 0 && !this.bParseAct)
+            if (this.working && !this.parseActive || this.mJobsList.Count > 0 && !this.parseActive)
             {
                 this.LogicCode();
             }
 
-            if (!this.bParseAct && this.ExtractUrls.Count > 0 && !GetPostsWorker.IsBusy && !GetIdxsWorker.IsBusy)
+            if (!this.parseActive && this.ExtractUrls.Count > 0 && !GetPostsWorker.IsBusy && !GetIdxsWorker.IsBusy)
             {
                 this.GetExtractUrls();
             }
@@ -1325,38 +1436,37 @@ namespace PGRipper
         private void LogicCode()
         {
             // Full HDD solution
-            if (bDelete && !bFullDisc)
+            if (Delete && !this.fullDisc)
             {
-                FullDisc();
+                this.FullDisc();
             }
-
 
             if (mrefTM.GetThreadCount() > 0)
             {
                 // If Joblist empty and the last Threads of Current Job are parsed
-                if (mCurrentJob == null && mJobsList.Count.Equals(0) && !bParseAct)
+                if (this.mCurrentJob == null && this.mJobsList.Count.Equals(0) && !this.parseActive)
                 {
-                    bEndRip = true;
+                    this.endingRip = true;
 
-                    StatusLabelInfo.Text = rm.GetString("StatusLabelInfo");
+                    this.StatusLabelInfo.Text = this._ResourceManager.GetString("StatusLabelInfo");
                     StatusLabelInfo.ForeColor = Color.Red;
 
-                    groupBox5.Text = string.Format("{0} (-):", rm.GetString("lblRippingQue"));
+                    this.groupBox5.Text = string.Format("{0} (-):", this._ResourceManager.GetString("lblRippingQue"));
                 }
                 else
                 {
-                    bEndRip = false;
+                    this.endingRip = false;
                 }
             }
             else
             {
                 // Check if Last Downloadfolder is Empty
-                if (!string.IsNullOrEmpty(sLastDownFolder))
+                if (!string.IsNullOrEmpty(this.lastDownFolder))
                 {
-                    CheckCurJobFolder(sLastDownFolder);
+                    CheckCurJobFolder(this.lastDownFolder);
                 }
 
-                if (!bCurPause)
+                if (!userSettings.CurrentlyPauseThreads)
                 {
                     lvCurJob.Items.Clear();
                     StatusLabelImageC.Text = string.Empty;
@@ -1373,30 +1483,13 @@ namespace PGRipper
 #endif
 
                         // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
-                        ProcessNextJob();
+                        this.ProcessNextJob();
                     }
                     else if (mCurrentJob == null && mJobsList.Count.Equals(0))
                     {
-                        IdleRipper();
+                        this.IdleRipper();
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Checks the Download Folder of the Current Finished Job, if Empty delete the folder.
-        /// </summary>
-        /// <param name="sCheckFolder"></param>
-        private static void CheckCurJobFolder(string sCheckFolder)
-        {
-            if (!Directory.Exists(sCheckFolder))
-            {
-                return;
-            }
-
-            if (Directory.GetFiles(sCheckFolder).Length == 0)
-            {
-                Directory.Delete(sCheckFolder);
             }
         }
 
@@ -1405,7 +1498,7 @@ namespace PGRipper
         /// </summary>
         private void ProcessNextJob()
         {
-            bWorking = true;
+            this.working = true;
 
             deleteJob.Enabled = true;
             stopCurrentThreads.Enabled = true;
@@ -1417,11 +1510,11 @@ namespace PGRipper
 
             mCurrentJob = mJobsList[0];
 
-            JobListRemove(0);
+            this.JobListRemove(0);
 
-            string bSystemExtr = rm.GetString("bSystemExtr");
+            string bSystemExtr = this._ResourceManager.GetString("bSystemExtr");
 
-            ParseJob();
+            this.ParseJob();
 
             // NO IMAGES TO PROCESS SO ABANDON CURRENT THREAD
             if (mImagesList == null || mImagesList.Count <= 0)
@@ -1432,18 +1525,18 @@ namespace PGRipper
                 return;
             }
 
-            groupBox2.Text = string.Format("{0}...", rm.GetString("gbCurrentlyExtract"));
+            this.groupBox2.Text = string.Format("{0}...", this._ResourceManager.GetString("gbCurrentlyExtract"));
 
             if (mCurrentJob.Title.Equals(mCurrentJob.PostTitle))
             {
                 Text = string.Format(
-                    "{0}: {1} - x{2}", rm.GetString("gbCurrentlyExtract"), mCurrentJob.Title, mImagesList.Count);
+                    "{0}: {1} - x{2}", this._ResourceManager.GetString("gbCurrentlyExtract"), this.mCurrentJob.Title, this.mImagesList.Count);
             }
             else
             {
                 Text = string.Format(
                     "{0}: {1} - {2} - x{3}",
-                    rm.GetString("gbCurrentlyExtract"),
+                    this._ResourceManager.GetString("gbCurrentlyExtract"),
                     mCurrentJob.Title,
                     mCurrentJob.PostTitle,
                     mImagesList.Count);
@@ -1454,18 +1547,18 @@ namespace PGRipper
 #if (!PGRIPPERX)
             try
             {
-                if (userSettings.bShowPopUps)
+                if (userSettings.ShowPopUps)
                 {
-                    trayIcon.Text = rm.GetString("gbCurrentlyExtract") + mCurrentJob.Title;
+                    this.trayIcon.Text = this._ResourceManager.GetString("gbCurrentlyExtract") + this.mCurrentJob.Title;
                     trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                    trayIcon.BalloonTipTitle = rm.GetString("gbCurrentlyExtract");
+                    this.trayIcon.BalloonTipTitle = this._ResourceManager.GetString("gbCurrentlyExtract");
                     trayIcon.BalloonTipText = mCurrentJob.Title;
                     trayIcon.ShowBalloonTip(10);
                 }
             }
             catch (Exception)
             {
-                if (userSettings.bShowPopUps)
+                if (userSettings.ShowPopUps)
                 {
                     trayIcon.Text = bSystemExtr;
                     trayIcon.BalloonTipTitle = bSystemExtr;
@@ -1484,7 +1577,7 @@ namespace PGRipper
                 progressBar1.Maximum = 10000;
             }
 
-            ProcessCurImgLst();
+            this.ProcessCurImgLst();
         }
 
         /// <summary>
@@ -1493,18 +1586,18 @@ namespace PGRipper
         private void ProcessCurImgLst()
         {
             stopCurrentThreads.Enabled = true;
-            bStopJob = false;
-            bWorking = true;
+            this.stopingJob = false;
+            this.working = true;
 
-            sLastDownFolder = null;
+            this.lastDownFolder = null;
 
             ThreadManager lTdm = ThreadManager.GetInstance();
 
-            sLastDownFolder = mCurrentJob.StorePath;
+            this.lastDownFolder = mCurrentJob.StorePath;
 
             if (mImagesList.Count > 0)
             {
-                string tiImagesRemain = rm.GetString("tiImagesRemain");
+                string tiImagesRemain = this._ResourceManager.GetString("tiImagesRemain");
 
                 ////////////////
                 lvCurJob.Items.Clear();
@@ -1522,13 +1615,13 @@ namespace PGRipper
 
                 for (int i = 0; i < mImagesList.Count; i++)
                 {
-                    if (bStopJob || bRipperClosing)
+                    if (this.stopingJob || this.ripperClosing)
                     {
                         break;
                     }
 
 #if (!PGRIPPERX)
-                    trayIcon.Text = String.Format(tiImagesRemain, mImagesList.Count - i, i * 100 / mImagesList.Count);
+                    this.trayIcon.Text = string.Format(tiImagesRemain, this.mImagesList.Count - i, i * 100 / this.mImagesList.Count);
 
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
                         Environment.OSVersion.Version.Minor >= 1)
@@ -1541,14 +1634,14 @@ namespace PGRipper
                         Application.DoEvents();
                     }
 
-                    if (!bRipperClosing)
+                    if (!this.ripperClosing)
                     {
                         if (progressBar1 != null)
                         {
                             progressBar1.Value = i;
                         }
 
-                        StatusLabelImageC.Text = String.Format(
+                        this.StatusLabelImageC.Text = string.Format(
                             tiImagesRemain, mImagesList.Count - i, i * 100 / mImagesList.Count);
                     }
 
@@ -1565,38 +1658,37 @@ namespace PGRipper
 
                             CacheController.GetInstance().DownloadImage(mImagesList[i].ImageUrl, mCurrentJob.StorePath);
                         }
-
                     }
                     catch (ArgumentOutOfRangeException)
                     {
-                        if (bStopJob || bRipperClosing)
+                        if (this.stopingJob || this.ripperClosing)
                         {
                             break;
                         }
                     }
                     catch (NullReferenceException)
                     {
-                        if (bStopJob || bRipperClosing)
+                        if (this.stopingJob || this.ripperClosing)
                         {
                             break;
                         }
                     }
 
-                    if ((i > lvCurJob.Items.Count))
+                    if (i > this.lvCurJob.Items.Count)
                     {
                         continue;
                     }
 
                     if (this.InvokeRequired)
                     {
-                        this.Invoke((MethodInvoker)(this.ShowLastPic));
+                        this.Invoke((MethodInvoker)this.ShowLastPic);
                     }
                     else
                     {
                         this.ShowLastPic();
                     }
 
-                    if (!this.bRipperClosing)
+                    if (!this.ripperClosing)
                     {
                         this.lvCurJob.Items[i].ForeColor = Color.Green;
                     }
@@ -1605,9 +1697,9 @@ namespace PGRipper
                 // FINISED A THREAD/POST DOWNLOAD JOB
                 mCurrentJob = null;
 
-                if (!string.IsNullOrEmpty(this.sLastDownFolder))
+                if (!string.IsNullOrEmpty(this.lastDownFolder))
                 {
-                    CheckCurJobFolder(this.sLastDownFolder);
+                    CheckCurJobFolder(this.lastDownFolder);
                 }
 
                 if (mJobsList.Count > 0)
@@ -1621,7 +1713,7 @@ namespace PGRipper
                     }
 #endif
                     // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
-                    ProcessNextJob();
+                    this.ProcessNextJob();
                 }
             }
             else
@@ -1640,21 +1732,10 @@ namespace PGRipper
         /// </summary>
         private void ShowLastPic()
         {
-            // Reclaim resources used by previous image in the picturebox
-            /*if (pictureBox1.Image != null)
-            {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-            }*/
-
             if (pictureBox1.Image != null)
             {
-                //  imgLastPic.Dispose();
-                // imgLastPic = null;
-
                 pictureBox1.Image.Dispose();
                 pictureBox1.Image = null;
-
             }
 
             if (pictureBox1.BackgroundImage != null)
@@ -1666,37 +1747,35 @@ namespace PGRipper
 
             sLastPic = mrefCC.uSLastPic;
 
-            if (File.Exists(sLastPic))
+            if (!File.Exists(this.sLastPic))
             {
-                try
+                return;
+            }
+
+            try
+            {
+                this.pictureBox1.Visible = true;
+
+                if (this.sLastPic.EndsWith(".gif"))
                 {
-                    pictureBox1.Visible = true;
+                    this.pictureBox1.BackgroundImage = Image.FromFile(this.sLastPic);
 
-                    if (sLastPic.EndsWith(".gif"))
-                    {
-                        pictureBox1.BackgroundImage = Image.FromFile(sLastPic);
-
-                        pictureBox1.Update();
-                    }
-                    else
-                    {
-                        // This statement causes file locking until the
-                        // process exits unless cleared when not visible
-                        imgLastPic = Image.FromFile(sLastPic);
-
-                        pictureBox1.Image = imgLastPic;
-
-                        //pictureBox1.Image = Image.FromFile(sLastPic);
-                        pictureBox1.Update();
-                    }
+                    this.pictureBox1.Update();
                 }
-                catch (Exception)
+                else
                 {
-                    //imgLastPic.Dispose();
-                    //imgLastPic = null;
-                    pictureBox1.Image.Dispose();
-                    pictureBox1.Image = null;
+                    // This statement causes file locking until the
+                    // process exits unless cleared when not visible
+                    this.imgLastPic = Image.FromFile(this.sLastPic);
+
+                    this.pictureBox1.Image = this.imgLastPic;
+                    this.pictureBox1.Update();
                 }
+            }
+            catch (Exception)
+            {
+                this.pictureBox1.Image.Dispose();
+                this.pictureBox1.Image = null;
             }
         }
 
@@ -1712,7 +1791,7 @@ namespace PGRipper
         /// <param name="job">The new Job</param>
         private void JobListAdd(JobInfo job)
         {
-            bWorking = true;
+            this.working = true;
 
             mJobsList.Add(job);
 
@@ -1723,7 +1802,7 @@ namespace PGRipper
 
             listViewJobList.Items.AddRange(new[] { ijobJob });
 
-            groupBox5.Text = string.Format("{0} ({1}):", rm.GetString("lblRippingQue"), mJobsList.Count);
+            this.groupBox5.Text = string.Format("{0} ({1}):", this._ResourceManager.GetString("lblRippingQue"), this.mJobsList.Count);
         }
 
         /// <summary>
@@ -1736,12 +1815,14 @@ namespace PGRipper
 
             listViewJobList.Items.RemoveAt(iJobIndex);
 
-            groupBox5.Text = string.Format("{0} ({1}):", rm.GetString("lblRippingQue"), mJobsList.Count);
+            this.groupBox5.Text = string.Format("{0} ({1}):", this._ResourceManager.GetString("lblRippingQue"), this.mJobsList.Count);
         }
 
+        /// <summary>
+        /// Idles the ripper.
+        /// </summary>
         private void IdleRipper()
         {
-
 #if (!PGRIPPERX)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
                 Environment.OSVersion.Version.Minor >= 1)
@@ -1751,10 +1832,9 @@ namespace PGRipper
                 this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
             }
 
-            string btleExit = rm.GetString("btleExit"), btexExit = rm.GetString("btexExit");
+            string btleExit = this._ResourceManager.GetString("btleExit"), btexExit = this._ResourceManager.GetString("btexExit");
 
-
-            if (bEndRip && userSettings.bShowCompletePopUp)
+            if (this.endingRip && userSettings.ShowCompletePopUp)
             {
                 trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                 trayIcon.BalloonTipTitle = btleExit;
@@ -1763,9 +1843,9 @@ namespace PGRipper
             }
 #endif
             stopCurrentThreads.Enabled = true;
-            bStopJob = false;
-            bEndRip = false;
-            bParseAct = false;
+            this.stopingJob = false;
+            this.endingRip = false;
+            this.parseActive = false;
 
             lvCurJob.Items.Clear();
             StatusLabelImageC.Text = string.Empty;
@@ -1774,43 +1854,42 @@ namespace PGRipper
 
             progressBar1.Value = 0;
 
-            string ttlHeader = rm.GetString("ttlHeader");
+            string ttlHeader = this._ResourceManager.GetString("ttlHeader");
 
-            groupBox2.Text = rm.GetString("gbCurrentlyIdle");
-            StatusLabelInfo.Text = rm.GetString("gbCurrentlyIdle");
+            this.groupBox2.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
+            this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
             StatusLabelInfo.ForeColor = Color.Gray;
 
             lvCurJob.Columns[0].Text = "  ";
 
 #if (PGRIPPER)
-            Text = String.Format(
+            this.Text = string.Format(
                 "PG-Ripper {0}.{1}.{2}{3}{4}",
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.sUser, userSettings.sForumUrl));
+                string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
 
             trayIcon.Text = "Right click for context menu";
 #elif (PGRIPPERX)
-                Text = String.Format("PG-Ripper X {0}.{1}.{2}{3}{4}", 
+                this.Text = string.Format("PG-Ripper X {0}.{1}.{2}{3}{4}", 
                     Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
                     Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
                     Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
                     Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                    string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.sUser, userSettings.sForumUrl));
+                    string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
 #else
-            Text = String.Format("PG-Ripper {0}.{1}.{2}{3}{4}", 
-                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
+            this.Text = string.Format(
+                "PG-Ripper {0}.{1}.{2}{3}{4}",
+                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.sUser, userSettings.sForumUrl));
+                string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
 
             trayIcon.Text = "Right click for context menu";
 #endif
-
-
             // Since no picbox image will be visible until another job is queued,
             // reclaim resources used by any previous image in the picturebox
             // This prevents file locking of downloaded images until the process exits
@@ -1820,10 +1899,10 @@ namespace PGRipper
                 pictureBox1.Image = null;
             }*/
 
-            if (imgLastPic != null)
+            if (this.imgLastPic != null)
             {
-                imgLastPic.Dispose();
-                imgLastPic = null;
+                this.imgLastPic.Dispose();
+                this.imgLastPic = null;
             }
 
             if (pictureBox1.Image != null)
@@ -1841,12 +1920,10 @@ namespace PGRipper
             // Hide any image last displayed in the picturebox
             pictureBox1.Visible = false;
 
-
-
             deleteJob.Enabled = false;
             stopCurrentThreads.Enabled = false;
 
-            bWorking = false;
+            this.working = false;
         }
 
         /// <summary>
@@ -1854,23 +1931,21 @@ namespace PGRipper
         /// </summary>
         private void FullDisc()
         {
-            bWorking = false;
-            bFullDisc = true;
+            this.working = false;
+            this.fullDisc = true;
 
             pauseCurrentThreads.Text = "Resume Download(s)";
             ThreadManager.GetInstance().HoldAllThreads();
 
-            StatusLabelInfo.Text = sDeleteMessage;
+            StatusLabelInfo.Text = DeleteMessage;
             StatusLabelInfo.ForeColor = Color.Red;
 
             TopMostMessageBox.Show(
                 string.Format(
-                    "Please change your download location, then press \"Resume Download\", because {0}", sDeleteMessage),
+                    "Please change your download location, then press \"Resume Download\", because {0}", DeleteMessage),
                 "Warning");
 
-            //JobListAdd(mCurrentJob);
-
-            JobListAddDelegate updateJob = JobListAdd;
+            JobListAddDelegate updateJob = this.JobListAdd;
 
             Invoke(updateJob, new object[] { mCurrentJob });
 
@@ -1878,7 +1953,7 @@ namespace PGRipper
             StatusLabelImageC.Text = string.Empty;
             mCurrentJob = null;
 
-            UpdateDownloadFolder();
+            this.UpdateDownloadFolder();
 
             for (int i = 0; i != mJobsList.Count; i++)
             {
@@ -1909,30 +1984,33 @@ namespace PGRipper
 
                  mJobsList.Insert(i, updatedJob);*/
 
-                mJobsList[i].StorePath = userSettings.sDownloadFolder;
+                mJobsList[i].StorePath = userSettings.DownloadFolder;
 
-                if (!userSettings.bSubDirs) continue;
+                if (!userSettings.SubDirs)
+                {
+                    continue;
+                }
 
                 if (comboBox1.SelectedIndex == 0)
                 {
-                    mJobsList[i].StorePath = Path.Combine(userSettings.sDownloadFolder, mJobsList[i].Title);
+                    mJobsList[i].StorePath = Path.Combine(userSettings.DownloadFolder, mJobsList[i].Title);
                 }
+
                 if (comboBox1.SelectedIndex == 1 || comboBox1.SelectedIndex == 2)
                 {
                     mJobsList[i].StorePath = Path.Combine(
-                        userSettings.sDownloadFolder,
+                        userSettings.DownloadFolder,
                         mJobsList[i].Title + Path.DirectorySeparatorChar + mJobsList[i].PostTitle);
                 }
             }
 
-            bDelete = false;
-            bFullDisc = false;
+            Delete = false;
+            this.fullDisc = false;
         }
 
-
-        //..........................................
-
-
+        /// <summary>
+        /// Parses the job.
+        /// </summary>
         private void ParseJob()
         {
             string sPostIdStart = null;
@@ -1948,18 +2026,21 @@ namespace PGRipper
 
             string postId = mCurrentJob.URL.Substring(mCurrentJob.URL.IndexOf(sPostIdStart) + sPostIdStart.Length);
 
-            if (postId.Contains(@"postcount")) postId = Regex.Replace(postId, postId.Substring(postId.IndexOf("postcount=") - 1), string.Empty);
+            if (postId.Contains(@"postcount"))
+            {
+                postId = Regex.Replace(postId, postId.Substring(postId.IndexOf("postcount=") - 1), string.Empty);
+            }
 
             mImagesList = mCurrentJob.ImageList;
 
-            ProcessAutoThankYou(postId, mImagesList.Count, mCurrentJob.SecurityToken);
+            this.ProcessAutoThankYou(postId, this.mImagesList.Count, this.mCurrentJob.SecurityToken);
         }
 
         /// <summary>
         /// Deletes the Selected Jobs
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void DeleteJobClick(object sender, EventArgs e)
         {
             try
@@ -1980,7 +2061,7 @@ namespace PGRipper
 
                 for (int i = 0; i < mJobsList.Count; i++)
                 {
-                    StatusLabelInfo.Text = string.Format("{0}{1}/{2}", rm.GetString("gbParse2"), i, mJobsList.Count);
+                    this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this._ResourceManager.GetString("gbParse2"), i, this.mJobsList.Count);
                     StatusLabelInfo.ForeColor = Color.Green;
 
                     ListViewItem ijobJob = new ListViewItem(mJobsList[i].Title, 0);
@@ -1991,21 +2072,24 @@ namespace PGRipper
             }
             finally
             {
-                groupBox5.Text = string.Format("{0} ({1}):", rm.GetString("lblRippingQue"), mJobsList.Count);
+                this.groupBox5.Text = string.Format("{0} ({1}):", this._ResourceManager.GetString("lblRippingQue"), mJobsList.Count);
             }
         }
 
         /// <summary>
         /// Kill and Deletes the Current Job
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void StopCurrentThreadsClick(object sender, EventArgs e)
         {
-            if (mCurrentJob == null) return;
+            if (mCurrentJob == null)
+            {
+                return;
+            }
 
             stopCurrentThreads.Enabled = false;
-            bStopJob = true;
+            this.stopingJob = true;
 
             ThreadManager.GetInstance().DismantleAllThreads();
 
@@ -2021,75 +2105,82 @@ namespace PGRipper
         /// <summary>
         /// Pause/Resumes Downloading
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void PauseCurrentThreadsClick(object sender, EventArgs e)
         {
             switch (pauseCurrentThreads.Text)
             {
                 case "Pause Download(s)":
                     pauseCurrentThreads.Text = "Resume Download(s)";
-                    bCurPause = true;
+                    userSettings.CurrentlyPauseThreads = true;
                     ThreadManager.GetInstance().HoldAllThreads();
                     pauseCurrentThreads.Image = Languages.english.play;
                     break;
                 case "(Re)Start Download(s)":
                     StatusLabelImageC.Text = string.Empty;
-                    Utility.SaveSetting("CurrentlyPauseThreads", "false");
-                    bCurPause = false;
+                    userSettings.CurrentlyPauseThreads = false;
                     deleteJob.Enabled = true;
                     stopCurrentThreads.Enabled = true;
-                    //LoadSettings();
-                    //IdleRipper();
                     pauseCurrentThreads.Text = "Pause Download(s)";
                     pauseCurrentThreads.Image = Languages.english.pause;
                     break;
                 case "Resume Download(s)":
                     StatusLabelImageC.Text = string.Empty;
-                    bCurPause = false;
+                    userSettings.CurrentlyPauseThreads = false;
                     deleteJob.Enabled = true;
                     stopCurrentThreads.Enabled = true;
-                    Utility.SaveSetting("CurrentlyPauseThreads", "false");
                     pauseCurrentThreads.Text = "Pause Download(s)";
                     ThreadManager.GetInstance().ResumeAllThreads();
                     pauseCurrentThreads.Image = Languages.english.pause;
                     break;
             }
+
+            Utility.SaveSettings(userSettings);
         }
 
+        /// <summary>
+        /// Comboes the box1 selected index changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ComboBox1SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (comboBox1.SelectedIndex)
             {
                 case 0:
-                    Utility.SaveSetting("Download Options", "0");
-                    userSettings.sDownloadOptions = "0";
+                    userSettings.DownloadOptions = "0";
                     break;
                 case 1:
-                    Utility.SaveSetting("Download Options", "1");
-                    userSettings.sDownloadOptions = "1";
+                    userSettings.DownloadOptions = "1";
                     break;
                 case 2:
-                    Utility.SaveSetting("Download Options", "2");
-                    userSettings.sDownloadOptions = "2";
+                    userSettings.DownloadOptions = "2";
                     break;
             }
+
+            Utility.SaveSettings(userSettings);
         }
 
+        /// <summary>
+        /// Mains the form resize.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void MainFormResize(object sender, EventArgs e)
         {
 #if (!PGRIPPERX)
             if (WindowState == FormWindowState.Minimized)
             {
                 Hide();
-                trayIcon.MouseDoubleClick -= (HideClick);
-                trayIcon.MouseDoubleClick += (ShowClick);
+                this.trayIcon.MouseDoubleClick -= this.HideClick;
+                this.trayIcon.MouseDoubleClick += this.ShowClick;
 
                 trayMenu.MenuItems.RemoveAt(0);
-                MenuItem show = new MenuItem("Show PG-Ripper", (ShowClick));
+                MenuItem show = new MenuItem("Show PG-Ripper", this.ShowClick);
                 trayMenu.MenuItems.Add(0, show);
 
-                if (userSettings.bShowPopUps)
+                if (userSettings.ShowPopUps)
                 {
                     trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
                     trayIcon.BalloonTipTitle = "Hidden in Tray";
@@ -2101,6 +2192,11 @@ namespace PGRipper
             lvCurJob.Columns[0].Width = lvCurJob.Width - 22;
         }
 
+        /// <summary>
+        /// Exits the tool strip menu item click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ExitToolStripMenuItemClick(object sender, EventArgs e)
         {
             Close();
@@ -2111,12 +2207,15 @@ namespace PGRipper
         /// </summary>
         public void SaveOnExit()
         {
-            if (mCurrentJob == null && mJobsList.Count <= 0) return;
+            if (mCurrentJob == null && mJobsList.Count <= 0)
+            {
+                return;
+            }
 
             // Save Current Job to quere List
             if (mCurrentJob != null)
             {
-                bRipperClosing = true;
+                this.ripperClosing = true;
 
                 ThreadManager.GetInstance().DismantleAllThreads();
 
@@ -2131,10 +2230,13 @@ namespace PGRipper
             tr.Close();
 
             // If Pause
-            if (pauseCurrentThreads.Text == "Resume Download")
+            if (this.pauseCurrentThreads.Text != "Resume Download")
             {
-                Utility.SaveSetting("CurrentlyPauseThreads", "true");
+                return;
             }
+
+            userSettings.CurrentlyPauseThreads = true;
+            Utility.SaveSettings(userSettings);
         }
 
         /// <summary>
@@ -2158,11 +2260,11 @@ namespace PGRipper
 
             string[] sPostIDs = srRead.Split(';');
 
-            sRippedPosts.Clear();
+            this.sRippedPosts.Clear();
 
             foreach (string sSavedId in sPostIDs.Where(sSavedId => !string.IsNullOrEmpty(sSavedId)))
             {
-                sRippedPosts.Add(
+                this.sRippedPosts.Add(
                     sSavedId.Contains("&postcount") ? sSavedId.Remove(sSavedId.IndexOf("&postcount")) : sSavedId);
             }
 
@@ -2192,10 +2294,11 @@ namespace PGRipper
             FileStream file = new FileStream(sFile, FileMode.Create);
             StreamWriter sw = new StreamWriter(file);
 
-            foreach (string sSavedId in sRippedPosts)
+            foreach (string sSavedId in this.sRippedPosts)
             {
-                sw.Write(sSavedId + ";");
+                sw.Write("{0};", sSavedId);
             }
+
             sw.Close();
             file.Close();
         }
@@ -2216,14 +2319,13 @@ namespace PGRipper
 
             try
             {
-
-                if (sRippedPosts.Contains(sPostId))
+                if (this.sRippedPosts.Contains(sPostId))
                 {
                     bCheck = true;
                 }
                 else
                 {
-                    sRippedPosts.Add(sPostId);
+                    this.sRippedPosts.Add(sPostId);
                 }
             }
             catch (Exception)
@@ -2234,33 +2336,48 @@ namespace PGRipper
             return bCheck;
         }
 
+        /// <summary>
+        /// Settingses the tool strip menu item1 click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void SettingsToolStripMenuItem1Click(object sender, EventArgs e)
         {
-            if (userSettings.bSavePids)
+            if (userSettings.SavePids)
             {
-                SaveHistory();
+                this.SaveHistory();
             }
 
             Options oForm = new Options();
             oForm.ShowDialog();
 
-            LoadSettings();
+            this.LoadSettings();
 
-            if (userSettings.bSavePids)
+            if (userSettings.SavePids)
             {
-                LoadHistory();
+                this.LoadHistory();
             }
         }
 
-        private static void HelpToolStripMenuItemClick(object sender, EventArgs e)
+        /// <summary>
+        /// Shows the About Dialog
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void HelpToolStripMenuItemClick(object sender, EventArgs e)
         {
             About aForm = new About();
             aForm.ShowDialog();
         }
 
+        /// <summary>
+        /// Update the Download Folder
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void BrowsFolderBtnClick(object sender, EventArgs e)
         {
-            UpdateDownloadFolder();
+            this.UpdateDownloadFolder();
         }
 
         /// <summary>
@@ -2268,10 +2385,12 @@ namespace PGRipper
         /// </summary>
         public void UpdateDownloadFolder()
         {
-            //dfolderBrowserDialog.ShowDialog(this);
-            if (bIsBrowserOpen) return;
+            if (this.IsBrowserOpen)
+            {
+                return;
+            }
 
-            bIsBrowserOpen = true;
+            this.IsBrowserOpen = true;
 
             if (this.dfolderBrowserDialog.ShowDialog(this) != DialogResult.OK)
             {
@@ -2280,11 +2399,11 @@ namespace PGRipper
 
             this.textBox2.Text = this.dfolderBrowserDialog.SelectedPath;
 
-            Utility.SaveSetting("Download Folder", this.textBox2.Text);
+            userSettings.DownloadFolder = this.textBox2.Text;
 
-            userSettings.sDownloadFolder = this.textBox2.Text;
+            Utility.SaveSettings(userSettings);
 
-            this.bIsBrowserOpen = false;
+            this.IsBrowserOpen = false;
         }
 
         /// <summary>
@@ -2294,77 +2413,76 @@ namespace PGRipper
         {
             try
             {
-                userSettings.iWindowLeft = int.Parse(Utility.LoadSetting("Window left"));
-                userSettings.iWindowTop = int.Parse(Utility.LoadSetting("Window top"));
-
-                Left = userSettings.iWindowLeft;
-                Top = userSettings.iWindowTop;
+                Left = userSettings.WindowLeft;
+                Top = userSettings.WindowTop;
             }
             catch (Exception)
             {
                 StartPosition = FormStartPosition.CenterScreen;
             }
 
-            try
-            {
-                userSettings.iWindowWidth = int.Parse(Utility.LoadSetting("Window width"));
-            }
-            catch (Exception)
-            {
-                userSettings.iWindowWidth = 863;
-            }
-
-            Width = userSettings.iWindowWidth;
-
-            try
-            {
-                userSettings.iWindowHeight = int.Parse(Utility.LoadSetting("Window height"));
-            }
-            catch (Exception)
-            {
-                userSettings.iWindowHeight = 611;
-            }
-
-            Height = userSettings.iWindowHeight;
-
+            Width = userSettings.WindowWidth;
+            Height = userSettings.WindowHeight;
         }
 
+        /// <summary>
+        /// Mains the form form closing.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Windows.Forms.FormClosingEventArgs"/> instance containing the event data.</param>
         private void MainFormFormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveOnExit();
+            this.SaveOnExit();
 
-            if (userSettings.bSavePids)
+            if (userSettings.SavePids)
             {
-                SaveHistory();
+                this.SaveHistory();
             }
 
-            if (WindowState == FormWindowState.Minimized) return;
+            if (WindowState == FormWindowState.Minimized)
+            {
+                return;
+            }
 
-            Utility.SaveSetting("Window left", Left.ToString());
-            Utility.SaveSetting("Window top", Top.ToString());
-            Utility.SaveSetting("Window width", Width.ToString());
-            Utility.SaveSetting("Window height", Height.ToString());
+            userSettings.WindowLeft = Left;
+            userSettings.WindowTop = Top;
+            userSettings.WindowWidth = Width;
+            userSettings.WindowHeight = Height;
+
+            Utility.SaveSettings(userSettings);
         }
 
 #if (!PGRIPPERX)
+        /// <summary>
+        /// WNDs the proc.
+        /// </summary>
+        /// <param name="m">The m.</param>
         protected override void WndProc(ref Message m)
         {
             try
             {
                 // defined in winuser.h
-                const int wmDrawclipboard = 0x308;
-                const int wmChangecbchain = 0x030D;
+                const int Drawclipboard = 0x308;
+                const int Changecbchain = 0x030D;
 
                 switch (m.Msg)
                 {
-                    case wmDrawclipboard:
-                        CheckClipboardData();
-                        Win32.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+                    case Drawclipboard:
+                        this.CheckClipboardData();
+                        Win32.SendMessage(this.nextClipboardViewer, m.Msg, m.WParam, m.LParam);
                         break;
 
-                    case wmChangecbchain:
-                        if (m.WParam == nextClipboardViewer) nextClipboardViewer = m.LParam;
-                        else Win32.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+                    case Changecbchain:
+
+                        if (m.WParam == this.nextClipboardViewer)
+                        {
+                            this.nextClipboardViewer = m.LParam;
+                        }
+                        else
+                        {
+                            Win32.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
+                        }
+
                         break;
 
                     default:
@@ -2377,9 +2495,12 @@ namespace PGRipper
             }
         }
 
+        /// <summary>
+        /// Checks the clipboard data.
+        /// </summary>
         private void CheckClipboardData()
         {
-            if (!userSettings.bClipBWatch)
+            if (!userSettings.ClipBWatch)
             {
                 return;
             }
@@ -2396,7 +2517,7 @@ namespace PGRipper
 
                     foreach (string sClipBoardURL in sClipBoardUrLs)
                     {
-                        if (!sClipBoardURL.StartsWith(userSettings.sForumUrl)) continue;
+                        if (!sClipBoardURL.StartsWith(userSettings.CurrentForumUrl)) continue;
 
                         string sClipBoardURLNew = sClipBoardURL;
 
@@ -2418,7 +2539,7 @@ namespace PGRipper
                             this.comboBox1.SelectedIndex = 2;
                         }
 
-                        if (!this.bParseAct)
+                        if (!this.parseActive)
                         {
                             if (this.comboBox1.SelectedIndex != 2)
                             {
@@ -2453,16 +2574,25 @@ namespace PGRipper
         }
 #endif
 
+        /// <summary>
+        /// Raises the <see cref="E:Load"/> event.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected override void OnLoad(EventArgs args)
         {
             base.OnLoad(args);
 
-            Application.Idle += OnLoaded;
+            Application.Idle += this.OnLoaded;
         }
 
+        /// <summary>
+        /// Called when [loaded].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnLoaded(object sender, EventArgs args)
         {
-            Application.Idle -= OnLoaded;
+            Application.Idle -= this.OnLoaded;
 
             tmrPageUpdate.Enabled = true;
 
@@ -2470,31 +2600,30 @@ namespace PGRipper
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
                 Environment.OSVersion.Version.Minor >= 1)
             {
-                windowsTaskbar = TaskbarManager.Instance;
+                this.windowsTaskbar = TaskbarManager.Instance;
 
                 // create a new taskbar jump list for the main window
-                jumpList = JumpList.CreateJumpList();
+                this.jumpList = JumpList.CreateJumpList();
 
-                if (!string.IsNullOrEmpty(userSettings.sDownloadFolder))
+                if (!string.IsNullOrEmpty(userSettings.DownloadFolder))
                 {
-
                     // Add our user tasks
-                    jumpList.AddUserTasks(
-                        new JumpListLink(userSettings.sDownloadFolder, "Open Download Folder")
+                    this.jumpList.AddUserTasks(
+                        new JumpListLink(userSettings.DownloadFolder, "Open Download Folder")
                             {
                                 IconReference =
                                     new IconReference(
                                     Path.Combine(
-                                        Application.StartupPath, Assembly.GetExecutingAssembly().GetName().Name + ".exe"),
+                                        Application.StartupPath, string.Format("{0}.exe", Assembly.GetExecutingAssembly().GetName().Name)),
                                     0)
                             });
 
-                    jumpList.Refresh();
+                    this.jumpList.Refresh();
                 }
             }
 #endif
 
-            IdleRipper();
+            this.IdleRipper();
 
             try
             {
@@ -2504,21 +2633,11 @@ namespace PGRipper
                 mJobsList = (List<JobInfo>)serializer.Deserialize(tr);
                 tr.Close();
 
-                try
-                {
-                    bCurPause = bool.Parse(Utility.LoadSetting("CurrentlyPauseThreads"));
-                }
-                catch (Exception)
-                {
-                    bCurPause = false;
-                }
-
-                if (bCurPause)
+                if (userSettings.CurrentlyPauseThreads)
                 {
                     pauseCurrentThreads.Text = "(Re)Start Download(s)";
                     pauseCurrentThreads.Image = Languages.english.play;
                 }
-
 
                 File.Delete(Path.Combine(Application.StartupPath, "jobs.xml"));
             }
@@ -2529,12 +2648,12 @@ namespace PGRipper
 
             if (mJobsList.Count != 0)
             {
-                StatusLabelInfo.Text = rm.GetString("gbParse2");
+                StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse2");
                 StatusLabelInfo.ForeColor = Color.Green;
 
                 for (int i = 0; i < mJobsList.Count; i++)
                 {
-                    StatusLabelInfo.Text = string.Format("{0}{1}/{2}", rm.GetString("gbParse2"), i, mJobsList.Count);
+                    this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this._ResourceManager.GetString("gbParse2"), i, this.mJobsList.Count);
                     StatusLabelInfo.ForeColor = Color.Green;
 
                     ListViewItem ijobJob = new ListViewItem { Text = mJobsList[i].Title };
@@ -2544,13 +2663,13 @@ namespace PGRipper
                     listViewJobList.Items.AddRange(new[] { ijobJob });
                 }
 
-                bWorking = true;
+                this.working = true;
 
                 StatusLabelInfo.Text = string.Empty;
             }
 
 #if (!PGRIPPERX)
-            nextClipboardViewer = (IntPtr)Win32.SetClipboardViewer((int)Handle);
+            this.nextClipboardViewer = (IntPtr)Win32.SetClipboardViewer((int)Handle);
 #endif
 
             // Delete Backup Files From AutoUpdate
@@ -2571,7 +2690,7 @@ namespace PGRipper
         /// </summary>
         private void GetExtractUrls()
         {
-            if (this.ExtractUrls.Count <= 0 && this.bParseAct || this.bParseAct)
+            if (this.ExtractUrls.Count <= 0 && this.parseActive || this.parseActive)
             {
                 return;
             }
@@ -2624,7 +2743,7 @@ namespace PGRipper
 
                 foreach (string sRipUrl in sRipUrls)
                 {
-                    if (!sRipUrl.StartsWith(userSettings.sForumUrl))
+                    if (!sRipUrl.StartsWith(userSettings.CurrentForumUrl))
                     {
                         continue;
                     }
@@ -2674,13 +2793,11 @@ namespace PGRipper
                 tr.Close();
 
                 // If Pause
-                if (this.bCurPause)
-                {
-                    Utility.SaveSetting("CurrentlyPauseThreads", "true");
-                }
+                userSettings.CurrentlyPauseThreads = true;
+                Utility.SaveSettings(userSettings);
             }
 
-            if (userSettings.bSavePids)
+            if (userSettings.SavePids)
             {
                 this.SaveHistory();
             }
@@ -2689,8 +2806,8 @@ namespace PGRipper
         /// <summary>
         /// Catches All Unhandled Thread Exceptions and creates a Crash Log
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Threading.ThreadExceptionEventArgs"/> instance containing the event data.</param>
         private void ThreadExceptionFunction(object sender, ThreadExceptionEventArgs e)
         {
             Exception ex = e.Exception;
@@ -2705,23 +2822,23 @@ namespace PGRipper
                 tr.Close();
 
                 // If Pause
-                if (bCurPause)
+                if (userSettings.CurrentlyPauseThreads)
                 {
-                    Utility.SaveSetting("CurrentlyPauseThreads", "true");
+                    Utility.SaveSettings(userSettings);
                 }
             }
 
-            if (userSettings.bSavePids)
+            if (userSettings.SavePids)
             {
-                SaveHistory();
+                this.SaveHistory();
             }
         }
 
         /// <summary>
         /// Opens last downloaded Image
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void PictureBox1DoubleClick(object sender, EventArgs e)
         {
             if (pictureBox1.Visible && pictureBox1.Image != null)
@@ -2730,37 +2847,58 @@ namespace PGRipper
             }
         }
 
+        /// <summary>
+        /// Gets the posts worker do work.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.DoWorkEventArgs"/> instance containing the event data.</param>
         private void GetPostsWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            //bParseAct = true;
-            ThrdGetPosts(Convert.ToString(e.Argument));
+            this.ThrdGetPosts(Convert.ToString(e.Argument));
         }
 
+        /// <summary>
+        /// Gets the posts worker completed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
         private void GetPostsWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            UnlockControls();
+            this.UnlockControls();
         }
 
+        /// <summary>
+        /// Gets the idxs worker do work.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.DoWorkEventArgs"/> instance containing the event data.</param>
         private void GetIdxsWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            //bParseAct = true;
-            ThrdGetIndexes(Convert.ToString(e.Argument));
+            this.ThrdGetIndexes(Convert.ToString(e.Argument));
         }
 
+        /// <summary>
+        /// Gets the idxs worker completed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
         private void GetIdxsWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            UnlockControls();
+            this.UnlockControls();
 
             Application.DoEvents();
 
-            if (arlstIndxs == null) return;
+            if (this.arlstIndxs == null)
+            {
+                return;
+            }
 
-            for (int po = 0; po < arlstIndxs.Count; po++)
+            for (int po = 0; po < this.arlstIndxs.Count; po++)
             {
                 StatusLabelInfo.ForeColor = Color.Green;
-                StatusLabelInfo.Text = string.Format("{0}{1}/{2}", "Analyse Index(es)", po, arlstIndxs.Count);
+                this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", "Analyse Index(es)", po, this.arlstIndxs.Count);
 
-                textBox1.Text = arlstIndxs[po].ImageUrl;
+                this.textBox1.Text = this.arlstIndxs[po].ImageUrl;
 
                 if (InvokeRequired)
                 {
@@ -2773,7 +2911,7 @@ namespace PGRipper
                 //////////////////////////////////////////////////////////////////////////
             }
 
-            arlstIndxs = null;
+            this.arlstIndxs = null;
         }
 
         /// <summary>
@@ -2783,18 +2921,18 @@ namespace PGRipper
         /// <returns>The Storage Folder</returns>
         private string GenerateStorePath(JobInfo curJob)
         {
-            string sStorePath = userSettings.sDownloadFolder;
+            string sStorePath = userSettings.DownloadFolder;
 
-            if (userSettings.bSubDirs)
+            if (userSettings.SubDirs)
             {
                 try
                 {
                     if (curJob.ForumTitle != null)
                     {
-                        if (userSettings.bDownInSepFolder)
+                        if (userSettings.DownInSepFolder)
                         {
                             sStorePath = Path.Combine(
-                                userSettings.sDownloadFolder,
+                                userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.PostTitle));
@@ -2802,24 +2940,24 @@ namespace PGRipper
                         else
                         {
                             sStorePath = Path.Combine(
-                                userSettings.sDownloadFolder,
+                                userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.Title));
                         }
                     }
                     else
                     {
-                        if (userSettings.bDownInSepFolder)
+                        if (userSettings.DownInSepFolder)
                         {
                             sStorePath = Path.Combine(
-                                userSettings.sDownloadFolder,
+                                userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.PostTitle));
                         }
                         else
                         {
                             sStorePath = Path.Combine(
-                                userSettings.sDownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
+                                userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
                         }
                     }
 
@@ -2857,7 +2995,7 @@ namespace PGRipper
                 catch (Exception)
                 {
                     sStorePath = Path.Combine(
-                        userSettings.sDownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
+                        userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
                 }
             }
 
@@ -2869,7 +3007,7 @@ namespace PGRipper
         /// </summary>
         private void UnlockControls()
         {
-            this.bParseAct = false;
+            this.parseActive = false;
 
             if (InvokeRequired)
             {
@@ -2898,12 +3036,12 @@ namespace PGRipper
         /// </summary>
         private void LockControls()
         {
-            this.bParseAct = true;
+            this.parseActive = true;
 
             textBox1.Enabled = false;
             mStartDownloadBtn.Enabled = false;
 
-            this.StatusLabelInfo.Text = this.rm.GetString("gbParse");
+            this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse");
             StatusLabelInfo.ForeColor = Color.Green;
         }
     }

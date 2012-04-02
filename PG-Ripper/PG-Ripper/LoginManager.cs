@@ -54,7 +54,7 @@ namespace PGRipper
         /// </returns>
         public bool DoLogin()
         {
-            string strURL = string.Format("{0}login.php", Utility.LoadSetting("forumURL"));
+            string strURL = string.Format("{0}login.php", MainForm.userSettings.CurrentForumUrl);
             string sPostData =
                 "do=login&forceredirect=1&url=%2Fforum%2F&vb_login_md5password=%md5pass%&vb_login_md5password_utf=%md5pass%&s=&vb_login_username=%md5user%&vb_login_password=&cookieuser=1";
 
@@ -90,8 +90,6 @@ namespace PGRipper
                 stream.Close();
 
                 HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-
-                //res.Cookies = req.CookieContainer.GetCookies(req.RequestUri);
 
                 CookieManager cookieMgr = CookieManager.GetInstance();
 

@@ -28,17 +28,19 @@ namespace PGRipper
         #region Constants and Fields
 
         /// <summary>
-        /// </summary>
-        public static MainForm xform;
-
-        /// <summary>
         ///   Universal string, Last pic Race conditions happen alot on this string, 
         ///   but it's function is non-critical enough to ignore those races.
         /// </summary>
-        public string uSLastPic = string.Empty; // 
+        public string uSLastPic = string.Empty;
 
+        /// <summary>
+        /// The CacheController Instance
+        /// </summary>
         private static CacheController _mInstance;
 
+        /// <summary>
+        /// The Table that contains the image urls
+        /// </summary>
         private Hashtable mEventTable;
 
         #endregion
@@ -52,6 +54,11 @@ namespace PGRipper
         {
             this.mEventTable = new Hashtable();
         }
+
+        /// <summary>
+        /// Gets or sets the Main Form
+        /// </summary>
+        public static MainForm Xform { get; set; }
 
         #endregion
 
@@ -544,6 +551,22 @@ namespace PGRipper
             {
                 lThreadStart = lImageDownloader.GetHoooster;
             }
+            else if (aImageUrl.IndexOf(@"pixhub.eu/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetPixHub;
+            }
+            else if (aImageUrl.IndexOf(@"pixroute.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetPixRoute;
+            }
+            else if (aImageUrl.IndexOf(@"imagepicsa.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetImagePicasa;
+            }
+            else if (aImageUrl.IndexOf(@"directupload.net/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetDirectUpload;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
@@ -566,15 +589,15 @@ namespace PGRipper
         }
 
         /// <summary>
-        /// Gets the obj.
+        /// Gets the object.
         /// </summary>
-        /// <param name="strURL">The str url.</param>
-        /// <returns></returns>
-        public CacheObject GetObj(string strURL)
+        /// <param name="url">The URL.</param>
+        /// <returns>Returns the object</returns>
+        public CacheObject GetObject(string url)
         {
-            if (this.mEventTable.ContainsKey(strURL))
+            if (this.mEventTable.ContainsKey(url))
             {
-                return (CacheObject)this.mEventTable[strURL];
+                return (CacheObject)this.mEventTable[url];
             }
 
             return null;

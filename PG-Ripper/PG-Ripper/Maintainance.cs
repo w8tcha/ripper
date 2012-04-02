@@ -21,14 +21,14 @@ namespace PGRipper
     public class Maintainance
     {
         /// <summary>
-        /// The MainForm Instance
+        /// Gets or sets the MainForm Instance
         /// </summary>
-        public static System.Windows.Forms.Form xform;
+        public static System.Windows.Forms.Form Xform { get; set; }
 
         /// <summary>
-        /// The Maintainance Instance
+        /// Gets or sets the Maintainance Instance
         /// </summary>
-        public static Maintainance mInstace;
+        public static Maintainance Instace { get; set; }
 
         /// <summary>
         /// Gets the instance.
@@ -38,7 +38,7 @@ namespace PGRipper
         /// </returns>
         public static Maintainance GetInstance()
         {
-            return mInstace ?? (mInstace = new Maintainance());
+            return Instace ?? (Instace = new Maintainance());
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace PGRipper
 
             iTitleStart += 7;
 
-            if (MainForm.userSettings.sForumUrl.Contains(@"http://rip-") ||
-                MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-"))
+            if (MainForm.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                MainForm.userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
             {
                 iTitleStart += 1;
             }
@@ -78,8 +78,8 @@ namespace PGRipper
 
             string sTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
 
-            if (MainForm.userSettings.sForumUrl.Contains("rip-productions.net") ||
-                MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
+            if (MainForm.userSettings.CurrentForumUrl.Contains("rip-productions.net") ||
+                MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
             {
                 return sTitle.Trim();
             }
@@ -141,7 +141,7 @@ namespace PGRipper
         {
             string sPage;
 
-            if (MainForm.userSettings.sForumUrl.Contains(@"rip-productions.net"))
+            if (MainForm.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
             {
                 sPage = GetRipPage(content);
 
@@ -161,13 +161,13 @@ namespace PGRipper
                 return iPageEnd < 0 ? string.Empty : sPage.Substring(iPageStart, iPageEnd - iPageStart);
             }
 
-            if (MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
+            if (MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
             {
                 sPage = GetRipPage(content);
 
                 const string Start = "<li class=\"navbit\">";
 
-                int iPageStart = sPage.LastIndexOf(Start);
+                int iPageStart = sPage.LastIndexOf(Start, StringComparison.Ordinal);
 
                 if (iPageStart < 0)
                 {
@@ -206,7 +206,7 @@ namespace PGRipper
 
                 string sFTitleUrl = content.Substring(iPageStart, iPageEnd - iPageStart);
 
-                sPage = GetRipPage(MainForm.userSettings.sForumUrl + sFTitleUrl);
+                sPage = GetRipPage(MainForm.userSettings.CurrentForumUrl + sFTitleUrl);
             }
             else
             {
@@ -256,9 +256,9 @@ namespace PGRipper
 
             string sPostTitle;
 
-            if (MainForm.userSettings.sForumUrl.Contains(@"http://rip-") ||
-                MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-") ||
-                MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
+            if (MainForm.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                MainForm.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
             {
                 ////////////////////////////////////
                 // Extract Current Post first
@@ -326,11 +326,11 @@ namespace PGRipper
 
             if (string.IsNullOrEmpty(sPostTitle))
             {
-                if (MainForm.userSettings.sForumUrl.Contains(@"http://rip-") ||
-                    MainForm.userSettings.sForumUrl.Contains(@"http://www.rip-") ||
-                    MainForm.userSettings.sForumUrl.Contains(@"kitty-kats.com"))
+                if (MainForm.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                    MainForm.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                    MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
                 {
-                    sPostTitle = "post# " + url.Substring(url.IndexOf(@"#post") + 5);
+                    sPostTitle = string.Format("post# {0}", url.Substring(url.IndexOf(@"#post") + 5));
                 }
                 else
                 {
@@ -352,11 +352,11 @@ namespace PGRipper
                             return string.Empty;
                         }
 
-                        sPostTitle = "post# " + url.Substring(iTitleStart, iTitleEnd - iTitleStart);
+                        sPostTitle = string.Format("post# {0}", url.Substring(iTitleStart, iTitleEnd - iTitleStart));
                     }
                     else
                     {
-                        sPostTitle = "post# " + url.Substring(url.IndexOf(@"showpost.php?p=") + 15);
+                        sPostTitle = string.Format("post# {0}", url.Substring(url.IndexOf(@"showpost.php?p=") + 15));
                     }
                 }
             }
@@ -398,10 +398,10 @@ namespace PGRipper
             try
             {
                 WebClient wc = new WebClient();
-                wc.Headers.Add("Referer: " + url);
+                wc.Headers.Add(string.Format("Referer: {0}", url));
                 wc.Headers.Add(
                     "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                wc.Headers.Add("Cookie: " + CookieManager.GetInstance().GetCookieString());
+                wc.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));
                 sPageRead = wc.DownloadString(url);
             }
             catch (Exception)

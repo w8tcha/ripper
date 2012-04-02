@@ -1,36 +1,45 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
-
-using System;
-using System.Reflection;
-using System.Resources;
-using System.Windows.Forms;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Options.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper
 {
+    using System;
+    using System.Reflection;
+    using System.Resources;
+    using System.Windows.Forms;
+
+    /// <summary>
+    /// Options Dialog
+    /// </summary>
     public partial class Options : Form
     {
+        /// <summary>
+        /// The Resource Manager Instance
+        /// </summary>
         private ResourceManager rm;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Options"/> class.
+        /// </summary>
         public Options()
         {
             InitializeComponent();
-            LoadSettings();
+            this.LoadSettings();
         }
+
+        /// <summary>
+        /// Loads the settings.
+        /// </summary>
         public void LoadSettings()
         {
-
 #if (PGRIPPERX)
             checkBox9.Enabled = false;
             showTrayPopups.Enabled = false;
@@ -38,23 +47,23 @@ namespace PGRipper
 #endif
 
             // Load "Show Tray PopUps" Setting
-            showTrayPopups.Checked = MainForm.userSettings.bShowPopUps;
+            showTrayPopups.Checked = MainForm.userSettings.ShowPopUps;
 
             // Load "Download Folder" Setting
-            textBox2.Text = MainForm.userSettings.sDownloadFolder;
+            textBox2.Text = MainForm.userSettings.DownloadFolder;
 
             // Load "Thread Limit" Setting
-            numericUDThreads.Text = MainForm.userSettings.iThreadLimit.ToString();
+            numericUDThreads.Text = MainForm.userSettings.ThreadLimit.ToString();
             ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
 
             // min. Image Count for Thanks
-            numericUDThanks.Text = MainForm.userSettings.iMinImageCount.ToString();
+            numericUDThanks.Text = MainForm.userSettings.MinImageCount.ToString();
 
             // Load "Create Subdirctories" Setting
-            checkBox1.Checked = MainForm.userSettings.bSubDirs;
+            checkBox1.Checked = MainForm.userSettings.SubDirs;
 
             // Load "Automaticly Thank You Button" Setting
-            if (MainForm.userSettings.bAutoThank)
+            if (MainForm.userSettings.AutoThank)
             {
                 checkBox8.Checked = true;
             }
@@ -65,14 +74,14 @@ namespace PGRipper
             }
 
             // Load "Clipboard Watch" Setting
-            checkBox10.Checked = MainForm.userSettings.bClipBWatch;
+            checkBox10.Checked = MainForm.userSettings.ClipBWatch;
 
             // Load "Always on Top" Setting
-            checkBox5.Checked = MainForm.userSettings.bTopMost;
-            TopMost = MainForm.userSettings.bTopMost;
+            checkBox5.Checked = MainForm.userSettings.TopMost;
+            TopMost = MainForm.userSettings.TopMost;
 
             // Load "Download each post in its own folder" Setting
-            mDownInSepFolderChk.Checked = MainForm.userSettings.bDownInSepFolder;
+            mDownInSepFolderChk.Checked = MainForm.userSettings.DownInSepFolder;
 
             if (!checkBox1.Checked)
             {
@@ -81,39 +90,39 @@ namespace PGRipper
             }
 
             // Load "Save Ripped posts for checking" Setting
-            saveHistoryChk.Checked = MainForm.userSettings.bSavePids;
+            saveHistoryChk.Checked = MainForm.userSettings.SavePids;
 
             // Load "Show Downloads Complete PopUp" Setting
-            checkBox9.Checked = MainForm.userSettings.bShowCompletePopUp;
+            checkBox9.Checked = MainForm.userSettings.ShowCompletePopUp;
 
             // Load Language Setting
             try
             {
-                switch (MainForm.userSettings.sLanguage)
+                switch (MainForm.userSettings.Language)
                 {
                     case "de-DE":
-                        rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
+                        this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 0;
                         pictureBox2.Image = Languages.english.de;
                         break;
                     case "fr-FR":
-                        rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
+                        this.rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 1;
                         pictureBox2.Image = Languages.english.fr;
                         break;
                     case "en-EN":
-                        rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;
                     default:
-                        rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;
                 }
 
-                AdjustCulture();
+                this.AdjustCulture();
             }
             catch (Exception)
             {
@@ -121,75 +130,81 @@ namespace PGRipper
                 pictureBox2.Image = Languages.english.us;
             }
         }
+
         /// <summary>
         /// Set Language Strings
         /// </summary>
         private void AdjustCulture()
         {
-            groupBox1.Text = rm.GetString("downloadOptions");
-            label2.Text = rm.GetString("lblDownloadFolder");
-            button4.Text = rm.GetString("btnBrowse");
-            checkBox1.Text = rm.GetString("chbSubdirectories");
-            checkBox8.Text = rm.GetString("chbAutoTKButton");
-            showTrayPopups.Text = rm.GetString("chbShowPopUps");
-            checkBox5.Text = rm.GetString("chbAlwaysOnTop");
-            checkBox9.Text = rm.GetString("chbShowDCPopUps");
-            mDownInSepFolderChk.Text = rm.GetString("chbSubThreadRip");
-            saveHistoryChk.Text = rm.GetString("chbSaveHistory");
-            label6.Text = rm.GetString("lblThreadLimit");
-            label1.Text = rm.GetString("lblminImageCount");
-            groupBox3.Text = rm.GetString("gbMainOptions");
-
+            this.groupBox1.Text = this.rm.GetString("downloadOptions");
+            this.label2.Text = this.rm.GetString("lblDownloadFolder");
+            this.button4.Text = this.rm.GetString("btnBrowse");
+            this.checkBox1.Text = this.rm.GetString("chbSubdirectories");
+            this.checkBox8.Text = this.rm.GetString("chbAutoTKButton");
+            this.showTrayPopups.Text = this.rm.GetString("chbShowPopUps");
+            this.checkBox5.Text = this.rm.GetString("chbAlwaysOnTop");
+            this.checkBox9.Text = this.rm.GetString("chbShowDCPopUps");
+            this.mDownInSepFolderChk.Text = this.rm.GetString("chbSubThreadRip");
+            this.saveHistoryChk.Text = this.rm.GetString("chbSaveHistory");
+            this.label6.Text = this.rm.GetString("lblThreadLimit");
+            this.label1.Text = this.rm.GetString("lblminImageCount");
+            this.groupBox3.Text = this.rm.GetString("gbMainOptions");
         }
+
         /// <summary>
         /// Switch Language
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void LanguageSelectorSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (languageSelector.SelectedIndex == 0)
+            switch (this.languageSelector.SelectedIndex)
             {
-                pictureBox2.Image = Languages.english.de;
-            }
-            if (languageSelector.SelectedIndex == 1)
-            {
-                pictureBox2.Image = Languages.english.fr;
-            }
-            if (languageSelector.SelectedIndex == 2)
-            {
-                pictureBox2.Image = Languages.english.us;
+                case 0:
+                    this.pictureBox2.Image = Languages.english.de;
+                    break;
+                case 1:
+                    this.pictureBox2.Image = Languages.english.fr;
+                    break;
+                case 2:
+                    this.pictureBox2.Image = Languages.english.us;
+                    break;
             }
         }
+
         /// <summary>
         /// Open Browse Download Folder Dialog
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void Button4Click(object sender, EventArgs e)
         {
             FBD.ShowDialog(this);
 
-            if (FBD.SelectedPath.Length <= 1) return;
+            if (FBD.SelectedPath.Length <= 1)
+            {
+                return;
+            }
 
             textBox2.Text = FBD.SelectedPath;
 
-            Utility.SaveSetting("Download Folder", textBox2.Text);
+            MainForm.userSettings.DownloadFolder = textBox2.Text;
 
-            MainForm.userSettings.sDownloadFolder = textBox2.Text;
+            Utility.SaveSettings(MainForm.userSettings);
         }
+
         /// <summary>
         /// Close Dialog and Save Changes
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OkButtonClick(object sender, EventArgs e)
         {
             try
             {
-                string mbThreadNum = rm.GetString("mbThreadNum"),
-                    mbThreadbetw = rm.GetString("mbThreadbetw"),
-                    mbNum = rm.GetString("mbNum");
+                string mbThreadNum = this.rm.GetString("mbThreadNum"),
+                    mbThreadbetw = this.rm.GetString("mbThreadbetw"),
+                    mbNum = this.rm.GetString("mbNum");
 
                 if (!Utility.IsNumeric(numericUDThreads.Text))
                 {
@@ -211,42 +226,52 @@ namespace PGRipper
 
                 ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
 
-                Utility.SaveSetting("Thread Limit", numericUDThreads.Text);
-                Utility.SaveSetting("minImageCountThanks", numericUDThanks.Text);
-                Utility.SaveSetting("SubDirs", checkBox1.Checked.ToString());
-                Utility.SaveSetting("Auto TK Button", checkBox8.Checked.ToString());
-                Utility.SaveSetting("clipBoardWatch", checkBox10.Checked.ToString());
-                Utility.SaveSetting("Show Popups", showTrayPopups.Checked.ToString());
-                Utility.SaveSetting("Always OnTop", checkBox5.Checked.ToString());
-                Utility.SaveSetting("DownInSepFolder", mDownInSepFolderChk.Checked.ToString());
-                Utility.SaveSetting("SaveRippedPosts", saveHistoryChk.Checked.ToString());
-                Utility.SaveSetting("Show Downloads Complete PopUp", checkBox9.Checked.ToString());
-
+                MainForm.userSettings.ThreadLimit = Convert.ToInt32(this.numericUDThreads.Text);
+                MainForm.userSettings.MinImageCount = Convert.ToInt32(this.numericUDThanks.Text);
+                MainForm.userSettings.SubDirs = checkBox1.Checked;
+                MainForm.userSettings.AutoThank = checkBox8.Checked;
+                MainForm.userSettings.ClipBWatch = checkBox10.Checked;
+                MainForm.userSettings.ShowPopUps = showTrayPopups.Checked;
+                MainForm.userSettings.TopMost = checkBox5.Checked;
+                MainForm.userSettings.DownInSepFolder = mDownInSepFolderChk.Checked;
+                MainForm.userSettings.SavePids = saveHistoryChk.Checked;
+                MainForm.userSettings.ShowCompletePopUp = checkBox9.Checked;
 
                 switch (languageSelector.SelectedIndex)
                 {
                     case 0:
-                        Utility.SaveSetting("UserLanguage", "de-DE");
+                        MainForm.userSettings.Language = "de-DE";
                         break;
                     case 1:
-                        Utility.SaveSetting("UserLanguage", "fr-FR");
+                        MainForm.userSettings.Language = "fr-FR";
                         break;
                     case 2:
-                        Utility.SaveSetting("UserLanguage", "en-EN");
+                        MainForm.userSettings.Language = "en-EN";
                         break;
                 }
             }
             finally
             {
+                Utility.SaveSettings(MainForm.userSettings);
                 Close();
             }
         }
 
+        /// <summary>
+        /// Checks the box8 checked changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void CheckBox8CheckedChanged(object sender, EventArgs e)
         {
             this.numericUDThanks.Enabled = this.checkBox8.Checked;
         }
 
+        /// <summary>
+        /// Checks the box1 checked changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
@@ -259,16 +284,20 @@ namespace PGRipper
                 mDownInSepFolderChk.Checked = false;
             }
         }
+
         /// <summary>
         /// Check if Input is a Number between 1-20
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void NumericUdThreadsValueChanged(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(numericUDThreads.Text) <= 20 && Convert.ToInt32(numericUDThreads.Text) >= 1) return;
+            if (Convert.ToInt32(numericUDThreads.Text) <= 20 && Convert.ToInt32(numericUDThreads.Text) >= 1)
+            {
+                return;
+            }
 
-            MessageBox.Show(this, rm.GetString("mbThreadbetw"));
+            MessageBox.Show(this, this.rm.GetString("mbThreadbetw"));
                 
             numericUDThreads.Text = "3";
         }
