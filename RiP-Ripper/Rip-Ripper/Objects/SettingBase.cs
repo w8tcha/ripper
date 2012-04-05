@@ -17,114 +17,114 @@ namespace RiPRipper.Objects
     public class SettingBase : object
     {
         /// <summary>
-        /// Gets or sets the Hidden Options
+        /// Gets or sets a value indicating whether Hidden Options
         /// "Offline Modus" Setting
         /// </summary>
-        public bool bOfflMod { get; set; }
+        public bool OfflMode { get; set; }
 
         /// <summary>
-        /// Gets or sets the "Firefox Exension Enabled" Setting
+        /// Gets or sets a value indicating whether "Firefox Exension Enabled" Setting
         /// </summary>
-        public bool bExtension { get; set; }
+        public bool Extension { get; set; }
 
         /// <summary>
         /// Gets or sets the Path to the Text File
         /// </summary>
-        public string sTxtFolder { get; set; }
+        public string TxtFolder { get; set; }
 
         /// <summary>
-        /// Gets or sets the "Clipboard Watch" Setting
+        /// Gets or sets a value indicating whether "Clipboard Watch" Setting
         /// </summary>
-        public bool bClipBWatch { get; set; }
+        public bool ClipBWatch { get; set; }
 
         /// <summary>
-        /// Gets or sets the Create Folder for Every Post Setting
+        /// Gets or sets a value indicating whether Create Folder for Every Post Setting
         /// </summary>
-        public bool bSubDirs { get; set; }
+        public bool SubDirs { get; set; }
 
         /// <summary>
-        /// Gets or sets the Create New Folder for Every Thread Setting
+        /// Gets or sets a value indicating whether Create New Folder for Every Thread Setting
         /// </summary>
-        public bool bDownInSepFolder { get; set; }
+        public bool DownInSepFolder { get; set; }
 
         /// <summary>
-        /// Gets or sets the Automatically presses Thank You Button Setting
+        /// Gets or sets a value indicating whether Automatically presses Thank You Button Setting
         /// </summary>
-        public bool bAutoThank { get; set; }
+        public bool AutoThank { get; set; }
 
         /// <summary>
-        /// Gets or sets the Save PostIDs for Checking Setting
+        /// Gets or sets a value indicating whether Save PostIDs for Checking Setting
         /// </summary>
-        public bool bSavePids { get; set; }
+        public bool SavePids { get; set; }
 
         /// <summary>
-        /// Gets or sets the Show Tray PopUps Setting
+        /// Gets or sets a value indicating whether Show Tray PopUps Setting
         /// </summary>
-        public bool bShowPopUps { get; set; }
+        public bool ShowPopUps { get; set; }
 
         /// <summary>
-        /// Gets or sets the Show Complete all Downloads PopUp Setting
+        /// Gets or sets a value indicating whether Show Complete all Downloads PopUp Setting
         /// </summary>
-        public bool bShowCompletePopUp { get; set; }
+        public bool ShowCompletePopUp { get; set; }
 
         /// <summary>
-        /// "Always on Top" Setting
+        /// Gets or sets a value indicating whether "Always on Top" Setting
         /// </summary>
-        public bool bTopMost { get; set; }
+        public bool TopMost { get; set; }
 
         /// <summary>
         /// Gets or sets the min. Image Count for Thanks Setting
         /// </summary>
-        public int iMinImageCount { get; set; }
+        public int MinImageCount { get; set; }
 
         /// <summary>
         /// Gets or sets the Max. Multi. Downloads Setting
         /// </summary>
-        public int iThreadLimit { get; set; }
+        public int ThreadLimit { get; set; }
 
         /// <summary>
         /// Gets or sets the The Downloadfolder Location
         /// </summary>
-        public string sDownloadFolder { get; set; }
+        public string DownloadFolder { get; set; }
 
         /// <summary>
         /// Gets or sets the "Download Options" Setting
         /// </summary>
-        public string sDownloadOptions { get; set; }
+        public string DownloadOptions { get; set; }
 
         /// <summary>
         /// Gets or sets the Current Language Setting
         /// </summary>
-        public string sLanguage { get; set; }
+        public string Language { get; set; }
 
         /// <summary>
         /// Gets or sets the Username
         /// </summary>
-        public string sUser { get; set; }
+        public string User { get; set; }
 
         /// <summary>
         /// Gets or sets the User Password
         /// </summary>
-        public string sPass { get; set; }
+        public string Pass { get; set; }
 
         /// <summary>
         /// Gets or sets the Window Position Left
         /// </summary>
-        public int iWindowLeft { get; set; }
+        public int WindowLeft { get; set; }
 
         /// <summary>
         /// Gets or sets the Window Position Top
         /// </summary>
-        public int iWindowTop { get; set; }
+        public int WindowTop { get; set; }
 
         /// <summary>
         /// Gets or sets the Window Width
         /// </summary>
-        public int iWindowWidth { get; set; }
+        public int WindowWidth { get; set; }
 
         /// <summary>
         /// Gets or sets the Window Height
         /// </summary>
-        public int iWindowHeight { get; set; }
+        public int WindowHeight { get; set; }
     }
 }

@@ -67,8 +67,8 @@ namespace RiPRipper.ImageHosts
             }
             catch (IOException ex)
             {
-                MainForm.sDeleteMessage = ex.Message;
-                MainForm.bDelete = true;
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
 
                 return false;
             }
@@ -143,8 +143,8 @@ namespace RiPRipper.ImageHosts
             }
             catch (IOException ex)
             {
-                MainForm.sDeleteMessage = ex.Message;
-                MainForm.bDelete = true;
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
 
                 ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
@@ -189,12 +189,21 @@ namespace RiPRipper.ImageHosts
                 var res = (HttpWebResponse)req.GetResponse();
 
                 var stream = res.GetResponseStream();
-                var reader = new StreamReader(stream);
 
-                strPageRead = reader.ReadToEnd();
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
 
-                res.Close();
-                reader.Close();
+                    strPageRead = reader.ReadToEnd();
+
+                    res.Close();
+                    reader.Close();
+                }
+                else
+                {
+                    res.Close();
+                    return string.Empty;
+                }
             }
             catch (ThreadAbortException)
             {

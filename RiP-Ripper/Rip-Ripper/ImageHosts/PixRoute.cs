@@ -1,5 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PimpAndHost.cs" company="The Watcher">
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PixRoute.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -17,22 +17,27 @@ namespace RiPRipper.ImageHosts
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
-
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from PimpAndHost.com
+    /// Worker class to get images from PixRoute.com
     /// </summary>
-    public class PimpAndHost : ServiceTemplate
+    public class PixRoute : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PimpAndHost"/> class.
+        /// Initializes a new instance of the <see cref="PixRoute"/> class.
         /// </summary>
-        /// <param name="savePath">The save path.</param>
-        /// <param name="imageURL">The image URL.</param>
-        /// <param name="hashtable">The hashtable.</param>
-        public PimpAndHost(ref string savePath, ref string imageURL, ref Hashtable hashtable)
-            : base(savePath, imageURL, ref hashtable)
+        /// <param name="savePath">
+        /// The save Path.
+        /// </param>
+        /// <param name="imageUrl">
+        /// The image Url.
+        /// </param>
+        /// <param name="hashtable">
+        /// The hashtable.
+        /// </param>
+        public PixRoute(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
+            : base(savePath, imageUrl, ref hashtable)
         {
         }
 
@@ -40,7 +45,7 @@ namespace RiPRipper.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Returns if the Image was downloaded
+        /// Return if Downloaded or not
         /// </returns>
         protected override bool DoDownload()
         {
@@ -51,7 +56,7 @@ namespace RiPRipper.ImageHosts
                 return true;
             }
 
-            var filePath = string.Empty;
+            string strFilePath = string.Empty;
 
             try
             {
@@ -68,7 +73,7 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = strImgURL };
+            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
 
             try
             {
@@ -88,7 +93,7 @@ namespace RiPRipper.ImageHosts
                 eventTable.Add(strImgURL, ccObj);
             }
 
-            string sPage = GetImageHostPage(ref strImgURL);
+            string sPage = this.GetImageHostsPage(ref strImgURL);
 
             if (sPage.Length < 10)
             {
@@ -97,7 +102,7 @@ namespace RiPRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"id=\""image\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"<A HREF=\""javascript:loodfic\(\)\"" ><img src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
@@ -108,17 +113,17 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            filePath = strNewURL.Substring(strNewURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/", StringComparison.Ordinal) + 1).Replace(".html", string.Empty);
 
-            filePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(filePath));
+            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
-            string newAlteredPath = Utility.GetSuitableName(filePath);
-            if (filePath != newAlteredPath)
+            string newAlteredPath = Utility.GetSuitableName(strFilePath);
+            if (strFilePath != newAlteredPath)
             {
-                filePath = newAlteredPath;
-                ((CacheObject)eventTable[mstrURL]).FilePath = filePath;
+                strFilePath = newAlteredPath;
+                ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
             }
 
             try
@@ -126,7 +131,7 @@ namespace RiPRipper.ImageHosts
                 WebClient client = new WebClient();
                 client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(strNewURL, filePath);
+                client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
@@ -155,11 +160,61 @@ namespace RiPRipper.ImageHosts
             }
 
             ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = filePath;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
         }
 
+        /// <summary>
+        /// a generic function to fetch urls.
+        /// </summary>
+        /// <param name="strURL">
+        /// The str URL.
+        /// </param>
+        /// <returns>
+        /// Returns the Page as string.
+        /// </returns>
+        protected string GetImageHostsPage(ref string strURL)
+        {
+            string strPageRead;
+
+            try
+            {
+                var req = (HttpWebRequest)WebRequest.Create(strURL);
+
+                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
+                req.Headers["Cookie"] = "pixr8263_s=loaded;";
+                req.Referer = strURL;
+
+                var res = (HttpWebResponse)req.GetResponse();
+
+                var stream = res.GetResponseStream();
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
+
+                    strPageRead = reader.ReadToEnd();
+
+                    res.Close();
+                    reader.Close();
+                }
+                else
+                {
+                    res.Close();
+                    return string.Empty;
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return strPageRead;
+        }
         //////////////////////////////////////////////////////////////////////////
     }
 }

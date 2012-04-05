@@ -11,6 +11,7 @@
 
 namespace RiPRipper
 {
+    using System;
     using System.Collections;
     using System.IO;
     using System.Net;
@@ -19,7 +20,7 @@ namespace RiPRipper
     using RiPRipper.Objects;
 
     /// <summary>
-    /// 
+    /// Image Downloader Class
     /// </summary>
     public class ImageDownloader
     {
@@ -31,14 +32,14 @@ namespace RiPRipper
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageDownloader"/> class.
         /// </summary>
-        /// <param name="sSavePath">The s save path.</param>
-        /// <param name="strURL">The STR URL.</param>
-        /// <param name="hTbl">The h TBL.</param>
-        public ImageDownloader( string sSavePath, string strURL, ref Hashtable hTbl )
+        /// <param name="savePath">The save path.</param>
+        /// <param name="url">The URL.</param>
+        /// <param name="hashtable">The hashtable.</param>
+        public ImageDownloader(string savePath, string url, ref Hashtable hashtable)
         {
-            this.mstrURL = strURL;
-            this.eventTable = hTbl;
-            this.mSavePath = sSavePath;
+            this.mstrURL = url;
+            this.eventTable = hashtable;
+            this.mSavePath = savePath;
         }
 
         /// <summary>
@@ -55,8 +56,8 @@ namespace RiPRipper
         /// </summary>
         public void GetUploadImage()
         {
-            xService = new uploadimages_net( ref mSavePath, ref mstrURL, ref eventTable );
-            xService.StartDownload();
+            this.xService = new uploadimages_net(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
 
         /// <summary>
@@ -64,432 +65,441 @@ namespace RiPRipper
         /// </summary>
         public void GetFapomatic()
         {
-            xService = new fapomatic( ref mSavePath, ref mstrURL, ref eventTable );
-            xService.StartDownload();
+            this.xService = new fapomatic(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the image venue.
+        /// </summary>
         public void GetImageVenue()
         {
-            xService = new imagevenue( ref mSavePath, ref mstrURL, ref eventTable );
-            xService.StartDownload();
+            this.xService = new imagevenue(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the image venue download.
+        /// </summary>
         public void GetImageVenueNew()
         {
-            xService = new imagevenueNew(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new imagevenueNew(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the moast download.
+        /// </summary>
         public void GetMoast()
         {
-            xService = new Moast(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Moast(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetwatermarkIt()
         {
-            xService = new watermarkIt(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new watermarkIt(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicBux()
         {
-            xService = new PicBux(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicBux(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicturesUpload()
         {
-            xService = new PicturesUpload(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicturesUpload(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageHigh()
         {
-            xService = new ImageHigh(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageHigh(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImage2Share()
         {
-            xService = new Image2Share(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Image2Share(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPaintedOver()
         {
-            xService = new PaintedOver(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PaintedOver(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetDumbARump()
         {
-            xService = new DumbARump(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new DumbARump(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageCrack()
         {
-            xService = new ImageCrack(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageCrack(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetTenPix()
         {
-            xService = new TenPix(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new TenPix(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetSupload()
         {
-            xService = new Supload(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Supload(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageThrust()
         {
-            xService = new ImageThrust(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageThrust(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetShareAPic()
         {
-            xService = new ShareAPic(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ShareAPic(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFileDen()
         {
-            xService = new FileDen(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FileDen(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicTiger()
         {
-            xService = new PicTiger(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicTiger(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicTiger2()
         {
-            xService = new PicTiger2(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicTiger2(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetMyPhotos()
         {
-            xService = new MyPhotos(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new MyPhotos(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetTheImageHosting()
         {
-            xService = new TheImageHosting(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new TheImageHosting(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetZShare()
         {
-            xService = new ZShare(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ZShare(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetKeepMyFile()
         {
-            xService = new KeepMyFile(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new KeepMyFile(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageBeaver()
         {
-            xService = new ImageBeaver(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageBeaver(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetShareAvenue()
         {
-            xService = new ShareAvenue(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ShareAvenue(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetGlowFoto()
         {
-            xService = new GlowFoto(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new GlowFoto(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetJpgHosting()
         {
-            xService = new JpgHosting(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new JpgHosting(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetJpgHosting2()
         {
-            xService = new JpgHosting2(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new JpgHosting2(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageFling()
         {
-            xService = new ImageFling(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageFling(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetYourPix()
         {
-            xService = new YourPix(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new YourPix(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFreeImageHost()
         {
-            xService = new FreeImageHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FreeImageHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFreeShare()
         {
-            xService = new FreeShare(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FreeShare(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetSuprFile()
         {
-            xService = new SuprFile(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new SuprFile(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetLetMeHost()
         {
-            xService = new LetMeHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new LetMeHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFileHost()
         {
-            xService = new FileHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FileHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetTheFreeImageHosting()
         {
-            xService = new TheFreeImageHosting(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new TheFreeImageHosting(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetYesAlbum()
         {
-            xService = new YesAlbum(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new YesAlbum(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicsPlace()
         {
-            xService = new PicsPlace(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicsPlace(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetXsHosting()
         {
-            xService = new XsHosting(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new XsHosting(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetCelebs()
         {
-            xService = new Celebs(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Celebs(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetRipHq()
         {
-            xService = new RipHq(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new RipHq(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetBenuri()
         {
-            xService = new Benuri(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Benuri(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageHaven()
         {
-            xService = new ImageHaven(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageHaven(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImagePundit()
         {
-            xService = new ImagePundit(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImagePundit(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetUploadEm()
         {
-            xService = new UploadEm(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new UploadEm(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetUpPix()
         {
-            xService = new UpPix(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new UpPix(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPixHosting()
         {
-            xService = new PixHosting(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PixHosting(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPussyUpload()
         {
-            xService = new PussyUpload(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PussyUpload(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetHotLinkImage()
         {
-            xService = new HotLinkImage(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new HotLinkImage(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageBam()
         {
-            xService = new ImageBam(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageBam(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageHosting()
         {
-            xService = new ImageHosting(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageHosting(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageFap()
         {
-            xService = new ImageFap(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageFap(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetAllYouCanUpload()
         {
-            xService = new AllYouCanUpload(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new AllYouCanUpload(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetLargeImageHost()
         {
-            xService = new LargeImageHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new LargeImageHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetRadikal()
         {
-            xService = new Radikal(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Radikal(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPixUp()
         {
-            xService = new PixUp(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PixUp(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFreePornDumpster()
         {
-            xService = new FreePornDumpster(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FreePornDumpster(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageSocket()
         {
-            xService = new ImageSocket(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageSocket(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetStormFactory()
         {
-            xService = new StormFactory(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new StormFactory(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicHoarder()
         {
-            xService = new PicHoarder(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicHoarder(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetMultiPics()
         {
-            xService = new MultiPics(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new MultiPics(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageFoco()
         {
-            xService = new ImageFoco(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageFoco(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetSpeedImg()
         {
-            xService = new SpeedImg(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new SpeedImg(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetDollarLink()
         {
-            xService = new DollarLink(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new DollarLink(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicEasy()
         {
-            xService = new PicEasy(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicEasy(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicturesHoster()
         {
-            xService = new PicturesHoster(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicturesHoster(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicJackal()
         {
-            xService = new PicJackal(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicJackal(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetAmazingDickSSl()
         {
-            xService = new AmazingDickSSl(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new AmazingDickSSl(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImagesGal()
         {
-            xService = new ImagesGal(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImagesGal(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetBigPics()
         {
-            xService = new BigPics(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new BigPics(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetXPhotoSharing()
         {
-            xService = new XPhotoSharing(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new XPhotoSharing(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetBusyUpload()
         {
-            xService = new BusyUpload(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new BusyUpload(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetUpMyPhoto()
         {
-            xService = new UpMyPhoto(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new UpMyPhoto(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetTurboImageHost()
         {
-            xService = new TurboImageHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new TurboImageHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetAbload()
         {
-            xService = new Abload(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Abload(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageDoza()
         {
-            xService = new ImageDoza(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageDoza(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageWam()
         {
-            xService = new ImageWam(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageWam(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageFlea()
         {
-            xService = new ImageFlea(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageFlea(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageCargo()
         {
-            xService = new ImageCargo(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageCargo(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPixSlam()
         {
-            xService = new PixSlam(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PixSlam(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageHost()
         {
-            xService = new ImageHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
-            xService.StartDownload();
+            this.xService = new ImageHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+            this.xService.StartDownload();
         }
         public void GetMyImageHost()
         {
-            xService = new MyImageHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new MyImageHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetShareNxs()
         {
-            xService = new ShareNxs(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ShareNxs(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetKemiPic()
         {
-            xService = new KemiPic(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new KemiPic(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFotoTube()
         {
-            xService = new FotoTube(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FotoTube(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImmage()
         {
@@ -498,83 +508,83 @@ namespace RiPRipper
         }
         public void GetIpicture()
         {
-            xService = new Ipicture(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Ipicture(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPornImgHost()
         {
-            xService = new PornImgHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PornImgHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageTwist()
         {
-            xService = new ImageTwist(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageTwist(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageWaste()
         {
-            xService = new ImageWaste(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageWaste(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPixHost()
         {
-            xService = new PixHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PixHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFastPic()
         {
-            xService = new FastPic(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FastPic(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetPicDir()
         {
-            xService = new PicDir(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new PicDir(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFotoSik()
         {
-            xService = new FotoSik(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FotoSik(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetDailyPoa()
         {
-            xService = new DailyPoa(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new DailyPoa(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageHostLi()
         {
-            xService = new ImageHostLi(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageHostLi(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetStooorage()
         {
-            xService = new Stooorage(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new Stooorage(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImagePorter()
         {
-            xService = new ImagePorter(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImagePorter(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetFileMad()
         {
-            xService = new FileMad(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new FileMad(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetMyPixHost()
         {
-            xService = new MyPixHost(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new MyPixHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetSevenBucket()
         {
-            xService = new SevenBucket(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new SevenBucket(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
         public void GetImageHyper()
         {
-            xService = new ImageHyper(ref mSavePath, ref mstrURL, ref eventTable);
-            xService.StartDownload();
+            this.xService = new ImageHyper(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
         }
 
         /// <summary>
@@ -677,6 +687,33 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get PixRoute Download
+        /// </summary>
+        public void GetPixRoute()
+        {
+            this.xService = new PixRoute(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get ImagePicasa Download
+        /// </summary>
+        public void GetImagePicasa()
+        {
+            this.xService = new ImagePicasa(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get DirectUpload Download
+        /// </summary>
+        public void GetDirectUpload()
+        {
+            this.xService = new DirectUpload(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hotlinked image fether...
         /// </summary>
         public void GetImage()
@@ -691,7 +728,7 @@ namespace RiPRipper
                 }
             }
 
-            string strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1);
+            string strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             try
             {
@@ -702,8 +739,8 @@ namespace RiPRipper
             }
             catch (IOException ex)
             {
-                MainForm.sDeleteMessage = ex.Message;
-                MainForm.bDelete = true;
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
 
                 return;
             }
@@ -721,7 +758,7 @@ namespace RiPRipper
                 ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
                 return;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 if (this.eventTable.ContainsKey(strImgURL))
                 {
@@ -731,7 +768,6 @@ namespace RiPRipper
 
                 this.eventTable.Add(strImgURL, ccObj);
             }
-
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -747,7 +783,6 @@ namespace RiPRipper
                 ////lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
                 lHttpWebRequest.KeepAlive = true;
                 lHttpWebRequest.Timeout = 20000;
-
 
                 lHttpWebRequest.Referer = strImgURL.IndexOf("www.ripnetwork.net:82") >= 0 ? "http://rip-productions.net/showthread.php" : strImgURL;
 
@@ -797,7 +832,7 @@ namespace RiPRipper
                 ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
                 return;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
@@ -807,7 +842,6 @@ namespace RiPRipper
             ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = true;
             ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
             CacheController.GetInstance().uSLastPic = ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
-            return;
         }
     }
 }

@@ -77,7 +77,7 @@ namespace RiPRipper
 
             ArrayList arrCookieKeys = new ArrayList();
 
-            CookiePairS cPair = this.NextCookie();
+            CookiePair cPair = this.NextCookie();
 
             while (cPair != null)
             {
@@ -142,7 +142,7 @@ namespace RiPRipper
 
             string sCookies = string.Empty;
 
-            CookiePairS cPair = this.NextCookie();
+            CookiePair cPair = this.NextCookie();
 
             while (cPair != null)
             {
@@ -165,18 +165,18 @@ namespace RiPRipper
         /// <returns>
         /// The next cookie.
         /// </returns>
-        public CookiePairS NextCookie()
+        public CookiePair NextCookie()
         {
             if (this.ckieEnumerator == null)
             {
                 this.ResetCookiePos();
             }
 
-            CookiePairS newpair = null;
+            CookiePair newpair = null;
 
             if (this.ckieEnumerator.MoveNext())
             {
-                newpair = new CookiePairS
+                newpair = new CookiePair
                     {
                        Key = (string)this.ckieEnumerator.Key, Value = (string)this.ckieEnumerator.Value 
                     };

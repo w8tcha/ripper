@@ -544,6 +544,18 @@ namespace RiPRipper
             {
                 lThreadStart = lImageDownloader.GetPixHub;
             }
+            else if (aImageUrl.IndexOf(@"pixroute.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetPixRoute;
+            }
+            else if (aImageUrl.IndexOf(@"imagepicsa.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetImagePicasa;
+            }
+            else if (aImageUrl.IndexOf(@"directupload.net/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetDirectUpload;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;

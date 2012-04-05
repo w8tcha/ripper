@@ -73,7 +73,7 @@
             this.linkLabel1.Size = new System.Drawing.Size(176, 17);
             this.linkLabel1.TabIndex = 3;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Ripper.WatchersNET.de";
+            this.linkLabel1.Text = "Ripper.CodePlex.com";
             this.linkLabel1.UseCompatibleTextRendering = true;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1LinkClicked);
             // 
@@ -136,6 +136,7 @@
             "CocoImage.com",
             "CocoPic.com",
             "DailyPoa.com",
+            "DirectUpload.net",
             "DollarLink.biz",
             "DumbARump.com",
             "DumpPix.com",
@@ -171,6 +172,7 @@
             "ImageHosting.gr",
             "ImageHyper.com",
             "ImagePad.us",
+            "ImagePicasa.com",
             "ImagePorter.com",
             "ImageSocket.com",
             "ImageSwitch.com",
@@ -211,6 +213,7 @@
             "PixHost.org",
             "PixHosting.info",
             "PixHub.eu",
+            "PixRoute.com",
             "PixSlam.com",
             "PixUp.info",
             "PornImgHost.com",

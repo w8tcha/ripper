@@ -5,8 +5,8 @@
     <PropertyGroup>
       <Major>2</Major>
       <Minor>9</Minor>
-      <Build>2</Build>
-      <Revision>9</Revision>
+      <Build>3</Build>
+      <Revision>0</Revision>
     </PropertyGroup>
 
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>

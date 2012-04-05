@@ -209,6 +209,9 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoUpdater.cs" />
+    <Compile Include="ImageHosts\PixRoute.cs" />
+    <Compile Include="ImageHosts\ImagePicasa.cs" />
+    <Compile Include="ImageHosts\DirectUpload.cs" />
     <Compile Include="ImageHosts\PixHub.cs" />
     <Compile Include="ImageHosts\Hoooster.cs" />
     <Compile Include="ImageHosts\PimpAndHost.cs" />
@@ -219,7 +222,7 @@
     <Compile Include="ImageHosts\ImgChili.cs" />
     <Compile Include="ImageHosts\ImgDepot.cs" />
     <Compile Include="Objects\CacheObject.cs" />
-    <Compile Include="Objects\CookiePairS.cs" />
+    <Compile Include="Objects\CookiePair.cs" />
     <Compile Include="ImageDownloader.cs" />
     <Compile Include="ImageHosts\Abload.cs" />
     <Compile Include="ImageHosts\AllYouCanUpload.cs" />

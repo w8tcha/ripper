@@ -124,8 +124,8 @@ namespace RiPRipper
 			timer1.Enabled = false;
 			((MainForm)Owner).bCameThroughCorrectLogin = true;
 
-            MainForm.userSettings.sUser = textBox1.Text;
-            MainForm.userSettings.sPass = textBox2.Text;
+            MainForm.userSettings.User = textBox1.Text;
+            MainForm.userSettings.Pass = textBox2.Text;
 
 			Close();
 		}

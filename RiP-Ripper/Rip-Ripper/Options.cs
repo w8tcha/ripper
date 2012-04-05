@@ -42,23 +42,23 @@ namespace RiPRipper
 #endif
 
             // Load "Show Tray PopUps" Setting
-            showTrayPopups.Checked = MainForm.userSettings.bShowPopUps;
+            showTrayPopups.Checked = MainForm.userSettings.ShowPopUps;
 
             // Load "Download Folder" Setting
-            textBox2.Text =  MainForm.userSettings.sDownloadFolder;
+            textBox2.Text =  MainForm.userSettings.DownloadFolder;
 
             // Load "Thread Limit" Setting
-            numericUDThreads.Text = MainForm.userSettings.iThreadLimit.ToString();
+            numericUDThreads.Text = MainForm.userSettings.ThreadLimit.ToString();
             ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
 
             // min. Image Count for Thanks
-            numericUDThanks.Text = MainForm.userSettings.iMinImageCount.ToString();
+            numericUDThanks.Text = MainForm.userSettings.MinImageCount.ToString();
 
             // Load "Create Subdirctories" Setting
-            checkBox1.Checked = MainForm.userSettings.bSubDirs;
+            checkBox1.Checked = MainForm.userSettings.SubDirs;
 
             // Load "Automaticly Thank You Button" Setting
-            if (MainForm.userSettings.bAutoThank)
+            if (MainForm.userSettings.AutoThank)
             {
                 checkBox8.Checked = true;
             }
@@ -69,14 +69,14 @@ namespace RiPRipper
             }
 
             // Load "Clipboard Watch" Setting
-            checkBox10.Checked = MainForm.userSettings.bClipBWatch;
+            checkBox10.Checked = MainForm.userSettings.ClipBWatch;
            
             // Load "Always on Top" Setting
-            checkBox5.Checked = MainForm.userSettings.bTopMost;
-            TopMost = MainForm.userSettings.bTopMost;
+            checkBox5.Checked = MainForm.userSettings.TopMost;
+            TopMost = MainForm.userSettings.TopMost;
 
             // Load "Download each post in its own folder" Setting
-            mDownInSepFolderChk.Checked = MainForm.userSettings.bDownInSepFolder;   
+            mDownInSepFolderChk.Checked = MainForm.userSettings.DownInSepFolder;   
 
             if (!checkBox1.Checked)
             {
@@ -85,15 +85,15 @@ namespace RiPRipper
             }
 
             // Load "Save Ripped posts for checking" Setting
-            saveHistoryChk.Checked = MainForm.userSettings.bSavePids;
+            saveHistoryChk.Checked = MainForm.userSettings.SavePids;
 
             // Load "Show Downloads Complete PopUp" Setting
-            checkBox9.Checked = MainForm.userSettings.bShowCompletePopUp;
+            checkBox9.Checked = MainForm.userSettings.ShowCompletePopUp;
 
             // Load Language Setting
             try
             {
-                switch (MainForm.userSettings.sLanguage)
+                switch (MainForm.userSettings.Language)
                 {
                     case "de-DE":
                         rm = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
@@ -176,7 +176,7 @@ namespace RiPRipper
 
             Utility.SaveSetting("Download Folder", textBox2.Text);
                 
-            MainForm.userSettings.sDownloadFolder = textBox2.Text;
+            MainForm.userSettings.DownloadFolder = textBox2.Text;
         }
         /// <summary>
         /// Close Dialog and Save Changes

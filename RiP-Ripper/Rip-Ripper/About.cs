@@ -79,9 +79,9 @@ namespace RiPRipper
         /// </summary>
         public void LoadSettings()
         {
-            this.TopMost = MainForm.userSettings.bTopMost;
+            this.TopMost = MainForm.userSettings.TopMost;
 
-            switch (MainForm.userSettings.sLanguage)
+            switch (MainForm.userSettings.Language)
             {
                 case "de-DE":
                     this.rm = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
@@ -115,12 +115,8 @@ namespace RiPRipper
         /// <summary>
         /// Close About Dialog
         /// </summary>
-        /// <param name="sender">
-        /// The sender object.
-        /// </param>
-        /// <param name="e">
-        /// The Event Arguments.
-        /// </param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void BtnCloseClick(object sender, EventArgs e)
         {
             this.Close();
@@ -129,15 +125,11 @@ namespace RiPRipper
         /// <summary>
         /// Open Ripper Website in Default Webbrowser
         /// </summary>
-        /// <param name="sender">
-        /// The sender object.
-        /// </param>
-        /// <param name="e">
-        /// The Event Arguments.
-        /// </param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Windows.Forms.LinkLabelLinkClickedEventArgs"/> instance containing the event data.</param>
         private void LinkLabel1LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://Ripper.WatchersNET.de");
+            Process.Start("http://Ripper.CodePlex.com/");
         }
 
         #endregion
