@@ -606,25 +606,14 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void AddNewAccount_Click(object sender, EventArgs e)
         {
-            // Kill all current downloads 
-            if (mCurrentJob != null)
-            {
-                stopCurrentThreads.Enabled = false;
-                this.stopingJob = true;
-
-                ThreadManager.GetInstance().DismantleAllThreads();
-
-                lvCurJob.Items.Clear();
-                mCurrentJob = null;
-                StatusLabelImageC.Text = string.Empty;
-
-                this.IdleRipper();
-            }
-            ////
             this.Visible = false;
 
             Login frmLgn = new Login();
             frmLgn.ShowDialog(this);
+
+            this.CheckAccountMenu();
+
+            this.SwitchAccount(null);
 
             this.Visible = true;
         }
@@ -635,6 +624,11 @@ namespace PGRipper
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ForumMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SwitchAccount(sender);
+        }
+
+        private void SwitchAccount(object sender)
         {
             // Kill all current downloads 
             if (mCurrentJob != null)
@@ -652,34 +646,45 @@ namespace PGRipper
             }
             ////
 
-            var menuItem = (ToolStripMenuItem)sender;
-
-            foreach (var forumAccount in userSettings.ForumsAccount.Where(
-                    forumAccount =>
-                        forumAccount.ForumURL.Equals(menuItem.Tag)).Where(
-                        forumAccount => !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
+            if (sender != null)
             {
-                userSettings.CurrentForumUrl = forumAccount.ForumURL;
-                userSettings.CurrentUserName = forumAccount.UserName;
+                var menuItem = (ToolStripMenuItem)sender;
 
-                LoginManager lgnMgr = new LoginManager(forumAccount.UserName, forumAccount.UserPassWord);
+                ForumAccount currentAccount = null;
 
-                if (lgnMgr.DoLogin())
+                foreach (var forumAccount in
+                    userSettings.ForumsAccount.Where(forumAccount => forumAccount.ForumURL.Equals(menuItem.Tag)).Where(
+                        forumAccount =>
+                        !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
                 {
-                    bCameThroughCorrectLogin = true;
-                    this.CheckAccountMenu();
-                }
-                else
-                {
-                    this.Visible = false;
-
-                    Login frmLgn = new Login();
-                    frmLgn.ShowDialog(this);
-
-                    this.Visible = true;
+                    currentAccount = forumAccount;
                 }
 
-                var header = this._ResourceManager.GetString("ttlHeader");
+                if (currentAccount != null)
+                {
+                    userSettings.CurrentForumUrl = currentAccount.ForumURL;
+                    userSettings.CurrentUserName = currentAccount.UserName;
+
+                    LoginManager lgnMgr = new LoginManager(currentAccount.UserName, currentAccount.UserPassWord);
+
+                    if (lgnMgr.DoLogin())
+                    {
+                        bCameThroughCorrectLogin = true;
+                        this.CheckAccountMenu();
+                    }
+                    else
+                    {
+                        this.Visible = false;
+
+                        Login frmLgn = new Login();
+                        frmLgn.ShowDialog(this);
+
+                        this.Visible = true;
+                    }
+                }
+            }
+
+            var header = this._ResourceManager.GetString("ttlHeader");
 
 #if (PGRIPPER)
             Text = string.Format(
@@ -705,7 +710,6 @@ namespace PGRipper
                     Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
                     string.Format("{0}{1}\" @ {2} ]", header, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
 #endif
-            }
         }
 
         /// <summary>

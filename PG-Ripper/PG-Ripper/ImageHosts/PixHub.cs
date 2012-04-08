@@ -110,6 +110,11 @@ namespace PGRipper.ImageHosts
             if (m.Success)
             {
                 strNewURL = m.Groups["inner"].Value;
+
+                if (strNewURL.Contains("thumbnail"))
+                {
+                    strNewURL = strNewURL.Replace("thumbnail/", string.Empty);
+                }
             }
             else
             {

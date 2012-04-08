@@ -103,7 +103,7 @@ namespace PGRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"onclick=\""scale\(this\);\""  src=\""http://i(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"    src=\""http://i(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
@@ -132,6 +132,7 @@ namespace PGRipper.ImageHosts
                 WebClient client = new WebClient();
                 client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
+                client.Headers["Cookie"] = "chililast=1333887023.078;";
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
             }
@@ -184,7 +185,7 @@ namespace PGRipper.ImageHosts
                 var req = (HttpWebRequest)WebRequest.Create(strURL);
 
                 req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-                req.Headers["Cookie"] = "chililast=1318769375.861;";
+                req.Headers["Cookie"] = "chililast=1333887023.078;";
                 req.Referer = strURL;
 
                 var res = (HttpWebResponse)req.GetResponse();
