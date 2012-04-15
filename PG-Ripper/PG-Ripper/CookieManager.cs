@@ -83,7 +83,7 @@ namespace PGRipper
         /// </summary>
         public void DeleteAllCookies()
         {
-            this.ResetCookiePos();
+            /*this.ResetCookiePos();
 
             ArrayList arrCookieKeys = new ArrayList();
 
@@ -104,7 +104,10 @@ namespace PGRipper
             foreach (object t in arrCookieKeys)
             {
                 this.DeleteCookie((string)t);
-            }
+            }*
+             */
+
+            this.cookieTable.Clear();
         }
 
         /// <summary>

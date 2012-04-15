@@ -65,7 +65,7 @@ namespace PGRipper
             // Load Language Setting
             try
             {
-                string sLanguage = MainForm.userSettings.Language;
+                string sLanguage = CacheController.Xform.userSettings.Language;
 
                 switch (sLanguage)
                 {
@@ -103,7 +103,7 @@ namespace PGRipper
                     textBox3.Text += "/";
                 }
 
-                MainForm.userSettings.CurrentForumUrl = textBox3.Text;
+                CacheController.Xform.userSettings.CurrentForumUrl = textBox3.Text;
             }
 
             // Encrypt Password
@@ -119,21 +119,21 @@ namespace PGRipper
                 label3.ForeColor = Color.Green;
                 LoginBtn.Enabled = false;
 
-                if (MainForm.userSettings.ForumsAccount.Any(item => item.ForumURL == MainForm.userSettings.CurrentForumUrl))
+                if (CacheController.Xform.userSettings.ForumsAccount.Any(item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl))
                 {
-                    MainForm.userSettings.ForumsAccount.RemoveAll(
-                       item => item.ForumURL == MainForm.userSettings.CurrentForumUrl);
+                    CacheController.Xform.userSettings.ForumsAccount.RemoveAll(
+                       item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl);
                 }
 
                 var forumsAccount = new ForumAccount
                 {
-                    ForumURL = MainForm.userSettings.CurrentForumUrl,
+                    ForumURL = CacheController.Xform.userSettings.CurrentForumUrl,
                     UserName = this.textBox1.Text,
                     UserPassWord = this.textBox2.Text
                 };
 
-                MainForm.userSettings.ForumsAccount.Add(forumsAccount);
-                MainForm.userSettings.CurrentUserName = this.textBox1.Text;
+                CacheController.Xform.userSettings.ForumsAccount.Add(forumsAccount);
+                CacheController.Xform.userSettings.CurrentUserName = this.textBox1.Text;
 
                 timer1.Enabled = true;
             }
@@ -153,23 +153,23 @@ namespace PGRipper
         {
             timer1.Enabled = false;
 
-            ((MainForm)Owner).bCameThroughCorrectLogin = true;
+            CacheController.Xform.bCameThroughCorrectLogin = true;
 
-            if (MainForm.userSettings.ForumsAccount.Any(item => item.ForumURL == MainForm.userSettings.CurrentForumUrl))
+            if (CacheController.Xform.userSettings.ForumsAccount.Any(item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl))
             {
-                MainForm.userSettings.ForumsAccount.RemoveAll(
-                   item => item.ForumURL == MainForm.userSettings.CurrentForumUrl);
+                CacheController.Xform.userSettings.ForumsAccount.RemoveAll(
+                   item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl);
             }
 
             var forumsAccount = new ForumAccount
             {
-                ForumURL = MainForm.userSettings.CurrentForumUrl,
+                ForumURL = CacheController.Xform.userSettings.CurrentForumUrl,
                 UserName = this.textBox1.Text,
                 UserPassWord = this.textBox2.Text
             };
 
-            MainForm.userSettings.ForumsAccount.Add(forumsAccount);
-            MainForm.userSettings.CurrentUserName = this.textBox1.Text;
+            CacheController.Xform.userSettings.ForumsAccount.Add(forumsAccount);
+            CacheController.Xform.userSettings.CurrentUserName = this.textBox1.Text;
             
             Close();
         }
@@ -185,19 +185,19 @@ namespace PGRipper
             {
                 case 0:
                     this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
-                    MainForm.userSettings.Language = "de-DE";
+                    CacheController.Xform.userSettings.Language = "de-DE";
                     break;
                 case 1:
                     this.rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
-                    MainForm.userSettings.Language = "fr-FR";
+                    CacheController.Xform.userSettings.Language = "fr-FR";
                     break;
                 case 2:
                     this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
-                    MainForm.userSettings.Language = "en-EN";
+                    CacheController.Xform.userSettings.Language = "en-EN";
                     break;
                 default:
                     this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
-                    MainForm.userSettings.Language = "en-EN";
+                    CacheController.Xform.userSettings.Language = "en-EN";
                     break;
             }
 

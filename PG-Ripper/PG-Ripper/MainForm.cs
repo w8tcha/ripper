@@ -38,7 +38,7 @@ namespace PGRipper
         /// <summary>
         /// All Settings
         /// </summary>
-        public static SettingBase userSettings = new SettingBase();
+        public SettingBase userSettings = new SettingBase();
 
         /// <summary>
         /// String List of Urls to Rip
@@ -271,9 +271,9 @@ namespace PGRipper
         /// </summary>
         /// <param name="args">The args.</param>
         /// <param name="aForm">A form.</param>
-        private static void ProcessArgs(string[] args, MainForm aForm)
+        private static void ProcessArgs(ICollection<string> args, Form aForm)
         {
-            if (args.Length == 0)
+            if (args.Count == 0)
             {
                 return;
             }
@@ -1030,7 +1030,7 @@ namespace PGRipper
             }
 #endif
 
-            try
+           try
             {
                 if (
                     string.IsNullOrEmpty(
@@ -1052,8 +1052,9 @@ namespace PGRipper
 
                     return;
                 }
-            }
+           }
             catch (Exception)
+
             {
                 TopMostMessageBox.Show(sHtmlUrl.IndexOf("showthread.php") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
 
@@ -1238,7 +1239,7 @@ namespace PGRipper
         /// Sends the thank you.
         /// </summary>
         /// <param name="aUrl">A URL.</param>
-        private static void SendThankYou(string aUrl)
+        private void SendThankYou(string aUrl)
         {
             string tyURLRef = userSettings.CurrentForumUrl;
 

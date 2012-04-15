@@ -79,9 +79,9 @@ namespace PGRipper
         /// </summary>
         public void LoadSettings()
         {
-            this.TopMost = MainForm.userSettings.TopMost;
+            this.TopMost = CacheController.Xform.userSettings.TopMost;
 
-            switch (MainForm.userSettings.Language)
+            switch (CacheController.Xform.userSettings.Language)
             {
                 case "de-DE":
                     this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());

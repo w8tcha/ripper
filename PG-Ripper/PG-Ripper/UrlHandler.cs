@@ -35,14 +35,14 @@ namespace PGRipper
                 case 0:
                     {
                         sHtmlUrl = string.Format(
-                            "{0}showthread.php?t={1}", MainForm.userSettings.CurrentForumUrl, Convert.ToInt64(inputUrl));
+                            "{0}showthread.php?t={1}", CacheController.Xform.userSettings.CurrentForumUrl, Convert.ToInt64(inputUrl));
                         break;
                     }
 
                 case 1:
                     {
                         sHtmlUrl = string.Format(
-                            "{0}showpost.php?p={1}", MainForm.userSettings.CurrentForumUrl, Convert.ToInt64(inputUrl));
+                            "{0}showpost.php?p={1}", CacheController.Xform.userSettings.CurrentForumUrl, Convert.ToInt64(inputUrl));
                         break;
                     }
 
@@ -56,9 +56,9 @@ namespace PGRipper
                             return string.Empty;
                         }
 
-                        if (MainForm.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                            MainForm.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                            MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+                        if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
                         {
                             if (sHtmlUrl.Contains(".html") && !sHtmlUrl.Contains(".php"))
                             {
@@ -92,7 +92,7 @@ namespace PGRipper
 
                                 sHtmlUrl = string.Format(
                                     "{0}showthread.php?t={1}",
-                                    MainForm.userSettings.CurrentForumUrl,
+                                    CacheController.Xform.userSettings.CurrentForumUrl,
                                     Convert.ToInt64(sThreadId));
                             }
                             else if (sHtmlUrl.Contains("goto=newpost") && sHtmlUrl.Contains("showthread.php?"))
@@ -108,7 +108,7 @@ namespace PGRipper
 
                                 sHtmlUrl = string.Format(
                                     "{0}showthread.php?t={1}",
-                                    MainForm.userSettings.CurrentForumUrl,
+                                    CacheController.Xform.userSettings.CurrentForumUrl,
                                     Convert.ToInt64(sThreadId));
                             }
                             else if (sHtmlUrl.Contains("&p=") && sHtmlUrl.Contains("#post"))

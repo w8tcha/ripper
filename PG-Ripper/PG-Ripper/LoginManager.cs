@@ -54,7 +54,7 @@ namespace PGRipper
         /// </returns>
         public bool DoLogin()
         {
-            string strURL = string.Format("{0}login.php", MainForm.userSettings.CurrentForumUrl);
+            string strURL = string.Format("{0}login.php", CacheController.Xform.userSettings.CurrentForumUrl);
             string sPostData =
                 "do=login&forceredirect=1&url=%2Fforum%2F&vb_login_md5password=%md5pass%&vb_login_md5password_utf=%md5pass%&s=&vb_login_username=%md5user%&vb_login_password=&cookieuser=1";
 
@@ -91,14 +91,24 @@ namespace PGRipper
 
                 HttpWebResponse res = (HttpWebResponse)req.GetResponse();
 
-                CookieManager cookieMgr = CookieManager.GetInstance();
+                CookieManager.mInstance = new CookieManager();
 
-                cookieMgr.DeleteCookie("bbuserid");
-                cookieMgr.DeleteCookie("bbpassword");
+                var cookieManager = CookieManager.GetInstance();
+
+                // can be removed
+                cookieManager.DeleteCookie("bbuserid");
+                cookieManager.DeleteCookie("bbpassword");
+
+                cookieManager.DeleteCookie("bb_userid");
+                cookieManager.DeleteCookie("bb_password");
+
+                cookieManager.DeleteCookie("rp_userid");
+                cookieManager.DeleteCookie("rp_password");
+                //
 
                 foreach (Cookie cook in res.Cookies)
                 {
-                    cookieMgr.SetCookie(cook.Name, cook.Value);
+                    cookieManager.SetCookie(cook.Name, cook.Value);
 
                     if (cook.Name.Contains(@"userid") && !string.IsNullOrEmpty(cook.Value))
                     {

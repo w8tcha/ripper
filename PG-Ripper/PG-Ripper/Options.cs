@@ -47,23 +47,23 @@ namespace PGRipper
 #endif
 
             // Load "Show Tray PopUps" Setting
-            showTrayPopups.Checked = MainForm.userSettings.ShowPopUps;
+            showTrayPopups.Checked = CacheController.Xform.userSettings.ShowPopUps;
 
             // Load "Download Folder" Setting
-            textBox2.Text = MainForm.userSettings.DownloadFolder;
+            textBox2.Text = CacheController.Xform.userSettings.DownloadFolder;
 
             // Load "Thread Limit" Setting
-            numericUDThreads.Text = MainForm.userSettings.ThreadLimit.ToString();
+            numericUDThreads.Text = CacheController.Xform.userSettings.ThreadLimit.ToString();
             ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
 
             // min. Image Count for Thanks
-            numericUDThanks.Text = MainForm.userSettings.MinImageCount.ToString();
+            numericUDThanks.Text = CacheController.Xform.userSettings.MinImageCount.ToString();
 
             // Load "Create Subdirctories" Setting
-            checkBox1.Checked = MainForm.userSettings.SubDirs;
+            checkBox1.Checked = CacheController.Xform.userSettings.SubDirs;
 
             // Load "Automaticly Thank You Button" Setting
-            if (MainForm.userSettings.AutoThank)
+            if (CacheController.Xform.userSettings.AutoThank)
             {
                 checkBox8.Checked = true;
             }
@@ -74,14 +74,14 @@ namespace PGRipper
             }
 
             // Load "Clipboard Watch" Setting
-            checkBox10.Checked = MainForm.userSettings.ClipBWatch;
+            checkBox10.Checked = CacheController.Xform.userSettings.ClipBWatch;
 
             // Load "Always on Top" Setting
-            checkBox5.Checked = MainForm.userSettings.TopMost;
-            TopMost = MainForm.userSettings.TopMost;
+            checkBox5.Checked = CacheController.Xform.userSettings.TopMost;
+            TopMost = CacheController.Xform.userSettings.TopMost;
 
             // Load "Download each post in its own folder" Setting
-            mDownInSepFolderChk.Checked = MainForm.userSettings.DownInSepFolder;
+            mDownInSepFolderChk.Checked = CacheController.Xform.userSettings.DownInSepFolder;
 
             if (!checkBox1.Checked)
             {
@@ -90,15 +90,15 @@ namespace PGRipper
             }
 
             // Load "Save Ripped posts for checking" Setting
-            saveHistoryChk.Checked = MainForm.userSettings.SavePids;
+            saveHistoryChk.Checked = CacheController.Xform.userSettings.SavePids;
 
             // Load "Show Downloads Complete PopUp" Setting
-            checkBox9.Checked = MainForm.userSettings.ShowCompletePopUp;
+            checkBox9.Checked = CacheController.Xform.userSettings.ShowCompletePopUp;
 
             // Load Language Setting
             try
             {
-                switch (MainForm.userSettings.Language)
+                switch (CacheController.Xform.userSettings.Language)
                 {
                     case "de-DE":
                         this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
@@ -188,9 +188,9 @@ namespace PGRipper
 
             textBox2.Text = FBD.SelectedPath;
 
-            MainForm.userSettings.DownloadFolder = textBox2.Text;
+            CacheController.Xform.userSettings.DownloadFolder = textBox2.Text;
 
-            Utility.SaveSettings(MainForm.userSettings);
+            Utility.SaveSettings(CacheController.Xform.userSettings);
         }
 
         /// <summary>
@@ -226,33 +226,33 @@ namespace PGRipper
 
                 ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
 
-                MainForm.userSettings.ThreadLimit = Convert.ToInt32(this.numericUDThreads.Text);
-                MainForm.userSettings.MinImageCount = Convert.ToInt32(this.numericUDThanks.Text);
-                MainForm.userSettings.SubDirs = checkBox1.Checked;
-                MainForm.userSettings.AutoThank = checkBox8.Checked;
-                MainForm.userSettings.ClipBWatch = checkBox10.Checked;
-                MainForm.userSettings.ShowPopUps = showTrayPopups.Checked;
-                MainForm.userSettings.TopMost = checkBox5.Checked;
-                MainForm.userSettings.DownInSepFolder = mDownInSepFolderChk.Checked;
-                MainForm.userSettings.SavePids = saveHistoryChk.Checked;
-                MainForm.userSettings.ShowCompletePopUp = checkBox9.Checked;
+                CacheController.Xform.userSettings.ThreadLimit = Convert.ToInt32(this.numericUDThreads.Text);
+                CacheController.Xform.userSettings.MinImageCount = Convert.ToInt32(this.numericUDThanks.Text);
+                CacheController.Xform.userSettings.SubDirs = checkBox1.Checked;
+                CacheController.Xform.userSettings.AutoThank = checkBox8.Checked;
+                CacheController.Xform.userSettings.ClipBWatch = checkBox10.Checked;
+                CacheController.Xform.userSettings.ShowPopUps = showTrayPopups.Checked;
+                CacheController.Xform.userSettings.TopMost = checkBox5.Checked;
+                CacheController.Xform.userSettings.DownInSepFolder = mDownInSepFolderChk.Checked;
+                CacheController.Xform.userSettings.SavePids = saveHistoryChk.Checked;
+                CacheController.Xform.userSettings.ShowCompletePopUp = checkBox9.Checked;
 
                 switch (languageSelector.SelectedIndex)
                 {
                     case 0:
-                        MainForm.userSettings.Language = "de-DE";
+                        CacheController.Xform.userSettings.Language = "de-DE";
                         break;
                     case 1:
-                        MainForm.userSettings.Language = "fr-FR";
+                        CacheController.Xform.userSettings.Language = "fr-FR";
                         break;
                     case 2:
-                        MainForm.userSettings.Language = "en-EN";
+                        CacheController.Xform.userSettings.Language = "en-EN";
                         break;
                 }
             }
             finally
             {
-                Utility.SaveSettings(MainForm.userSettings);
+                Utility.SaveSettings(CacheController.Xform.userSettings);
                 Close();
             }
         }

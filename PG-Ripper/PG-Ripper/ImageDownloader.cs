@@ -882,7 +882,7 @@ namespace PGRipper
                 lHttpWebRequest.KeepAlive = true;
                 lHttpWebRequest.Referer = strImgURL.IndexOf("www.ripnetwork.net:82") >= 0
                                               ? string.Format(
-                                                  "{0}showthread.php", MainForm.userSettings.CurrentForumUrl)
+                                                  "{0}showthread.php", CacheController.Xform.userSettings.CurrentForumUrl)
                                               : strImgURL;
 
                 var lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
@@ -916,7 +916,7 @@ namespace PGRipper
                 ////client.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
                 client.Headers.Add(
                     strImgURL.IndexOf("www.ripnetwork.net:82") >= 0
-                        ? string.Format("Referer: {0}showthread.php", MainForm.userSettings.CurrentForumUrl)
+                        ? string.Format("Referer: {0}showthread.php", CacheController.Xform.userSettings.CurrentForumUrl)
                         : string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add(
                     "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");

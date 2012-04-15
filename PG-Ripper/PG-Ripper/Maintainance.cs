@@ -63,8 +63,8 @@ namespace PGRipper
 
             iTitleStart += 7;
 
-            if (MainForm.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                MainForm.userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-")
+                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
             {
                 iTitleStart += 1;
             }
@@ -78,8 +78,8 @@ namespace PGRipper
 
             string sTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
 
-            if (MainForm.userSettings.CurrentForumUrl.Contains("rip-productions.net") ||
-                MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains("rip-productions.net")
+                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
             {
                 return sTitle.Trim();
             }
@@ -141,7 +141,7 @@ namespace PGRipper
         {
             string sPage;
 
-            if (MainForm.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
             {
                 sPage = GetRipPage(content);
 
@@ -161,7 +161,7 @@ namespace PGRipper
                 return iPageEnd < 0 ? string.Empty : sPage.Substring(iPageStart, iPageEnd - iPageStart);
             }
 
-            if (MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
             {
                 sPage = GetRipPage(content);
 
@@ -206,7 +206,7 @@ namespace PGRipper
 
                 string sFTitleUrl = content.Substring(iPageStart, iPageEnd - iPageStart);
 
-                sPage = GetRipPage(MainForm.userSettings.CurrentForumUrl + sFTitleUrl);
+                sPage = GetRipPage(CacheController.Xform.userSettings.CurrentForumUrl + sFTitleUrl);
             }
             else
             {
@@ -256,9 +256,9 @@ namespace PGRipper
 
             string sPostTitle;
 
-            if (MainForm.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                MainForm.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-")
+                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-")
+                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
             {
                 ////////////////////////////////////
                 // Extract Current Post first
@@ -326,9 +326,9 @@ namespace PGRipper
 
             if (string.IsNullOrEmpty(sPostTitle))
             {
-                if (MainForm.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                    MainForm.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                    MainForm.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+                if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-")
+                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-")
+                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
                 {
                     sPostTitle = string.Format("post# {0}", url.Substring(url.IndexOf(@"#post") + 5));
                 }
