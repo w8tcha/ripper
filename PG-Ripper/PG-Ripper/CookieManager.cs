@@ -15,20 +15,16 @@ namespace PGRipper
     using PGRipper.Objects;
 
     /// <summary>
-    /// 
+    /// Class for handling Cookies
     /// </summary>
     public class CookieManager
     {
+        /// <summary>
+        /// The Cookie Table
+        /// </summary>
         private readonly Hashtable cookieTable;
 
         private IDictionaryEnumerator ckieEnumerator;
-
-        public static CookieManager mInstance;
-
-        public static CookieManager GetInstance()
-        {
-            return mInstance ?? (mInstance = new CookieManager());
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CookieManager"/> class.
@@ -36,6 +32,22 @@ namespace PGRipper
         public CookieManager()
         {
             this.cookieTable = new Hashtable();
+        }
+
+        /// <summary>
+        /// Gets or sets the Cookie Manager Instance
+        /// </summary>
+        public static CookieManager Instance { get; set; }
+
+        /// <summary>
+        /// Gets the Cookie Manager instance.
+        /// </summary>
+        /// <returns>
+        /// The cookie manager instance
+        /// </returns>
+        public static CookieManager GetInstance()
+        {
+            return Instance ?? (Instance = new CookieManager());
         }
 
         /// <summary>
@@ -59,22 +71,22 @@ namespace PGRipper
         /// <summary>
         /// Gets the cookie.
         /// </summary>
-        /// <param name="sKey">The s key.</param>
-        /// <returns></returns>
-        public string GetCookie(string sKey)
+        /// <param name="key">The key.</param>
+        /// <returns>Returns the Cookie</returns>
+        public string GetCookie(string key)
         {
-            return this.cookieTable.ContainsKey(sKey) ? (string)this.cookieTable[sKey] : string.Empty;
+            return this.cookieTable.ContainsKey(key) ? (string)this.cookieTable[key] : string.Empty;
         }
 
         /// <summary>
         /// Deletes the cookie.
         /// </summary>
-        /// <param name="sKey">The s key.</param>
-        public void DeleteCookie(string sKey)
+        /// <param name="key">The key.</param>
+        public void DeleteCookie(string key)
         {
-            if (this.cookieTable.ContainsKey(sKey))
+            if (this.cookieTable.ContainsKey(key))
             {
-                this.cookieTable.Remove(sKey);
+                this.cookieTable.Remove(key);
             }
         }
 
@@ -113,7 +125,7 @@ namespace PGRipper
         /// <summary>
         /// Gets the cookie string.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the Cookie String</returns>
         public string GetCookieString()
         {
             this.ResetCookiePos();
@@ -140,7 +152,9 @@ namespace PGRipper
         /// <summary>
         /// Nexts the cookie.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The next cookie.
+        /// </returns>
         public CookiePair NextCookie()
         {
             if (this.ckieEnumerator == null)

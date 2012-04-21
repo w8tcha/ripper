@@ -28,9 +28,9 @@ namespace PGRipper
         protected string mstrURL = string.Empty;
 
         /// <summary>
-        /// HashTable with Urls.
+        /// Gets or sets the HashTable with Urls.
         /// </summary>
-        protected Hashtable eventTable;
+        public Hashtable EventTable { get; set; }
 
         /// <summary>
         /// Image Save Folder Path
@@ -52,7 +52,7 @@ namespace PGRipper
         protected ServiceTemplate(string savePath, string url, ref Hashtable hTbl)
         {
             this.mstrURL = url;
-            this.eventTable = hTbl;
+            this.EventTable = hTbl;
             this.mSavePath = savePath;
         }
 
@@ -63,11 +63,11 @@ namespace PGRipper
         {
             this.DoDownload();
 
-            if (this.eventTable[this.mstrURL] != null)
+            if (this.EventTable[this.mstrURL] != null)
             {
-                if (this.eventTable.Contains(this.mstrURL))
+                if (this.EventTable.Contains(this.mstrURL))
                 {
-                    this.eventTable.Remove(this.mstrURL);
+                    this.EventTable.Remove(this.mstrURL);
                 }
             }
 

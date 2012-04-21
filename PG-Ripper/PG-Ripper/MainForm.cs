@@ -25,9 +25,10 @@ namespace PGRipper
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
+#if (!PGRIPPERX)
     using Microsoft.WindowsAPICodePack.Shell;
     using Microsoft.WindowsAPICodePack.Taskbar;
-
+#endif
     using PGRipper.Objects;
 
     /// <summary>
@@ -45,11 +46,16 @@ namespace PGRipper
         /// </summary>
         private readonly List<string> ExtractUrls = new List<string>();
 
+        /// <summary>
+        /// Array List of all Stored (Ripped) Post Ids
+        /// </summary>
+        private readonly ArrayList sRippedPosts = new ArrayList();
+
 #if (!PGRIPPERX)
         /// <summary>
         /// Clipboard Viewer Instance
         /// </summary>
-        public IntPtr nextClipboardViewer;
+        private IntPtr nextClipboardViewer;
 
         /// <summary>
         /// TaskBar Manager Instance
@@ -61,6 +67,11 @@ namespace PGRipper
         /// </summary>
         private JumpList jumpList;
 #endif
+
+        /// <summary>
+        /// The Indexed Topic Lists
+        /// </summary>
+        private List<ImageInfo> indexedTopicsList;
 
         /// <summary>
         /// Indicates if Ripper Currently Parsing Jobs
@@ -96,11 +107,6 @@ namespace PGRipper
         /// The Last Download Folder
         /// </summary>
         private string lastDownFolder;
-
-        /// <summary>
-        /// Array List of all Stored (Ripped) Post Ids
-        /// </summary>
-        private readonly ArrayList sRippedPosts = new ArrayList();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -167,16 +173,13 @@ namespace PGRipper
         protected void SDownloadClick(object sender, EventArgs e)
         {
             if (!Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) ||
-                Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(userSettings.CurrentForumUrl) < 0 ||
+                Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(this.userSettings.CurrentForumUrl) < 0 ||
                 this.parseActive)
             {
                 return;
             }
 
-            if (this.comboBox1.SelectedIndex != 2)
-            {
-                this.comboBox1.SelectedIndex = 2;
-            }
+            this.comboBox1.SelectedIndex = 2;
 
             this.textBox1.Text = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
 
@@ -216,7 +219,7 @@ namespace PGRipper
             this.trayIcon.MouseDoubleClick -= this.HideClick;
             this.trayIcon.MouseDoubleClick += this.ShowClick;
 
-            if (!userSettings.ShowPopUps)
+            if (!this.userSettings.ShowPopUps)
             {
                 return;
             }
@@ -343,40 +346,40 @@ namespace PGRipper
         /// </summary>
         private void LoadSettings()
         {
-            userSettings = Utility.LoadSettings();
+            this.userSettings = Utility.LoadSettings();
 
             // Max. Threads
-            userSettings.ThreadLimit = userSettings.ThreadLimit == -1 ? 3 : userSettings.ThreadLimit;
-            ThreadManager.GetInstance().SetThreadThreshHold(userSettings.ThreadLimit);
+            this.userSettings.ThreadLimit = this.userSettings.ThreadLimit == -1 ? 3 : this.userSettings.ThreadLimit;
+            ThreadManager.GetInstance().SetThreadThreshHold(this.userSettings.ThreadLimit);
 
-            if (string.IsNullOrEmpty(userSettings.DownloadFolder))
+            if (string.IsNullOrEmpty(this.userSettings.DownloadFolder))
             {
-                userSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                this.userSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
-                textBox2.Text = userSettings.DownloadFolder;
+                textBox2.Text = this.userSettings.DownloadFolder;
 
-                Utility.SaveSettings(userSettings);
+                Utility.SaveSettings(this.userSettings);
             }
 
-            textBox2.Text = userSettings.DownloadFolder;
+            textBox2.Text = this.userSettings.DownloadFolder;
 
             // Load "Download Options"
             try
             {
-                comboBox1.SelectedIndex = Convert.ToInt32(userSettings.DownloadOptions);
+                comboBox1.SelectedIndex = Convert.ToInt32(this.userSettings.DownloadOptions);
             }
             catch (Exception)
             {
-                userSettings.DownloadOptions = "0";
+                this.userSettings.DownloadOptions = "0";
                 comboBox1.SelectedIndex = 0;
             }
 
-            TopMost = userSettings.TopMost;
+            TopMost = this.userSettings.TopMost;
 
             // Load Language Setting
             try
             {
-                switch (userSettings.Language)
+                switch (this.userSettings.Language)
                 {
                     case "de-DE":
                         this._ResourceManager = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
@@ -403,9 +406,9 @@ namespace PGRipper
             {
                 bool accountNotFound = false;
 
-                foreach (var forumAccount in userSettings.ForumsAccount.Where(
+                foreach (var forumAccount in this.userSettings.ForumsAccount.Where(
                     forumAccount => 
-                        forumAccount.ForumURL.Equals(userSettings.CurrentForumUrl)).Where(
+                        forumAccount.ForumURL.Equals(this.userSettings.CurrentForumUrl)).Where(
                         forumAccount => !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
                 {
                     accountNotFound = true;
@@ -539,13 +542,13 @@ namespace PGRipper
                 this.CheckAccountMenu();
             }
 
-            if (userSettings.SavePids)
+            if (this.userSettings.SavePids)
             {
                 this.LoadHistory();
             }
 
             // Hide Index Thread Checkbox if not RiP Forums
-            if (!userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
+            if (!this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
             {
                 mIsIndexChk.Visible = false;
             }
@@ -572,7 +575,7 @@ namespace PGRipper
 
             this.accountsToolStripMenuItem.DropDownItems.Add(newAccountMenuItem);
 
-            foreach (var accounts in userSettings.ForumsAccount)
+            foreach (var accounts in this.userSettings.ForumsAccount)
             {
                 var forumName = accounts.ForumURL.Replace("http://", string.Empty);
 
@@ -590,7 +593,7 @@ namespace PGRipper
                     {
                         Tag = accounts.ForumURL,
                         Text = forumName, 
-                        Checked = userSettings.CurrentForumUrl.Equals(accounts.ForumURL)
+                        Checked = this.userSettings.CurrentForumUrl.Equals(accounts.ForumURL)
                     };
 
                 forumMenuItem.Click += this.ForumMenuItem_Click;
@@ -628,10 +631,28 @@ namespace PGRipper
             this.SwitchAccount(sender);
         }
 
+        /// <summary>
+        /// Checks the URL if it matches the current forum account.
+        /// </summary>
+        /// <param name="forumUrl">The forum URL.</param>
+        private void CheckUrlForumAccount(string forumUrl)
+        {
+            if (forumUrl.StartsWith(this.userSettings.CurrentForumUrl))
+            {
+                return;
+            }
+
+            this.SwitchCurrentForumAccount(forumUrl);
+        }
+
+        /// <summary>
+        /// Switches the forum account.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
         private void SwitchAccount(object sender)
         {
             // Kill all current downloads 
-            if (mCurrentJob != null)
+            /*if (mCurrentJob != null)
             {
                 stopCurrentThreads.Enabled = false;
                 this.stopingJob = true;
@@ -640,48 +661,74 @@ namespace PGRipper
 
                 lvCurJob.Items.Clear();
                 mCurrentJob = null;
-                StatusLabelImageC.Text = string.Empty;
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(
+                        (MethodInvoker)delegate
+                        {
+                            StatusLabelImageC.Text = string.Empty;
+                        });
+                }
+                else
+                {
+                    StatusLabelImageC.Text = string.Empty;
+                }
 
                 this.IdleRipper();
-            }
+            }*/
             ////
 
-            if (sender != null)
+            if (sender == null)
             {
-                var menuItem = (ToolStripMenuItem)sender;
+                return;
+            }
 
-                ForumAccount currentAccount = null;
+            var menuItem = (ToolStripMenuItem)sender;
 
-                foreach (var forumAccount in
-                    userSettings.ForumsAccount.Where(forumAccount => forumAccount.ForumURL.Equals(menuItem.Tag)).Where(
-                        forumAccount =>
-                        !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
+            this.SwitchCurrentForumAccount((string)menuItem.Tag);
+        }
+
+        /// <summary>
+        /// Switches the current forum account to the forum Url
+        /// </summary>
+        /// <param name="forumUrl">The forum URL.</param>
+        private void SwitchCurrentForumAccount(string forumUrl)
+        {
+            ForumAccount currentAccount = null;
+
+            foreach (var forumAccount in
+                this.userSettings.ForumsAccount.Where(forumAccount => forumUrl.StartsWith(forumAccount.ForumURL)).Where(
+                    forumAccount =>
+                    !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
+            {
+                currentAccount = forumAccount;
+            }
+
+            if (currentAccount != null)
+            {
+                this.userSettings.CurrentForumUrl = currentAccount.ForumURL;
+                this.userSettings.CurrentUserName = currentAccount.UserName;
+
+                LoginManager lgnMgr = new LoginManager(currentAccount.UserName, currentAccount.UserPassWord);
+
+                if (lgnMgr.DoLogin())
                 {
-                    currentAccount = forumAccount;
+                    bCameThroughCorrectLogin = true;
+                    this.CheckAccountMenu();
                 }
-
-                if (currentAccount != null)
+                else
                 {
-                    userSettings.CurrentForumUrl = currentAccount.ForumURL;
-                    userSettings.CurrentUserName = currentAccount.UserName;
+                    this.Visible = false;
 
-                    LoginManager lgnMgr = new LoginManager(currentAccount.UserName, currentAccount.UserPassWord);
+                    Login frmLgn = new Login();
+                    frmLgn.ShowDialog(this);
 
-                    if (lgnMgr.DoLogin())
-                    {
-                        bCameThroughCorrectLogin = true;
-                        this.CheckAccountMenu();
-                    }
-                    else
-                    {
-                        this.Visible = false;
-
-                        Login frmLgn = new Login();
-                        frmLgn.ShowDialog(this);
-
-                        this.Visible = true;
-                    }
+                    this.Visible = true;
                 }
+            }
+            else
+            {
+                return;
             }
 
             var header = this._ResourceManager.GetString("ttlHeader");
@@ -693,22 +740,23 @@ namespace PGRipper
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\" @ {2} ]", header, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+                string.Format("{0}{1}\" @ {2} ]", header, this.userSettings.CurrentUserName, this.userSettings.CurrentForumUrl));
 #elif (PGRIPPERX)
                 Text = string.Format("PG-Ripper X {0}.{1}.{2}{3}{4}", 
                     Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
                     Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
                     Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
                     Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                    string.Format("{0}{1}\" @ {2} ]", header, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+                    string.Format("{0}{1}\" @ {2} ]", header, this.userSettings.CurrentUserName, this.userSettings.CurrentForumUrl));
 #else
-                Text = string.Format(
-                    "PG-Ripper {0}.{1}.{2}{3}{4}",
-                    Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
-                    Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
-                    Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
-                    Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                    string.Format("{0}{1}\" @ {2} ]", header, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+            Text = string.Format(
+                "PG-Ripper {0}.{1}.{2}{3}{4}",
+                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
+                string.Format(
+                    "{0}{1}\" @ {2} ]", header, this.userSettings.CurrentUserName, this.userSettings.CurrentForumUrl));
 #endif
         }
 
@@ -721,9 +769,9 @@ namespace PGRipper
             bool accountExists = false;
             var currentForumAccount = new ForumAccount();
 
-            foreach (var forumAccount in userSettings.ForumsAccount.Where(
+            foreach (var forumAccount in this.userSettings.ForumsAccount.Where(
                     forumAccount =>
-                        forumAccount.ForumURL.Equals(userSettings.CurrentForumUrl)).Where(
+                        forumAccount.ForumURL.Equals(this.userSettings.CurrentForumUrl)).Where(
                         forumAccount => !string.IsNullOrEmpty(forumAccount.UserName) && !string.IsNullOrEmpty(forumAccount.UserPassWord)))
             {
                 currentForumAccount = forumAccount;
@@ -828,6 +876,8 @@ namespace PGRipper
         /// </summary>
         private void EnqueueJob()
         {
+            this.CheckUrlForumAccount(textBox1.Text);
+
             tmrPageUpdate.Enabled = true;
 
             if (!this.IsValidJob())
@@ -846,7 +896,7 @@ namespace PGRipper
             }
 
             // Check Post is Ripped?!
-            if (userSettings.SavePids)
+            if (this.userSettings.SavePids)
             {
                 string sPostId = null;
 
@@ -891,9 +941,9 @@ namespace PGRipper
             }
             else
             {
-                if (userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                    userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                    userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+                if (this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                    this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                    this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
                 {
                     if (!sHtmlUrl.Contains(@"#post"))
                     {
@@ -931,7 +981,7 @@ namespace PGRipper
                 return false;
             }
 
-            if (string.IsNullOrEmpty(userSettings.DownloadFolder))
+            if (string.IsNullOrEmpty(this.userSettings.DownloadFolder))
             {
                 DialogResult result = TopMostMessageBox.Show(
                     "Please Set Up Download Folder before starting download",
@@ -1054,7 +1104,6 @@ namespace PGRipper
                 }
            }
             catch (Exception)
-
             {
                 TopMostMessageBox.Show(sHtmlUrl.IndexOf("showthread.php") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
 
@@ -1099,10 +1148,10 @@ namespace PGRipper
 
             job.Title = Utility.ReplaceHexWithAscii(Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad));
 
-            if (userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"kitty-kats.com/") ||
-                userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
+            if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com/") ||
+                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
+                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
             {
                 job.SecurityToken = Maintainance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
             }
@@ -1113,7 +1162,7 @@ namespace PGRipper
                     Utility.ReplaceHexWithAscii(
                         Maintainance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sHtmlUrl));
 
-                if (userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
+                if (this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
                 {
                     job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.URL, true);
                 }
@@ -1128,7 +1177,7 @@ namespace PGRipper
             }
             else
             {
-                if (userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
+                if (this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
                 {
                     job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.URL, false);
                 }
@@ -1188,17 +1237,17 @@ namespace PGRipper
         /// </param>
         private void ProcessAutoThankYou(string sPostId, int iICount, string sSecurityToken)
         {
-            if (!userSettings.AutoThank)
+            if (!this.userSettings.AutoThank)
             {
                 return;
             }
 
-            if (iICount < userSettings.MinImageCount)
+            if (iICount < this.userSettings.MinImageCount)
             {
                 return;
             }
 
-            SendThankYouDelegate lSendThankYouDel = SendThankYou;
+            SendThankYouDelegate lSendThankYouDel = this.SendThankYou;
 
             if (sPostId == null)
             {
@@ -1206,18 +1255,18 @@ namespace PGRipper
             }
 
             string tyURL;
-            if (userSettings.CurrentForumUrl.Contains(@"scanlover.com"))
+            if (this.userSettings.CurrentForumUrl.Contains(@"scanlover.com"))
             {
-                tyURL = string.Format("{0}post_thanks.php?do=post_thanks_add&p={1}", userSettings.CurrentForumUrl, sPostId);
+                tyURL = string.Format("{0}post_thanks.php?do=post_thanks_add&p={1}", this.userSettings.CurrentForumUrl, sPostId);
             }
-            else if (userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
-                     userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                     userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                     userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
+            else if (this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
+                     this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
+                     this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                     this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
             {
                 tyURL = string.Format(
                     "{0}post_thanks.php?do=post_thanks_add&p={1}&securitytoken={2}",
-                    userSettings.CurrentForumUrl,
+                    this.userSettings.CurrentForumUrl,
                     sPostId,
                     sSecurityToken);
             }
@@ -1241,7 +1290,7 @@ namespace PGRipper
         /// <param name="aUrl">A URL.</param>
         private void SendThankYou(string aUrl)
         {
-            string tyURLRef = userSettings.CurrentForumUrl;
+            string tyURLRef = this.userSettings.CurrentForumUrl;
 
             HttpWebResponse lHttpWebResponse = null;
             Stream lHttpWebResponseStream = null;
@@ -1280,18 +1329,13 @@ namespace PGRipper
         {
             Indexes idxs = new Indexes();
 
-            string sPagecontent = userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
-                                  userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
+            string sPagecontent = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
+                                  this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
                                       ? idxs.GetThreadPagesNew(sHtmlUrl)
                                       : idxs.GetThreadPages(sHtmlUrl);
 
-            this.arlstIndxs = idxs.ParseHtml(sPagecontent, sHtmlUrl);
+            this.indexedTopicsList = idxs.ParseHtml(sPagecontent, sHtmlUrl);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private List<ImageInfo> arlstIndxs;
 
         /// <summary>
         /// Get All Post of a Thread and Parse them as new Job
@@ -1305,8 +1349,8 @@ namespace PGRipper
 
             string sPagecontent;
 
-            if (userSettings.CurrentForumUrl.Contains(@"http://rip-") || userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+            if (this.userSettings.CurrentForumUrl.Contains(@"http://rip-") || this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
             {
                 sPagecontent = threads.GetThreadPagesNew(htmlUrl);
             }
@@ -1321,30 +1365,39 @@ namespace PGRipper
 
             for (int po = 0; po < arlst.Count; po++)
             {
-                StatusLabelInfo.ForeColor = Color.Green;
+                var po1 = po;
 
-                try
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(
+                        (MethodInvoker)delegate
+                            {
+                                this.StatusLabelInfo.Text = string.Format(
+                                    "{0}{1}/{2}", this._ResourceManager.GetString("gbParse"), po1, arlst.Count);
+
+                                StatusLabelInfo.ForeColor = Color.Green;
+                            });
+                }
+                else
                 {
                     this.StatusLabelInfo.Text = string.Format(
-                        "{0}{1}/{2}", this._ResourceManager.GetString("gbParse"), po, arlst.Count);
-                }
-                catch (Exception)
-                {
+                       "{0}{1}/{2}", this._ResourceManager.GetString("gbParse"), po, arlst.Count);
+                    StatusLabelInfo.ForeColor = Color.Green;
                 }
 
                 string sLpostId = arlst[po].ImageUrl;
 
                 //////////////////////////////////////////////////////////////////////////
 
-                if (userSettings.SavePids && this.IsPostAlreadyRipped(sLpostId))
+                if (this.userSettings.SavePids && this.IsPostAlreadyRipped(sLpostId))
                 {
                     goto SKIPIT;
                 }
 
-                string sLComposedURL = userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
-                                       userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
+                string sLComposedURL = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
+                                       this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
                                            ? string.Format("{0}#post{1}", htmlUrl, sLpostId)
-                                           : string.Format("{0}showpost.php?p={1}", userSettings.CurrentForumUrl, sLpostId);
+                                           : string.Format("{0}showpost.php?p={1}", this.userSettings.CurrentForumUrl, sLpostId);
 
                 JobInfo jobInfo = mJobsList.Find(doubleJob => doubleJob.URL.Equals(sLComposedURL));
 
@@ -1371,16 +1424,16 @@ namespace PGRipper
 
                 job.Title = Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad);
 
-                if (userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
-                    userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                    userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                    userSettings.AutoThank & userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
+                if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
+                    this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
+                    this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
+                    this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
                 {
                     job.SecurityToken = Maintainance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
                 }
 
-                job.ForumTitle = userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
-                                 userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
+                job.ForumTitle = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net") ||
+                                 this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
                                      ? sForumTitle
                                      : sForumTitle.Substring(
                                          sForumTitle.IndexOf(string.Format("{0} ", job.Title)) + job.Title.Length + 1);
@@ -1471,10 +1524,21 @@ namespace PGRipper
                     CheckCurJobFolder(this.lastDownFolder);
                 }
 
-                if (!userSettings.CurrentlyPauseThreads)
+                if (!this.userSettings.CurrentlyPauseThreads)
                 {
                     lvCurJob.Items.Clear();
-                    StatusLabelImageC.Text = string.Empty;
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(
+                            (MethodInvoker)delegate
+                            {
+                                StatusLabelImageC.Text = string.Empty;
+                            });
+                    }
+                    else
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    }
 
                     if (mCurrentJob == null && mJobsList.Count > 0)
                     {
@@ -1552,7 +1616,7 @@ namespace PGRipper
 #if (!PGRIPPERX)
             try
             {
-                if (userSettings.ShowPopUps)
+                if (this.userSettings.ShowPopUps)
                 {
                     this.trayIcon.Text = this._ResourceManager.GetString("gbCurrentlyExtract") + this.mCurrentJob.Title;
                     trayIcon.BalloonTipIcon = ToolTipIcon.Info;
@@ -1563,7 +1627,7 @@ namespace PGRipper
             }
             catch (Exception)
             {
-                if (userSettings.ShowPopUps)
+                if (this.userSettings.ShowPopUps)
                 {
                     trayIcon.Text = bSystemExtr;
                     trayIcon.BalloonTipTitle = bSystemExtr;
@@ -1606,7 +1670,18 @@ namespace PGRipper
 
                 ////////////////
                 lvCurJob.Items.Clear();
-                StatusLabelImageC.Text = string.Empty;
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(
+                        (MethodInvoker)delegate
+                        {
+                            StatusLabelImageC.Text = string.Empty;
+                        });
+                }
+                else
+                {
+                    StatusLabelImageC.Text = string.Empty;
+                }
 
                 for (int i = 0; i < mImagesList.Count; i++)
                 {
@@ -1726,7 +1801,18 @@ namespace PGRipper
                 // NO IMAGES TO PROCESS SO ABANDON CURRENT THREAD
                 lvCurJob.Items.Clear();
                 mCurrentJob = null;
-                StatusLabelImageC.Text = string.Empty;
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(
+                        (MethodInvoker)delegate
+                        {
+                            StatusLabelImageC.Text = string.Empty;
+                        });
+                }
+                else
+                {
+                    StatusLabelImageC.Text = string.Empty;
+                }
             }
         }
 
@@ -1839,7 +1925,7 @@ namespace PGRipper
 
             string btleExit = this._ResourceManager.GetString("btleExit"), btexExit = this._ResourceManager.GetString("btexExit");
 
-            if (this.endingRip && userSettings.ShowCompletePopUp)
+            if (this.endingRip && this.userSettings.ShowCompletePopUp)
             {
                 trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                 trayIcon.BalloonTipTitle = btleExit;
@@ -1853,7 +1939,18 @@ namespace PGRipper
             this.parseActive = false;
 
             lvCurJob.Items.Clear();
-            StatusLabelImageC.Text = string.Empty;
+            if (this.InvokeRequired)
+            {
+                this.Invoke(
+                    (MethodInvoker)delegate
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    });
+            }
+            else
+            {
+                StatusLabelImageC.Text = string.Empty;
+            }
 
             textBox1.Text = string.Empty;
 
@@ -1874,7 +1971,7 @@ namespace PGRipper
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+                string.Format("{0}{1}\" @ {2} ]", ttlHeader, this.userSettings.CurrentUserName, this.userSettings.CurrentForumUrl));
 
             trayIcon.Text = "Right click for context menu";
 #elif (PGRIPPERX)
@@ -1883,7 +1980,7 @@ namespace PGRipper
                     Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
                     Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
                     Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                    string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+                    string.Format("{0}{1}\" @ {2} ]", ttlHeader, this.userSettings.CurrentUserName, this.userSettings.CurrentForumUrl));
 #else
             this.Text = string.Format(
                 "PG-Ripper {0}.{1}.{2}{3}{4}",
@@ -1891,7 +1988,7 @@ namespace PGRipper
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\" @ {2} ]", ttlHeader, userSettings.CurrentUserName, userSettings.CurrentForumUrl));
+                string.Format("{0}{1}\" @ {2} ]", ttlHeader, this.userSettings.CurrentUserName, this.userSettings.CurrentForumUrl));
 
             trayIcon.Text = "Right click for context menu";
 #endif
@@ -1955,7 +2052,19 @@ namespace PGRipper
             Invoke(updateJob, new object[] { mCurrentJob });
 
             lvCurJob.Items.Clear();
-            StatusLabelImageC.Text = string.Empty;
+            if (this.InvokeRequired)
+            {
+                this.Invoke(
+                    (MethodInvoker)delegate
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    });
+            }
+            else
+            {
+                StatusLabelImageC.Text = string.Empty;
+            }
+
             mCurrentJob = null;
 
             this.UpdateDownloadFolder();
@@ -1989,22 +2098,22 @@ namespace PGRipper
 
                  mJobsList.Insert(i, updatedJob);*/
 
-                mJobsList[i].StorePath = userSettings.DownloadFolder;
+                mJobsList[i].StorePath = this.userSettings.DownloadFolder;
 
-                if (!userSettings.SubDirs)
+                if (!this.userSettings.SubDirs)
                 {
                     continue;
                 }
 
                 if (comboBox1.SelectedIndex == 0)
                 {
-                    mJobsList[i].StorePath = Path.Combine(userSettings.DownloadFolder, mJobsList[i].Title);
+                    mJobsList[i].StorePath = Path.Combine(this.userSettings.DownloadFolder, mJobsList[i].Title);
                 }
 
                 if (comboBox1.SelectedIndex == 1 || comboBox1.SelectedIndex == 2)
                 {
                     mJobsList[i].StorePath = Path.Combine(
-                        userSettings.DownloadFolder,
+                        this.userSettings.DownloadFolder,
                         mJobsList[i].Title + Path.DirectorySeparatorChar + mJobsList[i].PostTitle);
                 }
             }
@@ -2102,7 +2211,18 @@ namespace PGRipper
 
             lvCurJob.Items.Clear();
             mCurrentJob = null;
-            StatusLabelImageC.Text = string.Empty;
+            if (this.InvokeRequired)
+            {
+                this.Invoke(
+                    (MethodInvoker)delegate
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    });
+            }
+            else
+            {
+                StatusLabelImageC.Text = string.Empty;
+            }
 
             CheckCurJobFolder(sLastJobFolder);
         }
@@ -2118,21 +2238,45 @@ namespace PGRipper
             {
                 case "Pause Download(s)":
                     pauseCurrentThreads.Text = "Resume Download(s)";
-                    userSettings.CurrentlyPauseThreads = true;
+                    this.userSettings.CurrentlyPauseThreads = true;
                     ThreadManager.GetInstance().HoldAllThreads();
                     pauseCurrentThreads.Image = Languages.english.play;
                     break;
                 case "(Re)Start Download(s)":
-                    StatusLabelImageC.Text = string.Empty;
-                    userSettings.CurrentlyPauseThreads = false;
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(
+                            (MethodInvoker)delegate
+                            {
+                                StatusLabelImageC.Text = string.Empty;
+                            });
+                    }
+                    else
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    }
+
+                    this.userSettings.CurrentlyPauseThreads = false;
                     deleteJob.Enabled = true;
                     stopCurrentThreads.Enabled = true;
                     pauseCurrentThreads.Text = "Pause Download(s)";
                     pauseCurrentThreads.Image = Languages.english.pause;
                     break;
                 case "Resume Download(s)":
-                    StatusLabelImageC.Text = string.Empty;
-                    userSettings.CurrentlyPauseThreads = false;
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(
+                            (MethodInvoker)delegate
+                            {
+                                StatusLabelImageC.Text = string.Empty;
+                            });
+                    }
+                    else
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    }
+
+                    this.userSettings.CurrentlyPauseThreads = false;
                     deleteJob.Enabled = true;
                     stopCurrentThreads.Enabled = true;
                     pauseCurrentThreads.Text = "Pause Download(s)";
@@ -2141,7 +2285,7 @@ namespace PGRipper
                     break;
             }
 
-            Utility.SaveSettings(userSettings);
+            Utility.SaveSettings(this.userSettings);
         }
 
         /// <summary>
@@ -2154,17 +2298,17 @@ namespace PGRipper
             switch (comboBox1.SelectedIndex)
             {
                 case 0:
-                    userSettings.DownloadOptions = "0";
+                    this.userSettings.DownloadOptions = "0";
                     break;
                 case 1:
-                    userSettings.DownloadOptions = "1";
+                    this.userSettings.DownloadOptions = "1";
                     break;
                 case 2:
-                    userSettings.DownloadOptions = "2";
+                    this.userSettings.DownloadOptions = "2";
                     break;
             }
 
-            Utility.SaveSettings(userSettings);
+            Utility.SaveSettings(this.userSettings);
         }
 
         /// <summary>
@@ -2185,7 +2329,7 @@ namespace PGRipper
                 MenuItem show = new MenuItem("Show PG-Ripper", this.ShowClick);
                 trayMenu.MenuItems.Add(0, show);
 
-                if (userSettings.ShowPopUps)
+                if (this.userSettings.ShowPopUps)
                 {
                     trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
                     trayIcon.BalloonTipTitle = "Hidden in Tray";
@@ -2240,8 +2384,8 @@ namespace PGRipper
                 return;
             }
 
-            userSettings.CurrentlyPauseThreads = true;
-            Utility.SaveSettings(userSettings);
+            this.userSettings.CurrentlyPauseThreads = true;
+            Utility.SaveSettings(this.userSettings);
         }
 
         /// <summary>
@@ -2348,7 +2492,7 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void SettingsToolStripMenuItem1Click(object sender, EventArgs e)
         {
-            if (userSettings.SavePids)
+            if (this.userSettings.SavePids)
             {
                 this.SaveHistory();
             }
@@ -2358,7 +2502,7 @@ namespace PGRipper
 
             this.LoadSettings();
 
-            if (userSettings.SavePids)
+            if (this.userSettings.SavePids)
             {
                 this.LoadHistory();
             }
@@ -2404,9 +2548,9 @@ namespace PGRipper
 
             this.textBox2.Text = this.dfolderBrowserDialog.SelectedPath;
 
-            userSettings.DownloadFolder = this.textBox2.Text;
+            this.userSettings.DownloadFolder = this.textBox2.Text;
 
-            Utility.SaveSettings(userSettings);
+            Utility.SaveSettings(this.userSettings);
 
             this.IsBrowserOpen = false;
         }
@@ -2418,16 +2562,16 @@ namespace PGRipper
         {
             try
             {
-                Left = userSettings.WindowLeft;
-                Top = userSettings.WindowTop;
+                Left = this.userSettings.WindowLeft;
+                Top = this.userSettings.WindowTop;
             }
             catch (Exception)
             {
                 StartPosition = FormStartPosition.CenterScreen;
             }
 
-            Width = userSettings.WindowWidth;
-            Height = userSettings.WindowHeight;
+            Width = this.userSettings.WindowWidth;
+            Height = this.userSettings.WindowHeight;
         }
 
         /// <summary>
@@ -2439,7 +2583,7 @@ namespace PGRipper
         {
             this.SaveOnExit();
 
-            if (userSettings.SavePids)
+            if (this.userSettings.SavePids)
             {
                 this.SaveHistory();
             }
@@ -2449,12 +2593,12 @@ namespace PGRipper
                 return;
             }
 
-            userSettings.WindowLeft = Left;
-            userSettings.WindowTop = Top;
-            userSettings.WindowWidth = Width;
-            userSettings.WindowHeight = Height;
+            this.userSettings.WindowLeft = Left;
+            this.userSettings.WindowTop = Top;
+            this.userSettings.WindowWidth = Width;
+            this.userSettings.WindowHeight = Height;
 
-            Utility.SaveSettings(userSettings);
+            Utility.SaveSettings(this.userSettings);
         }
 
 #if (!PGRIPPERX)
@@ -2505,7 +2649,7 @@ namespace PGRipper
         /// </summary>
         private void CheckClipboardData()
         {
-            if (!userSettings.ClipBWatch)
+            if (!this.userSettings.ClipBWatch)
             {
                 return;
             }
@@ -2514,63 +2658,57 @@ namespace PGRipper
             {
                 IDataObject iData = Clipboard.GetDataObject();
 
-                if (iData.GetDataPresent(DataFormats.Text))
+                if (!iData.GetDataPresent(DataFormats.Text))
                 {
-                    string sClipBoardURLTemp = (string)iData.GetData(DataFormats.Text);
+                    return;
+                }
 
-                    string[] sClipBoardUrLs = sClipBoardURLTemp.Split(new[] { '\n' });
+                string sClipBoardURLTemp = (string)iData.GetData(DataFormats.Text);
 
-                    foreach (string sClipBoardURL in sClipBoardUrLs)
+                string[] sClipBoardUrLs = sClipBoardURLTemp.Split(new[] { '\n' });
+
+                foreach (string sClipBoardURL in sClipBoardUrLs.Where(sClipBoardURL => this.userSettings.ForumsAccount.Any(
+                    forumAccount => sClipBoardURL.StartsWith(forumAccount.ForumURL))))
+                {
+                    this.CheckUrlForumAccount(this.textBox1.Text);
+
+                    string sClipBoardURLNew = sClipBoardURL;
+
+                    if (sClipBoardURLNew.Contains("\r"))
                     {
-                        if (!sClipBoardURL.StartsWith(userSettings.CurrentForumUrl)) continue;
+                        sClipBoardURLNew = sClipBoardURLNew.Replace("\r", string.Empty);
+                    }
 
-                        string sClipBoardURLNew = sClipBoardURL;
+                    if (sClipBoardURL.Contains(@"&postcount=") || sClipBoardURL.Contains(@"&page="))
+                    {
+                        sClipBoardURLNew = Regex.Replace(
+                            sClipBoardURLNew, sClipBoardURLNew.Substring(sClipBoardURLNew.IndexOf("&")), string.Empty);
+                    }
 
-                        if (sClipBoardURLNew.Contains("\r"))
+                    this.comboBox1.SelectedIndex = 2;
+
+                    if (!this.parseActive)
+                    {
+                        this.comboBox1.SelectedIndex = 2;
+
+                        this.textBox1.Text = sClipBoardURLNew;
+
+                        if (this.InvokeRequired)
                         {
-                            sClipBoardURLNew = sClipBoardURLNew.Replace("\r", "");
-                        }
-
-                        if (sClipBoardURL.Contains(@"&postcount=") || sClipBoardURL.Contains(@"&page="))
-                        {
-                            sClipBoardURLNew = Regex.Replace(
-                                sClipBoardURLNew, sClipBoardURLNew.Substring(sClipBoardURLNew.IndexOf("&")), "");
-                        }
-
-                        //Application.DoEvents();
-
-                        if (this.comboBox1.SelectedIndex != 2)
-                        {
-                            this.comboBox1.SelectedIndex = 2;
-                        }
-
-                        if (!this.parseActive)
-                        {
-                            if (this.comboBox1.SelectedIndex != 2)
-                            {
-                                this.comboBox1.SelectedIndex = 2;
-                            }
-
-                            this.textBox1.Text = sClipBoardURLNew;
-
-                            if (this.InvokeRequired)
-                            {
-                                this.Invoke((MethodInvoker)this.EnqueueJob);
-                            }
-                            else
-                            {
-                                this.EnqueueJob();
-                            }
+                            this.Invoke((MethodInvoker)this.EnqueueJob);
                         }
                         else
                         {
-                            this.ExtractUrls.Add(sClipBoardURLNew);
+                            this.EnqueueJob();
                         }
-
-                        Clipboard.Clear();
                     }
-                }
+                    else
+                    {
+                        this.ExtractUrls.Add(sClipBoardURLNew);
+                    }
 
+                    Clipboard.Clear();
+                }
             }
             catch (Exception)
             {
@@ -2610,11 +2748,11 @@ namespace PGRipper
                 // create a new taskbar jump list for the main window
                 this.jumpList = JumpList.CreateJumpList();
 
-                if (!string.IsNullOrEmpty(userSettings.DownloadFolder))
+                if (!string.IsNullOrEmpty(this.userSettings.DownloadFolder))
                 {
                     // Add our user tasks
                     this.jumpList.AddUserTasks(
-                        new JumpListLink(userSettings.DownloadFolder, "Open Download Folder")
+                        new JumpListLink(this.userSettings.DownloadFolder, "Open Download Folder")
                             {
                                 IconReference =
                                     new IconReference(
@@ -2638,7 +2776,7 @@ namespace PGRipper
                 mJobsList = (List<JobInfo>)serializer.Deserialize(tr);
                 tr.Close();
 
-                if (userSettings.CurrentlyPauseThreads)
+                if (this.userSettings.CurrentlyPauseThreads)
                 {
                     pauseCurrentThreads.Text = "(Re)Start Download(s)";
                     pauseCurrentThreads.Image = Languages.english.play;
@@ -2748,7 +2886,7 @@ namespace PGRipper
 
                 foreach (string sRipUrl in sRipUrls)
                 {
-                    if (!sRipUrl.StartsWith(userSettings.CurrentForumUrl))
+                    if (!sRipUrl.StartsWith(this.userSettings.CurrentForumUrl))
                     {
                         continue;
                     }
@@ -2798,11 +2936,11 @@ namespace PGRipper
                 tr.Close();
 
                 // If Pause
-                userSettings.CurrentlyPauseThreads = true;
-                Utility.SaveSettings(userSettings);
+                this.userSettings.CurrentlyPauseThreads = true;
+                Utility.SaveSettings(this.userSettings);
             }
 
-            if (userSettings.SavePids)
+            if (this.userSettings.SavePids)
             {
                 this.SaveHistory();
             }
@@ -2827,13 +2965,13 @@ namespace PGRipper
                 tr.Close();
 
                 // If Pause
-                if (userSettings.CurrentlyPauseThreads)
+                if (this.userSettings.CurrentlyPauseThreads)
                 {
-                    Utility.SaveSettings(userSettings);
+                    Utility.SaveSettings(this.userSettings);
                 }
             }
 
-            if (userSettings.SavePids)
+            if (this.userSettings.SavePids)
             {
                 this.SaveHistory();
             }
@@ -2893,17 +3031,17 @@ namespace PGRipper
 
             Application.DoEvents();
 
-            if (this.arlstIndxs == null)
+            if (this.indexedTopicsList == null)
             {
                 return;
             }
 
-            for (int po = 0; po < this.arlstIndxs.Count; po++)
+            for (int po = 0; po < this.indexedTopicsList.Count; po++)
             {
                 StatusLabelInfo.ForeColor = Color.Green;
-                this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", "Analyse Index(es)", po, this.arlstIndxs.Count);
+                this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", "Analyse Index(es)", po, this.indexedTopicsList.Count);
 
-                this.textBox1.Text = this.arlstIndxs[po].ImageUrl;
+                this.textBox1.Text = this.indexedTopicsList[po].ImageUrl;
 
                 if (InvokeRequired)
                 {
@@ -2916,7 +3054,7 @@ namespace PGRipper
                 //////////////////////////////////////////////////////////////////////////
             }
 
-            this.arlstIndxs = null;
+            this.indexedTopicsList = null;
         }
 
         /// <summary>
@@ -2926,18 +3064,18 @@ namespace PGRipper
         /// <returns>The Storage Folder</returns>
         private string GenerateStorePath(JobInfo curJob)
         {
-            string sStorePath = userSettings.DownloadFolder;
+            string sStorePath = this.userSettings.DownloadFolder;
 
-            if (userSettings.SubDirs)
+            if (this.userSettings.SubDirs)
             {
                 try
                 {
                     if (curJob.ForumTitle != null)
                     {
-                        if (userSettings.DownInSepFolder)
+                        if (this.userSettings.DownInSepFolder)
                         {
                             sStorePath = Path.Combine(
-                                userSettings.DownloadFolder,
+                                this.userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.PostTitle));
@@ -2945,24 +3083,24 @@ namespace PGRipper
                         else
                         {
                             sStorePath = Path.Combine(
-                                userSettings.DownloadFolder,
+                                this.userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.Title));
                         }
                     }
                     else
                     {
-                        if (userSettings.DownInSepFolder)
+                        if (this.userSettings.DownInSepFolder)
                         {
                             sStorePath = Path.Combine(
-                                userSettings.DownloadFolder,
+                                this.userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.PostTitle));
                         }
                         else
                         {
                             sStorePath = Path.Combine(
-                                userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
+                                this.userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
                         }
                     }
 
@@ -3000,7 +3138,7 @@ namespace PGRipper
                 catch (Exception)
                 {
                     sStorePath = Path.Combine(
-                        userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
+                        this.userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
                 }
             }
 

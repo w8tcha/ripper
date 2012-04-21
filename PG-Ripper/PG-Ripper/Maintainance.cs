@@ -397,7 +397,7 @@ namespace PGRipper
 
             try
             {
-                WebClient wc = new WebClient();
+                var wc = new WebClient();
                 wc.Headers.Add(string.Format("Referer: {0}", url));
                 wc.Headers.Add(
                     "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");

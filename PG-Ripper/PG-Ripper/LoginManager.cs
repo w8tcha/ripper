@@ -91,7 +91,7 @@ namespace PGRipper
 
                 HttpWebResponse res = (HttpWebResponse)req.GetResponse();
 
-                CookieManager.mInstance = new CookieManager();
+                CookieManager.Instance = new CookieManager();
 
                 var cookieManager = CookieManager.GetInstance();
 

@@ -54,7 +54,7 @@ namespace PGRipper.ImageHosts
         {
             string strImgURL = mstrURL;
 
-            if (eventTable.ContainsKey(strImgURL))
+            if (EventTable.ContainsKey(strImgURL))
             {
                 return true;
             }
@@ -80,7 +80,7 @@ namespace PGRipper.ImageHosts
 
             try
             {
-                eventTable.Add(strImgURL, ccObj);
+                EventTable.Add(strImgURL, ccObj);
             }
             catch (ThreadAbortException)
             {
@@ -88,12 +88,12 @@ namespace PGRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (eventTable.ContainsKey(strImgURL))
+                if (EventTable.ContainsKey(strImgURL))
                 {
                     return false;
                 }
 
-                eventTable.Add(strImgURL, ccObj);
+                EventTable.Add(strImgURL, ccObj);
             }
 
             const string StartSrc = "<img src=\"http://img";
@@ -134,11 +134,11 @@ namespace PGRipper.ImageHosts
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
-                ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+                ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
             }
 
             strFilePath = Utility.CheckPathLength(strFilePath);
-            ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
 
             try
             {
@@ -150,7 +150,7 @@ namespace PGRipper.ImageHosts
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return true;
@@ -160,21 +160,21 @@ namespace PGRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return false;
             }
 
-            ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
         }

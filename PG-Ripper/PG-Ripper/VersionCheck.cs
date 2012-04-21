@@ -22,9 +22,9 @@ namespace PGRipper
     public class VersionCheck
     {
         /// <summary>
-        /// Version String of the Online Version
+        /// Gets or sets the version String of the Online Version
         /// </summary>
-        public static string OnlineVersion;
+        public static string OnlineVersion { get; set; }
 
         /// <summary>
         /// Check if Update is available
@@ -40,7 +40,7 @@ namespace PGRipper
                 Assembly ripperASM = Assembly.GetExecutingAssembly();
 
                 double dbCurrentVersion =
-                    Double.Parse(
+                    double.Parse(
                         string.Format(
                             "{0}.{1}.{2}.{3}",
                             ripperASM.GetName().Version.Major,
@@ -61,7 +61,7 @@ namespace PGRipper
                     OnlineVersion = row["version"].ToString();
                 }
 
-                double dbLatestVersion = Double.Parse(OnlineVersion);
+                double dbLatestVersion = double.Parse(OnlineVersion);
 
                 if (dbLatestVersion > dbCurrentVersion)
                 {

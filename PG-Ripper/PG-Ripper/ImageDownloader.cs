@@ -53,30 +53,45 @@ namespace PGRipper
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the upload image.
+        /// </summary>
         public void GetUploadImage()
         {
             this.xService = new uploadimages_net(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the fapomatic.
+        /// </summary>
         public void GetFapomatic()
         {
             this.xService = new fapomatic(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the image venue.
+        /// </summary>
         public void GetImageVenue()
         {
             this.xService = new imagevenue(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the image venue new.
+        /// </summary>
         public void GetImageVenueNew()
         {
             this.xService = new imagevenueNew(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the moast.
+        /// </summary>
         public void GetMoast()
         {
             this.xService = new Moast(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
@@ -611,72 +626,108 @@ namespace PGRipper
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the pix host.
+        /// </summary>
         public void GetPixHost()
         {
             this.xService = new PixHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the fast pic.
+        /// </summary>
         public void GetFastPic()
         {
             this.xService = new FastPic(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the pic dir.
+        /// </summary>
         public void GetPicDir()
         {
             this.xService = new PicDir(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the foto sik.
+        /// </summary>
         public void GetFotoSik()
         {
             this.xService = new FotoSik(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the daily poa.
+        /// </summary>
         public void GetDailyPoa()
         {
             this.xService = new DailyPoa(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the image host li.
+        /// </summary>
         public void GetImageHostLi()
         {
             this.xService = new ImageHostLi(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the stooorage.
+        /// </summary>
         public void GetStooorage()
         {
             this.xService = new Stooorage(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the image porter.
+        /// </summary>
         public void GetImagePorter()
         {
             this.xService = new ImagePorter(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the file mad.
+        /// </summary>
         public void GetFileMad()
         {
             this.xService = new FileMad(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets my pix host.
+        /// </summary>
         public void GetMyPixHost()
         {
             this.xService = new MyPixHost(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the seven bucket.
+        /// </summary>
         public void GetSevenBucket()
         {
             this.xService = new SevenBucket(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the image hyper.
+        /// </summary>
         public void GetImageHyper()
         {
             this.xService = new ImageHyper(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);

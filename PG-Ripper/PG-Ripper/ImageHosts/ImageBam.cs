@@ -68,7 +68,7 @@ namespace PGRipper.ImageHosts
         {
             string strImgURL = this.mstrURL;
 
-            if (this.eventTable.ContainsKey(strImgURL))
+            if (this.EventTable.ContainsKey(strImgURL))
             {
                 return true;
             }
@@ -94,7 +94,7 @@ namespace PGRipper.ImageHosts
 
             try
             {
-                this.eventTable.Add(strImgURL, ccObj);
+                this.EventTable.Add(strImgURL, ccObj);
             }
             catch (ThreadAbortException)
             {
@@ -102,12 +102,12 @@ namespace PGRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (this.eventTable.ContainsKey(strImgURL))
+                if (this.EventTable.ContainsKey(strImgURL))
                 {
                     return false;
                 }
 
-                this.eventTable.Add(strImgURL, ccObj);
+                this.EventTable.Add(strImgURL, ccObj);
             }
 
             string pageContent = this.GetImageHostPage(ref strImgURL);
@@ -130,7 +130,7 @@ namespace PGRipper.ImageHosts
                 return false;
             }
 
-            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/") + 1);
+            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             if (strNewURL.Contains("amazonaws.com/bambackup/"))
             {
@@ -145,7 +145,7 @@ namespace PGRipper.ImageHosts
 
             if (strNewURL.Contains("filename="))
             {
-                strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("=") + 1);
+                strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("=", StringComparison.Ordinal) + 1);
                 strNewURL = HttpUtility.HtmlDecode(strNewURL);
             }
 
@@ -156,7 +156,7 @@ namespace PGRipper.ImageHosts
             if (strFilePath != sNewAlteredPath)
             {
                 strFilePath = sNewAlteredPath;
-                ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
+                ((CacheObject)this.EventTable[this.mstrURL]).FilePath = strFilePath;
             }
 
             try
@@ -168,7 +168,7 @@ namespace PGRipper.ImageHosts
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
 
                 return true;
@@ -178,22 +178,22 @@ namespace PGRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
 
                 return false;
             }
 
-            ((CacheObject)this.eventTable[this.mstrURL]).IsDownloaded = true;
+            ((CacheObject)this.EventTable[this.mstrURL]).IsDownloaded = true;
             CacheController.GetInstance().uSLastPic =
-                ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
+                ((CacheObject)this.EventTable[this.mstrURL]).FilePath = strFilePath;
 
             return true;
         }
