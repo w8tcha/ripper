@@ -58,7 +58,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BF286CE5F07F5822F9C50BE730C1DA2C"
+        "OwnerKey" = "8:_FF37E55CA49C6CAE7C8AA6E9FDE18A0E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -70,7 +70,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FF37E55CA49C6CAE7C8AA6E9FDE18A0E"
+        "OwnerKey" = "8:_BF286CE5F07F5822F9C50BE730C1DA2C"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -182,7 +182,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RiPRipper, Version=2.9.2.9, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:RiPRipper, Version=2.9.3.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1DB7AFF7C55B4C3E82AF0D624B015AE3"
@@ -383,15 +383,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RiP-Ripper"
-        "ProductCode" = "8:{478EB6F6-F6A8-452F-82C3-711E53E2D199}"
-        "PackageCode" = "8:{FB72759C-36C2-42D7-B76C-2EE6DC8C1B06}"
+        "ProductCode" = "8:{05244C12-4A14-4BA8-BD3C-0E399CA44C39}"
+        "PackageCode" = "8:{DF0F5E2C-960C-42BB-A74B-B2F2AA9F6C5B}"
         "UpgradeCode" = "8:{F8AAAB40-576E-4625-9078-374A4CB0D7FB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.9.30"
+        "ProductVersion" = "8:2.9.31"
         "Manufacturer" = "8:WatchersNET"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://ripper.watchersnet.de"

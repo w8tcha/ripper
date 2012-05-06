@@ -1,47 +1,46 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: RiP-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
-using System;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UrlHandler.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//   //   //   //  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RiPRipper
 {
+    using System;
+
     /// <summary>
+    /// Class to Convert rip urls in to xml url
     /// </summary>
     public class UrlHandler
     {
         /// <summary>
         /// Parse Job Url or ID to Xml Url
         /// </summary>
-        /// <param name="sInputUrl">
-        /// The s Input Url.
+        /// <param name="inputUrl">
+        /// The Input Url.
         /// </param>
-        /// <param name="iComboBoxValue">
-        /// The i Combo Box Value.
+        /// <param name="comboBoxValue">
+        /// The Combo Box Value.
         /// </param>
         /// <returns>
         /// Xml Url
         /// </returns>
-        public static String GetXmlUrl(string sInputUrl, int iComboBoxValue)
+        public static string GetXmlUrl(string inputUrl, int comboBoxValue)
         {
             string sXmlUrl;
 
-            switch (iComboBoxValue)
+            switch (comboBoxValue)
             {
                 case 0:
                     {
                         sXmlUrl = string.Format(
                             "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                            Convert.ToInt64(sInputUrl));
+                            Convert.ToInt64(inputUrl));
                         break;
                     }
 
@@ -49,13 +48,13 @@ namespace RiPRipper
                     {
                         sXmlUrl = string.Format(
                             "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
-                            Convert.ToInt64(sInputUrl));
+                            Convert.ToInt64(inputUrl));
                         break;
                     }
 
                 default:
                     {
-                        sXmlUrl = sInputUrl;
+                        sXmlUrl = inputUrl;
 
                         // Make sure url starts with http://
                         if (sXmlUrl.IndexOf("http://") != 0)
@@ -125,7 +124,7 @@ namespace RiPRipper
                         {
                             // http://rip-productions.net/subforumname/01234-threadtitle.html
                             // Threads
-                            string sThreadId = sXmlUrl.Substring(sXmlUrl.LastIndexOf("/") + 1);
+                            string sThreadId = sXmlUrl.Substring(sXmlUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
                             if (sXmlUrl.Contains("-"))
                             {
@@ -155,17 +154,17 @@ namespace RiPRipper
         }
 
         /// <summary>
-        /// Get Index Url
+        /// Get the Index Url
         /// </summary>
-        /// <param name="sInputUrl">
-        /// The s input url.
+        /// <param name="inputUrl">
+        /// The input url.
         /// </param>
         /// <returns>
         /// Returns the Index Url
         /// </returns>
-        public static String GetIndexUrl(string sInputUrl)
+        public static string GetIndexUrl(string inputUrl)
         {
-            string sNewUrl = sInputUrl;
+            string sNewUrl = inputUrl;
 
             if (sNewUrl.Contains("showthread.php?t="))
             {
@@ -213,7 +212,7 @@ namespace RiPRipper
             else if (!sNewUrl.Contains(".php") && !sNewUrl.Contains("#post"))
             {
                 // Threads
-                string sThreadId = sNewUrl.Substring(sNewUrl.LastIndexOf("/") + 1);
+                string sThreadId = sNewUrl.Substring(sNewUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
                 if (sNewUrl.Contains("-"))
                 {

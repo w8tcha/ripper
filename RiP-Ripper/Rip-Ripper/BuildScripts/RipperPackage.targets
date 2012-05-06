@@ -6,7 +6,7 @@
       <Major>2</Major>
       <Minor>9</Minor>
       <Build>3</Build>
-      <Revision>0</Revision>
+      <Revision>1</Revision>
     </PropertyGroup>
 
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\RiPRipper\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>

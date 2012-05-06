@@ -50,6 +50,8 @@ namespace RiPRipper
         /// </summary>
         private void InitializeComponent()
         {
+            
+
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.browsFolderBtn = new System.Windows.Forms.Button();

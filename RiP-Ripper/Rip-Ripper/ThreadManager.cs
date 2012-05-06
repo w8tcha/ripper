@@ -18,103 +18,105 @@ using System;
 
 namespace RiPRipper
 {
-	/// <summary>
-	/// Custom thread controller.
-	/// Bad architecture, poor design. But it works and it works better than the more
-	/// 'complex' models featuring thousands of lines of coding. So whatever..
-	/// </summary>
-	public class ThreadManager
-	{
-        
-		private int mThreshHold;
-		private readonly Hashtable threadTable;
+    /// <summary>
+    /// Custom thread controller.
+    /// Bad architecture, poor design. But it works and it works better than the more
+    /// 'complex' models featuring thousands of lines of coding. So whatever..
+    /// </summary>
+    public class ThreadManager
+    {
+
+        private int mThreshHold;
+
+        private readonly Hashtable threadTable;
+
         private bool bSuspend;
 
         public static ThreadManager mInstance;
 
-		public static ThreadManager GetInstance()
-		{
-		    return mInstance ?? (mInstance = new ThreadManager());
-		}
+        public static ThreadManager GetInstance()
+        {
+            return mInstance ?? (mInstance = new ThreadManager());
+        }
 
-	    public ThreadManager()
-		{
-			threadTable = new Hashtable();
-			SetThreadThreshHold(3);
-		}
+        public ThreadManager()
+        {
+            threadTable = new Hashtable();
+            SetThreadThreshHold(3);
+        }
 
-		public int GetThreadCount()
-		{
-			return threadTable.Count;
-		}
+        public int GetThreadCount()
+        {
+            return threadTable.Count;
+        }
 
-		public int GetThreadThreshHold()
-		{
-			return mThreshHold;
-		}
+        public int GetThreadThreshHold()
+        {
+            return mThreshHold;
+        }
+
         public void SetThreadThreshHold(int iTHold)
-		{
-			mThreshHold = iTHold;
-		}
+        {
+            mThreshHold = iTHold;
+        }
 
-		public bool LaunchThread( string threadId, ThreadStart start )
-		{
-			if (threadTable.Count >= mThreshHold || threadTable.ContainsKey(threadId))
-			{
-				return false;
-			}
-
-			Thread threadGet = new Thread(start) {IsBackground = true};
-
-		    threadTable.Add(threadId, threadGet);
-			
-            threadGet.Start();
-			return true;
-		}
-
-		public bool IsSystemReadyForNewThread()
-		{
-			if (threadTable.Count >= mThreshHold)
-				return false;
-
-            if (bSuspend)
+        public bool LaunchThread(string threadId, ThreadStart start)
+        {
+            if (threadTable.Count >= mThreshHold || threadTable.ContainsKey(threadId))
+            {
                 return false;
+            }
 
-			return true;
-		}
-        
-		public void RemoveThreadbyId(string threadId)
-		{
-			if (threadTable.ContainsKey(threadId))
-			{
-				threadTable.Remove(threadId);
-			}
-		}
+            Thread threadGet = new Thread(start) { IsBackground = true };
 
-		public void DismantleAllThreads()
-		{
-			try
-			{
-				IDictionaryEnumerator thrdEnumerator = threadTable.GetEnumerator();
+            threadTable.Add(threadId, threadGet);
 
-				while ( thrdEnumerator.MoveNext() )
-				{
-					if ( ((Thread)thrdEnumerator.Value).IsAlive )
-					{
-						Monitor.Exit(thrdEnumerator.Value);
-					}
-				}
-			}
-			catch(Exception)
-			{
-				threadTable.Clear();
-			}
-			finally
-			{
-			    bSuspend = false;
-				threadTable.Clear();
-			}
-		}
+            threadGet.Start();
+            return true;
+        }
+
+        public bool IsSystemReadyForNewThread()
+        {
+            if (threadTable.Count >= mThreshHold) return false;
+
+            if (bSuspend) return false;
+
+            return true;
+        }
+
+        public void RemoveThreadbyId(string threadId)
+        {
+            if (threadTable.ContainsKey(threadId))
+            {
+                threadTable.Remove(threadId);
+            }
+        }
+
+        public void DismantleAllThreads()
+        {
+            try
+            {
+                IDictionaryEnumerator thrdEnumerator = threadTable.GetEnumerator();
+
+                while (thrdEnumerator.MoveNext())
+                {
+                    if (((Thread)thrdEnumerator.Value).IsAlive)
+                    {
+                        Monitor.Exit(thrdEnumerator.Value);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                threadTable.Clear();
+            }
+            finally
+            {
+                bSuspend = false;
+                threadTable.Clear();
+            }
+        }
+
         public void HoldAllThreads()
         {
             try

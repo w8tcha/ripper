@@ -104,7 +104,7 @@ namespace RiPRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"img src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"img onLoad=\""ustaw\(100000\);\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {

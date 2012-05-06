@@ -180,6 +180,7 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -366,6 +367,7 @@
     </Compile>
     <Compile Include="ServiceTemplate.cs" />
     <Compile Include="Objects\SettingBase.cs" />
+    <Compile Include="SingleInstanceController.cs" />
     <Compile Include="ThreadToPost.cs" />
     <Compile Include="TopMostMessageBox.cs" />
     <Compile Include="UrlHandler.cs" />

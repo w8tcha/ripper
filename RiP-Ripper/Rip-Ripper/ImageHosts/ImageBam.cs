@@ -129,7 +129,7 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/") + 1);
+            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             if (strNewURL.Contains("amazonaws.com/bambackup/"))
             {
@@ -144,7 +144,7 @@ namespace RiPRipper.ImageHosts
 
             if (strNewURL.Contains("filename="))
             {
-                strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("=") + 1);
+                strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("=", StringComparison.Ordinal) + 1);
                 strNewURL = HttpUtility.HtmlDecode(strNewURL);
             }
 

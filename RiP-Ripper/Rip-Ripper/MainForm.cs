@@ -95,7 +95,7 @@ namespace RiPRipper
         /// <summary>
         /// The Resource Manger that is used for Icons and Labels etc.
         /// </summary>
-        private ResourceManager rm;
+        private ResourceManager _ResourceManager;
 
         /// <summary>
         /// All Settings
@@ -121,6 +121,7 @@ namespace RiPRipper
         private JumpList jumpList;
 
         public IntPtr nextClipboardViewer;
+
 #endif
 
         /// <summary>
@@ -249,19 +250,21 @@ namespace RiPRipper
         }
 #endif
 
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// <param name="args">The args.</param>
         [STAThread]
         static void Main(string[] args)
         {
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
-            Application.Run(new MainForm());
+            var controller = new SingleInstanceController();
 
-            //ProcessArgs(args);
+            controller.Run(args);
+
+            //Application.Run(new MainForm(args));
         }
         /// <summary>
         /// Loads All Settings
@@ -467,16 +470,16 @@ namespace RiPRipper
                 switch (userSettings.Language)
                 {
                     case "de-DE":
-                        rm = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
+                        _ResourceManager = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
                         break;
                     case "fr-FR":
-                        rm = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
+                        _ResourceManager = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
                         break;
                     case "en-EN":
-                        rm = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        _ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
                     default:
-                        rm = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        _ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
                 }
 
@@ -484,7 +487,7 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                rm = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                _ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
             }
 
 
@@ -516,7 +519,7 @@ namespace RiPRipper
 
                 if (!bCameThroughCorrectLogin)
                 {
-                    DialogResult result = TopMostMessageBox.Show(this.rm.GetString("mbExit"), this.rm.GetString("mbExitTtl"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = TopMostMessageBox.Show(this._ResourceManager.GetString("mbExit"), this._ResourceManager.GetString("mbExitTtl"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result == DialogResult.Yes)
                     {
@@ -529,26 +532,26 @@ namespace RiPRipper
         
         private void AdjustCulture()
         {
-            mStartDownloadBtn.Text = rm.GetString("btnStartDownload");
-            groupBox1.Text = rm.GetString("downloadOptions");
-            groupBox5.Text = string.Format("{0} (-):", rm.GetString("lblRippingQue"));
-            stopCurrentThreads.Text = rm.GetString("btnStop");
-            groupBox4.Text = rm.GetString("lblLastPicture");
-            groupBox2.Text = rm.GetString("gbCurrently");
-            mInvalidDestinationMsg = rm.GetString("mbInvalidDes");
-            mIncorrectUrlMsg = rm.GetString("mbIncorrectURL");
-            mNoThreadMsg = rm.GetString("mbNoThread");
-            mNoPostMsg = rm.GetString("mbNoPost");
-            mAlreadyQueuedMsg = rm.GetString("mbAlreadyQueued");
-            mTNumericMsg = rm.GetString("mbTNumeric");
+            mStartDownloadBtn.Text = _ResourceManager.GetString("btnStartDownload");
+            groupBox1.Text = _ResourceManager.GetString("downloadOptions");
+            groupBox5.Text = string.Format("{0} (-):", _ResourceManager.GetString("lblRippingQue"));
+            stopCurrentThreads.Text = _ResourceManager.GetString("btnStop");
+            groupBox4.Text = _ResourceManager.GetString("lblLastPicture");
+            groupBox2.Text = _ResourceManager.GetString("gbCurrently");
+            mInvalidDestinationMsg = _ResourceManager.GetString("mbInvalidDes");
+            mIncorrectUrlMsg = _ResourceManager.GetString("mbIncorrectURL");
+            mNoThreadMsg = _ResourceManager.GetString("mbNoThread");
+            mNoPostMsg = _ResourceManager.GetString("mbNoPost");
+            mAlreadyQueuedMsg = _ResourceManager.GetString("mbAlreadyQueued");
+            mTNumericMsg = _ResourceManager.GetString("mbTNumeric");
 
             // Menue
-            fileToolStripMenuItem.Text = rm.GetString("MenuFile");
-            settingsToolStripMenuItem1.Text = rm.GetString("MenuSettings");
-            exitToolStripMenuItem.Text = rm.GetString("MenuExit");
+            fileToolStripMenuItem.Text = _ResourceManager.GetString("MenuFile");
+            settingsToolStripMenuItem1.Text = _ResourceManager.GetString("MenuSettings");
+            exitToolStripMenuItem.Text = _ResourceManager.GetString("MenuExit");
 
-            settingsToolStripMenuItem.Text = rm.GetString("MenuHelp");
-            helpToolStripMenuItem.Text = rm.GetString("MenuAbout");
+            settingsToolStripMenuItem.Text = _ResourceManager.GetString("MenuHelp");
+            helpToolStripMenuItem.Text = _ResourceManager.GetString("MenuAbout");
 
         }
 
@@ -626,7 +629,7 @@ namespace RiPRipper
 
             if (VersionCheck.UpdateAvailable() && File.Exists(Application.StartupPath + "\\ICSharpCode.SharpZipLib.dll"))
             {
-                string mbUpdate = rm.GetString("mbUpdate"), mbUpdate2 = rm.GetString("mbUpdate2");
+                string mbUpdate = _ResourceManager.GetString("mbUpdate"), mbUpdate2 = _ResourceManager.GetString("mbUpdate2");
                 DialogResult result = TopMostMessageBox.Show(mbUpdate, mbUpdate2, MessageBoxButtons.YesNo,
                                                              MessageBoxIcon.Question);
 
@@ -668,10 +671,14 @@ namespace RiPRipper
             trayIcon.Visible = true;
 #endif
 
+#if (!RIPRIPPERX)
+            Utility.RegisterRipUrlProtocol();
+#endif
             if (!userSettings.Extension)
             {
                 return;
             }
+
 
             this.NCProcessorPort = Convert.ToInt32(36969);
             this.StartNcProcessor();
@@ -836,7 +843,7 @@ namespace RiPRipper
             {
                 if (this.IsPostAlreadyRipped(sXmlUrl.Substring(sXmlUrl.IndexOf("&postid=") + 8)))
                 {
-                    DialogResult result = TopMostMessageBox.Show(this.rm.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = TopMostMessageBox.Show(this._ResourceManager.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result != DialogResult.Yes)
                     {
@@ -1225,15 +1232,24 @@ namespace RiPRipper
 
             for (int po = 0; po < arlst.Count; po++)
             {
-                StatusLabelInfo.ForeColor = Color.Green;
+                var po1 = po;
 
-                try
+                if (this.InvokeRequired)
                 {
-                    this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this.rm.GetString("gbParse"), po, arlst.Count);
+                    this.Invoke(
+                        (MethodInvoker)delegate
+                        {
+                            this.StatusLabelInfo.Text = string.Format(
+                                "{0}{1}/{2}", this._ResourceManager.GetString("gbParse"), po1, arlst.Count);
+
+                            StatusLabelInfo.ForeColor = Color.Green;
+                        });
                 }
-                catch (Exception)
+                else
                 {
-                    
+                    this.StatusLabelInfo.Text = string.Format(
+                       "{0}{1}/{2}", this._ResourceManager.GetString("gbParse"), po, arlst.Count);
+                    StatusLabelInfo.ForeColor = Color.Green;
                 }
 
                 string sLpostId = arlst[po].ImageUrl;
@@ -1313,7 +1329,7 @@ namespace RiPRipper
                 this.LogicCode();
             }
 
-            if (this.StatusLabelInfo.Text.Equals(this.rm.GetString("StatusLabelInfo")) &&
+            if (this.StatusLabelInfo.Text.Equals(this._ResourceManager.GetString("StatusLabelInfo")) &&
                 this.mJobsList.Count.Equals(0) &&
                 this.mCurrentJob == null)
             {
@@ -1372,10 +1388,10 @@ namespace RiPRipper
                 {
                     bEndRip = true;
 
-                    StatusLabelInfo.Text = rm.GetString("StatusLabelInfo");
+                    StatusLabelInfo.Text = _ResourceManager.GetString("StatusLabelInfo");
                     StatusLabelInfo.ForeColor = Color.Red;
 
-                    groupBox5.Text = string.Format("{0} (-):", rm.GetString("lblRippingQue"));
+                    groupBox5.Text = string.Format("{0} (-):", _ResourceManager.GetString("lblRippingQue"));
                 }
                 else
                 {
@@ -1393,7 +1409,18 @@ namespace RiPRipper
                 if (!bCurPause)
                 {
                     lvCurJob.Items.Clear();
-                    StatusLabelImageC.Text = string.Empty;
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(
+                            (MethodInvoker)delegate
+                            {
+                                StatusLabelImageC.Text = string.Empty;
+                            });
+                    }
+                    else
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    }
 
                     if (mCurrentJob == null && mJobsList.Count > 0)
                     {
@@ -1411,7 +1438,7 @@ namespace RiPRipper
                     }
                     else if (mCurrentJob == null && mJobsList.Count.Equals(0))
                     {
-                        IdleRipper();
+                        this.IdleRipper();
                     }
                 }
             }
@@ -1454,20 +1481,20 @@ namespace RiPRipper
 
             JobListRemove(mCurrentJob, 0);
 
-            string bSystemExtr = rm.GetString("bSystemExtr");
+            string bSystemExtr = _ResourceManager.GetString("bSystemExtr");
 
             ParseJobXml();
 
-            groupBox2.Text = string.Format("{0}...", rm.GetString("gbCurrentlyExtract"));
+            groupBox2.Text = string.Format("{0}...", _ResourceManager.GetString("gbCurrentlyExtract"));
 
             if (mCurrentJob.Title.Equals(mCurrentJob.PostTitle))
             {
-                Text = string.Format("{0}: {1} - x{2}", rm.GetString("gbCurrentlyExtract"), mCurrentJob.Title,
+                Text = string.Format("{0}: {1} - x{2}", _ResourceManager.GetString("gbCurrentlyExtract"), mCurrentJob.Title,
                                                 mImagesList.Count);
             }
             else
             {
-                Text = string.Format("{0}: {1} - {2} - x{3}", rm.GetString("gbCurrentlyExtract"),
+                Text = string.Format("{0}: {1} - {2} - x{3}", _ResourceManager.GetString("gbCurrentlyExtract"),
                                                mCurrentJob.Title, mCurrentJob.PostTitle, mImagesList.Count);
             }
 
@@ -1478,9 +1505,9 @@ namespace RiPRipper
             {
                 if (userSettings.ShowPopUps)
                 {
-                    trayIcon.Text = rm.GetString("gbCurrentlyExtract") + mCurrentJob.Title;
+                    trayIcon.Text = _ResourceManager.GetString("gbCurrentlyExtract") + mCurrentJob.Title;
                     trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                    trayIcon.BalloonTipTitle = rm.GetString("gbCurrentlyExtract");
+                    trayIcon.BalloonTipTitle = _ResourceManager.GetString("gbCurrentlyExtract");
                     trayIcon.BalloonTipText = mCurrentJob.Title;
                     trayIcon.ShowBalloonTip(10);
                 }
@@ -1523,13 +1550,22 @@ namespace RiPRipper
 
             if (mImagesList.Count > 0)
             {
-
-
-                string tiImagesRemain = this.rm.GetString("tiImagesRemain");
+                string tiImagesRemain = this._ResourceManager.GetString("tiImagesRemain");
 
                 ////////////////
                 lvCurJob.Items.Clear();
-                StatusLabelImageC.Text = string.Empty;
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(
+                        (MethodInvoker)delegate
+                        {
+                            StatusLabelImageC.Text = string.Empty;
+                        });
+                }
+                else
+                {
+                    StatusLabelImageC.Text = string.Empty;
+                }
 
                 for (int i = 0; i < mImagesList.Count; i++)
                 {
@@ -1653,7 +1689,18 @@ namespace RiPRipper
                 // NO IMAGES TO PROCESS SO ABANDON CURRENT THREAD
                 lvCurJob.Items.Clear();
                 mCurrentJob = null;
-                StatusLabelImageC.Text = string.Empty;
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(
+                        (MethodInvoker)delegate
+                        {
+                            StatusLabelImageC.Text = string.Empty;
+                        });
+                }
+                else
+                {
+                    StatusLabelImageC.Text = string.Empty;
+                }
             }
         }
 
@@ -1723,6 +1770,7 @@ namespace RiPRipper
                 }
             }
         }
+
         /// <summary>
         /// Idle Mode
         /// </summary>
@@ -1739,10 +1787,10 @@ namespace RiPRipper
                 this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
             }
 
-            string btleExit = rm.GetString("btleExit"),
-                   btexExit = rm.GetString("btexExit");
+            string btleExit = this._ResourceManager.GetString("btleExit"),
+                   btexExit = this._ResourceManager.GetString("btexExit");
 
-            if (bEndRip && userSettings.ShowCompletePopUp)
+            if (this.bEndRip && userSettings.ShowCompletePopUp)
             {
                 trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                 trayIcon.BalloonTipTitle = btleExit;
@@ -1751,41 +1799,53 @@ namespace RiPRipper
             }
 #endif
             lvCurJob.Items.Clear();
-            StatusLabelImageC.Text = string.Empty;
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke(
+                    (MethodInvoker)delegate
+                        {
+                            StatusLabelImageC.Text = string.Empty;
+                        });
+            }
+            else
+            {
+                StatusLabelImageC.Text = string.Empty;
+            }
 
             textBox1.Text = string.Empty;
             progressBar1.Value = 0;
 
             stopCurrentThreads.Enabled = true;
-            bStopJob = false;
-            bEndRip = false;
+            this.bStopJob = false;
+            this.bEndRip = false;
 
-            string ttlHeader = rm.GetString("ttlHeader");
+            string ttlHeader = this._ResourceManager.GetString("ttlHeader");
 
-            groupBox2.Text = rm.GetString("gbCurrentlyIdle");
-            StatusLabelInfo.Text = rm.GetString("gbCurrentlyIdle");
+            this.groupBox2.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
+            this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
             StatusLabelInfo.ForeColor = Color.Gray;
 
             lvCurJob.Columns[0].Text = "  ";
 
 #if (RIPRIPPER)
-            Text = String.Format("RiP-Ripper {0}.{1}.{2}{3}{4}", 
+            Text = string.Format("RiP-Ripper {0}.{1}.{2}{3}{4}", 
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                ttlHeader + userSettings.User + "\"]");
+                string.Format("{0}{1}\"]", ttlHeader, userSettings.User));
 
             trayIcon.Text = "Right click for context menu";
 #elif (RIPRIPPERX)
-            Text = String.Format("RiP-Ripper X {0}.{1}.{2}{3}{4}", 
+            Text = string.Format("RiP-Ripper X {0}.{1}.{2}{3}{4}", 
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                ttlHeader + userSettings.sUser + "\"]");
+                string.Format("{0}{1}\"]", ttlHeader, userSettings.User));
 #else
-            Text = String.Format("RiP-Ripper {0}.{1}.{2}{3}{4}",
+            Text = string.Format("RiP-Ripper {0}.{1}.{2}{3}{4}",
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
@@ -1855,7 +1915,7 @@ namespace RiPRipper
 
             listViewJobList.Items.AddRange(new[] { ijobJob });
 
-            groupBox5.Text = string.Format("{0} ({1}):", rm.GetString("lblRippingQue"), mJobsList.Count);
+            groupBox5.Text = string.Format("{0} ({1}):", _ResourceManager.GetString("lblRippingQue"), mJobsList.Count);
         }
         /// <summary>
         /// Removes a Job from the Joblist and ListView
@@ -1869,7 +1929,7 @@ namespace RiPRipper
 
             listViewJobList.Items.RemoveAt(iJobIndex);
 
-            groupBox5.Text = string.Format("{0} ({1}):", rm.GetString("lblRippingQue"), mJobsList.Count);
+            groupBox5.Text = string.Format("{0} ({1}):", _ResourceManager.GetString("lblRippingQue"), mJobsList.Count);
         }
         /// <summary>
         /// Full Disc Handling
@@ -1957,7 +2017,7 @@ namespace RiPRipper
 
                 for (int i = 0; i < mJobsList.Count; i++)
                 {
-                    StatusLabelInfo.Text = string.Format("{0}{1}/{2}", rm.GetString("gbParse2"), i, mJobsList.Count);
+                    StatusLabelInfo.Text = string.Format("{0}{1}/{2}", _ResourceManager.GetString("gbParse2"), i, mJobsList.Count);
                     StatusLabelInfo.ForeColor = Color.Green;
 
                     ListViewItem ijobJob = new ListViewItem(mJobsList[i].Title, 0);
@@ -1968,7 +2028,7 @@ namespace RiPRipper
             }
             finally
             {
-                groupBox5.Text = string.Format("{0} ({1}):", rm.GetString("lblRippingQue"), mJobsList.Count);
+                groupBox5.Text = string.Format("{0} ({1}):", _ResourceManager.GetString("lblRippingQue"), mJobsList.Count);
             }
         }
 
@@ -1993,7 +2053,19 @@ namespace RiPRipper
 
             lvCurJob.Items.Clear();
             mCurrentJob = null;
-            StatusLabelImageC.Text = string.Empty;
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke(
+                    (MethodInvoker)delegate
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    });
+            }
+            else
+            {
+                StatusLabelImageC.Text = string.Empty;
+            }
 
             CheckCurJobFolder(sLastJobFolder);
         }
@@ -2001,22 +2073,33 @@ namespace RiPRipper
         /// <summary>
         /// Pause/Resumes Downloading
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void PauseCurrentThreadsClick(object sender, EventArgs e)
         {
             switch (pauseCurrentThreads.Text)
             {
                 case "Pause Download(s)":
                     pauseCurrentThreads.Text = "Resume Download(s)";
-                    bCurPause = true;
+                    this.bCurPause = true;
                     ThreadManager.GetInstance().HoldAllThreads();
                     pauseCurrentThreads.Image = Languages.english.play;
                     break;
                 case "(Re)Start Download(s)":
-                    StatusLabelImageC.Text = string.Empty;
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(
+                            (MethodInvoker)delegate
+                            {
+                                StatusLabelImageC.Text = string.Empty;
+                            });
+                    }
+                    else
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    }
                     Utility.SaveSetting("CurrentlyPauseThreads", "false");
-                    bCurPause = false;
+                    this.bCurPause = false;
                     deleteJob.Enabled = true;
                     stopCurrentThreads.Enabled = true;
                     //LoadSettings();
@@ -2025,8 +2108,19 @@ namespace RiPRipper
                     pauseCurrentThreads.Image = Languages.english.pause;
                     break;
                 case "Resume Download(s)":
-                    StatusLabelImageC.Text = string.Empty;
-                    bCurPause = false;
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(
+                            (MethodInvoker)delegate
+                            {
+                                StatusLabelImageC.Text = string.Empty;
+                            });
+                    }
+                    else
+                    {
+                        StatusLabelImageC.Text = string.Empty;
+                    }
+                    this.bCurPause = false;
                     deleteJob.Enabled = true;
                     stopCurrentThreads.Enabled = true;
                     pauseCurrentThreads.Text = "Pause Download(s)";
@@ -2035,10 +2129,14 @@ namespace RiPRipper
                     break;
             }
         }
+
+        /// <summary>
+        /// Starts the net command processor.
+        /// </summary>
         private void StartNcProcessor()
         {
-            mNCProcessor = new NetCommandProcessor();
-            mNCProcessor.StartListening(this, NCProcessorPort);
+            this.mNCProcessor = new NetCommandProcessor();
+            this.mNCProcessor.StartListening(this, this.NCProcessorPort);
         }
 
         private void ComboBox1SelectedIndexChanged(object sender, EventArgs e)
@@ -2382,7 +2480,7 @@ namespace RiPRipper
                     Login frmLgn = new Login();
                     frmLgn.ShowDialog(this);
 
-                    DialogResult result = TopMostMessageBox.Show(rm.GetString("mbExit"), rm.GetString("mbExitTtl"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = TopMostMessageBox.Show(_ResourceManager.GetString("mbExit"), _ResourceManager.GetString("mbExitTtl"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (result == DialogResult.Yes)
                     {
@@ -2508,7 +2606,7 @@ namespace RiPRipper
                     // }
             }
 #endif
-            IdleRipper();
+            this.IdleRipper();
 
             try
             {
@@ -2542,12 +2640,12 @@ namespace RiPRipper
 
             if (mJobsList.Count != 0)
             {
-                StatusLabelInfo.Text = rm.GetString("gbParse2");
+                StatusLabelInfo.Text = _ResourceManager.GetString("gbParse2");
                 StatusLabelInfo.ForeColor = Color.Green;
 
                 for (int i = 0; i < mJobsList.Count; i++)
                 {
-                    StatusLabelInfo.Text = string.Format("{0}{1}/{2}", rm.GetString("gbParse2"), i, mJobsList.Count);
+                    StatusLabelInfo.Text = string.Format("{0}{1}/{2}", _ResourceManager.GetString("gbParse2"), i, mJobsList.Count);
                     StatusLabelInfo.ForeColor = Color.Green;
 
                     ListViewItem ijobJob = new ListViewItem(mJobsList[i].Title, 0);
@@ -2907,9 +3005,8 @@ namespace RiPRipper
             textBox1.Enabled = false;
             mStartDownloadBtn.Enabled = true;
 
-            this.StatusLabelInfo.Text = this.rm.GetString("gbParse");
+            this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse");
             StatusLabelInfo.ForeColor = Color.Green;
         }
-
     }
 }
