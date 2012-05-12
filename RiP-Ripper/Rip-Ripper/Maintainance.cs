@@ -17,8 +17,6 @@ namespace RiPRipper
     using System.Data;
     using System.IO;
     using System.Linq;
-    using System.Net;
-    using System.Windows.Forms;
 
     #endregion
 
@@ -30,14 +28,9 @@ namespace RiPRipper
         #region Constants and Fields
 
         /// <summary>
-        /// The m instace.
+        /// Gets or sets the instance.
         /// </summary>
-        public static Maintainance mInstace;
-
-        /// <summary>
-        /// The xform.
-        /// </summary>
-        public static Form xform;
+        public static Maintainance Instance { get; set; }
 
         #endregion
 
@@ -51,11 +44,11 @@ namespace RiPRipper
         /// </returns>
         public static Maintainance GetInstance()
         {
-            return mInstace ?? (mInstace = new Maintainance());
+            return Instance ?? (Instance = new Maintainance());
         }
 
         /// <summary>
-        /// count The Images from xml.
+        /// Count The Images from xml.
         /// </summary>
         /// <param name="xmlPayload">
         /// The xml payload.
@@ -89,13 +82,13 @@ namespace RiPRipper
         /// <summary>
         /// The extract forum title from xml.
         /// </summary>
-        /// <param name="sXmlPayload">
-        /// The s xml payload.
+        /// <param name="xmlPayload">
+        /// The xml payload.
         /// </param>
         /// <returns>
         /// Returns the Forum Title
         /// </returns>
-        public string ExtractForumTitleFromXML(string sXmlPayload)
+        public string ExtractForumTitleFromXML(string xmlPayload)
         {
             string sForumTitle = string.Empty;
 
@@ -103,7 +96,7 @@ namespace RiPRipper
             {
                 DataSet ds = new DataSet();
 
-                ds.ReadXml(new StringReader(sXmlPayload));
+                ds.ReadXml(new StringReader(xmlPayload));
 
                 foreach (DataRow row in ds.Tables["forum"].Rows)
                 {
@@ -123,13 +116,13 @@ namespace RiPRipper
         /// <summary>
         /// The extract post title from xml.
         /// </summary>
-        /// <param name="sXmlPayload">
-        /// The s xml payload.
+        /// <param name="xmlPayload">
+        /// The xml payload.
         /// </param>
         /// <returns>
         /// Returns the Post Title
         /// </returns>
-        public string ExtractPostTitleFromXML(string sXmlPayload)
+        public string ExtractPostTitleFromXML(string xmlPayload)
         {
             string sPostTitle = string.Empty;
 
@@ -137,7 +130,7 @@ namespace RiPRipper
             {
                 DataSet ds = new DataSet();
 
-                ds.ReadXml(new StringReader(sXmlPayload));
+                ds.ReadXml(new StringReader(xmlPayload));
 
                 foreach (DataRow row in ds.Tables["post"].Rows)
                 {
@@ -147,7 +140,7 @@ namespace RiPRipper
                     {
                         sPostTitle = string.Format("post# {0}", row["id"]);
                     }
-                    else if (sPostTitle == string.Format("Re: {0}", this.ExtractTitleFromXML(sXmlPayload)))
+                    else if (sPostTitle == string.Format("Re: {0}", this.ExtractTitleFromXML(xmlPayload)))
                     {
                         sPostTitle = string.Format("post# {0}", row["id"]);
                     }
@@ -166,13 +159,13 @@ namespace RiPRipper
         /// <summary>
         /// The extract title from xml.
         /// </summary>
-        /// <param name="sXmlPayload">
-        /// The s xml payload.
+        /// <param name="xmlPayload">
+        /// The xml payload.
         /// </param>
         /// <returns>
         /// Returns the Title
         /// </returns>
-        public string ExtractTitleFromXML(string sXmlPayload)
+        public string ExtractTitleFromXML(string xmlPayload)
         {
             string sTitle = string.Empty;
 
@@ -180,7 +173,7 @@ namespace RiPRipper
             {
                 DataSet ds = new DataSet();
 
-                ds.ReadXml(new StringReader(sXmlPayload));
+                ds.ReadXml(new StringReader(xmlPayload));
 
                 foreach (DataRow row in ds.Tables["thread"].Rows)
                 {
@@ -195,52 +188,9 @@ namespace RiPRipper
             return Utility.RemoveIllegalCharecters(sTitle);
         }
 
-        /// <summary>
-        /// The get post pages.
-        /// </summary>
-        /// <param name="sURL">
-        /// The s url.
-        /// </param>
-        /// <returns>
-        /// Returns the Post Pages Content
-        /// </returns>
-        public string GetPostPages(string sURL)
-        {
-            return GetRipPage(sURL);
-        }
-
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// The get rip page.
-        /// </summary>
-        /// <param name="strURL">
-        /// The str url.
-        /// </param>
-        /// <returns>
-        /// Returns the Page Content as String
-        /// </returns>
-        private static string GetRipPage(string strURL)
-        {
-            string strPageRead;
-
-            try
-            {
-                WebClient wc = new WebClient();
-                wc.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));
-                strPageRead = wc.DownloadString(strURL);
-
-                wc.Dispose();
-            }
-            catch (Exception)
-            {
-                strPageRead = string.Empty;
-            }
-
-            return strPageRead;
-        }
 
         #endregion
     }

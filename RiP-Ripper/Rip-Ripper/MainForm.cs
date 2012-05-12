@@ -97,10 +97,7 @@ namespace RiPRipper
         /// </summary>
         private ResourceManager _ResourceManager;
 
-        /// <summary>
-        /// All Settings
-        /// </summary>
-        public static SettingBase userSettings = new SettingBase();
+       
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="MainForm"/> is delete.
@@ -120,8 +117,6 @@ namespace RiPRipper
         private TaskbarManager windowsTaskbar;
         private JumpList jumpList;
 
-        public IntPtr nextClipboardViewer;
-
 #endif
 
         /// <summary>
@@ -129,6 +124,8 @@ namespace RiPRipper
         /// </summary>
         public MainForm()
         {
+            this.cacheController = CacheController.GetInstance();
+
 #if (!RIPRIPPERX)
 
             // Tray Menue
@@ -172,16 +169,15 @@ namespace RiPRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void SDownloadClick(Object sender, EventArgs e)
         {
-            if (!Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) ||
-                Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(@"http://rip-productions.net/") <
+            if (Clipboard.GetText().IndexOf(@"http://rip-productions.net/") <
                 0 || this.bParseAct)
             {
                 return;
             }
 
-            comboBox1.SelectedIndex = 2;
+            this.comboBox1.SelectedIndex = 2;
 
-            textBox1.Text = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
+            this.textBox1.Text = Clipboard.GetText();
 
             if (InvokeRequired)
             {
@@ -219,7 +215,7 @@ namespace RiPRipper
             this.trayIcon.MouseDoubleClick -= this.HideClick;
             this.trayIcon.MouseDoubleClick += this.ShowClick;
 
-            if (!userSettings.ShowPopUps) return;
+            if (!this.cacheController.userSettings.ShowPopUps) return;
 
             trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
             trayIcon.BalloonTipTitle = "Hidden in Tray";
@@ -272,162 +268,160 @@ namespace RiPRipper
         public void LoadSettings()
         {
             // Reading Settings
-            
+
             // Load "Offline Modus" Setting
             try
             {
-                userSettings.OfflMode = bool.Parse(Utility.LoadSetting("OfflineModus"));
+                this.cacheController.userSettings.OfflMode = bool.Parse(Utility.LoadSetting("OfflineModus"));
             }
             catch (Exception)
             {
-                userSettings.OfflMode = false;
+                this.cacheController.userSettings.OfflMode = false;
             }
 
             // Load "Firefox Exension Enabled" Setting
             try
             {
-                userSettings.Extension = bool.Parse(Utility.LoadSetting("FFExtension"));
+                this.cacheController.userSettings.Extension = bool.Parse(Utility.LoadSetting("FFExtension"));
             }
             catch (Exception)
             {
-                userSettings.Extension = false;
+                this.cacheController.userSettings.Extension = false;
             }
 
-            
             try
             {
                 if (!string.IsNullOrEmpty(Utility.LoadSetting("TxtFolder")))
                 {
-                    userSettings.TxtFolder = Utility.LoadSetting("TxtFolder");
+                    this.cacheController.userSettings.TxtFolder = Utility.LoadSetting("TxtFolder");
                 }
             }
             catch (Exception)
             {
-                userSettings.TxtFolder = null;
+                this.cacheController.userSettings.TxtFolder = null;
             }
 
             // Load "Clipboard Watch" Setting
             try
             {
-                userSettings.ClipBWatch = bool.Parse(Utility.LoadSetting("clipBoardWatch"));
+                this.cacheController.userSettings.ClipBWatch = bool.Parse(Utility.LoadSetting("clipBoardWatch"));
             }
             catch (Exception)
             {
-                userSettings.ClipBWatch = true;
+                this.cacheController.userSettings.ClipBWatch = true;
             }
 
 
             try
             {
-                userSettings.ShowPopUps = bool.Parse(Utility.LoadSetting("Show Popups"));
+                this.cacheController.userSettings.ShowPopUps = bool.Parse(Utility.LoadSetting("Show Popups"));
             }
             catch (Exception)
             {
-                userSettings.ShowPopUps = true;
+                this.cacheController.userSettings.ShowPopUps = true;
             }
 
             try
             {
-                userSettings.SubDirs = bool.Parse(Utility.LoadSetting("SubDirs"));
+                this.cacheController.userSettings.SubDirs = bool.Parse(Utility.LoadSetting("SubDirs"));
             }
             catch (Exception)
             {
-                userSettings.SubDirs = true;
-            }
-
-
-            try
-            {
-                userSettings.AutoThank = bool.Parse(Utility.LoadSetting("Auto TK Button"));
-            }
-            catch (Exception)
-            {
-                userSettings.AutoThank = false;
+                this.cacheController.userSettings.SubDirs = true;
             }
 
             try
             {
-                userSettings.DownInSepFolder = bool.Parse(Utility.LoadSetting("DownInSepFolder"));
+                this.cacheController.userSettings.AutoThank = bool.Parse(Utility.LoadSetting("Auto TK Button"));
             }
             catch (Exception)
             {
-                userSettings.DownInSepFolder = true;
+                this.cacheController.userSettings.AutoThank = false;
             }
 
             try
             {
-                userSettings.SavePids = bool.Parse(Utility.LoadSetting("SaveRippedPosts"));
+                this.cacheController.userSettings.DownInSepFolder = bool.Parse(Utility.LoadSetting("DownInSepFolder"));
             }
             catch (Exception)
             {
-                userSettings.SavePids = true;
+                this.cacheController.userSettings.DownInSepFolder = true;
             }
 
             try
             {
-                userSettings.ShowCompletePopUp = bool.Parse(Utility.LoadSetting("Show Downloads Complete PopUp"));
+                this.cacheController.userSettings.SavePids = bool.Parse(Utility.LoadSetting("SaveRippedPosts"));
             }
             catch (Exception)
             {
-                userSettings.ShowCompletePopUp = true;
+                this.cacheController.userSettings.SavePids = true;
+            }
+
+            try
+            {
+                this.cacheController.userSettings.ShowCompletePopUp = bool.Parse(Utility.LoadSetting("Show Downloads Complete PopUp"));
+            }
+            catch (Exception)
+            {
+                this.cacheController.userSettings.ShowCompletePopUp = true;
             }
 
             // min. Image Count for Thanks
             try
             {
-                userSettings.MinImageCount = !string.IsNullOrEmpty(Utility.LoadSetting("minImageCountThanks")) ? int.Parse(Utility.LoadSetting("minImageCountThanks")) : 3;
+                this.cacheController.userSettings.MinImageCount = !string.IsNullOrEmpty(Utility.LoadSetting("minImageCountThanks")) ? int.Parse(Utility.LoadSetting("minImageCountThanks")) : 3;
             }
             catch (Exception)
             {
-                userSettings.MinImageCount = 3;
+                this.cacheController.userSettings.MinImageCount = 3;
             }
 
             // Max. Threads
             try
             {
-                userSettings.ThreadLimit = -1;
+                this.cacheController.userSettings.ThreadLimit = -1;
 
-                userSettings.ThreadLimit = Convert.ToInt32(Utility.LoadSetting("Thread Limit"));
+                this.cacheController.userSettings.ThreadLimit = Convert.ToInt32(Utility.LoadSetting("Thread Limit"));
 
-                ThreadManager.GetInstance().SetThreadThreshHold(userSettings.ThreadLimit == -1
+                ThreadManager.GetInstance().SetThreadThreshHold(this.cacheController.userSettings.ThreadLimit == -1
                                                                     ? 3
-                                                                    : userSettings.ThreadLimit);
+                                                                    : this.cacheController.userSettings.ThreadLimit);
             }
             catch (Exception)
             {
-                userSettings.ThreadLimit = 3;
+                this.cacheController.userSettings.ThreadLimit = 3;
                 ThreadManager.GetInstance().SetThreadThreshHold(3);
             }
 
             try
             {
-                userSettings.DownloadFolder = Utility.LoadSetting("Download Folder");
-                textBox2.Text = userSettings.DownloadFolder;
+                this.cacheController.userSettings.DownloadFolder = Utility.LoadSetting("Download Folder");
+                this.textBox2.Text = this.cacheController.userSettings.DownloadFolder;
 
-                if (string.IsNullOrEmpty(userSettings.DownloadFolder))
+                if (string.IsNullOrEmpty(this.cacheController.userSettings.DownloadFolder))
                 {
-                    userSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                    this.cacheController.userSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
-                    textBox2.Text = userSettings.DownloadFolder;
+                    this.textBox2.Text = this.cacheController.userSettings.DownloadFolder;
 
                     Utility.SaveSetting("Download Folder", textBox2.Text);
                 }
             }
             catch (Exception)
             {
-                userSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-                textBox2.Text = userSettings.DownloadFolder;
+                this.cacheController.userSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                textBox2.Text = this.cacheController.userSettings.DownloadFolder;
 
                 Utility.SaveSetting("Download Folder", textBox2.Text);
-                userSettings.DownloadFolder = textBox2.Text;
+                this.cacheController.userSettings.DownloadFolder = textBox2.Text;
             }
 
             // Load "Download Options"
             try
             {
-                userSettings.DownloadOptions = Utility.LoadSetting("Download Options");
+                this.cacheController.userSettings.DownloadOptions = Utility.LoadSetting("Download Options");
 
-                switch (userSettings.DownloadOptions)
+                switch (this.cacheController.userSettings.DownloadOptions)
                 {
                     case "0":
                         comboBox1.SelectedIndex = 0;
@@ -445,19 +439,19 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                userSettings.DownloadOptions = "0";
+                this.cacheController.userSettings.DownloadOptions = "0";
                 comboBox1.SelectedIndex = 0;
             }
 
             // Load "Always on Top" Setting
             try
             {
-                userSettings.TopMost = bool.Parse(Utility.LoadSetting("Always OnTop"));
-                TopMost = userSettings.TopMost;
+                this.cacheController.userSettings.TopMost = bool.Parse(Utility.LoadSetting("Always OnTop"));
+                TopMost = this.cacheController.userSettings.TopMost;
             }
             catch (Exception)
             {
-                userSettings.TopMost = false;
+                this.cacheController.userSettings.TopMost = false;
                 TopMost = false;
             }
 
@@ -465,61 +459,86 @@ namespace RiPRipper
             // Load Language Setting
             try
             {
-                userSettings.Language = Utility.LoadSetting("UserLanguage");
+                this.cacheController.userSettings.Language = Utility.LoadSetting("UserLanguage");
 
-                switch (userSettings.Language)
+                switch (this.cacheController.userSettings.Language)
                 {
                     case "de-DE":
-                        _ResourceManager = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
+                        this._ResourceManager = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
                         break;
                     case "fr-FR":
-                        _ResourceManager = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
+                        this._ResourceManager = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
                         break;
                     case "en-EN":
-                        _ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this._ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
                     default:
-                        _ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this._ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
                 }
 
-                AdjustCulture();
+                this.AdjustCulture();
             }
             catch (Exception)
             {
-                _ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                this._ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
             }
 
 
+            // Load "Guest Mode" Setting
             try
             {
-                userSettings.User = Utility.LoadSetting("User");
+                this.cacheController.userSettings.GuestMode = bool.Parse(Utility.LoadSetting("GuestMode"));
+
+                if (this.cacheController.userSettings.GuestMode)
+                {
+                    this.cacheController.userSettings.AutoThank = false;
+                }
+            }
+            catch (Exception)
+            {
+                this.cacheController.userSettings.GuestMode = false;
+            }
+
+            if (this.cacheController.userSettings.GuestMode)
+            {
+                return;
+            }
+
+            try
+            {
+                this.cacheController.userSettings.User = Utility.LoadSetting("User");
 
                 // Import old Password
                 try
                 {
-                    string sOldPass = Utility.EncodePassword(Utility.LoadSetting("Pass")).Replace("-", string.Empty).ToLower();
+                    string sOldPass =
+                        Utility.EncodePassword(Utility.LoadSetting("Pass")).Replace("-", string.Empty).ToLower();
 
                     Utility.SaveSetting("Password", sOldPass);
                     Utility.DeleteSetting("Pass");
 
-                    userSettings.Pass = sOldPass;
+                    this.cacheController.userSettings.Pass = sOldPass;
                 }
                 catch (Exception)
                 {
-                    userSettings.Pass = null;
+                    this.cacheController.userSettings.Pass = null;
                 }
 
-                userSettings.Pass = Utility.LoadSetting("Password");
+                this.cacheController.userSettings.Pass = Utility.LoadSetting("Password");
             }
             catch (Exception)
             {
                 Login frmLgn = new Login();
                 frmLgn.ShowDialog(this);
 
-                if (!bCameThroughCorrectLogin)
+                if (!this.bCameThroughCorrectLogin)
                 {
-                    DialogResult result = TopMostMessageBox.Show(this._ResourceManager.GetString("mbExit"), this._ResourceManager.GetString("mbExitTtl"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = TopMostMessageBox.Show(
+                        this._ResourceManager.GetString("mbExit"),
+                        this._ResourceManager.GetString("mbExitTtl"),
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
 
                     if (result == DialogResult.Yes)
                     {
@@ -528,31 +547,33 @@ namespace RiPRipper
                 }
             }
         }
-        
-        
+
+
+        /// <summary>
+        /// Adjusts the culture.
+        /// </summary>
         private void AdjustCulture()
         {
-            mStartDownloadBtn.Text = _ResourceManager.GetString("btnStartDownload");
-            groupBox1.Text = _ResourceManager.GetString("downloadOptions");
-            groupBox5.Text = string.Format("{0} (-):", _ResourceManager.GetString("lblRippingQue"));
-            stopCurrentThreads.Text = _ResourceManager.GetString("btnStop");
-            groupBox4.Text = _ResourceManager.GetString("lblLastPicture");
-            groupBox2.Text = _ResourceManager.GetString("gbCurrently");
-            mInvalidDestinationMsg = _ResourceManager.GetString("mbInvalidDes");
-            mIncorrectUrlMsg = _ResourceManager.GetString("mbIncorrectURL");
-            mNoThreadMsg = _ResourceManager.GetString("mbNoThread");
-            mNoPostMsg = _ResourceManager.GetString("mbNoPost");
-            mAlreadyQueuedMsg = _ResourceManager.GetString("mbAlreadyQueued");
-            mTNumericMsg = _ResourceManager.GetString("mbTNumeric");
+            this.mStartDownloadBtn.Text = this._ResourceManager.GetString("btnStartDownload");
+            this.groupBox1.Text = this._ResourceManager.GetString("downloadOptions");
+            this.groupBox5.Text = string.Format("{0} (-):", this._ResourceManager.GetString("lblRippingQue"));
+            this.stopCurrentThreads.Text = this._ResourceManager.GetString("btnStop");
+            this.groupBox4.Text = this._ResourceManager.GetString("lblLastPicture");
+            this.groupBox2.Text = this._ResourceManager.GetString("gbCurrently");
+            this.mInvalidDestinationMsg = this._ResourceManager.GetString("mbInvalidDes");
+            this.mIncorrectUrlMsg = this._ResourceManager.GetString("mbIncorrectURL");
+            this.mNoThreadMsg = this._ResourceManager.GetString("mbNoThread");
+            this.mNoPostMsg = this._ResourceManager.GetString("mbNoPost");
+            this.mAlreadyQueuedMsg = this._ResourceManager.GetString("mbAlreadyQueued");
+            this.mTNumericMsg = this._ResourceManager.GetString("mbTNumeric");
 
             // Menue
-            fileToolStripMenuItem.Text = _ResourceManager.GetString("MenuFile");
-            settingsToolStripMenuItem1.Text = _ResourceManager.GetString("MenuSettings");
-            exitToolStripMenuItem.Text = _ResourceManager.GetString("MenuExit");
+            this.fileToolStripMenuItem.Text = this._ResourceManager.GetString("MenuFile");
+            this.settingsToolStripMenuItem1.Text = this._ResourceManager.GetString("MenuSettings");
+            this.exitToolStripMenuItem.Text = this._ResourceManager.GetString("MenuExit");
 
-            settingsToolStripMenuItem.Text = _ResourceManager.GetString("MenuHelp");
-            helpToolStripMenuItem.Text = _ResourceManager.GetString("MenuAbout");
-
+            this.settingsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuHelp");
+            this.helpToolStripMenuItem.Text = this._ResourceManager.GetString("MenuAbout");
         }
 
         /*
@@ -621,7 +642,6 @@ namespace RiPRipper
 
             //AutoResetEvent autoEvent = new AutoResetEvent( false );
 
-            mrefCC = CacheController.GetInstance();
             mrefTM = ThreadManager.GetInstance();
 
 #if (!RIPRIPPERX)
@@ -650,31 +670,33 @@ namespace RiPRipper
             }
 #endif
 
-            LoadSettings();
+            this.LoadSettings();
 
-            if (!userSettings.OfflMode)
+            if (!this.cacheController.userSettings.OfflMode && !this.cacheController.userSettings.GuestMode)
             {
-                AutoLogin();
+                this.AutoLogin();
 
-                if (!bCameThroughCorrectLogin)
+                if (!this.bCameThroughCorrectLogin)
+                {
                     Application.Exit();
+                }
             }
 
             //LoadSettings();
 
-            if (userSettings.SavePids)
+            if (this.cacheController.userSettings.SavePids)
             {
-                LoadHistory();
+                this.LoadHistory();
             }
 
 #if (!RIPRIPPERX)
-            trayIcon.Visible = true;
+            this.trayIcon.Visible = true;
 #endif
 
 #if (!RIPRIPPERX)
             Utility.RegisterRipUrlProtocol();
 #endif
-            if (!userSettings.Extension)
+            if (!this.cacheController.userSettings.Extension)
             {
                 return;
             }
@@ -723,18 +745,18 @@ namespace RiPRipper
             else
             {
                 textBox1.Text = aUrl;
-                userSettings.DownloadFolder = aJobPath;
+                this.cacheController.userSettings.DownloadFolder = aJobPath;
                 comboBox1.SelectedIndex = 2;
 
                 if (aAutoFolder == "1")
                 {
-                    userSettings.SubDirs = true;
-                    userSettings.DownInSepFolder = true;
+                    this.cacheController.userSettings.SubDirs = true;
+                    this.cacheController.userSettings.DownInSepFolder = true;
                 }
                 else
                 {
-                    userSettings.SubDirs = false;
-                    userSettings.DownInSepFolder = false;
+                    this.cacheController.userSettings.SubDirs = false;
+                    this.cacheController.userSettings.DownInSepFolder = false;
                 }
 
                 if (!this.bParseAct)
@@ -755,30 +777,20 @@ namespace RiPRipper
         /// <summary>
         /// Starts Ripping
         /// </summary>
-        /// <param name="sender">
-        /// The sender object.
-        /// </param>
-        /// <param name="e">
-        /// The Event Arguments.
-        /// </param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void MStartDownloadBtnClick(object sender, EventArgs e)
         {
-            if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) && Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(@"http://rip-productions.net/") >= 0)
+            if (this.textBox1.Text.StartsWith("http"))
             {
-                comboBox1.SelectedIndex = 2;
-
-                textBox1.Text = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
-            }
-
-            if (textBox1.Text.StartsWith("http"))
-            {
-                comboBox1.SelectedIndex = 2;
+                this.comboBox1.SelectedIndex = 2;
             }
 
             if (string.IsNullOrEmpty(this.textBox1.Text) || this.bParseAct)
             {
                 return;
             }
+
             if (this.InvokeRequired)
             {
                 this.Invoke((MethodInvoker)this.EnqueueJob);
@@ -839,7 +851,7 @@ namespace RiPRipper
             }
 
             // Check Post is Ripped?!
-            if (sXmlUrl.Contains("dpver=2&postid=") && userSettings.SavePids)
+            if (sXmlUrl.Contains("dpver=2&postid=") && this.cacheController.userSettings.SavePids)
             {
                 if (this.IsPostAlreadyRipped(sXmlUrl.Substring(sXmlUrl.IndexOf("&postid=") + 8)))
                 {
@@ -864,7 +876,7 @@ namespace RiPRipper
             }
             else
             {
-                if (userSettings.DownInSepFolder && sXmlUrl.Contains("threadid"))
+                if (this.cacheController.userSettings.DownInSepFolder && sXmlUrl.Contains("threadid"))
                 {
                     this.EnqueueThreadToPost(sXmlUrl);
                 }
@@ -888,7 +900,7 @@ namespace RiPRipper
                 return false;
             }
 
-            if (string.IsNullOrEmpty(userSettings.DownloadFolder))
+            if (string.IsNullOrEmpty(this.cacheController.userSettings.DownloadFolder))
             {
                 DialogResult result = TopMostMessageBox.Show("Please Set Up Download Folder before starting download", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -921,9 +933,9 @@ namespace RiPRipper
 
             try
             {
-                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Maintainance.GetInstance().GetPostPages(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
                 {
-                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
 #if (!RIPRIPPERX)
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -944,9 +956,9 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Maintainance.GetInstance().GetPostPages(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
                 {
-                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
 #if (!RIPRIPPERX)
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -996,9 +1008,9 @@ namespace RiPRipper
 
             try
             {
-                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Maintainance.GetInstance().GetPostPages(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
                 {
-                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
 #if (!RIPRIPPERX)
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -1019,9 +1031,9 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Maintainance.GetInstance().GetPostPages(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
                 {
-                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
 #if (!RIPRIPPERX)
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -1064,7 +1076,7 @@ namespace RiPRipper
                 return;
             }
 
-            JobInfo job = new JobInfo { URL = sXmlUrl, XMLPayLoad = Maintainance.GetInstance().GetPostPages(sXmlUrl) };
+            JobInfo job = new JobInfo { URL = sXmlUrl, XMLPayLoad = Utility.DownloadRipPage(sXmlUrl) };
 
             //job.sStorePath = sDownloadFolder;
             job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
@@ -1084,7 +1096,7 @@ namespace RiPRipper
 
             if (string.IsNullOrEmpty(job.Title))
             {
-                TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
                 this.UnlockControls();
 
@@ -1106,9 +1118,9 @@ namespace RiPRipper
         /// </summary>
         void ProcessAutoThankYou(string sPostId, int iICount, string sUrl, string sToken)
         {
-            if (!userSettings.AutoThank) { return; }
+            if (!this.cacheController.userSettings.AutoThank) { return; }
 
-            if (iICount < userSettings.MinImageCount) { return; }
+            if (iICount < this.cacheController.userSettings.MinImageCount) { return; }
 
             SendThankYouDelegate lSendThankYouDel = (SendThankYou);
 
@@ -1176,7 +1188,7 @@ namespace RiPRipper
             lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
             lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
             lHttpWebRequest.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
-            lHttpWebRequest.Headers.Add("Cookie: " + CookieManager.GetInstance().GetCookieString());
+            lHttpWebRequest.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));
             lHttpWebRequest.Accept = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
             lHttpWebRequest.KeepAlive = true;
             //lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
@@ -1207,7 +1219,7 @@ namespace RiPRipper
         {
             Indexes idxs = new Indexes();
 
-            string sPagecontent = idxs.GetPostPages(string.Format("{0}&showlinks=1", sXmlUrl));
+            string sPagecontent = Utility.DownloadRipPage(string.Format("{0}&showlinks=1", sXmlUrl));
 
             arlstIndxs = idxs.ParseXML(sPagecontent);
         }
@@ -1222,9 +1234,9 @@ namespace RiPRipper
         /// </param>
         private void ThrdGetPosts(string sXmlUrl)
         {
-            ThreadToPost threadPosts = new ThreadToPost();
+            var threadPosts = new ThreadToPost();
 
-            string sPagecontent = threadPosts.GetPostPages(sXmlUrl);
+            string sPagecontent = Utility.DownloadRipPage(sXmlUrl);
 
             List<ImageInfo> arlst = threadPosts.ParseXML(sPagecontent);
 
@@ -1256,7 +1268,7 @@ namespace RiPRipper
 
                 //////////////////////////////////////////////////////////////////////////
 
-                if (userSettings.SavePids && IsPostAlreadyRipped(sLpostId))
+                if (this.cacheController.userSettings.SavePids && IsPostAlreadyRipped(sLpostId))
                 {
                     goto SKIPIT;
                 }
@@ -1282,7 +1294,7 @@ namespace RiPRipper
                 JobInfo job = new JobInfo
                                   {
                                       URL = sLComposedURL,
-                                      XMLPayLoad = Maintainance.GetInstance().GetPostPages(sLComposedURL)
+                                      XMLPayLoad = Utility.DownloadRipPage(sLComposedURL)
                                   };
 
                 job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
@@ -1337,10 +1349,12 @@ namespace RiPRipper
             }
 
             if (!this.bParseAct && this.ExtractUrls.Count > 0 &&
-                !GetPostsWorker.IsBusy && !GetIdxsWorker.IsBusy)
+                !this.GetPostsWorker.IsBusy && !this.GetIdxsWorker.IsBusy)
             {
                 this.GetExtractUrls();
             }
+
+            this.CheckClipboardData();
         }
 
         /*
@@ -1503,7 +1517,7 @@ namespace RiPRipper
 #if (!RIPRIPPERX)
             try
             {
-                if (userSettings.ShowPopUps)
+                if (this.cacheController.userSettings.ShowPopUps)
                 {
                     trayIcon.Text = _ResourceManager.GetString("gbCurrentlyExtract") + mCurrentJob.Title;
                     trayIcon.BalloonTipIcon = ToolTipIcon.Info;
@@ -1514,7 +1528,7 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                if (userSettings.ShowPopUps)
+                if (this.cacheController.userSettings.ShowPopUps)
                 {
                     trayIcon.Text = bSystemExtr;
                     trayIcon.BalloonTipTitle = bSystemExtr;
@@ -1735,7 +1749,7 @@ namespace RiPRipper
             }
             ///////////////////////////
 
-            sLastPic = mrefCC.uSLastPic;
+            sLastPic = this.cacheController.uSLastPic;
 
             if (File.Exists(sLastPic))
             {
@@ -1790,7 +1804,7 @@ namespace RiPRipper
             string btleExit = this._ResourceManager.GetString("btleExit"),
                    btexExit = this._ResourceManager.GetString("btexExit");
 
-            if (this.bEndRip && userSettings.ShowCompletePopUp)
+            if (this.bEndRip && this.cacheController.userSettings.ShowCompletePopUp)
             {
                 trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                 trayIcon.BalloonTipTitle = btleExit;
@@ -1820,7 +1834,8 @@ namespace RiPRipper
             this.bStopJob = false;
             this.bEndRip = false;
 
-            string ttlHeader = this._ResourceManager.GetString("ttlHeader");
+            var ttlHeader = this._ResourceManager.GetString("ttlHeader");
+            var guestModeText = this._ResourceManager.GetString("guestModeText");
 
             this.groupBox2.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
             this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
@@ -1829,30 +1844,39 @@ namespace RiPRipper
             lvCurJob.Columns[0].Text = "  ";
 
 #if (RIPRIPPER)
-            Text = string.Format("RiP-Ripper {0}.{1}.{2}{3}{4}", 
-                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\"]", ttlHeader, userSettings.User));
-
-            trayIcon.Text = "Right click for context menu";
-#elif (RIPRIPPERX)
-            Text = string.Format("RiP-Ripper X {0}.{1}.{2}{3}{4}", 
-                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\"]", ttlHeader, userSettings.User));
-#else
-            Text = string.Format("RiP-Ripper {0}.{1}.{2}{3}{4}",
+            this.Text = string.Format(
+                "RiP-Ripper {0}.{1}.{2}{3}{4}",
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\"]", ttlHeader, userSettings.User));
+                this.cacheController.userSettings.GuestMode
+                    ? guestModeText
+                    : string.Format("{0}{1}\"]", ttlHeader, this.cacheController.userSettings.User));
 
             trayIcon.Text = "Right click for context menu";
+#elif (RIPRIPPERX)
+            this.Text = string.Format(
+                "RiP-Ripper X {0}.{1}.{2}{3}{4}",
+                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
+                this.cacheController.userSettings.GuestMode
+                    ? guestModeText
+                    : string.Format("{0}{1}\"]", ttlHeader, this.cacheController.userSettings.User));
+#else
+            this.Text = string.Format(
+                "RiP-Ripper {0}.{1}.{2}{3}{4}",
+                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
+                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
+                this.cacheController.userSettings.GuestMode
+                    ? guestModeText
+                    : string.Format("{0}{1}\"]", ttlHeader, this.cacheController.userSettings.User));
+
+            this.trayIcon.Text = "Right click for context menu";
 #endif
 
             // Since no picbox image will be visible until another job is queued,
@@ -1968,15 +1992,15 @@ namespace RiPRipper
 
                 //updatedJob.sStorePath = sDownloadFolder;
 
-                if (userSettings.SubDirs)
+                if (this.cacheController.userSettings.SubDirs)
                 {
                     if (comboBox1.SelectedIndex == 0)
                     {
-                        updatedJob.StorePath = Path.Combine(userSettings.DownloadFolder, mJobsList[i].Title);
+                        updatedJob.StorePath = Path.Combine(this.cacheController.userSettings.DownloadFolder, mJobsList[i].Title);
                     }
                     if (comboBox1.SelectedIndex == 1 || comboBox1.SelectedIndex == 2)
                     {
-                        updatedJob.StorePath = Path.Combine(userSettings.DownloadFolder, mJobsList[i].Title + Path.DirectorySeparatorChar + mJobsList[i].PostTitle);
+                        updatedJob.StorePath = Path.Combine(this.cacheController.userSettings.DownloadFolder, mJobsList[i].Title + Path.DirectorySeparatorChar + mJobsList[i].PostTitle);
                     }
                 }
 
@@ -2145,15 +2169,15 @@ namespace RiPRipper
             {
                 case 0:
                     Utility.SaveSetting("Download Options", "0");
-                    userSettings.DownloadOptions = "0";
+                    this.cacheController.userSettings.DownloadOptions = "0";
                     break;
                 case 1:
                     Utility.SaveSetting("Download Options", "1");
-                    userSettings.DownloadOptions = "1";
+                    this.cacheController.userSettings.DownloadOptions = "1";
                     break;
                 case 2:
                     Utility.SaveSetting("Download Options", "2");
-                    userSettings.DownloadOptions = "2";
+                    this.cacheController.userSettings.DownloadOptions = "2";
                     break;
             }
         }
@@ -2171,7 +2195,7 @@ namespace RiPRipper
                 MenuItem show = new MenuItem("Show RiP-Ripper", (ShowClick));
                 trayMenu.MenuItems.Add(0, show);
 
-                if (userSettings.ShowPopUps)
+                if (this.cacheController.userSettings.ShowPopUps)
                 {
                     trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
                     trayIcon.BalloonTipTitle = "Hidden in Tray";
@@ -2322,7 +2346,7 @@ namespace RiPRipper
         private void SettingsToolStripMenuItem1Click(object sender, EventArgs e)
         {
 
-            if (userSettings.SavePids)
+            if (this.cacheController.userSettings.SavePids)
             {
                 SaveHistory();
             }
@@ -2332,7 +2356,7 @@ namespace RiPRipper
 
             LoadSettings();
 
-            if (userSettings.SavePids)
+            if (this.cacheController.userSettings.SavePids)
             {
                 LoadHistory();
             }
@@ -2367,42 +2391,9 @@ namespace RiPRipper
 
             Utility.SaveSetting("Download Folder", this.textBox2.Text);
 
-            userSettings.DownloadFolder = this.textBox2.Text;
+            this.cacheController.userSettings.DownloadFolder = this.textBox2.Text;
 
             this.bIsBrowserOpen = false;
-        }
-#if (!RIPRIPPERX)
-        protected override void WndProc(ref Message m)
-        {
-            try
-            {
-                // defined in winuser.h
-                const int wmDrawclipboard = 0x308;
-                const int wmChangecbchain = 0x030D;
-
-                switch (m.Msg)
-                {
-                    case wmDrawclipboard:
-                        CheckClipboardData();
-                        Win32.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
-                        break;
-
-                    case wmChangecbchain:
-                        if (m.WParam == nextClipboardViewer)
-                            nextClipboardViewer = m.LParam;
-                        else
-                            Win32.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
-                        break;
-
-                    default:
-                        base.WndProc(ref m);
-                        break;
-                }
-            }
-            catch (Exception)
-            {
-
-            }
         }
 
         /// <summary>
@@ -2410,48 +2401,54 @@ namespace RiPRipper
         /// </summary>
         private void CheckClipboardData()
         {
-            if (!userSettings.ClipBWatch)
+            /*if (!cacheController.userSettings.ClipBWatch)
             {
                 return;
-            }
+            }*/
 
             try
             {
-                IDataObject iData = Clipboard.GetDataObject();
-
-                if (iData.GetDataPresent(DataFormats.Text))
+                if (string.IsNullOrEmpty(Clipboard.GetText()))
                 {
-                    string sClipBoardURLTemp = (string)iData.GetData(DataFormats.Text);
+                    return;
+                }
 
-                    string[] sClipBoardUrLs = sClipBoardURLTemp.Split(new[] { '\n' });
+                // Ignore other input
+                if (!Clipboard.GetText().StartsWith("http://rip-productions.net/"))
+                {
+                    return;
+                }
 
-                    foreach (string sClipBoardURL in
-                        sClipBoardUrLs.Where(sClipBoardURL => sClipBoardURL.StartsWith(@"http://rip-productions.net/") || sClipBoardURL.StartsWith(@"http://www.rip-productions.net/")))
+                var clipBoardURLTemp = Clipboard.GetText();
+
+                Clipboard.Clear();
+
+                string[] sClipBoardUrLs = clipBoardURLTemp.Split(new[] { '\n' });
+
+                foreach (string sClipBoardURL in
+                    sClipBoardUrLs.Where(
+                        sClipBoardURL =>
+                        sClipBoardURL.StartsWith(@"http://rip-productions.net/")
+                        || sClipBoardURL.StartsWith(@"http://www.rip-productions.net/")))
+                {
+                    if (!this.bParseAct)
                     {
-                        if (!this.bParseAct)
+                        this.comboBox1.SelectedIndex = 2;
+
+                        this.textBox1.Text = sClipBoardURL;
+
+                        if (InvokeRequired)
                         {
-                            if (this.comboBox1.SelectedIndex != 2)
-                            {
-                                this.comboBox1.SelectedIndex = 2;
-                            }
-
-                            this.textBox1.Text = sClipBoardURL;
-
-                            if (InvokeRequired)
-                            {
-                                Invoke((MethodInvoker)this.EnqueueJob);
-                            }
-                            else
-                            {
-                                this.EnqueueJob();
-                            } 
+                            Invoke((MethodInvoker)this.EnqueueJob);
                         }
                         else
                         {
-                            this.ExtractUrls.Add(sClipBoardURL);
+                            this.EnqueueJob();
                         }
-
-                        Clipboard.Clear();
+                    }
+                    else
+                    {
+                        this.ExtractUrls.Add(sClipBoardURL);
                     }
                 }
             }
@@ -2460,16 +2457,16 @@ namespace RiPRipper
                 Clipboard.Clear();
             }
         }
-#endif
+
         /// <summary>
         /// Auto login if User Credentials exists in Config file.
         /// if no Data show Login Form
         /// </summary>
         public void AutoLogin()
         {
-            if (userSettings.User != null && userSettings.Pass != null)
+            if (this.cacheController.userSettings.User != null && this.cacheController.userSettings.Pass != null)
             {
-                LoginManager lgnMgr = new LoginManager(userSettings.User, userSettings.Pass);
+                LoginManager lgnMgr = new LoginManager(this.cacheController.userSettings.User, this.cacheController.userSettings.Pass);
 
                 if (lgnMgr.DoLogin())
                 {
@@ -2503,11 +2500,11 @@ namespace RiPRipper
         {
             try
             {
-                userSettings.WindowLeft = int.Parse(Utility.LoadSetting("Window left"));
-                userSettings.WindowTop = int.Parse(Utility.LoadSetting("Window top"));
+                this.cacheController.userSettings.WindowLeft = int.Parse(Utility.LoadSetting("Window left"));
+                this.cacheController.userSettings.WindowTop = int.Parse(Utility.LoadSetting("Window top"));
 
-                Left = userSettings.WindowLeft;
-                Top = userSettings.WindowTop;
+                Left = this.cacheController.userSettings.WindowLeft;
+                Top = this.cacheController.userSettings.WindowTop;
             }
             catch (Exception)
             {
@@ -2516,32 +2513,32 @@ namespace RiPRipper
 
             try
             {
-                userSettings.WindowWidth = int.Parse(Utility.LoadSetting("Window width"));
+                this.cacheController.userSettings.WindowWidth = int.Parse(Utility.LoadSetting("Window width"));
             }
             catch (Exception)
             {
-                userSettings.WindowWidth = 863;
+                this.cacheController.userSettings.WindowWidth = 863;
             }
 
-            Width = userSettings.WindowWidth;
+            Width = this.cacheController.userSettings.WindowWidth;
 
             try
             {
-                userSettings.WindowHeight = int.Parse(Utility.LoadSetting("Window height"));
+                this.cacheController.userSettings.WindowHeight = int.Parse(Utility.LoadSetting("Window height"));
             }
             catch (Exception)
             {
-                userSettings.WindowHeight = 611;
+                this.cacheController.userSettings.WindowHeight = 611;
             }
 
-            Height = userSettings.WindowHeight;
+            Height = this.cacheController.userSettings.WindowHeight;
 
         }
         private void MainFormFormClosing(object sender, FormClosingEventArgs e)
         {
             SaveOnExit();
 
-            if (userSettings.SavePids)
+            if (this.cacheController.userSettings.SavePids)
             {
                 SaveHistory();
             }
@@ -2586,11 +2583,11 @@ namespace RiPRipper
 
 
 
-                    if (!string.IsNullOrEmpty(userSettings.DownloadFolder))
+                    if (!string.IsNullOrEmpty(this.cacheController.userSettings.DownloadFolder))
                     {
 
                         // Add our user tasks
-                        jumpList.AddUserTasks(new JumpListLink(userSettings.DownloadFolder, "Open Download Folder")
+                        jumpList.AddUserTasks(new JumpListLink(this.cacheController.userSettings.DownloadFolder, "Open Download Folder")
                                                   {
                                                       IconReference =
                                                           new IconReference(
@@ -2659,10 +2656,6 @@ namespace RiPRipper
                 StatusLabelInfo.Text = string.Empty;
             }
 
-#if (!RIPRIPPERX)
-            nextClipboardViewer = (IntPtr)Win32.SetClipboardViewer((int)Handle);
-#endif
-
             // Delete Backup Files From AutoUpdate
             if (File.Exists("RiPRipper.bak"))
             {
@@ -2670,11 +2663,11 @@ namespace RiPRipper
             }
 
             // Extract Urls from Text file for Ripping
-            userSettings.TxtFolder = string.IsNullOrEmpty(userSettings.TxtFolder) ? "ExtractUrls.txt" : Path.Combine(userSettings.TxtFolder, "ExtractUrls.txt");
+            this.cacheController.userSettings.TxtFolder = string.IsNullOrEmpty(this.cacheController.userSettings.TxtFolder) ? "ExtractUrls.txt" : Path.Combine(this.cacheController.userSettings.TxtFolder, "ExtractUrls.txt");
 
-            if (File.Exists(userSettings.TxtFolder))
+            if (File.Exists(this.cacheController.userSettings.TxtFolder))
             {
-                this.GetTxtUrls(userSettings.TxtFolder);
+                this.GetTxtUrls(this.cacheController.userSettings.TxtFolder);
             }
             /////////////////
         }
@@ -2777,7 +2770,7 @@ namespace RiPRipper
                 }
             }
 
-            if (userSettings.SavePids)
+            if (this.cacheController.userSettings.SavePids)
             {
                 this.SaveHistory();
             }
@@ -2820,7 +2813,7 @@ namespace RiPRipper
                 }
             }
 
-            if (userSettings.SavePids)
+            if (this.cacheController.userSettings.SavePids)
             {
                 SaveHistory();
             }
@@ -2888,18 +2881,18 @@ namespace RiPRipper
         /// <returns>The Storage Folder</returns>
         private string GenerateStorePath(JobInfo curJob)
         {
-            string sStorePath = userSettings.DownloadFolder;
+            string sStorePath = this.cacheController.userSettings.DownloadFolder;
             
-            if (userSettings.SubDirs)
+            if (this.cacheController.userSettings.SubDirs)
             {
                 try
                 {
                     if (curJob.ForumTitle != null)
                     {
-                        if (userSettings.DownInSepFolder)
+                        if (this.cacheController.userSettings.DownInSepFolder)
                         {
                             sStorePath = Path.Combine(
-                                userSettings.DownloadFolder,
+                                this.cacheController.userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.PostTitle));
@@ -2907,24 +2900,24 @@ namespace RiPRipper
                         else
                         {
                             sStorePath = Path.Combine(
-                                userSettings.DownloadFolder,
+                                this.cacheController.userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.Title));
                         }
                     }
                     else
                     {
-                        if (userSettings.DownInSepFolder)
+                        if (this.cacheController.userSettings.DownInSepFolder)
                         {
                             sStorePath = Path.Combine(
-                                userSettings.DownloadFolder,
+                                this.cacheController.userSettings.DownloadFolder,
                                 Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
                                 Utility.RemoveIllegalCharecters(curJob.PostTitle));
                         }
                         else
                         {
                             sStorePath = Path.Combine(
-                                userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
+                                this.cacheController.userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
                         }
                     }
 
@@ -2959,7 +2952,7 @@ namespace RiPRipper
                 }
                 catch (Exception)
                 {
-                    sStorePath = Path.Combine(userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
+                    sStorePath = Path.Combine(this.cacheController.userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
                 }
             }
 

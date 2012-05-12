@@ -79,9 +79,9 @@ namespace RiPRipper
         /// </summary>
         public void LoadSettings()
         {
-            this.TopMost = MainForm.userSettings.TopMost;
+            this.TopMost = CacheController.GetInstance().userSettings.TopMost;
 
-            switch (MainForm.userSettings.Language)
+            switch (CacheController.GetInstance().userSettings.Language)
             {
                 case "de-DE":
                     this.rm = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());

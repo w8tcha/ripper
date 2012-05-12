@@ -26,16 +26,16 @@ namespace RiPRipper
     public class CacheController
     {
         #region Constants and Fields
-
-        /// <summary>
-        /// </summary>
-        public static MainForm xform;
-
         /// <summary>
         ///   Universal string, Last pic Race conditions happen alot on this string, 
         ///   but it's function is non-critical enough to ignore those races.
         /// </summary>
         public string uSLastPic = string.Empty; // 
+
+        /// <summary>
+        /// All Settings
+        /// </summary>
+        public SettingBase userSettings = new SettingBase();
 
         /// <summary>
         /// </summary>

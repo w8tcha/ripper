@@ -128,10 +128,13 @@ namespace RiPRipper.ImageHosts
 
             try
             {
-                WebClient client = new WebClient();
+                var random = new Random();
+
+                var client = new WebClient();
+
                 client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.Headers["Cookie"] = "chililast=1333887023.078;";
+                client.Headers["Cookie"] = string.Format("chililast=99999999999999999.{0};", random.Next(001, 999));
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
             }
@@ -179,23 +182,34 @@ namespace RiPRipper.ImageHosts
         {
             string strPageRead;
 
+            var random = new Random();
+
             try
             {
                 var req = (HttpWebRequest)WebRequest.Create(strURL);
 
                 req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-                req.Headers["Cookie"] = "chililast=1333887023.078;";
+
+                req.Headers["Cookie"] = string.Format("chililast=99999999999999999.{0};", random.Next(001, 999));
                 req.Referer = strURL;
 
                 var res = (HttpWebResponse)req.GetResponse();
 
                 var stream = res.GetResponseStream();
-                var reader = new StreamReader(stream);
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
 
-                strPageRead = reader.ReadToEnd();
+                    strPageRead = reader.ReadToEnd();
 
-                res.Close();
-                reader.Close();
+                    res.Close();
+                    reader.Close();
+                }
+                else
+                {
+                    res.Close();
+                    return string.Empty;
+                }
             }
             catch (ThreadAbortException)
             {

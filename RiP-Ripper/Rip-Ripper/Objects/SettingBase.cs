@@ -23,6 +23,11 @@ namespace RiPRipper.Objects
         public bool OfflMode { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether use Guest Mode or not
+        /// </summary>
+        public bool GuestMode { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether "Firefox Exension Enabled" Setting
         /// </summary>
         public bool Extension { get; set; }

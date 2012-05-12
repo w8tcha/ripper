@@ -37,8 +37,6 @@ namespace RiPRipper
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -47,15 +45,18 @@ namespace RiPRipper
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.timer1 = new System.Timers.Timer();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.GuestLoginButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timer1)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
@@ -66,36 +67,11 @@ namespace RiPRipper
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Location = new System.Drawing.Point(8, 16);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(376, 252);
+            this.groupBox1.Size = new System.Drawing.Size(359, 241);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Provide Login Credentials to RiP Forums";
             this.groupBox1.UseCompatibleTextRendering = true;
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(57, 227);
-            this.label5.MaximumSize = new System.Drawing.Size(0, 13);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(184, 13);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "label5";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.label5.UseCompatibleTextRendering = true;
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.Items.AddRange(new object[] {
-            "German",
-            "French",
-            "English"});
-            this.comboBox2.Location = new System.Drawing.Point(247, 223);
-            this.comboBox2.MaximumSize = new System.Drawing.Size(121, 0);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 21);
-            this.comboBox2.TabIndex = 4;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2SelectedIndexChanged);
             // 
             // checkBox1
             // 
@@ -117,10 +93,10 @@ namespace RiPRipper
             this.label4.Location = new System.Drawing.Point(16, 24);
             this.label4.MaximumSize = new System.Drawing.Size(352, 48);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(352, 48);
+            this.label4.Size = new System.Drawing.Size(330, 48);
             this.label4.TabIndex = 6;
             this.label4.Text = "WARNING! More than 3 failed tries will result in your RiP Account being locked! Y" +
-                "ou have been warned!";
+    "ou have been warned!";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label4.UseCompatibleTextRendering = true;
             // 
@@ -128,9 +104,9 @@ namespace RiPRipper
             // 
             this.label3.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Red;
-            this.label3.Location = new System.Drawing.Point(32, 192);
+            this.label3.Location = new System.Drawing.Point(13, 189);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(312, 24);
+            this.label3.Size = new System.Drawing.Size(335, 24);
             this.label3.TabIndex = 5;
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -184,16 +160,65 @@ namespace RiPRipper
             this.textBox1.Size = new System.Drawing.Size(246, 20);
             this.textBox1.TabIndex = 0;
             // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(43, 355);
+            this.label5.MaximumSize = new System.Drawing.Size(0, 13);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(184, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "label5";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label5.UseCompatibleTextRendering = true;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.Items.AddRange(new object[] {
+            "German",
+            "French",
+            "English"});
+            this.comboBox2.Location = new System.Drawing.Point(233, 351);
+            this.comboBox2.MaximumSize = new System.Drawing.Size(121, 0);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(121, 21);
+            this.comboBox2.TabIndex = 4;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2SelectedIndexChanged);
+            // 
             // timer1
             // 
             this.timer1.Interval = 400D;
             this.timer1.SynchronizingObject = this;
             this.timer1.Elapsed += new System.Timers.ElapsedEventHandler(this.Timer1Elapsed);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.GuestLoginButton);
+            this.groupBox2.Location = new System.Drawing.Point(8, 264);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(359, 81);
+            this.groupBox2.TabIndex = 14;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Or Login as Guest ...";
+            // 
+            // GuestLoginButton
+            // 
+            this.GuestLoginButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.GuestLoginButton.Location = new System.Drawing.Point(102, 19);
+            this.GuestLoginButton.Name = "GuestLoginButton";
+            this.GuestLoginButton.Size = new System.Drawing.Size(244, 47);
+            this.GuestLoginButton.TabIndex = 4;
+            this.GuestLoginButton.Text = "Guest Login";
+            this.GuestLoginButton.UseCompatibleTextRendering = true;
+            this.GuestLoginButton.Click += new System.EventHandler(this.GuestLoginButton_Click);
+            // 
             // Login
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(394, 280);
+            this.ClientSize = new System.Drawing.Size(373, 384);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -205,6 +230,7 @@ namespace RiPRipper
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timer1)).EndInit();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -222,5 +248,7 @@ namespace RiPRipper
         private CheckBox checkBox1;
         private ComboBox comboBox2;
         private Label label5;
+        private GroupBox groupBox2;
+        private Button GuestLoginButton;
     }
 }

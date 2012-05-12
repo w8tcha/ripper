@@ -1,7 +1,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UrlHandler.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
-//   //   //   //  This software is licensed under the MIT license. See license.txt for details.
+//   This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
 // <summary>
 //   Code Named: RiP-Ripper

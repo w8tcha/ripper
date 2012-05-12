@@ -532,7 +532,7 @@ namespace RiPRipper
         private System.Timers.Timer tmrPageUpdate;
         private JobInfo mCurrentJob = null;
         private List<ImageInfo> mImagesList = null;
-        private CacheController mrefCC = null;
+        private CacheController cacheController = null;
         private ThreadManager mrefTM = null;
         public bool bCameThroughCorrectLogin = false;
         public bool bKeepPicHidden = false;

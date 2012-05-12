@@ -40,25 +40,26 @@ namespace RiPRipper
             showTrayPopups.Enabled = false;
             checkBox10.Enabled = false;
 #endif
+            var cacheController = CacheController.GetInstance();
 
             // Load "Show Tray PopUps" Setting
-            showTrayPopups.Checked = MainForm.userSettings.ShowPopUps;
+            this.showTrayPopups.Checked = cacheController.userSettings.ShowPopUps;
 
             // Load "Download Folder" Setting
-            textBox2.Text =  MainForm.userSettings.DownloadFolder;
+            textBox2.Text = cacheController.userSettings.DownloadFolder;
 
             // Load "Thread Limit" Setting
-            numericUDThreads.Text = MainForm.userSettings.ThreadLimit.ToString();
+            numericUDThreads.Text = cacheController.userSettings.ThreadLimit.ToString();
             ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
 
             // min. Image Count for Thanks
-            numericUDThanks.Text = MainForm.userSettings.MinImageCount.ToString();
+            numericUDThanks.Text =cacheController.userSettings.MinImageCount.ToString();
 
             // Load "Create Subdirctories" Setting
-            checkBox1.Checked = MainForm.userSettings.SubDirs;
+            checkBox1.Checked =cacheController.userSettings.SubDirs;
 
             // Load "Automaticly Thank You Button" Setting
-            if (MainForm.userSettings.AutoThank)
+            if (cacheController.userSettings.AutoThank)
             {
                 checkBox8.Checked = true;
             }
@@ -69,14 +70,14 @@ namespace RiPRipper
             }
 
             // Load "Clipboard Watch" Setting
-            checkBox10.Checked = MainForm.userSettings.ClipBWatch;
+            checkBox10.Checked =cacheController.userSettings.ClipBWatch;
            
             // Load "Always on Top" Setting
-            checkBox5.Checked = MainForm.userSettings.TopMost;
-            TopMost = MainForm.userSettings.TopMost;
+            checkBox5.Checked =cacheController.userSettings.TopMost;
+            TopMost =cacheController.userSettings.TopMost;
 
             // Load "Download each post in its own folder" Setting
-            mDownInSepFolderChk.Checked = MainForm.userSettings.DownInSepFolder;   
+            mDownInSepFolderChk.Checked =cacheController.userSettings.DownInSepFolder;   
 
             if (!checkBox1.Checked)
             {
@@ -85,15 +86,15 @@ namespace RiPRipper
             }
 
             // Load "Save Ripped posts for checking" Setting
-            saveHistoryChk.Checked = MainForm.userSettings.SavePids;
+            saveHistoryChk.Checked =cacheController.userSettings.SavePids;
 
             // Load "Show Downloads Complete PopUp" Setting
-            checkBox9.Checked = MainForm.userSettings.ShowCompletePopUp;
+            checkBox9.Checked =cacheController.userSettings.ShowCompletePopUp;
 
             // Load Language Setting
             try
             {
-                switch (MainForm.userSettings.Language)
+                switch (cacheController.userSettings.Language)
                 {
                     case "de-DE":
                         rm = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
@@ -161,23 +162,30 @@ namespace RiPRipper
                 pictureBox2.Image = Languages.english.us;
             }
         }
+
         /// <summary>
         /// Open Browse Download Folder Dialog
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void Button4Click(object sender, EventArgs e)
         {
-            FBD.ShowDialog(this);
+            var cacheController = CacheController.GetInstance();
 
-            if (FBD.SelectedPath.Length <= 1) return;
+            this.FBD.ShowDialog(this);
 
-            textBox2.Text = FBD.SelectedPath;
+            if (FBD.SelectedPath.Length <= 1)
+            {
+                return;
+            }
 
-            Utility.SaveSetting("Download Folder", textBox2.Text);
+            this.textBox2.Text = this.FBD.SelectedPath;
+
+            Utility.SaveSetting("Download Folder", this.textBox2.Text);
                 
-            MainForm.userSettings.DownloadFolder = textBox2.Text;
+           cacheController.userSettings.DownloadFolder = this.textBox2.Text;
         }
+
         /// <summary>
         /// Close Dialog and Save Changes
         /// </summary>

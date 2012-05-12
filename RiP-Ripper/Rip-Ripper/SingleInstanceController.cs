@@ -49,9 +49,16 @@ namespace RiPRipper
         /// <param name="e">The <see cref="Microsoft.VisualBasic.ApplicationServices.StartupEventArgs"/> instance containing the event data.</param>
         private static void SingleInstanceController_Startup(object sender, StartupEventArgs e)
         {
-            if (e.CommandLine.Count > 0 && !string.IsNullOrEmpty(e.CommandLine[0]))
+            if (e.CommandLine.Count <= 0 || string.IsNullOrEmpty(e.CommandLine[0]))
             {
-                Clipboard.SetText(Utility.ProccesArguments(e.CommandLine[0]));
+                return;
+            }
+            
+            var extractedUrl = Utility.ProccesArguments(e.CommandLine[0]);
+                
+            if (!string.IsNullOrEmpty(extractedUrl))
+            {
+                Clipboard.SetText(extractedUrl);
             }
         }
 
@@ -62,9 +69,16 @@ namespace RiPRipper
         /// <param name="e">The <see cref="Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs"/> instance containing the event data.</param>
         private static void SingleInstanceController_StartupNextInstance(object sender, StartupNextInstanceEventArgs e)
         {
-            if (e.CommandLine.Count > 0 && !string.IsNullOrEmpty(e.CommandLine[0]))
+            if (e.CommandLine.Count <= 0 || string.IsNullOrEmpty(e.CommandLine[0]))
             {
-                Clipboard.SetText(Utility.ProccesArguments(e.CommandLine[0]));
+                return;
+            }
+
+            var extractedUrl = Utility.ProccesArguments(e.CommandLine[0]);
+
+            if (!string.IsNullOrEmpty(extractedUrl))
+            {
+                Clipboard.SetText(extractedUrl);
             }
         }        
     }

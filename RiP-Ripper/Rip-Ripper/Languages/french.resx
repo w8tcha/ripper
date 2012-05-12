@@ -321,4 +321,13 @@
   <data name="gbParse2" xml:space="preserve">
     <value>Analyse de la jobs.xml...</value>
   </data>
+  <data name="guestModeText" xml:space="preserve">
+    <value>[mode invité]</value>
+  </data>
+  <data name="gbGuestLoginHead" xml:space="preserve">
+    <value>Ou Connexion en tant qu'invité ...</value>
+  </data>
+  <data name="guestLoginButton" xml:space="preserve">
+    <value>Guest Login</value>
+  </data>
 </root>
