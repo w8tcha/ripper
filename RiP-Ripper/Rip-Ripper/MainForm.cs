@@ -256,12 +256,16 @@ namespace RiPRipper
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
+#if (!RIPRIPPERX)
             var controller = new SingleInstanceController();
 
             controller.Run(args);
+#else
 
-            //Application.Run(new MainForm(args));
+            Application.Run(new MainForm());
+#endif
         }
+
         /// <summary>
         /// Loads All Settings
         /// </summary>
@@ -2401,10 +2405,10 @@ namespace RiPRipper
         /// </summary>
         private void CheckClipboardData()
         {
-            /*if (!cacheController.userSettings.ClipBWatch)
+            if (!cacheController.userSettings.ClipBWatch)
             {
                 return;
-            }*/
+            }
 
             try
             {

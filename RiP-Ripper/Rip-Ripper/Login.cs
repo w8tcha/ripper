@@ -1,16 +1,13 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: RiP-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Login.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//   //   This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: RiP-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RiPRipper
 {
@@ -25,7 +22,10 @@ namespace RiPRipper
     /// </summary>
     public partial class Login : Form
     {
-        public ResourceManager rm;
+        /// <summary>
+        /// Gets or sets the Resource Manager
+        /// </summary>
+        private ResourceManager _ResourceManager { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Login"/> class.
@@ -40,18 +40,18 @@ namespace RiPRipper
         /// </summary>
         private void AdjustCulture()
         {
-            this.groupBox1.Text = this.rm.GetString("gbLoginHead");
-            this.groupBox2.Text = this.rm.GetString("gbGuestLoginHead");
+            this.groupBox1.Text = this._ResourceManager.GetString("gbLoginHead");
+            this.groupBox2.Text = this._ResourceManager.GetString("gbGuestLoginHead");
 
-            this.label1.Text = this.rm.GetString("lblUser");
-            this.label2.Text = this.rm.GetString("lblPass");
-            this.label4.Text = this.rm.GetString("lblWarningLogin");
-            this.label5.Text = this.rm.GetString("gbLanguage");
+            this.label1.Text = this._ResourceManager.GetString("lblUser");
+            this.label2.Text = this._ResourceManager.GetString("lblPass");
+            this.label4.Text = this._ResourceManager.GetString("lblWarningLogin");
+            this.label5.Text = this._ResourceManager.GetString("gbLanguage");
 
-            this.checkBox1.Text = this.rm.GetString("chRememberCred");
+            this.checkBox1.Text = this._ResourceManager.GetString("chRememberCred");
 
-            this.LoginBtn.Text = this.rm.GetString("logintext");
-            this.GuestLoginButton.Text =  this.rm.GetString("guestLoginButton");
+            this.LoginBtn.Text = this._ResourceManager.GetString("logintext");
+            this.GuestLoginButton.Text =  this._ResourceManager.GetString("guestLoginButton");
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace RiPRipper
 
             LoginManager lgnMgr = new LoginManager(this.textBox1.Text, this.textBox2.Text);
 
-            string lblWelcome = this.rm.GetString("lblWelcome"), lblFailed = this.rm.GetString("lblFailed");
+            string lblWelcome = this._ResourceManager.GetString("lblWelcome"), lblFailed = this._ResourceManager.GetString("lblFailed");
 
             if (lgnMgr.DoLogin())
             {
@@ -149,15 +149,15 @@ namespace RiPRipper
             switch (this.comboBox2.SelectedIndex)
             {
                 case 0:
-                    this.rm = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "de-DE");
                     break;
                 case 1:
-                    this.rm = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "fr-FR");
                     break;
                 case 2:
-                    this.rm = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "en-EN");
                     break;
             }
@@ -177,6 +177,8 @@ namespace RiPRipper
             var cacheController = CacheController.GetInstance();
 
             cacheController.userSettings.GuestMode = true;
+
+            Utility.SaveSetting("GuestMode", cacheController.userSettings.GuestMode.ToString());
 
             this.Close();
         }
