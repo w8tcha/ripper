@@ -1,13 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiPRipper", "Rip-Ripper\RiPRipper.csproj", "{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RiP-Ripper-Setup", "RiP-Ripper-Setup\RiP-Ripper-Setup.vdproj", "{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RiP-Ripper-Setup-x64", "RiP-Ripper-Setup-x64\RiP-Ripper-Setup-x64.vdproj", "{04A3B1B6-9543-40D1-A7DB-556EE76F016B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setups", "Setups", "{8F21200F-10A6-47BB-8942-8CF9D241D926}"
+	ProjectSection(SolutionItems) = preProject
+		RiP-Ripper-Setup\RiP-Ripper-Setup-x64.iss = RiP-Ripper-Setup\RiP-Ripper-Setup-x64.iss
+		RiP-Ripper-Setup\RiP-Ripper-Setup-x86.iss = RiP-Ripper-Setup\RiP-Ripper-Setup-x86.iss
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CD7B910C-7C51-4B36-89BC-3B15F5B35F7E}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,24 +17,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CD7B91
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		CodeAnalysisDebug|Any CPU = CodeAnalysisDebug|Any CPU
-		CodeAnalysisDebug|x64 = CodeAnalysisDebug|x64
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
-		RiPRipper|Any CPU = RiPRipper|Any CPU
-		RiPRipper|x64 = RiPRipper|x64
 		RiPRipper64|Any CPU = RiPRipper64|Any CPU
 		RiPRipper64|x64 = RiPRipper64|x64
 		RiPRipperX|Any CPU = RiPRipperX|Any CPU
 		RiPRipperX|x64 = RiPRipperX|x64
+		RiPRipper|Any CPU = RiPRipper|Any CPU
+		RiPRipper|x64 = RiPRipper|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.CodeAnalysisDebug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.CodeAnalysisDebug|Any CPU.Build.0 = Debug|Any CPU
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.CodeAnalysisDebug|x64.ActiveCfg = Debug|x64
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.CodeAnalysisDebug|x64.Build.0 = Debug|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Debug|x64.ActiveCfg = Debug|x64
@@ -43,10 +37,6 @@ Global
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Release|Any CPU.Build.0 = RiPRipperX|Any CPU
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Release|x64.ActiveCfg = RiPRipper64|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Release|x64.Build.0 = RiPRipper64|x64
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|Any CPU.ActiveCfg = RiPRipper|Any CPU
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|Any CPU.Build.0 = RiPRipper|Any CPU
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|x64.ActiveCfg = RiPRipper|x64
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|x64.Build.0 = RiPRipper|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper64|Any CPU.ActiveCfg = RiPRipper64|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper64|Any CPU.Build.0 = RiPRipper64|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper64|x64.ActiveCfg = RiPRipper64|x64
@@ -55,47 +45,12 @@ Global
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipperX|Any CPU.Build.0 = RiPRipperX|Any CPU
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipperX|x64.ActiveCfg = RiPRipperX|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipperX|x64.Build.0 = RiPRipperX|x64
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.CodeAnalysisDebug|Any CPU.ActiveCfg = Debug
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.CodeAnalysisDebug|x64.ActiveCfg = Debug
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.Debug|Any CPU.ActiveCfg = Debug
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.Debug|x64.ActiveCfg = Debug
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.Release|Any CPU.ActiveCfg = Release
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.Release|x64.ActiveCfg = Release
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.RiPRipper|Any CPU.ActiveCfg = Release
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.RiPRipper|x64.ActiveCfg = Release
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.RiPRipper64|Any CPU.ActiveCfg = Release
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.RiPRipper64|x64.ActiveCfg = Release
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.RiPRipperX|Any CPU.ActiveCfg = Release
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6}.RiPRipperX|x64.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.CodeAnalysisDebug|Any CPU.ActiveCfg = Debug
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.CodeAnalysisDebug|Any CPU.Build.0 = Debug
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.CodeAnalysisDebug|x64.ActiveCfg = Debug
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.CodeAnalysisDebug|x64.Build.0 = Debug
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.Debug|Any CPU.ActiveCfg = Debug
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.Debug|x64.ActiveCfg = Debug
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.Debug|x64.Build.0 = Debug
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.Release|Any CPU.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.Release|Any CPU.Build.0 = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.Release|x64.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.Release|x64.Build.0 = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipper|Any CPU.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipper|Any CPU.Build.0 = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipper|x64.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipper|x64.Build.0 = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipper64|Any CPU.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipper64|Any CPU.Build.0 = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipper64|x64.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipper64|x64.Build.0 = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipperX|Any CPU.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipperX|Any CPU.Build.0 = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipperX|x64.ActiveCfg = Release
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B}.RiPRipperX|x64.Build.0 = Release
+		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|Any CPU.ActiveCfg = RiPRipper64|x86
+		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|Any CPU.Build.0 = RiPRipper64|x86
+		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|x64.ActiveCfg = RiPRipper|x64
+		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|x64.Build.0 = RiPRipper|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{04A3B1B6-9543-40D1-A7DB-556EE76F016B} = {8F21200F-10A6-47BB-8942-8CF9D241D926}
-		{13C11A53-6F2B-4E93-8BE6-3679877BFBB6} = {8F21200F-10A6-47BB-8942-8CF9D241D926}
 	EndGlobalSection
 EndGlobal

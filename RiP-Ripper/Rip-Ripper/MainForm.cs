@@ -25,6 +25,7 @@ namespace RiPRipper
     using System.Xml.Serialization;
     using Microsoft.WindowsAPICodePack.Shell;
     using Microsoft.WindowsAPICodePack.Taskbar;
+
     using RiPRipper.Objects;
 
     /// <summary>
@@ -1723,69 +1724,68 @@ namespace RiPRipper
         }
 
         private Image imgLastPic;
+
         /// <summary>
         /// Shows the last Downloaded Image
         /// </summary>
         public void ShowLastPic()
         {
-
-            // Reclaim resources used by previous image in the picturebox
-            /*if (pictureBox1.Image != null)
+            if (this.pictureBox1.Image != null)
             {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-            }*/
-
-            if (pictureBox1.Image != null)
-            {
-              //  imgLastPic.Dispose();
-               // imgLastPic = null;
-
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-
+                this.pictureBox1.Image.Dispose();
+                this.pictureBox1.Image = null;
             }
 
-            if (pictureBox1.BackgroundImage != null)
+            if (this.pictureBox1.BackgroundImage != null)
             {
-                pictureBox1.BackgroundImage.Dispose();
-                pictureBox1.BackgroundImage = null;
+                this.pictureBox1.BackgroundImage.Dispose();
+                this.pictureBox1.BackgroundImage = null;
             }
             ///////////////////////////
 
-            sLastPic = this.cacheController.uSLastPic;
+            this.sLastPic = this.cacheController.uSLastPic;
 
-            if (File.Exists(sLastPic))
+            if (!File.Exists(this.sLastPic))
             {
-                try
+                return;
+            }
+
+            try
+            {
+                var fileInfo = new FileInfo(this.sLastPic);
+
+                // skip Images above 9 MB
+                if (fileInfo.Length >= 9437184)
                 {
-                    pictureBox1.Visible = true;
-
-                    if (sLastPic.EndsWith(".gif"))
-                    {
-                        pictureBox1.BackgroundImage = Image.FromFile(sLastPic);
-                        pictureBox1.Update();
-                    }
-                    else
-                    {
-                        // This statement causes file locking until the
-                        // process exits unless cleared when not visible
-
-                        imgLastPic = Image.FromFile(sLastPic);
-
-                        pictureBox1.Image = imgLastPic;
-
-                        //pictureBox1.Image = Image.FromFile(sLastPic);
-                        pictureBox1.Update();
-                    }
+                    return;
                 }
-                catch (Exception)
+
+                this.pictureBox1.Visible = true;
+
+                if (this.sLastPic.EndsWith(".gif"))
                 {
-                    //imgLastPic.Dispose();
-                    //imgLastPic = null;
-                    pictureBox1.Image.Dispose();
-                    pictureBox1.Image = null;
+                    this.pictureBox1.BackgroundImage = Image.FromFile(this.sLastPic);
+                    this.pictureBox1.Update();
                 }
+                else
+                {
+                    // This statement causes file locking until the
+                    // process exits unless cleared when not visible
+                    //this.imgLastPic = Image.FromFile(this.sLastPic);
+
+                    using (FileStream stream = new FileStream(this.sLastPic, FileMode.Open, FileAccess.Read))
+                    {
+                        this.imgLastPic = Image.FromStream(stream);
+                    }
+
+                    this.pictureBox1.Image = this.imgLastPic;
+                    this.pictureBox1.Update();
+                }
+            }
+            catch (Exception)
+            {
+                this.pictureBox1.Image.Dispose();
+                this.pictureBox1.Image = null;
             }
         }
 

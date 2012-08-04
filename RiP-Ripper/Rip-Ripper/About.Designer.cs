@@ -183,6 +183,7 @@
             "ImageVenue.com",
             "ImageWam.com",
             "ImageWaste.com",
+            "ImgBox.com",
             "ImgChili.com",
             "ImgDepot.org",
             "Immage.de",

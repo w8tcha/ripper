@@ -40,7 +40,7 @@ namespace RiPRipper
         {
             string strImgURL = mstrURL;
 
-            if (eventTable.ContainsKey(strImgURL))
+            if (EventTable.ContainsKey(strImgURL))
             {
                 return true;
             }
@@ -72,7 +72,7 @@ namespace RiPRipper
             CCObj.Url = strImgURL;
             try
             {
-                eventTable.Add(strImgURL, CCObj);
+                EventTable.Add(strImgURL, CCObj);
             }
             catch (ThreadAbortException)
             {
@@ -80,13 +80,13 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                if (eventTable.ContainsKey(strImgURL))
+                if (EventTable.ContainsKey(strImgURL))
                 {
                     return false;
                 }
                 else
                 {
-                    eventTable.Add(strImgURL, CCObj);
+                    EventTable.Add(strImgURL, CCObj);
                 }
             }
 
@@ -125,17 +125,10 @@ namespace RiPRipper
                 strIVPage.Substring(iStartSRC, iEndSRC - iStartSRC) + ".jpg");
             
             //////////////////////////////////////////////////////////////////////////
-            HttpWebRequest lHttpWebRequest;
-            HttpWebResponse lHttpWebResponse;
-            Stream lHttpWebResponseStream;
-
-            //FileStream lFileStream = new FileStream(strFilePath, FileMode.Create);
-
-            //int bytesRead;
 
             try
             {
-                lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strNewURL);
+                HttpWebRequest lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strNewURL);
 
                 lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
                 lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
@@ -145,27 +138,32 @@ namespace RiPRipper
                 lHttpWebRequest.Accept = "image/png,*/*;q=0.5";
                 lHttpWebRequest.KeepAlive = true;
 
-                lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
-                lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
+                HttpWebResponse lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
+                Stream lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
 
                 if (lHttpWebResponse.ContentType.IndexOf("image") < 0)
                 {
-                    //if (lFileStream != null)
-                    //	lFileStream.Close();
                     return false;
                 }
-                if (lHttpWebResponse.ContentType.ToLower() == "image/jpeg")
-                    strFilePath += ".jpg";
-                else if (lHttpWebResponse.ContentType.ToLower() == "image/gif")
-                    strFilePath += ".gif";
-                else if (lHttpWebResponse.ContentType.ToLower() == "image/png")
-                    strFilePath += ".png";
+
+                switch (lHttpWebResponse.ContentType.ToLower())
+                {
+                    case "image/jpeg":
+                        strFilePath += ".jpg";
+                        break;
+                    case "image/gif":
+                        strFilePath += ".gif";
+                        break;
+                    case "image/png":
+                        strFilePath += ".png";
+                        break;
+                }
 
                 string NewAlteredPath = Utility.GetSuitableName(strFilePath);
                 if (strFilePath != NewAlteredPath)
                 {
                     strFilePath = NewAlteredPath;
-                    ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+                    ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
                 }
 
                 lHttpWebResponseStream.Close();
@@ -182,7 +180,7 @@ namespace RiPRipper
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return true;
@@ -192,22 +190,22 @@ namespace RiPRipper
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return false;
             }
 
-            ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
+            ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
             //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.GetInstance().uSLastPic =((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            CacheController.GetInstance().uSLastPic =((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
         }

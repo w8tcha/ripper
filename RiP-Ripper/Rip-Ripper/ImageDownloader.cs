@@ -714,6 +714,15 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get ImgBox Download
+        /// </summary>
+        public void GetImgBox()
+        {
+            this.xService = new ImgBox(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hotlinked image fether...
         /// </summary>
         public void GetImage()

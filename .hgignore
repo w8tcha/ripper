@@ -18,3 +18,5 @@ PG-Ripper/PG-Ripper-Setup/PG-Ripper-Install.msi
 PG-Ripper/PG-Ripper/PG-Ripper.csproj.user
 PG-Ripper/PG-Ripper/bin/PG-Ripper/
 PG-Ripper/PG-Ripper/bin/PG-RipperX/
+RiP-Ripper/RiP-Ripper-Setup/RiP-Ripper-Setup-x64.exe
+RiP-Ripper/RiP-Ripper-Setup/RiP-Ripper-Setup.exe

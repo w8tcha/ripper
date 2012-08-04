@@ -11,6 +11,7 @@
 
 namespace RiPRipper
 {
+    using System;
     using System.Collections;
     using System.IO;
     using System.Net;
@@ -22,14 +23,14 @@ namespace RiPRipper
     public abstract class ServiceTemplate
     {
         /// <summary>
+        /// Gets or sets the hashTable with Urls.
+        /// </summary>
+        protected Hashtable EventTable { get; set; }
+
+        /// <summary>
         /// Image Link Url
         /// </summary>
         protected string mstrURL = string.Empty;
-
-        /// <summary>
-        /// HashTable with Urls.
-        /// </summary>
-        protected Hashtable eventTable;
 
         /// <summary>
         /// Image Save Folder Path
@@ -51,22 +52,22 @@ namespace RiPRipper
         protected ServiceTemplate(string savePath, string url, ref Hashtable hTbl)
         {
             this.mstrURL = url;
-            this.eventTable = hTbl;
+            this.EventTable = hTbl;
             this.mSavePath = savePath;
         }
 
-        /// <summary>
+       /// <summary>
         /// Start Download
         /// </summary>
         public void StartDownload()
         {
             this.DoDownload();
 
-            if (this.eventTable[this.mstrURL] != null)
+            if (this.EventTable[this.mstrURL] != null)
             {
-                if (this.eventTable.Contains(this.mstrURL))
+                if (this.EventTable.Contains(this.mstrURL))
                 {
-                    this.eventTable.Remove(this.mstrURL);
+                    this.EventTable.Remove(this.mstrURL);
                 }
             }
 
@@ -131,7 +132,7 @@ namespace RiPRipper
             {
                 return string.Empty;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return string.Empty;
             }

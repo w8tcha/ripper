@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImageHyper.cs" company="The Watcher">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImgBox.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -17,28 +17,27 @@ namespace RiPRipper.ImageHosts
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
-
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImageHyper.com
+    /// Worker class to get images from ImgBox.com
     /// </summary>
-    public class ImageHyper : ServiceTemplate
+    public class ImgBox : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageHyper"/> class.
+        /// Initializes a new instance of the <see cref="ImgBox"/> class.
         /// </summary>
-        /// <param name="sSavePath">
-        /// The s save path.
+        /// <param name="savePath">
+        /// The save Path.
         /// </param>
-        /// <param name="strURL">
-        /// The str url.
+        /// <param name="imageUrl">
+        /// The image Url.
         /// </param>
-        /// <param name="hTbl">
-        /// The h tbl.
+        /// <param name="hashtable">
+        /// The hashtable.
         /// </param>
-        public ImageHyper(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
-            : base(sSavePath, strURL, ref hTbl)
+        public ImgBox(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
+            : base(savePath, imageUrl, ref hashtable)
         {
         }
 
@@ -46,7 +45,7 @@ namespace RiPRipper.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Return if Downloaded or not
+        /// Returns if the Image was downloaded
         /// </returns>
         protected override bool DoDownload()
         {
@@ -57,13 +56,13 @@ namespace RiPRipper.ImageHosts
                 return true;
             }
 
-            string strFilePath = string.Empty;
+            var filePath = string.Empty;
 
             try
             {
-                if (!Directory.Exists(mSavePath))
+                if (!Directory.Exists(this.mSavePath))
                 {
-                    Directory.CreateDirectory(mSavePath);
+                    Directory.CreateDirectory(this.mSavePath);
                 }
             }
             catch (IOException ex)
@@ -74,7 +73,7 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = strImgURL };
 
             try
             {
@@ -94,45 +93,49 @@ namespace RiPRipper.ImageHosts
                 EventTable.Add(strImgURL, ccObj);
             }
 
-            string newPage = GetImageHostPage(ref strImgURL);
-            
-            string newURL;
-            
-            var m = Regex.Match(newPage, @"id=""mainimg\"" src=\""(?<inner>[^\""]*)\"" />", RegexOptions.Singleline);
+            var page = GetImageHostPage(ref strImgURL);
+
+            if (page.Length < 10)
+            {
+                return false;
+            }
+
+            string strNewURL;
+
+            var m = Regex.Match(page, @"id=\""img\"".*?src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
-                newURL = m.Groups["inner"].Value;
+                strNewURL = m.Groups["inner"].Value.Replace("&amp;", "&");
+                filePath = m.Groups["title"].Value;
             }
             else
             {
                 return false;
             }
 
-            strFilePath = newURL.Substring(newURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            filePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(filePath));
 
-            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            if (!Directory.Exists(this.mSavePath))
+            {
+                Directory.CreateDirectory(this.mSavePath);
+            }
 
             //////////////////////////////////////////////////////////////////////////
 
-            string newAlteredPath = Utility.GetSuitableName(strFilePath);
-
-            if (strFilePath != newAlteredPath)
+            string newAlteredPath = Utility.GetSuitableName(filePath);
+            if (filePath != newAlteredPath)
             {
-                strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+                filePath = newAlteredPath;
+                ((CacheObject)EventTable[mstrURL]).FilePath = filePath;
             }
-
-            strFilePath = Utility.CheckPathLength(strFilePath);
-            ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
 
             try
             {
-                WebClient client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(newURL, strFilePath);
-                client.Dispose();
+                var webClient = new WebClient();
+                webClient.Headers.Add(string.Format("Referer: {0}", strImgURL));
+                webClient.DownloadFile(strNewURL, filePath);
+                webClient.Dispose();
             }
             catch (ThreadAbortException)
             {
@@ -151,7 +154,7 @@ namespace RiPRipper.ImageHosts
 
                 return true;
             }
-            catch (WebException)
+            catch (WebException ex)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
@@ -160,7 +163,7 @@ namespace RiPRipper.ImageHosts
             }
 
             ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic = ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)EventTable[mstrURL]).FilePath = filePath;
 
             return true;
         }

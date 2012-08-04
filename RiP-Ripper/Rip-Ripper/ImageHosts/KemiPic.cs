@@ -37,7 +37,7 @@ namespace RiPRipper.ImageHosts
         {
             string strImgURL = mstrURL;
 
-            if (eventTable.ContainsKey(strImgURL))
+            if (EventTable.ContainsKey(strImgURL))
             {
                 return true;
             }
@@ -66,7 +66,7 @@ namespace RiPRipper.ImageHosts
 
             try
             {
-                eventTable.Add(strImgURL, ccObj);
+                EventTable.Add(strImgURL, ccObj);
             }
             catch (ThreadAbortException)
             {
@@ -74,12 +74,12 @@ namespace RiPRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (eventTable.ContainsKey(strImgURL))
+                if (EventTable.ContainsKey(strImgURL))
                 {
                     return false;
                 }
 
-                eventTable.Add(strImgURL, ccObj);
+                EventTable.Add(strImgURL, ccObj);
             }
 
             const string sStartTitle = "<title>Kemipic - Earn money by sharing pictures, images - ";
@@ -121,7 +121,7 @@ namespace RiPRipper.ImageHosts
                 if (strFilePath != sNewAlteredPath)
                 {
                     strFilePath = sNewAlteredPath;
-                    ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+                    ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
                 }
 
                 WebClient client = new WebClient();
@@ -133,7 +133,7 @@ namespace RiPRipper.ImageHosts
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return true;
@@ -143,22 +143,22 @@ namespace RiPRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return false;
             }
 
-            ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
+            ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
             //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.GetInstance().uSLastPic =((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            CacheController.GetInstance().uSLastPic =((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
         }

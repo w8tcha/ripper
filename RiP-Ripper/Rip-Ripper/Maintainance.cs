@@ -58,25 +58,23 @@ namespace RiPRipper
         /// </returns>
         public int CountImagesFromXML(string xmlPayload)
         {
-            int iImgCount;
-
             try
             {
-                DataSet ds = new DataSet();
+                var dataSet = new DataSet();
 
-                ds.ReadXml(new StringReader(xmlPayload));
+                dataSet.ReadXml(new StringReader(xmlPayload));
 
-                // iImageCount = ds.Tables["Image"].Rows.Count;
-                iImgCount =
-                    ds.Tables["Image"].Rows.Cast<DataRow>().Count(
-                        row => !Utility.IsImageNoneSense(row["main_url"].ToString()));
+                foreach (DataRow row in dataSet.Tables["post"].Rows)
+                {
+                    return Convert.ToInt32(row["imageCount"]);
+                }
             }
             catch (Exception)
             {
                 return 0;
             }
 
-            return iImgCount;
+            return 0;
         }
 
         /// <summary>

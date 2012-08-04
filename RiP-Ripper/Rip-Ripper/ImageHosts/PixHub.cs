@@ -51,7 +51,7 @@ namespace RiPRipper.ImageHosts
         {
             string strImgURL = mstrURL;
 
-            if (eventTable.ContainsKey(strImgURL))
+            if (EventTable.ContainsKey(strImgURL))
             {
                 return true;
             }
@@ -60,9 +60,9 @@ namespace RiPRipper.ImageHosts
 
             try
             {
-                if (!Directory.Exists(mSavePath))
+                if (!Directory.Exists(this.mSavePath))
                 {
-                    Directory.CreateDirectory(mSavePath);
+                    Directory.CreateDirectory(this.mSavePath);
                 }
             }
             catch (IOException ex)
@@ -77,7 +77,7 @@ namespace RiPRipper.ImageHosts
 
             try
             {
-                eventTable.Add(strImgURL, ccObj);
+                EventTable.Add(strImgURL, ccObj);
             }
             catch (ThreadAbortException)
             {
@@ -85,15 +85,20 @@ namespace RiPRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (eventTable.ContainsKey(strImgURL))
+                if (EventTable.ContainsKey(strImgURL))
                 {
                     return false;
                 }
 
-                eventTable.Add(strImgURL, ccObj);
+                EventTable.Add(strImgURL, ccObj);
             }
 
             var cookieValue = this.GetCookieValue(strImgURL);
+
+            if (string.IsNullOrEmpty(cookieValue))
+            {
+                return false;
+            }
 
             string sPage = this.GetImageHostsPage(ref strImgURL, cookieValue);
 
@@ -122,7 +127,7 @@ namespace RiPRipper.ImageHosts
 
             strFilePath = strNewURL.Substring(strNewURL.IndexOf("_", StringComparison.Ordinal) + 1);
 
-            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -130,7 +135,7 @@ namespace RiPRipper.ImageHosts
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
-                ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+                ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
             }
 
             try
@@ -143,7 +148,7 @@ namespace RiPRipper.ImageHosts
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return true;
@@ -153,21 +158,21 @@ namespace RiPRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)eventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
 
                 return false;
             }
 
-            ((CacheObject)eventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic = ((CacheObject)eventTable[mstrURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
 
             return true;
         }
@@ -194,6 +199,7 @@ namespace RiPRipper.ImageHosts
 
                 req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
                 req.Headers["Cookie"] = string.Format("ads_pixhub={0};", cookieValue);
+                req.Timeout = 20000;
                 req.Referer = strURL;
 
                 var res = (HttpWebResponse)req.GetResponse();
@@ -233,13 +239,41 @@ namespace RiPRipper.ImageHosts
         /// <returns>Returns the Cookie Value</returns>
         private string GetCookieValue(string url)
         {
-            var webClient = new WebClient();
+            try
+            {
+                var req = (HttpWebRequest)WebRequest.Create(url);
 
-            var page = webClient.DownloadString(url);
+                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
+                req.Referer = url;
+                req.Timeout = 20000;
 
-            var m = Regex.Match(page, @"writeCookie\('ads_pixhub', '(?<inner>[^']*)', '1'\)", RegexOptions.Singleline);
+                var res = (HttpWebResponse)req.GetResponse();
 
-            return m.Success ? m.Groups["inner"].Value : string.Empty;
+                var stream = res.GetResponseStream();
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
+
+                    string page = reader.ReadToEnd();
+
+                    res.Close();
+                    reader.Close();
+
+                    var m = Regex.Match(page, @"writeCookie\('ads_pixhub', '(?<inner>[^']*)', '1'\)", RegexOptions.Singleline);
+
+                    return m.Success ? m.Groups["inner"].Value : string.Empty;
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return string.Empty;
         }
 
         //////////////////////////////////////////////////////////////////////////

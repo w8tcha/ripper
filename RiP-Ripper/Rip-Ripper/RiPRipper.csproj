@@ -222,6 +222,7 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoUpdater.cs" />
+    <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\PixRoute.cs" />
     <Compile Include="ImageHosts\ImagePicasa.cs" />
     <Compile Include="ImageHosts\DirectUpload.cs" />
@@ -474,7 +475,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />
-    <None Include="BuildScripts\MSBuild.Community.Tasks.Targets" />
+    <None Include="BuildScripts\MSBuild.Community.Tasks.Targets">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="BuildScripts\RipperPackage.targets">
       <SubType>Designer</SubType>
     </None>
