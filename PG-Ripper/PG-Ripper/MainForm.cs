@@ -53,11 +53,6 @@ namespace PGRipper
 
 #if (!PGRIPPERX)
         /// <summary>
-        /// Clipboard Viewer Instance
-        /// </summary>
-        private IntPtr nextClipboardViewer;
-
-        /// <summary>
         /// TaskBar Manager Instance
         /// </summary>
         private TaskbarManager windowsTaskbar;
@@ -172,8 +167,7 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void SDownloadClick(object sender, EventArgs e)
         {
-            if (!Clipboard.GetDataObject().GetDataPresent(DataFormats.Text) ||
-                Clipboard.GetDataObject().GetData(DataFormats.Text).ToString().IndexOf(this.userSettings.CurrentForumUrl) < 0 ||
+            if (Clipboard.GetText().IndexOf(this.userSettings.CurrentForumUrl) < 0 ||
                 this.parseActive)
             {
                 return;
@@ -181,7 +175,7 @@ namespace PGRipper
 
             this.comboBox1.SelectedIndex = 2;
 
-            this.textBox1.Text = Clipboard.GetDataObject().GetData(DataFormats.Text).ToString();
+            this.textBox1.Text = Clipboard.GetText();
 
             if (InvokeRequired)
             {
@@ -1479,10 +1473,12 @@ namespace PGRipper
                 this.LogicCode();
             }
 
-            if (!this.parseActive && this.ExtractUrls.Count > 0 && !GetPostsWorker.IsBusy && !GetIdxsWorker.IsBusy)
+            if (!this.parseActive && this.ExtractUrls.Count > 0 && !this.GetPostsWorker.IsBusy && !this.GetIdxsWorker.IsBusy)
             {
                 this.GetExtractUrls();
             }
+
+            this.CheckClipboardData();
         }
 
         /// <summary>
@@ -1823,20 +1819,20 @@ namespace PGRipper
         /// </summary>
         private void ShowLastPic()
         {
-            if (pictureBox1.Image != null)
+            if (this.pictureBox1.Image != null)
             {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
+                this.pictureBox1.Image.Dispose();
+                this.pictureBox1.Image = null;
             }
 
-            if (pictureBox1.BackgroundImage != null)
+            if (this.pictureBox1.BackgroundImage != null)
             {
-                pictureBox1.BackgroundImage.Dispose();
-                pictureBox1.BackgroundImage = null;
+                this.pictureBox1.BackgroundImage.Dispose();
+                this.pictureBox1.BackgroundImage = null;
             }
             ///////////////////////////
 
-            sLastPic = mrefCC.uSLastPic;
+            this.sLastPic = this.mrefCC.uSLastPic;
 
             if (!File.Exists(this.sLastPic))
             {
@@ -1845,6 +1841,14 @@ namespace PGRipper
 
             try
             {
+                var fileInfo = new FileInfo(this.sLastPic);
+
+                // skip Images above 9 MB
+                if (fileInfo.Length >= 9437184)
+                {
+                    return;
+                }
+
                 this.pictureBox1.Visible = true;
 
                 if (this.sLastPic.EndsWith(".gif"))
@@ -1857,7 +1861,12 @@ namespace PGRipper
                 {
                     // This statement causes file locking until the
                     // process exits unless cleared when not visible
-                    this.imgLastPic = Image.FromFile(this.sLastPic);
+                    //this.imgLastPic = Image.FromFile(this.sLastPic);
+
+                    using (FileStream stream = new FileStream(this.sLastPic, FileMode.Open, FileAccess.Read))
+                    {
+                        this.imgLastPic = Image.FromStream(stream);
+                    }
 
                     this.pictureBox1.Image = this.imgLastPic;
                     this.pictureBox1.Update();
@@ -2601,49 +2610,6 @@ namespace PGRipper
             Utility.SaveSettings(this.userSettings);
         }
 
-#if (!PGRIPPERX)
-        /// <summary>
-        /// WNDs the proc.
-        /// </summary>
-        /// <param name="m">The m.</param>
-        protected override void WndProc(ref Message m)
-        {
-            try
-            {
-                // defined in winuser.h
-                const int Drawclipboard = 0x308;
-                const int Changecbchain = 0x030D;
-
-                switch (m.Msg)
-                {
-                    case Drawclipboard:
-                        this.CheckClipboardData();
-                        Win32.SendMessage(this.nextClipboardViewer, m.Msg, m.WParam, m.LParam);
-                        break;
-
-                    case Changecbchain:
-
-                        if (m.WParam == this.nextClipboardViewer)
-                        {
-                            this.nextClipboardViewer = m.LParam;
-                        }
-                        else
-                        {
-                            Win32.SendMessage(nextClipboardViewer, m.Msg, m.WParam, m.LParam);
-                        }
-
-                        break;
-
-                    default:
-                        base.WndProc(ref m);
-                        break;
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
         /// <summary>
         /// Checks the clipboard data.
         /// </summary>
@@ -2656,16 +2622,16 @@ namespace PGRipper
 
             try
             {
-                IDataObject iData = Clipboard.GetDataObject();
-
-                if (!iData.GetDataPresent(DataFormats.Text))
+                if (string.IsNullOrEmpty(Clipboard.GetText()))
                 {
                     return;
                 }
 
-                string sClipBoardURLTemp = (string)iData.GetData(DataFormats.Text);
+                var clipBoardURLTemp = Clipboard.GetText();
 
-                string[] sClipBoardUrLs = sClipBoardURLTemp.Split(new[] { '\n' });
+                Clipboard.Clear();
+
+                string[] sClipBoardUrLs = clipBoardURLTemp.Split(new[] { '\n' });
 
                 foreach (string sClipBoardURL in sClipBoardUrLs.Where(sClipBoardURL => this.userSettings.ForumsAccount.Any(
                     forumAccount => sClipBoardURL.StartsWith(forumAccount.ForumURL))))
@@ -2706,8 +2672,6 @@ namespace PGRipper
                     {
                         this.ExtractUrls.Add(sClipBoardURLNew);
                     }
-
-                    Clipboard.Clear();
                 }
             }
             catch (Exception)
@@ -2715,7 +2679,6 @@ namespace PGRipper
                 Clipboard.Clear();
             }
         }
-#endif
 
         /// <summary>
         /// Raises the <see cref="E:Load"/> event.
@@ -2737,7 +2700,7 @@ namespace PGRipper
         {
             Application.Idle -= this.OnLoaded;
 
-            tmrPageUpdate.Enabled = true;
+            this.tmrPageUpdate.Enabled = true;
 
 #if (!PGRIPPERX)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
@@ -2810,10 +2773,6 @@ namespace PGRipper
 
                 StatusLabelInfo.Text = string.Empty;
             }
-
-#if (!PGRIPPERX)
-            this.nextClipboardViewer = (IntPtr)Win32.SetClipboardViewer((int)Handle);
-#endif
 
             // Delete Backup Files From AutoUpdate
             if (File.Exists("PG-Ripper.bak"))

@@ -2,12 +2,9 @@
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="MSBuild.Community.Tasks.Targets" />
   <Target Name="PackageModule" Condition=" '$(Configuration)|$(Platform)' == 'PG-Ripper|AnyCPU' ">
-    <PropertyGroup>
-      <Major>1</Major>
-      <Minor>4</Minor>
-      <Build>0</Build>
-      <Revision>0</Revision>
-    </PropertyGroup>
+    <GetAssemblyIdentity AssemblyFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\$(AssemblyName).exe">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyIdentities"/>
+    </GetAssemblyIdentity>
 
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\ICSharpCode.SharpZipLib.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
@@ -27,9 +24,9 @@
     </CreateItem>
     
     <!-- Create the Windows Package package -->    
-    <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
+    <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)%(AssemblyIdentities.Version).$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
     
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
     
@@ -45,9 +42,9 @@
     </CreateItem>
 
     <!-- Create the Linux (MONO) Package package -->
-    <Zip Files="@(OutputContentMono)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
+    <Zip Files="@(OutputContentMono)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X%(AssemblyIdentities.Version).$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X%(AssemblyIdentities.Version).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
 
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
 
@@ -75,15 +72,22 @@
     </CreateItem>
 
     <!-- Create the Mac Package package -->
-    <Zip Files="@(OutputContentMacFinal)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" />
+    <Zip Files="@(OutputContentMacFinal)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X%(AssemblyIdentities.Version)_mac.$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X%(AssemblyIdentities.Version)_mac.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
 
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
 
+    <!-- Create the x86 Install Version-->
+    <InnoSetup
+             ScriptFile="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\PG-Ripper-Setup-x86.iss"
+             OutputFileName="PG-Ripper-Setup"
+             OutputPath="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\"
+             Quiet="True" />
+
     <!-- Copy the x86 Install Version-->
 
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\PG-Ripper-Install.msi" DestinationFolder="$(MSBuildProjectDirectory)\Package"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\PG-Ripper-Setup.exe" DestinationFolder="$(MSBuildProjectDirectory)\Package"/>
 
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
@@ -93,15 +97,23 @@
     </CreateItem>
 
     <!-- Create the x86 Install Version package -->
-    <Zip Files="@(OutputContentInstallX86)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install.$(Extension)" />
+    <Zip Files="@(OutputContentInstallX86)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)%(AssemblyIdentities.Version)-Install.$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version)-Install.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
 
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
 
+    <!-- Create the x64 Install Version-->
+    <InnoSetup
+        ScriptFile="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\PG-Ripper-Setup-x64.iss"
+        OutputFileName="PG-Ripper-Setup-x64"
+        OutputPath="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\"
+        Quiet="True" />
+
+
     <!-- Copy the x64 Install Version-->
 
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup-x64\PG-Ripper-Install_x64.msi" DestinationFolder="$(MSBuildProjectDirectory)\Package"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\PG-Ripper-Setup-x64.exe" DestinationFolder="$(MSBuildProjectDirectory)\Package"/>
 
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
     <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
@@ -111,18 +123,18 @@
     </CreateItem>
 
     <!-- Create the x86 Install Version package -->
-    <Zip Files="@(OutputContentInstallX64)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install-x64.$(Extension)" />
+    <Zip Files="@(OutputContentInstallX64)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)%(AssemblyIdentities.Version)-Install-x64.$(Extension)" />
     <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install-x64.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version)-Install-x64.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
 
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
 
 
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision).$(Extension)" />
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X$(Major)$(Minor)$(Build)$(Revision)_mac.$(Extension)" />
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install.$(Extension)" />
-    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)$(Major)$(Minor)$(Build)$(Revision)-Install-x64.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version).$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X%(AssemblyIdentities.Version).$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X%(AssemblyIdentities.Version)_mac.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version)-Install.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version)-Install-x64.$(Extension)" />
 
   </Target>
 </Project>

@@ -73,7 +73,7 @@ namespace PGRipper
                 HttpWebRequest req = (HttpWebRequest)WebRequest.Create(strURL);
 
                 req.UserAgent =
-                    "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
+                    "Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0";
                 req.CookieContainer = cookieContainer;
                 req.Method = "POST";
                 req.ContentType = "application/x-www-form-urlencoded";

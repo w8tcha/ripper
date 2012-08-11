@@ -35,7 +35,7 @@ namespace PGRipper
         /// </summary>
         public Login()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace PGRipper
         private void LoginLoad(object sender, EventArgs e)
         {
             // Set Default Forum
-            cBForum.SelectedIndex = 0;
+            this.cBForum.SelectedIndex = 0;
 
             // Load Language Setting
             try
@@ -70,22 +70,22 @@ namespace PGRipper
                 switch (sLanguage)
                 {
                     case "de-DE":
-                        comboBox2.SelectedIndex = 0;
+                        this.comboBox2.SelectedIndex = 0;
                         break;
                     case "fr-FR":
-                        comboBox2.SelectedIndex = 1;
+                        this.comboBox2.SelectedIndex = 1;
                         break;
                     case "en-EN":
-                        comboBox2.SelectedIndex = 2;
+                        this.comboBox2.SelectedIndex = 2;
                         break;
                     default:
-                        comboBox2.SelectedIndex = 2;
+                        this.comboBox2.SelectedIndex = 2;
                         break;
                 }
             }
             catch (Exception)
             {
-                comboBox2.SelectedIndex = 2;
+                this.comboBox2.SelectedIndex = 2;
             }
         }
 
@@ -96,28 +96,28 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void LoginBtnClick(object sender, EventArgs e)
         {
-            if (textBox3.Text.StartsWith("http://"))
+            if (this.textBox3.Text.StartsWith("http://"))
             {
-                if (!textBox3.Text.EndsWith("/"))
+                if (!this.textBox3.Text.EndsWith("/"))
                 {
-                    textBox3.Text += "/";
+                    this.textBox3.Text += "/";
                 }
 
-                CacheController.Xform.userSettings.CurrentForumUrl = textBox3.Text;
+                CacheController.Xform.userSettings.CurrentForumUrl = this.textBox3.Text;
             }
 
             // Encrypt Password
-            textBox2.Text = Utility.EncodePassword(textBox2.Text).Replace("-", string.Empty).ToLower();
+            this.textBox2.Text = Utility.EncodePassword(this.textBox2.Text).Replace("-", string.Empty).ToLower();
 
-            LoginManager lgnMgr = new LoginManager(textBox1.Text, textBox2.Text);
+            LoginManager lgnMgr = new LoginManager(this.textBox1.Text, this.textBox2.Text);
 
             string lblWelcome = this.rm.GetString("lblWelcome"), lblFailed = this.rm.GetString("lblFailed");
 
             if (lgnMgr.DoLogin())
             {
-                label3.Text = string.Format("{0}{1}", lblWelcome, this.textBox1.Text);
-                label3.ForeColor = Color.Green;
-                LoginBtn.Enabled = false;
+                this.label3.Text = string.Format("{0}{1}", lblWelcome, this.textBox1.Text);
+                this.label3.ForeColor = Color.Green;
+                this.LoginBtn.Enabled = false;
 
                 if (CacheController.Xform.userSettings.ForumsAccount.Any(item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl))
                 {
@@ -135,12 +135,12 @@ namespace PGRipper
                 CacheController.Xform.userSettings.ForumsAccount.Add(forumsAccount);
                 CacheController.Xform.userSettings.CurrentUserName = this.textBox1.Text;
 
-                timer1.Enabled = true;
+                this.timer1.Enabled = true;
             }
             else
             {
-                label3.Text = lblFailed;
-                label3.ForeColor = Color.Red;
+                this.label3.Text = lblFailed;
+                this.label3.ForeColor = Color.Red;
             }
         }
 
@@ -151,7 +151,7 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
         private void Timer1Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            timer1.Enabled = false;
+            this.timer1.Enabled = false;
 
             CacheController.Xform.bCameThroughCorrectLogin = true;
 
@@ -170,8 +170,8 @@ namespace PGRipper
 
             CacheController.Xform.userSettings.ForumsAccount.Add(forumsAccount);
             CacheController.Xform.userSettings.CurrentUserName = this.textBox1.Text;
-            
-            Close();
+
+            this.Close();
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ComboBox2SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (comboBox2.SelectedIndex)
+            switch (this.comboBox2.SelectedIndex)
             {
                 case 0:
                     this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
@@ -211,25 +211,25 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void CBForumSelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (cBForum.SelectedIndex)
+            switch (this.cBForum.SelectedIndex)
             {
                 case 1:
-                    textBox3.Text = "http://www.kitty-kats.com/";
+                    this.textBox3.Text = "http://www.kitty-kats.com/";
                     break;
                 case 2:
-                    textBox3.Text = "http://rip-productions.net/";
+                    this.textBox3.Text = "http://rip-productions.net/";
                     break;
                 case 3:
-                    textBox3.Text = "http://forums.sexyandfunny.com/";
+                    this.textBox3.Text = "http://forums.sexyandfunny.com/";
                     break;
                 case 4:
-                    textBox3.Text = "http://forum.scanlover.com/";
+                    this.textBox3.Text = "http://forum.scanlover.com/";
                     break;
                 case 5:
-                    textBox3.Text = "http://...";
+                    this.textBox3.Text = "http://...";
                     break;
                 default:
-                    textBox3.Text = "http://...";
+                    this.textBox3.Text = "http://...";
                     break;
             }
         }

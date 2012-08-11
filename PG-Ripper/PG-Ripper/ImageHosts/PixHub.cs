@@ -61,9 +61,9 @@ namespace PGRipper.ImageHosts
 
             try
             {
-                if (!Directory.Exists(mSavePath))
+                if (!Directory.Exists(this.mSavePath))
                 {
-                    Directory.CreateDirectory(mSavePath);
+                    Directory.CreateDirectory(this.mSavePath);
                 }
             }
             catch (IOException ex)
@@ -96,6 +96,11 @@ namespace PGRipper.ImageHosts
 
             var cookieValue = this.GetCookieValue(strImgURL);
 
+            if (string.IsNullOrEmpty(cookieValue))
+            {
+                return false;
+            }
+
             string sPage = this.GetImageHostsPage(ref strImgURL, cookieValue);
 
             if (sPage.Length < 10)
@@ -105,7 +110,7 @@ namespace PGRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"img src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var m = Regex.Match(sPage, @"img onLoad=\""ustaw\(100000\);\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
@@ -123,7 +128,7 @@ namespace PGRipper.ImageHosts
 
             strFilePath = strNewURL.Substring(strNewURL.IndexOf("_", StringComparison.Ordinal) + 1);
 
-            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -195,12 +200,12 @@ namespace PGRipper.ImageHosts
 
                 req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
                 req.Headers["Cookie"] = string.Format("ads_pixhub={0};", cookieValue);
+                req.Timeout = 20000;
                 req.Referer = strURL;
 
                 var res = (HttpWebResponse)req.GetResponse();
 
                 var stream = res.GetResponseStream();
-
                 if (stream != null)
                 {
                     var reader = new StreamReader(stream);
@@ -235,13 +240,41 @@ namespace PGRipper.ImageHosts
         /// <returns>Returns the Cookie Value</returns>
         private string GetCookieValue(string url)
         {
-            var webClient = new WebClient();
+            try
+            {
+                var req = (HttpWebRequest)WebRequest.Create(url);
 
-            var page = webClient.DownloadString(url);
+                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
+                req.Referer = url;
+                req.Timeout = 20000;
 
-            var m = Regex.Match(page, @"writeCookie\('ads_pixhub', '(?<inner>[^']*)', '1'\)", RegexOptions.Singleline);
+                var res = (HttpWebResponse)req.GetResponse();
 
-            return m.Success ? m.Groups["inner"].Value : string.Empty;
+                var stream = res.GetResponseStream();
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
+
+                    string page = reader.ReadToEnd();
+
+                    res.Close();
+                    reader.Close();
+
+                    var m = Regex.Match(page, @"writeCookie\('ads_pixhub', '(?<inner>[^']*)', '1'\)", RegexOptions.Singleline);
+
+                    return m.Success ? m.Groups["inner"].Value : string.Empty;
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return string.Empty;
         }
 
         //////////////////////////////////////////////////////////////////////////

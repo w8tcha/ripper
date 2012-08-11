@@ -567,6 +567,10 @@ namespace PGRipper
             {
                 lThreadStart = lImageDownloader.GetDirectUpload;
             }
+            else if (aImageUrl.IndexOf(@"imgbox.com/") >= 0)
+            {
+                lThreadStart = lImageDownloader.GetImgBox;
+            }
             else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
