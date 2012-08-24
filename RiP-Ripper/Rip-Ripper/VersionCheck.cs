@@ -24,7 +24,7 @@ namespace RiPRipper
         /// <summary>
         /// Version String of the Online Version
         /// </summary>
-        public static string OnlineVersion;
+        public static string OnlineVersion { get; set; }
 
         /// <summary>
         /// Check if Update is available

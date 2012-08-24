@@ -21,12 +21,12 @@ Global
 		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
+		RiPRipper|Any CPU = RiPRipper|Any CPU
+		RiPRipper|x64 = RiPRipper|x64
 		RiPRipper64|Any CPU = RiPRipper64|Any CPU
 		RiPRipper64|x64 = RiPRipper64|x64
 		RiPRipperX|Any CPU = RiPRipperX|Any CPU
 		RiPRipperX|x64 = RiPRipperX|x64
-		RiPRipper|Any CPU = RiPRipper|Any CPU
-		RiPRipper|x64 = RiPRipper|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -37,6 +37,10 @@ Global
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Release|Any CPU.Build.0 = RiPRipperX|Any CPU
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Release|x64.ActiveCfg = RiPRipper64|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.Release|x64.Build.0 = RiPRipper64|x64
+		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|Any CPU.ActiveCfg = RiPRipper|x86
+		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|Any CPU.Build.0 = RiPRipper|x86
+		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|x64.ActiveCfg = RiPRipper|x64
+		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|x64.Build.0 = RiPRipper|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper64|Any CPU.ActiveCfg = RiPRipper64|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper64|Any CPU.Build.0 = RiPRipper64|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper64|x64.ActiveCfg = RiPRipper64|x64
@@ -45,10 +49,6 @@ Global
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipperX|Any CPU.Build.0 = RiPRipperX|Any CPU
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipperX|x64.ActiveCfg = RiPRipperX|x64
 		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipperX|x64.Build.0 = RiPRipperX|x64
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|Any CPU.ActiveCfg = RiPRipper64|x86
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|Any CPU.Build.0 = RiPRipper64|x86
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|x64.ActiveCfg = RiPRipper|x64
-		{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}.RiPRipper|x64.Build.0 = RiPRipper|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

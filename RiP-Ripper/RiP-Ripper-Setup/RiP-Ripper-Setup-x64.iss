@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RiP-Ripper 64Bit"
-#define MyAppVersion "2.9.3.2"
+#define MyAppVersion "2.9.3.3"
 #define MyAppPublisher "The Watcher"
 #define MyAppURL "http://ripper.codeplex.com"
 #define MyAppExeName "RiPRipper.exe"
@@ -14,6 +14,7 @@
 AppId={{494069BB-BB57-4B73-8A96-C46B040208E2}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
+ArchitecturesInstallIn64BitMode=x64
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -37,7 +38,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\Rip-Ripper\bin\x64\RiPRipper64\RiPRipper.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\Rip-Ripper\bin\x64\RiPRipper64\RiPRipper.exe"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\Rip-Ripper\bin\x64\RiPRipper64\ICSharpCode.SharpZipLib.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\Rip-Ripper\bin\x64\RiPRipper64\Microsoft.WindowsAPICodePack.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\Rip-Ripper\bin\x64\RiPRipper64\Microsoft.WindowsAPICodePack.Shell.dll"; DestDir: "{app}"; Flags: ignoreversion

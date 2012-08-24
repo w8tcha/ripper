@@ -52,58 +52,60 @@ namespace RiPRipper
         /// </summary>
         private static void Update()
         {
+            var tempFolder = Path.Combine(Application.StartupPath, "temp");
+
             try
             {
                 // Download Update 
-                string sDownloadURL = string.Format(
+                var downloadURL = string.Format(
                     "http://www.watchersnet.de/rip-ripper/RiPRipper{0}.zip", 
-                    VersionCheck.OnlineVersion.Replace(".", string.Empty));
+                    VersionCheck.OnlineVersion);
 
-                string sTempZIP = string.Format("{0}\\temp.zip", Application.StartupPath);
+                var tempZIP = Path.Combine(Application.StartupPath, "temp.zip");
 
-                WebClient client = new WebClient();
-                client.DownloadFile(sDownloadURL, sTempZIP);
+                var client = new WebClient();
+                client.DownloadFile(downloadURL, tempZIP);
 
                 client.Dispose();
 
-                if (File.Exists(sTempZIP))
+                if (File.Exists(tempZIP))
                 {
                     // Extract Zip file
                     FastZip fastZip = new FastZip();
-                    fastZip.ExtractZip(sTempZIP, Application.StartupPath + "\\temp", null);
+                    fastZip.ExtractZip(tempZIP, tempFolder, null);
 
-                    File.Delete(sTempZIP);
+                    File.Delete(tempZIP);
 
                     // Check for Microsoft.WindowsAPICodePack.dll
                     if (!File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.dll")))
                     {
                         File.Copy(
-                            string.Format("{0}\\temp\\Microsoft.WindowsAPICodePack.dll", Application.StartupPath), 
-                            string.Format("{0}\\Microsoft.WindowsAPICodePack.dll", Application.StartupPath));
+                            Path.Combine(tempFolder, "Microsoft.WindowsAPICodePack.dll"),
+                            Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.dll"));
                     }
 
                     // Check for Microsoft.WindowsAPICodePack.Shell.dll
                     if (!File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.Shell.dll")))
                     {
                         File.Copy(
-                            string.Format("{0}\\temp\\Microsoft.WindowsAPICodePack.Shell.dll", Application.StartupPath), 
-                            string.Format("{0}\\Microsoft.WindowsAPICodePack.Shell.dll", Application.StartupPath));
+                            Path.Combine(tempFolder, "Microsoft.WindowsAPICodePack.Shell.dll"),
+                            Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.Shell.dll"));
                     }
 
-                    if (File.Exists(string.Format("{0}\\temp\\RiPRipper.exe", Application.StartupPath)))
+                    if (File.Exists(Path.Combine(Application.StartupPath, "RiPRipper.exe")))
                     {
                         // Replace Exe
                         File.Replace(
-                            string.Format("{0}\\temp\\RiPRipper.exe", Application.StartupPath), 
+                            Path.Combine("RiPRipper.exe", Application.StartupPath), 
                             Assembly.GetExecutingAssembly().Location, 
                             "RiPRipper.bak");
 
-                        if (Directory.Exists(string.Format("{0}\\temp", Application.StartupPath)))
+                        if (Directory.Exists(tempFolder))
                         {
-                            Directory.Delete(string.Format("{0}\\temp", Application.StartupPath), true);
+                            Directory.Delete(tempFolder, true);
                         }
 
-                        ProcessStartInfo upgradeProcess = new ProcessStartInfo(Assembly.GetExecutingAssembly().Location);
+                        var upgradeProcess = new ProcessStartInfo(Assembly.GetExecutingAssembly().Location);
                         Process.Start(upgradeProcess);
                         Environment.Exit(0);
                     }
@@ -124,9 +126,9 @@ namespace RiPRipper
             finally
             {
                 // Finally Delete Temp Directory
-                if (Directory.Exists(string.Format("{0}\\temp", Application.StartupPath)))
+                if (Directory.Exists(tempFolder))
                 {
-                    Directory.Delete(string.Format("{0}\\temp", Application.StartupPath), true);
+                    Directory.Delete(tempFolder, true);
                 }
             }
 
