@@ -327,4 +327,7 @@
   <data name="MenuAccounts" xml:space="preserve">
     <value>Konten</value>
   </data>
+  <data name="ShowLastDownloaded" xml:space="preserve">
+    <value>Zuletzt heruntergeladenes Bild anzeigen</value>
+  </data>
 </root>

@@ -31,7 +31,7 @@ namespace PGRipper
         /// </summary>
         public Options()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.LoadSettings();
         }
 
@@ -47,30 +47,33 @@ namespace PGRipper
 #endif
 
             // Load "Show Tray PopUps" Setting
-            showTrayPopups.Checked = CacheController.Xform.userSettings.ShowPopUps;
+            this.showTrayPopups.Checked = CacheController.Xform.userSettings.ShowPopUps;
 
             // Load "Download Folder" Setting
-            textBox2.Text = CacheController.Xform.userSettings.DownloadFolder;
+            this.textBox2.Text = CacheController.Xform.userSettings.DownloadFolder;
 
             // Load "Thread Limit" Setting
-            numericUDThreads.Text = CacheController.Xform.userSettings.ThreadLimit.ToString();
+            this.numericUDThreads.Text = CacheController.Xform.userSettings.ThreadLimit.ToString();
             ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
 
             // min. Image Count for Thanks
-            numericUDThanks.Text = CacheController.Xform.userSettings.MinImageCount.ToString();
+            this.numericUDThanks.Text = CacheController.Xform.userSettings.MinImageCount.ToString();
 
             // Load "Create Subdirctories" Setting
-            checkBox1.Checked = CacheController.Xform.userSettings.SubDirs;
+            this.checkBox1.Checked = CacheController.Xform.userSettings.SubDirs;
+
+            // Load Show Last Download Image Setting
+            this.checkBox11.Checked = CacheController.Xform.userSettings.ShowLastDownloaded;
 
             // Load "Automaticly Thank You Button" Setting
             if (CacheController.Xform.userSettings.AutoThank)
             {
-                checkBox8.Checked = true;
+                this.checkBox8.Checked = true;
             }
             else
             {
-                checkBox8.Checked = false;
-                numericUDThanks.Enabled = false;
+                this.checkBox8.Checked = false;
+                this.numericUDThanks.Enabled = false;
             }
 
             // Load "Clipboard Watch" Setting
@@ -149,6 +152,7 @@ namespace PGRipper
             this.label6.Text = this.rm.GetString("lblThreadLimit");
             this.label1.Text = this.rm.GetString("lblminImageCount");
             this.groupBox3.Text = this.rm.GetString("gbMainOptions");
+            this.checkBox11.Text = this.rm.GetString("ShowLastDownloaded");
         }
 
         /// <summary>
@@ -236,6 +240,7 @@ namespace PGRipper
                 CacheController.Xform.userSettings.DownInSepFolder = mDownInSepFolderChk.Checked;
                 CacheController.Xform.userSettings.SavePids = saveHistoryChk.Checked;
                 CacheController.Xform.userSettings.ShowCompletePopUp = checkBox9.Checked;
+                CacheController.Xform.userSettings.ShowLastDownloaded = checkBox11.Checked;
 
                 switch (languageSelector.SelectedIndex)
                 {

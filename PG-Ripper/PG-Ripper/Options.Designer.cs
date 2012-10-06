@@ -56,6 +56,7 @@ namespace PGRipper
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.FBD = new System.Windows.Forms.FolderBrowserDialog();
+            this.checkBox11 = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -65,6 +66,7 @@ namespace PGRipper
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBox11);
             this.groupBox3.Controls.Add(this.checkBox10);
             this.groupBox3.Controls.Add(this.checkBox9);
             this.groupBox3.Controls.Add(this.checkBox3);
@@ -74,7 +76,7 @@ namespace PGRipper
             this.groupBox3.Controls.Add(this.languageSelector);
             this.groupBox3.Location = new System.Drawing.Point(12, 15);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(357, 138);
+            this.groupBox3.Size = new System.Drawing.Size(357, 161);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Main Options";
@@ -179,7 +181,7 @@ namespace PGRipper
             this.groupBox1.Controls.Add(this.checkBox6);
             this.groupBox1.Controls.Add(this.checkBox1);
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Location = new System.Drawing.Point(13, 159);
+            this.groupBox1.Location = new System.Drawing.Point(13, 182);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(357, 260);
             this.groupBox1.TabIndex = 6;
@@ -351,7 +353,7 @@ namespace PGRipper
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(214, 425);
+            this.okButton.Location = new System.Drawing.Point(214, 453);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 27);
             this.okButton.TabIndex = 15;
@@ -364,7 +366,7 @@ namespace PGRipper
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(297, 425);
+            this.cancelButton.Location = new System.Drawing.Point(297, 453);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 27);
             this.cancelButton.TabIndex = 16;
@@ -376,10 +378,20 @@ namespace PGRipper
             // 
             this.FBD.ShowNewFolderButton = false;
             // 
+            // checkBox11
+            // 
+            this.checkBox11.AutoSize = true;
+            this.checkBox11.Location = new System.Drawing.Point(8, 135);
+            this.checkBox11.Name = "checkBox11";
+            this.checkBox11.Size = new System.Drawing.Size(159, 17);
+            this.checkBox11.TabIndex = 24;
+            this.checkBox11.Text = "Show Last Download Image";
+            this.checkBox11.UseVisualStyleBackColor = true;
+            // 
             // Options
             // 
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(384, 464);
+            this.ClientSize = new System.Drawing.Size(384, 492);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.groupBox1);
@@ -434,5 +446,6 @@ namespace PGRipper
         private System.Windows.Forms.CheckBox checkBox10;
         private System.Windows.Forms.NumericUpDown numericUDThanks;
         private System.Windows.Forms.NumericUpDown numericUDThreads;
+        private System.Windows.Forms.CheckBox checkBox11;
     }
 }

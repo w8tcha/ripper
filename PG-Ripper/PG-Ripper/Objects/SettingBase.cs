@@ -11,6 +11,7 @@
 
 namespace PGRipper.Objects
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -18,6 +19,32 @@ namespace PGRipper.Objects
     /// </summary>
     public class SettingBase : object
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingBase" /> class.
+        /// </summary>
+        public SettingBase()
+        {
+            this.ShowLastDownloaded = true;
+            this.ClipBWatch = true;
+            this.ShowPopUps = true;
+            this.SubDirs = true;
+            this.AutoThank = false;
+            this.DownInSepFolder = true;
+            this.SavePids = true;
+            this.ShowCompletePopUp = true;
+            this.MinImageCount = 3;
+            this.ThreadLimit = 3;
+            this.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            this.DownloadOptions = "0";
+            this.TopMost = false;
+            this.Language = "en-EN";
+            this.CurrentForumUrl = "http://www.kitty-kats.com/";
+            this.WindowWidth = 863;
+            this.WindowHeight = 611;
+
+            this.ForumsAccount = new List<ForumAccount>();
+        }
+
         /// <summary>
         /// Gets or sets the forum Url.
         /// </summary>
@@ -41,6 +68,14 @@ namespace PGRipper.Objects
         /// The forums account.
         /// </value>
         public List<ForumAccount> ForumsAccount { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [show last downloaded].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [show last downloaded]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ShowLastDownloaded { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether "Clipboard Watch" Setting

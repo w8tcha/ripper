@@ -45,7 +45,7 @@ namespace PGRipper
             try
             {
                 // Download Update 
-                string sDownloadURL = string.Format("http://www.watchersnet.de/rip-ripper/PG-Ripper{0}.zip", VersionCheck.OnlineVersion.Replace(".", string.Empty));
+                string sDownloadURL = string.Format("http://www.watchersnet.de/rip-ripper/PG-Ripper{0}.zip", VersionCheck.OnlineVersion);
                 string sTempZIP = Path.Combine(Application.StartupPath, "temp.zip");
 
                 WebClient client = new WebClient();
@@ -53,40 +53,42 @@ namespace PGRipper
 
                 client.Dispose();
 
-                if (File.Exists(sTempZIP))
+                if (!File.Exists(sTempZIP))
                 {
-                    // Extract Zip file
-                    FastZip fastZip = new FastZip();
-                    fastZip.ExtractZip(sTempZIP, Path.Combine(Application.StartupPath, "temp"), null);
+                    return;
+                }
 
-                    File.Delete(sTempZIP);
+                // Extract Zip file
+                FastZip fastZip = new FastZip();
+                fastZip.ExtractZip(sTempZIP, Path.Combine(Application.StartupPath, "temp"), null);
 
-                    if (File.Exists(Path.Combine(Application.StartupPath, "temp\\PGRipper.exe")))
+                File.Delete(sTempZIP);
+
+                if (File.Exists(Path.Combine(Application.StartupPath, "temp\\PGRipper.exe")))
+                {
+                    // Check for Microsoft.WindowsAPICodePack.dll
+                    if (!File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.dll")))
                     {
-                        // Check for Microsoft.WindowsAPICodePack.dll
-                        if (!File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.dll")))
-                        {
-                            File.Copy(Path.Combine(Application.StartupPath, "temp\\Microsoft.WindowsAPICodePack.dll"), Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.dll"));
-                        }
-
-                        // Check for Microsoft.WindowsAPICodePack.Shell.dll
-                        if (!File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.Shell.dll")))
-                        {
-                            File.Copy(Path.Combine(Application.StartupPath, "temp\\Microsoft.WindowsAPICodePack.Shell.dll"), Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.Shell.dll"));
-                        }
-
-                        // Replace Exe
-                        File.Replace(Application.StartupPath + "\\temp\\PGRipper.exe", Assembly.GetExecutingAssembly().Location, "PGRipper.bak");
-
-                        if (Directory.Exists(Application.StartupPath + "\\temp"))
-                        {
-                            Directory.Delete(Application.StartupPath + "\\temp", true);
-                        }
-
-                        ProcessStartInfo upgradeProcess = new ProcessStartInfo(Assembly.GetExecutingAssembly().Location);
-                        Process.Start(upgradeProcess);
-                        Environment.Exit(0);
+                        File.Copy(Path.Combine(Application.StartupPath, "temp\\Microsoft.WindowsAPICodePack.dll"), Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.dll"));
                     }
+
+                    // Check for Microsoft.WindowsAPICodePack.Shell.dll
+                    if (!File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.Shell.dll")))
+                    {
+                        File.Copy(Path.Combine(Application.StartupPath, "temp\\Microsoft.WindowsAPICodePack.Shell.dll"), Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.Shell.dll"));
+                    }
+
+                    // Replace Exe
+                    File.Replace(Application.StartupPath + "\\temp\\PGRipper.exe", Assembly.GetExecutingAssembly().Location, "PGRipper.bak");
+
+                    if (Directory.Exists(Path.Combine(Application.StartupPath, "temp")))
+                    {
+                        Directory.Delete(Path.Combine(Application.StartupPath, "temp"), true);
+                    }
+
+                    ProcessStartInfo upgradeProcess = new ProcessStartInfo(Assembly.GetExecutingAssembly().Location);
+                    Process.Start(upgradeProcess);
+                    Environment.Exit(0);
                 }
             }
             catch (Exception ex)
@@ -96,9 +98,9 @@ namespace PGRipper
             finally
             {
                 // Finally Delete Temp Directory
-                if (Directory.Exists(Application.StartupPath + "\\temp"))
+                if (Directory.Exists(Path.Combine(Application.StartupPath, "temp")))
                 {
-                    Directory.Delete(Application.StartupPath + "\\temp", true);
+                    Directory.Delete(Path.Combine(Application.StartupPath, "temp"), true);
                 }
             }
         }

@@ -80,7 +80,6 @@ namespace PGRipper
             // 
             // cBForum
             // 
-            this.cBForum.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBForum.IntegralHeight = false;
             this.cBForum.ItemHeight = 13;
             this.cBForum.Items.AddRange(new object[] {
@@ -89,6 +88,7 @@ namespace PGRipper
             "Rip-Productions",
             "Sexy and Funny Forums",
             "Scanlover Forums",
+            "Big Naturals Only",
             "<Other - Enter URL bellow>"});
             this.cBForum.Location = new System.Drawing.Point(102, 82);
             this.cBForum.Name = "cBForum";

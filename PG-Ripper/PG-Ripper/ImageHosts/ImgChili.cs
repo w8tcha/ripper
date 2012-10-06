@@ -61,9 +61,9 @@ namespace PGRipper.ImageHosts
 
             try
             {
-                if (!Directory.Exists(mSavePath))
+                if (!Directory.Exists(this.mSavePath))
                 {
-                    Directory.CreateDirectory(mSavePath);
+                    Directory.CreateDirectory(this.mSavePath);
                 }
             }
             catch (IOException ex)
@@ -116,7 +116,7 @@ namespace PGRipper.ImageHosts
 
             strFilePath = strNewURL.Substring(strNewURL.IndexOf("_") + 1);
 
-            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -139,7 +139,7 @@ namespace PGRipper.ImageHosts
             catch (ThreadAbortException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
 
                 return true;
             }
@@ -149,20 +149,20 @@ namespace PGRipper.ImageHosts
                 MainForm.Delete = true;
 
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
 
                 return true;
             }
             catch (WebException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic = ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[this.mstrURL]).IsDownloaded = true;
+            CacheController.GetInstance().uSLastPic = ((CacheObject)EventTable[this.mstrURL]).FilePath = strFilePath;
 
             return true;
         }

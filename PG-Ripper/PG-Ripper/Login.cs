@@ -90,7 +90,7 @@ namespace PGRipper
         }
 
         /// <summary>
-        /// Trys to Login to the Forums
+        /// Tries to Login to the Forums
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -145,7 +145,7 @@ namespace PGRipper
         }
 
         /// <summary>
-        /// If Login sucessfully send user data to MainForm
+        /// If Login successfully send user data to MainForm
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
@@ -226,6 +226,9 @@ namespace PGRipper
                     this.textBox3.Text = "http://forum.scanlover.com/";
                     break;
                 case 5:
+                    this.textBox3.Text = "http://bignaturalsonly.com/";
+                    break;
+                case 6:
                     this.textBox3.Text = "http://...";
                     break;
                 default:

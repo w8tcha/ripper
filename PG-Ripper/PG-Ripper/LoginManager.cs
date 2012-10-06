@@ -104,7 +104,7 @@ namespace PGRipper
 
                 cookieManager.DeleteCookie("rp_userid");
                 cookieManager.DeleteCookie("rp_password");
-                //
+                ////
 
                 foreach (Cookie cook in res.Cookies)
                 {

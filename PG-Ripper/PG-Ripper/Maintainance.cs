@@ -79,7 +79,8 @@ namespace PGRipper
             string sTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
 
             if (CacheController.Xform.userSettings.CurrentForumUrl.Contains("rip-productions.net")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
+                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
             {
                 return sTitle.Trim();
             }
@@ -161,7 +162,7 @@ namespace PGRipper
                 return iPageEnd < 0 ? string.Empty : sPage.Substring(iPageStart, iPageEnd - iPageStart);
             }
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
             {
                 sPage = GetRipPage(content);
 
@@ -258,7 +259,8 @@ namespace PGRipper
 
             if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-")
                 || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") 
+                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
             {
                 ////////////////////////////////////
                 // Extract Current Post first
@@ -328,7 +330,8 @@ namespace PGRipper
             {
                 if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-")
                     || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-")
-                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
+                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
                 {
                     sPostTitle = string.Format("post# {0}", url.Substring(url.IndexOf(@"#post") + 5));
                 }
