@@ -214,7 +214,7 @@ namespace PGRipper
             switch (this.cBForum.SelectedIndex)
             {
                 case 1:
-                    this.textBox3.Text = "http://www.kitty-kats.com/";
+                    this.textBox3.Text = "http://www.kitty-kats.net/";
                     break;
                 case 2:
                     this.textBox3.Text = "http://rip-productions.net/";

@@ -58,7 +58,7 @@ namespace PGRipper
 
                         if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
                             CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") || 
+                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") || 
                             CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
                         {
                             if (sHtmlUrl.Contains(".html") && !sHtmlUrl.Contains(".php"))

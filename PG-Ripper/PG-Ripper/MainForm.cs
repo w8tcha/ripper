@@ -947,7 +947,7 @@ namespace PGRipper
             {
                 if (this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
                     this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                    this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
+                    this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") ||
                     this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
                 {
                     if (!sHtmlUrl.Contains(@"#post"))
@@ -1153,7 +1153,7 @@ namespace PGRipper
 
             job.Title = Utility.ReplaceHexWithAscii(Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad));
 
-            if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com/") ||
+            if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net/") ||
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
@@ -1265,7 +1265,7 @@ namespace PGRipper
             {
                 tyURL = string.Format("{0}post_thanks.php?do=post_thanks_add&p={1}", this.userSettings.CurrentForumUrl, sPostId);
             }
-            else if (this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
+            else if (this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") ||
                      this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
                      this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
                      this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
@@ -1337,7 +1337,7 @@ namespace PGRipper
             Indexes idxs = new Indexes();
 
             string sPagecontent = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net")
-                                  || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
+                                  || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                                   || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
                                       ? idxs.GetThreadPagesNew(sHtmlUrl)
                                       : idxs.GetThreadPages(sHtmlUrl);
@@ -1358,7 +1358,7 @@ namespace PGRipper
             string sPagecontent;
 
             if (this.userSettings.CurrentForumUrl.Contains(@"http://rip-") || this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com"))
+                this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net"))
             {
                 sPagecontent = threads.GetThreadPagesNew(htmlUrl);
             }
@@ -1403,7 +1403,7 @@ namespace PGRipper
                 }
 
                 string sLComposedURL = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net")
-                                       || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
+                                       || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                                        || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
                                            ? string.Format("{0}#post{1}", htmlUrl, sLpostId)
                                            : string.Format(
@@ -1434,7 +1434,7 @@ namespace PGRipper
 
                 job.Title = Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad);
 
-                if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com") ||
+                if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") ||
                     this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
                     this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
                     this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
@@ -1444,7 +1444,7 @@ namespace PGRipper
                 }
 
                 job.ForumTitle = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net")
-                                 || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.com")
+                                 || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                                  || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
                                      ? sForumTitle
                                      : sForumTitle.Substring(
