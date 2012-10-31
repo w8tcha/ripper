@@ -89,6 +89,7 @@ namespace PGRipper
             "Sexy and Funny Forums",
             "Scanlover Forums",
             "Big Naturals Only",
+            "The phun.org forum",
             "<Other - Enter URL bellow>"});
             this.cBForum.Location = new System.Drawing.Point(102, 82);
             this.cBForum.Name = "cBForum";

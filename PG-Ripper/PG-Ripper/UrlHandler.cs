@@ -14,7 +14,7 @@ namespace PGRipper
     using System;
 
     /// <summary>
-    /// Formats the Urls
+    /// Formats the URLs
     /// </summary>
     public class UrlHandler
     {
@@ -58,8 +58,10 @@ namespace PGRipper
 
                         if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
                             CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
-                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") || 
-                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
+                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") ||
+                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
+                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
+                            )
                         {
                             if (sHtmlUrl.Contains(".html") && !sHtmlUrl.Contains(".php"))
                             {

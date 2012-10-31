@@ -229,6 +229,9 @@ namespace PGRipper
                     this.textBox3.Text = "http://bignaturalsonly.com/";
                     break;
                 case 6:
+                    this.textBox3.Text = "http://forum.phun.org/";
+                    break;
+                case 7:
                     this.textBox3.Text = "http://...";
                     break;
                 default:
