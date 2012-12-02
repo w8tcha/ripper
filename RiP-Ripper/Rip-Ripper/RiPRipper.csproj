@@ -385,7 +385,6 @@
     <Compile Include="ThreadToPost.cs" />
     <Compile Include="TopMostMessageBox.cs" />
     <Compile Include="UrlHandler.cs" />
-    <Compile Include="Win32.cs" />
     <Compile Include="ImageHosts\Image2Share.cs" />
     <Compile Include="ImageHosts\ImageCrack.cs" />
     <Compile Include="ImageHosts\ImageHigh.cs" />

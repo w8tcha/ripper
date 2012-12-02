@@ -60,9 +60,9 @@ namespace RiPRipper.ImageHosts
 
             try
             {
-                if (!Directory.Exists(mSavePath))
+                if (!Directory.Exists(this.mSavePath))
                 {
-                    Directory.CreateDirectory(mSavePath);
+                    Directory.CreateDirectory(this.mSavePath);
                 }
             }
             catch (IOException ex)
@@ -101,7 +101,7 @@ namespace RiPRipper.ImageHosts
             }
 
             string strNewURL;
-
+            
             var m = Regex.Match(sPage, @"<A HREF=\""javascript:loodfic\(\)\"" ><img src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
 
             if (m.Success)
@@ -115,7 +115,7 @@ namespace RiPRipper.ImageHosts
 
             strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/", StringComparison.Ordinal) + 1).Replace(".html", string.Empty);
 
-            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -166,25 +166,25 @@ namespace RiPRipper.ImageHosts
         }
 
         /// <summary>
-        /// a generic function to fetch urls.
+        /// a generic function to fetch URLs.
         /// </summary>
-        /// <param name="strURL">
-        /// The str URL.
+        /// <param name="url">
+        /// The URL.
         /// </param>
         /// <returns>
         /// Returns the Page as string.
         /// </returns>
-        protected string GetImageHostsPage(ref string strURL)
+        protected string GetImageHostsPage(ref string url)
         {
             string strPageRead;
 
             try
             {
-                var req = (HttpWebRequest)WebRequest.Create(strURL);
+                var req = (HttpWebRequest)WebRequest.Create(url);
 
                 req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
                 req.Headers["Cookie"] = "pixr8263_s=loaded;";
-                req.Referer = strURL;
+                req.Referer = url;
 
                 var res = (HttpWebResponse)req.GetResponse();
 

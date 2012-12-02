@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "RiP-Ripper 64Bit"
-#define MyAppVersion "2.9.3.3"
+#define MyAppVersion "2.9.3.4"
 #define MyAppPublisher "The Watcher"
 #define MyAppURL "http://ripper.codeplex.com"
 #define MyAppExeName "RiPRipper.exe"

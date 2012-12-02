@@ -1083,19 +1083,20 @@ namespace RiPRipper
 
             JobInfo job = new JobInfo { URL = sXmlUrl, XMLPayLoad = Utility.DownloadRipPage(sXmlUrl) };
 
-            //job.sStorePath = sDownloadFolder;
-            job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
-            job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
-            job.Title = Maintainance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
             job.ImageCount = Maintainance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
-
-            job.Title = Utility.ReplaceHexWithAscii(job.Title);
-            job.PostTitle = Utility.ReplaceHexWithAscii(job.PostTitle);
 
             if (job.ImageCount.Equals(0))
             {
                 this.UnlockControls();
             }
+
+            job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
+            job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
+            job.Title = Maintainance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
+            job.Title = Utility.ReplaceHexWithAscii(job.Title);
+            job.PostTitle = Utility.ReplaceHexWithAscii(job.PostTitle);
+
+            job.PostIds = Maintainance.GetInstance().GetAllPostIds(job.XMLPayLoad);
 
             job.StorePath = this.GenerateStorePath(job);
 
@@ -1108,10 +1109,18 @@ namespace RiPRipper
                 return;
             }
 
-            this.ProcessAutoThankYou(null, job.ImageCount, job.URL, null);
+            if (this.cacheController.userSettings.AutoThank)
+            {
+                var token = Utility.GetSToken("http://rip-productions.net/");
+
+                foreach (string postId in job.PostIds)
+                {
+                    this.ProcessAutoThankYou(postId, job.ImageCount, job.URL, token);
+                }
+            }
 
             JobListAddDelegate newJob = this.JobListAdd;
-           Invoke(newJob, new object[] { job });
+            this.Invoke(newJob, new object[] { job });
 
             ///////////////////////////////////////////////
            this.UnlockControls();
@@ -1121,67 +1130,94 @@ namespace RiPRipper
         /// <summary>
         /// Pushes the "Thank You" Button for the user.
         /// </summary>
-        void ProcessAutoThankYou(string sPostId, int iICount, string sUrl, string sToken)
+        /// <param name="postId">The post id.</param>
+        /// <param name="imageCount">The image count.</param>
+        /// <param name="url">The URL.</param>
+        /// <param name="token">The token.</param>
+        void ProcessAutoThankYou(string postId, int imageCount, string url, string token)
         {
-            if (!this.cacheController.userSettings.AutoThank) { return; }
+            if (!this.cacheController.userSettings.AutoThank)
+            {
+                return;
+            }
 
-            if (iICount < this.cacheController.userSettings.MinImageCount) { return; }
+            if (imageCount < this.cacheController.userSettings.MinImageCount)
+            {
+                return;
+            }
 
-            SendThankYouDelegate lSendThankYouDel = (SendThankYou);
+            SendThankYouDelegate lSendThankYouDel = SendThankYou;
 
             string tyURL;
 
-            sUrl = sUrl.Replace("getSTDpost-imgXML.php?dpver=2&postid=", "showpost.php?p=");
+            url = url.Replace("getSTDpost-imgXML.php?dpver=2&postid=", "showpost.php?p=");
 
             // Complete Thread
-            if (sPostId != null)
+            if (postId != null)
             {
                 //string sToken = Utility.GetSToken("http://rip-productions.net/showpost.php?p=" + sPostId);
 
-                if (string.IsNullOrEmpty(sToken))
+                if (string.IsNullOrEmpty(token))
                 {
                     return;
                 }
 
-                tyURL = string.Format("http://rip-productions.net/post_thanks.php?do=post_thanks_add&p={0}&securitytoken={1}", sPostId, sToken);
+                tyURL = string.Format("http://rip-productions.net/post_thanks.php?do=post_thanks_add&p={0}&securitytoken={1}", postId, token);
 
-                //SendThankYou(tyURL);
-                Invoke(lSendThankYouDel, new object[] { tyURL });
-
+                // SendThankYou(tyURL);
+                this.Invoke(lSendThankYouDel, new object[] { tyURL });
             }
-            else
+            /*else
             {
                 // Single Post
-                switch (comboBox1.SelectedIndex)
+                switch (this.comboBox1.SelectedIndex)
                 {
                     case 1:
                         {
-                            sToken = Utility.GetSToken(sUrl);
+                            token = Utility.GetSToken(url);
 
-                            tyURL = string.Format("http://rip-productions.net/post_thanks.php?do=post_thanks_add&p={0}&securitytoken={1}",
-                                                  sUrl.Substring(sUrl.IndexOf("?p=") + 3), sToken);
+                            tyURL =
+                                string.Format(
+                                    "http://rip-productions.net/post_thanks.php?do=post_thanks_add&p={0}&securitytoken={1}",
+                                    url.Substring(url.IndexOf("?p=") + 3),
+                                    token);
 
                             //SendThankYou(tyURL);
-                            Invoke(lSendThankYouDel, new object[] { tyURL });
+                            this.Invoke(lSendThankYouDel, new object[] { tyURL });
                         }
+
                         break;
-                    case 2:
-                        string sUrlNew = sUrl.Replace("showpost.php?p=", "post_thanks.php?do=post_thanks_add&p=");
+                    default:
+                        var sUrlNew = string.Empty;
+                        if (url.Contains("showpost.php?p="))
+                        {
+                            sUrlNew = url.Replace("showpost.php?p=", "post_thanks.php?do=post_thanks_add&p=");
+                        }
+                        else if (url.Contains("showthread.php?t="))
+                        {
+                            sUrlNew = url.Replace("showpost.php?p=", "post_thanks.php?do=post_thanks_add&p=");
+                        }
 
-                        tyURL = string.Format("{0}&securitytoken={1}", sUrlNew, Utility.GetSToken(sUrl));
-
-                        Invoke(lSendThankYouDel, new object[] { tyURL });
+                        tyURL = string.Format("{0}&securitytoken={1}", sUrlNew, Utility.GetSToken(url));
+                        
+                        this.Invoke(lSendThankYouDel, new object[] { tyURL });
 
                         break;
                 }
-            }
+            }*/
         }
 
-        // This delegate enables asynchronous calls for automatically sending thank yous
+        /// <summary>
+        /// This delegate enables asynchronous calls for automatically sending thank yous
+        /// </summary>
+        /// <param name="aUrl">A URL.</param>
         delegate void SendThankYouDelegate(string aUrl);
 
-        static void SendThankYou
-        (string aUrl)
+        /// <summary>
+        /// Sends the thank you.
+        /// </summary>
+        /// <param name="aUrl">A URL.</param>
+        private static void SendThankYou(string aUrl)
         {
             const string tyURLRef = "http://rip-productions.net/";
 
@@ -1206,7 +1242,6 @@ namespace RiPRipper
             {
                 lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
                 lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
-
             }
             finally
             {
@@ -1275,7 +1310,7 @@ namespace RiPRipper
 
                 if (this.cacheController.userSettings.SavePids && IsPostAlreadyRipped(sLpostId))
                 {
-                    goto SKIPIT;
+                    continue;
                 }
 
                 string sLComposedURL = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}", sLpostId);
@@ -1285,14 +1320,14 @@ namespace RiPRipper
 
                 if (jobInfo != null)
                 {
-                    goto SKIPIT;
+                    continue;
                 }
 
                 if (mCurrentJob != null)
                 {
                     if (mCurrentJob.URL.Equals(sLComposedURL))
                     {
-                        goto SKIPIT;
+                        continue;
                     }
                 }
 
@@ -1302,20 +1337,22 @@ namespace RiPRipper
                                       XMLPayLoad = Utility.DownloadRipPage(sLComposedURL)
                                   };
 
+                job.ImageCount = Maintainance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
+
+                if (job.ImageCount.Equals(0))
+                {
+                    continue;
+                }
+
                 job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
                 job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
                 job.Title = Maintainance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
-                job.ImageCount = Maintainance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
+                
 
                 job.Title = Utility.ReplaceHexWithAscii(job.Title);
                 job.PostTitle = Utility.ReplaceHexWithAscii(job.PostTitle);
 
-                job.StorePath = GenerateStorePath(job);
-
-                if (job.ImageCount.Equals(0))
-                {
-                    goto SKIPIT;
-                }
+                job.StorePath = this.GenerateStorePath(job);
 
                 ProcessAutoThankYou(sLpostId, job.ImageCount, job.URL, sToken);
 
@@ -1324,8 +1361,6 @@ namespace RiPRipper
                 Invoke(newJob, new object[] { job });
 
                 //////////////////////////////////////////////////////////////////////////
-            SKIPIT:
-                continue;
             }
         }
 
@@ -2474,14 +2509,18 @@ namespace RiPRipper
 
                 if (lgnMgr.DoLogin())
                 {
-                    bCameThroughCorrectLogin = true;
+                    this.bCameThroughCorrectLogin = true;
                 }
                 else
                 {
                     Login frmLgn = new Login();
                     frmLgn.ShowDialog(this);
 
-                    DialogResult result = TopMostMessageBox.Show(_ResourceManager.GetString("mbExit"), _ResourceManager.GetString("mbExitTtl"), MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult result = TopMostMessageBox.Show(
+                        this._ResourceManager.GetString("mbExit"),
+                        this._ResourceManager.GetString("mbExitTtl"),
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
 
                     if (result == DialogResult.Yes)
                     {
@@ -2494,9 +2533,10 @@ namespace RiPRipper
                 Login frmLgn = new Login();
                 frmLgn.ShowDialog(this);
 
-                bCameThroughCorrectLogin = false;
+                this.bCameThroughCorrectLogin = false;
             }
         }
+
         /// <summary>
         /// Set Window Position and Size
         /// </summary>
@@ -2507,12 +2547,12 @@ namespace RiPRipper
                 this.cacheController.userSettings.WindowLeft = int.Parse(Utility.LoadSetting("Window left"));
                 this.cacheController.userSettings.WindowTop = int.Parse(Utility.LoadSetting("Window top"));
 
-                Left = this.cacheController.userSettings.WindowLeft;
-                Top = this.cacheController.userSettings.WindowTop;
+                this.Left = this.cacheController.userSettings.WindowLeft;
+                this.Top = this.cacheController.userSettings.WindowTop;
             }
             catch (Exception)
             {
-                StartPosition = FormStartPosition.CenterScreen;
+                this.StartPosition = FormStartPosition.CenterScreen;
             }
 
             try
@@ -2524,7 +2564,7 @@ namespace RiPRipper
                 this.cacheController.userSettings.WindowWidth = 863;
             }
 
-            Width = this.cacheController.userSettings.WindowWidth;
+            this.Width = this.cacheController.userSettings.WindowWidth;
 
             try
             {
@@ -2535,16 +2575,21 @@ namespace RiPRipper
                 this.cacheController.userSettings.WindowHeight = 611;
             }
 
-            Height = this.cacheController.userSettings.WindowHeight;
-
+            this.Height = this.cacheController.userSettings.WindowHeight;
         }
+
+        /// <summary>
+        /// Save the History and Window Size & Positioning on Program Closing.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="FormClosingEventArgs" /> instance containing the event data.</param>
         private void MainFormFormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveOnExit();
+            this.SaveOnExit();
 
             if (this.cacheController.userSettings.SavePids)
             {
-                SaveHistory();
+                this.SaveHistory();
             }
 
             if (this.WindowState == FormWindowState.Minimized)
@@ -2557,18 +2602,28 @@ namespace RiPRipper
             Utility.SaveSetting("Window width", this.Width.ToString());
             Utility.SaveSetting("Window height", this.Height.ToString());
         }
+
+        /// <summary>
+        /// Raises the <see cref="E:Load" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void OnLoad(EventArgs args)
         {
             base.OnLoad(args);
 
-            Application.Idle += (OnLoaded);
+            Application.Idle += this.OnLoaded;
         }
 
+        /// <summary>
+        /// Called when [loaded].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void OnLoaded(object sender, EventArgs args)
         {
-            Application.Idle -= OnLoaded;
+            Application.Idle -= this.OnLoaded;
 
-            tmrPageUpdate.Enabled = true;
+            this.tmrPageUpdate.Enabled = true;
 
 #if (!RIPRIPPERX)
 
@@ -2580,27 +2635,26 @@ namespace RiPRipper
                     Environment.OSVersion.Version.Major >= 6 &&
                     Environment.OSVersion.Version.Minor >= 1)
                 {
-                    windowsTaskbar = TaskbarManager.Instance;
+                    this.windowsTaskbar = TaskbarManager.Instance;
 
                     // create a new taskbar jump list for the main window
-                    jumpList = JumpList.CreateJumpList();
-
-
+                    this.jumpList = JumpList.CreateJumpList();
 
                     if (!string.IsNullOrEmpty(this.cacheController.userSettings.DownloadFolder))
                     {
-
                         // Add our user tasks
-                        jumpList.AddUserTasks(new JumpListLink(this.cacheController.userSettings.DownloadFolder, "Open Download Folder")
-                                                  {
-                                                      IconReference =
-                                                          new IconReference(
-                                                          Path.Combine(Application.StartupPath,
-                                                                       Assembly.GetExecutingAssembly().GetName().Name +
-                                                                       ".exe"), 0)
-                                                  });
+                        this.jumpList.AddUserTasks(
+                            new JumpListLink(this.cacheController.userSettings.DownloadFolder, "Open Download Folder")
+                                {
+                                    IconReference =
+                                        new IconReference(
+                                        Path.Combine(
+                                            Application.StartupPath,
+                                            string.Format("{0}.exe", Assembly.GetExecutingAssembly().GetName().Name)),
+                                        0)
+                                });
 
-                        jumpList.Refresh();
+                        this.jumpList.Refresh();
                     }
 
 
@@ -2614,50 +2668,50 @@ namespace RiPRipper
                 // Reading Saved Jobs
                 XmlSerializer serializer = new XmlSerializer(typeof(List<JobInfo>));
                 TextReader tr = new StreamReader(Path.Combine(Application.StartupPath, "jobs.xml"));
-                mJobsList = (List<JobInfo>)serializer.Deserialize(tr);
+                this.mJobsList = (List<JobInfo>)serializer.Deserialize(tr);
                 tr.Close();
 
                 try
                 {
-                    bCurPause = bool.Parse(Utility.LoadSetting("CurrentlyPauseThreads"));
+                    this.bCurPause = bool.Parse(Utility.LoadSetting("CurrentlyPauseThreads"));
                 }
                 catch (Exception)
                 {
-                    bCurPause = false;
+                    this.bCurPause = false;
                 }
 
-                if (bCurPause)
+                if (this.bCurPause)
                 {
-                    pauseCurrentThreads.Text = "(Re)Start Download(s)";
-                    pauseCurrentThreads.Image = Languages.english.play;
+                    this.pauseCurrentThreads.Text = "(Re)Start Download(s)";
+                    this.pauseCurrentThreads.Image = Languages.english.play;
                 }
 
                 File.Delete(Path.Combine(Application.StartupPath, "jobs.xml"));
             }
             catch (Exception)
             {
-                mJobsList = new List<JobInfo>();
+                this.mJobsList = new List<JobInfo>();
             }
 
-            if (mJobsList.Count != 0)
+            if (this.mJobsList.Count != 0)
             {
-                StatusLabelInfo.Text = _ResourceManager.GetString("gbParse2");
-                StatusLabelInfo.ForeColor = Color.Green;
+                this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse2");
+                this.StatusLabelInfo.ForeColor = Color.Green;
 
-                for (int i = 0; i < mJobsList.Count; i++)
+                for (int i = 0; i < this.mJobsList.Count; i++)
                 {
-                    StatusLabelInfo.Text = string.Format("{0}{1}/{2}", _ResourceManager.GetString("gbParse2"), i, mJobsList.Count);
-                    StatusLabelInfo.ForeColor = Color.Green;
+                    this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this._ResourceManager.GetString("gbParse2"), i, this.mJobsList.Count);
+                    this.StatusLabelInfo.ForeColor = Color.Green;
 
-                    ListViewItem ijobJob = new ListViewItem(mJobsList[i].Title, 0);
-                    ijobJob.SubItems.Add(mJobsList[i].PostTitle);
-                    ijobJob.SubItems.Add(mJobsList[i].ImageCount.ToString());
-                    listViewJobList.Items.AddRange(new[] { ijobJob });
+                    ListViewItem ijobJob = new ListViewItem(this.mJobsList[i].Title, 0);
+                    ijobJob.SubItems.Add(this.mJobsList[i].PostTitle);
+                    ijobJob.SubItems.Add(this.mJobsList[i].ImageCount.ToString());
+                    this.listViewJobList.Items.AddRange(new[] { ijobJob });
                 }
 
-                bWorking = true;
+                this.bWorking = true;
 
-                StatusLabelInfo.Text = string.Empty;
+                this.StatusLabelInfo.Text = string.Empty;
             }
 
             // Delete Backup Files From AutoUpdate

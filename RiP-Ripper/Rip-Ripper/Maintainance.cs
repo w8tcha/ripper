@@ -14,6 +14,7 @@ namespace RiPRipper
     #region
 
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.IO;
     using System.Linq;
@@ -45,6 +46,35 @@ namespace RiPRipper
         public static Maintainance GetInstance()
         {
             return Instance ?? (Instance = new Maintainance());
+        }
+
+        /// <summary>
+        /// Count The Images from xml.
+        /// </summary>
+        /// <param name="xmlPayload">
+        /// The xml payload.
+        /// </param>
+        /// <returns>
+        /// Returns How Many Images the Post contains
+        /// </returns>
+        public IList<string> GetAllPostIds(string xmlPayload)
+        {
+            var postIds = new List<string>();
+
+            try
+            {
+                var dataSet = new DataSet();
+
+                dataSet.ReadXml(new StringReader(xmlPayload));
+
+                postIds.AddRange(from DataRow row in dataSet.Tables["post"].Rows select row["id"].ToString());
+            }
+            catch (Exception)
+            {
+                return postIds;
+            }
+
+            return postIds;
         }
 
         /// <summary>

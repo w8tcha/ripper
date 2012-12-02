@@ -11,11 +11,21 @@
 
 namespace RiPRipper.Objects
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The job info.
     /// </summary>
     public class JobInfo : object
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JobInfo" /> class.
+        /// </summary>
+        public JobInfo()
+        {
+            this.PostIds = new List<string>();
+        }
+
         #region Properties
 
         /// <summary>
@@ -52,6 +62,14 @@ namespace RiPRipper.Objects
         /// Gets or sets sXMLPayLoad.
         /// </summary>
         public string XMLPayLoad { get; set; }
+
+        /// <summary>
+        /// Gets or sets the post ids.
+        /// </summary>
+        /// <value>
+        /// The post ids.
+        /// </value>
+        public IList<string> PostIds { get; set; }
 
         #endregion
     }
