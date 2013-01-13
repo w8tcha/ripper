@@ -870,6 +870,15 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Get ImgDino Download
+        /// </summary>
+        public void GetImgDino()
+        {
+            this.xService = new ImgDino(ref this.mSavePath, ref this.mstrURL, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hotlinked image fether...
         /// </summary>
         public void GetImage()

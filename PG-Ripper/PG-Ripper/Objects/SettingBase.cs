@@ -38,7 +38,7 @@ namespace PGRipper.Objects
             this.DownloadOptions = "0";
             this.TopMost = false;
             this.Language = "en-EN";
-            this.CurrentForumUrl = "http://www.kitty-kats.com/";
+            this.CurrentForumUrl = "http://www.kitty-kats.net/";
             this.WindowWidth = 863;
             this.WindowHeight = 611;
 

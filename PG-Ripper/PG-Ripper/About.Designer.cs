@@ -175,6 +175,7 @@
             "ImgBox.com",
             "ImgChili.com",
             "ImgDepot.org",
+            "ImgDino.com",
             "Immage.de",
             "IPicture.ru",
             "JpgHosting.com",
