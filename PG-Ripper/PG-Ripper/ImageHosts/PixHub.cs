@@ -110,23 +110,26 @@ namespace PGRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"img onLoad=\""ustaw\(100000\);\"" src=\""(?<inner>[^\""]*)\""", RegexOptions.Singleline);
+            var match = Regex.Match(
+                sPage,
+                @"<div class=\""image-show resize\"">\s+.+?<img.+?src=\""(?<inner>[^\""]*)\"" alt=\""(?<filename>[^\""]*)\""",
+                RegexOptions.Multiline);
 
-            if (m.Success)
+            if (match.Success)
             {
-                strNewURL = m.Groups["inner"].Value;
+                strNewURL = match.Groups["inner"].Value;
 
                 if (strNewURL.Contains("thumbnail"))
                 {
                     strNewURL = strNewURL.Replace("thumbnail/", string.Empty);
                 }
+
+                strFilePath = match.Groups["filename"].Value;
             }
             else
             {
                 return false;
             }
-
-            strFilePath = strNewURL.Substring(strNewURL.IndexOf("_", StringComparison.Ordinal) + 1);
 
             strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
