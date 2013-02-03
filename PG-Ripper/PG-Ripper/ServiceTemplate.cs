@@ -23,38 +23,50 @@ namespace PGRipper
     public abstract class ServiceTemplate
     {
         /// <summary>
-        /// Image Link Url
-        /// </summary>
-        protected string mstrURL = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the HashTable with Urls.
-        /// </summary>
-        public Hashtable EventTable { get; set; }
-
-        /// <summary>
-        /// Image Save Folder Path
-        /// </summary>
-        protected string mSavePath = string.Empty;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ServiceTemplate"/> class.
         /// </summary>
         /// <param name="savePath">
         /// The save path.
         /// </param>
-        /// <param name="url">
-        /// The url.
+        /// <param name="imageUrl">
+        /// The image url.
         /// </param>
-        /// <param name="hTbl">
-        /// The h tbl.
+        /// <param name="postTitle">
+        /// The post title
         /// </param>
-        protected ServiceTemplate(string savePath, string url, ref Hashtable hTbl)
+        /// <param name="hashTable">
+        /// The url list.
+        /// </param>
+        protected ServiceTemplate(string savePath, string imageUrl, string postTitle, ref Hashtable hashTable)
         {
-            this.mstrURL = url;
-            this.EventTable = hTbl;
-            this.mSavePath = savePath;
+            this.ImageLinkURL = imageUrl;
+            this.EventTable = hashTable;
+            this.SavePath = savePath;
+            this.PostTitle = postTitle;
         }
+
+        /// <summary>
+        /// Gets or sets the HashTable with URLs.
+        /// </summary>
+        public Hashtable EventTable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Image Link Url
+        /// </summary>
+        protected string ImageLinkURL { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Image Save Folder Path
+        /// </summary>
+        protected string SavePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the post title.
+        /// </summary>
+        /// <value>
+        /// The post title.
+        /// </value>
+        protected string PostTitle { get; set; }
 
         /// <summary>
         /// Start Download
@@ -63,15 +75,15 @@ namespace PGRipper
         {
             this.DoDownload();
 
-            if (this.EventTable[this.mstrURL] != null)
+            if (this.EventTable[this.ImageLinkURL] != null)
             {
-                if (this.EventTable.Contains(this.mstrURL))
+                if (this.EventTable.Contains(this.ImageLinkURL))
                 {
-                    this.EventTable.Remove(this.mstrURL);
+                    this.EventTable.Remove(this.ImageLinkURL);
                 }
             }
 
-            ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
+            ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
         }
 
         /// <summary>
@@ -83,45 +95,73 @@ namespace PGRipper
         protected abstract bool DoDownload();
 
         /// <summary>
-        /// a generic function to fetch urls.
+        /// a generic function to fetch URLs.
         /// </summary>
-        /// <param name="strURL">
-        /// The str URL.
-        /// </param>
+        /// <param name="imageHostURL">The image host URL.</param>
         /// <returns>
         /// Returns the Page as string.
         /// </returns>
-        protected string GetImageHostPage(ref string strURL)
+        protected string GetImageHostPage(ref string imageHostURL)
         {
-            string strPageRead;
+            string pageContent;
 
-            try
+            /*try
             {
-                HttpWebRequest lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strURL);
-
-                lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
-                lHttpWebRequest.Referer = strURL;
-                lHttpWebRequest.KeepAlive = true;
-                lHttpWebRequest.Timeout = 20000;
-
-                Stream lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
-
-                StreamReader streamReader = new StreamReader(lHttpWebResponseStream);
-
-                strPageRead = streamReader.ReadToEnd();
-
-                lHttpWebResponseStream.Close();
+                WebClient wc = new WebClient();
+                strPageRead = wc.DownloadString(strURL);
+                wc.T
+                wc.Dispose();
             }
             catch (ThreadAbortException)
             {
-                return string.Empty;
+                return "";
             }
             catch (Exception)
             {
-                return string.Empty;
+                return "";
+            }*/
+
+            try
+            {
+                var webRequest = (HttpWebRequest)WebRequest.Create(imageHostURL);
+
+                webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
+                webRequest.Referer = imageHostURL;
+                webRequest.KeepAlive = true;
+                webRequest.Timeout = 20000;
+
+                var responseStream = webRequest.GetResponse().GetResponseStream();
+
+                var streamReader = new StreamReader(responseStream);
+
+                pageContent = streamReader.ReadToEnd();
+
+                responseStream.Close();
+            }
+            catch (ThreadAbortException)
+            {
+                pageContent = string.Empty;
+            }
+            catch (Exception)
+            {
+                pageContent = string.Empty;
             }
 
-            return strPageRead;
+            return pageContent;
+        }
+
+        /// <summary>
+        /// Gets the name of the image.
+        /// </summary>
+        /// <param name="postTitle">The post title.</param>
+        /// <param name="imageUrl">The image URL.</param>
+        /// <returns>Returns the Image Name.</returns>
+        protected string GetImageName(string postTitle, string imageUrl)
+        {
+            postTitle = Utility.RemoveIllegalCharecters(postTitle).Replace(" ", "_");
+
+            return string.Format(
+                "{0}{1}", postTitle, imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
         }
     }
 }

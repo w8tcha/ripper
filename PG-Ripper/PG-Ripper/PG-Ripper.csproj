@@ -376,7 +376,7 @@
     <Compile Include="LoginManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Maintainance.cs">
+    <Compile Include="Maintenance.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ImageHosts\Moast.cs">

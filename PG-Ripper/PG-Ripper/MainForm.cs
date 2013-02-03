@@ -1023,7 +1023,7 @@ namespace PGRipper
             {
                 if (
                     string.IsNullOrEmpty(
-                        Maintainance.GetInstance().GetRipPageTitle(Maintainance.GetInstance().GetPostPages(sHtmlUrl))))
+                        Maintenance.GetInstance().GetRipPageTitle(Maintenance.GetInstance().GetPostPages(sHtmlUrl))))
                 {
                     TopMostMessageBox.Show(sHtmlUrl.IndexOf("showthread.php") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
 
@@ -1090,7 +1090,7 @@ namespace PGRipper
             {
                 if (
                     string.IsNullOrEmpty(
-                        Maintainance.GetInstance().GetRipPageTitle(Maintainance.GetInstance().GetPostPages(sHtmlUrl))))
+                        Maintenance.GetInstance().GetRipPageTitle(Maintenance.GetInstance().GetPostPages(sHtmlUrl))))
                 {
                     TopMostMessageBox.Show(sHtmlUrl.IndexOf("showthread.php") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
 
@@ -1150,9 +1150,9 @@ namespace PGRipper
             }
 
             JobInfo job = new JobInfo
-                { URL = sHtmlUrl, HtmlPayLoad = Maintainance.GetInstance().GetPostPages(sHtmlUrl) };
+                { URL = sHtmlUrl, HtmlPayLoad = Maintenance.GetInstance().GetPostPages(sHtmlUrl) };
 
-            job.Title = Utility.ReplaceHexWithAscii(Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad));
+            job.Title = Utility.ReplaceHexWithAscii(Maintenance.GetInstance().GetRipPageTitle(job.HtmlPayLoad));
 
             if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net/") ||
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
@@ -1161,22 +1161,22 @@ namespace PGRipper
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
             {
-                job.SecurityToken = Maintainance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
+                job.SecurityToken = Maintenance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
             }
 
             if (!sHtmlUrl.Contains(@"showthread") || sHtmlUrl.Contains(@"#post"))
             {
                 job.PostTitle =
                     Utility.ReplaceHexWithAscii(
-                        Maintainance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sHtmlUrl));
+                        Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sHtmlUrl));
 
                 if (this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
                 {
-                    job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.URL, true);
+                    job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.URL, true);
                 }
                 else
                 {
-                    job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.HtmlPayLoad, true);
+                    job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.HtmlPayLoad, true);
 
                     job.ForumTitle =
                         job.ForumTitle.Substring(
@@ -1187,11 +1187,11 @@ namespace PGRipper
             {
                 if (this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
                 {
-                    job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.URL, false);
+                    job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.URL, false);
                 }
                 else
                 {
-                    job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(job.HtmlPayLoad, false);
+                    job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.HtmlPayLoad, false);
 
                     job.ForumTitle =
                         job.ForumTitle.Substring(
@@ -1374,7 +1374,7 @@ namespace PGRipper
                 sPagecontent = threads.GetThreadPages(htmlUrl);
             }
 
-            string sForumTitle = Maintainance.GetInstance().ExtractForumTitleFromHtml(htmlUrl, false);
+            string sForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(htmlUrl, false);
 
             List<ImageInfo> arlst = threads.ParseHtml(sPagecontent);
 
@@ -1433,14 +1433,14 @@ namespace PGRipper
                 }
 
                 JobInfo job = new JobInfo
-                    { URL = sLComposedURL, HtmlPayLoad = Maintainance.GetInstance().GetPostPages(sLComposedURL) };
+                    { URL = sLComposedURL, HtmlPayLoad = Maintenance.GetInstance().GetPostPages(sLComposedURL) };
 
                 if (string.IsNullOrEmpty(job.HtmlPayLoad))
                 {
                     goto SKIPIT;
                 }
 
-                job.Title = Maintainance.GetInstance().GetRipPageTitle(job.HtmlPayLoad);
+                job.Title = Maintenance.GetInstance().GetRipPageTitle(job.HtmlPayLoad);
 
                 if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") || 
                     this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
@@ -1449,7 +1449,7 @@ namespace PGRipper
                     this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
                     this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
                 {
-                    job.SecurityToken = Maintainance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
+                    job.SecurityToken = Maintenance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
                 }
 
                 job.ForumTitle = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net")
@@ -1460,7 +1460,7 @@ namespace PGRipper
                                      : sForumTitle.Substring(
                                          sForumTitle.IndexOf(string.Format("{0} ", job.Title)) + job.Title.Length + 1);
 
-                job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sLComposedURL);
+                job.PostTitle = Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sLComposedURL);
                 job.Title = Utility.ReplaceHexWithAscii(job.Title);
 
                 job.ImageList = Utility.ExtractImagesHtml(job.HtmlPayLoad, sLpostId);
@@ -1740,9 +1740,9 @@ namespace PGRipper
 
                     if (!this.ripperClosing)
                     {
-                        if (progressBar1 != null)
+                        if (this.progressBar1 != null)
                         {
-                            progressBar1.Value = i;
+                            this.progressBar1.Value = i;
                         }
 
                         this.StatusLabelImageC.Text = string.Format(
@@ -1752,15 +1752,21 @@ namespace PGRipper
                     try
                     {
                         // Attempts to download an image when the URL is longer than http://
-                        if (mImagesList[i].ImageUrl.Length > 6)
+                        if (this.mImagesList[i].ImageUrl.Length > 6)
                         {
-                            if (!(i > lvCurJob.Items.Count))
+                            if (!(i > this.lvCurJob.Items.Count))
                             {
-                                lvCurJob.Items[i].Selected = true;
-                                lvCurJob.EnsureVisible(i);
+                                this.lvCurJob.Items[i].Selected = true;
+                                this.lvCurJob.EnsureVisible(i);
                             }
 
-                            CacheController.GetInstance().DownloadImage(mImagesList[i].ImageUrl, mCurrentJob.StorePath);
+                            CacheController.GetInstance()
+                                           .DownloadImage(
+                                               this.mImagesList[i].ImageUrl,
+                                               this.mCurrentJob.StorePath,
+                                               !string.IsNullOrEmpty(this.mCurrentJob.PostTitle)
+                                                   ? this.mCurrentJob.PostTitle
+                                                   : this.mCurrentJob.Title);
                         }
                     }
                     catch (ArgumentOutOfRangeException)
@@ -1865,7 +1871,7 @@ namespace PGRipper
             }
             ///////////////////////////
 
-            this.sLastPic = this.mrefCC.uSLastPic;
+            this.sLastPic = this.mrefCC.LastPic;
 
             if (!File.Exists(this.sLastPic))
             {

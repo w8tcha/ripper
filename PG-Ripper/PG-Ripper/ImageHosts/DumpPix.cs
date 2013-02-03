@@ -36,8 +36,8 @@ namespace PGRipper.ImageHosts
         /// <param name="hashtable">
         /// The hash table.
         /// </param>
-        public DumpPix(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
-            : base(savePath, imageUrl, ref hashtable)
+        public DumpPix(ref string savePath, ref string imageUrl, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, imageName, ref hashtable)
         {
         }
 
@@ -49,7 +49,7 @@ namespace PGRipper.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var strImgURL = mstrURL;
+            var strImgURL = ImageLinkURL;
 
             if (EventTable.ContainsKey(strImgURL))
             {
@@ -60,9 +60,9 @@ namespace PGRipper.ImageHosts
 
             try
             {
-                if (!Directory.Exists(this.mSavePath))
+                if (!Directory.Exists(this.SavePath))
                 {
-                    Directory.CreateDirectory(this.mSavePath);
+                    Directory.CreateDirectory(this.SavePath);
                 }
             }
             catch (IOException ex)
@@ -97,7 +97,7 @@ namespace PGRipper.ImageHosts
 
             strFilePath = strNewURL.Substring(strNewURL.IndexOf("_") + 1);
 
-            strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -105,7 +105,7 @@ namespace PGRipper.ImageHosts
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
             }
 
             try
@@ -119,7 +119,7 @@ namespace PGRipper.ImageHosts
             catch (ThreadAbortException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
@@ -129,20 +129,20 @@ namespace PGRipper.ImageHosts
                 MainForm.Delete = true;
 
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic = ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
+            CacheController.GetInstance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
 
             return true;
         }
