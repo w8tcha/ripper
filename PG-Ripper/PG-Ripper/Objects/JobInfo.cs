@@ -25,47 +25,47 @@ namespace PGRipper.Objects
         #region Properties
 
         /// <summary>
-        /// Gets or sets iImageCount.
+        /// Gets or sets Image Count.
         /// </summary>
         public int ImageCount { get; set; }
 
         /// <summary>
-        /// Gets or sets lImageList.
+        /// Gets or sets Image List.
         /// </summary>
         public List<ImageInfo> ImageList { get; set; }
 
         /// <summary>
-        /// Gets or sets sForumTitle.
+        /// Gets or sets Forum Title.
         /// </summary>
         public string ForumTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets sHtmlPayLoad.
+        /// Gets or sets Html PayLoad.
         /// </summary>
         public string HtmlPayLoad { get; set; }
 
         /// <summary>
-        /// Gets or sets sPostTitle.
+        /// Gets or sets Post Title.
         /// </summary>
         public string PostTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets sSecurityToken.
+        /// Gets or sets Security Token.
         /// </summary>
         public string SecurityToken { get; set; }
 
         /// <summary>
-        /// Gets or sets sStorePath.
+        /// Gets or sets Store Path.
         /// </summary>
         public string StorePath { get; set; }
 
         /// <summary>
-        /// Gets or sets sTitle.
+        /// Gets or sets Title (Thread Name).
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets sURL.
+        /// Gets or sets URL.
         /// </summary>
         public string URL { get; set; }
 

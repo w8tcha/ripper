@@ -25,19 +25,14 @@ namespace PGRipper.ImageHosts
     public class ImgDino : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgDino"/> class.
+        /// Initializes a new instance of the <see cref="ImgDino" /> class.
         /// </summary>
-        /// <param name="savePath">
-        /// The save Path.
-        /// </param>
-        /// <param name="imageUrl">
-        /// The image Url.
-        /// </param>
-        /// <param name="hashtable">
-        /// The hash table.
-        /// </param>
-        public ImgDino(ref string savePath, ref string imageUrl, ref Hashtable hashtable)
-            : base(savePath, imageUrl, ref hashtable)
+        /// <param name="savePath">The save Path.</param>
+        /// <param name="imageUrl">The image Url.</param>
+        /// <param name="imageName">Name of the image.</param>
+        /// <param name="hashtable">The hash table.</param>
+        public ImgDino(ref string savePath, ref string imageUrl, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, imageName, ref hashtable)
         {
         }
 
@@ -49,7 +44,7 @@ namespace PGRipper.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var strImgURL = mstrURL;
+            var strImgURL = ImageLinkURL;
 
             if (EventTable.ContainsKey(strImgURL))
             {
@@ -60,9 +55,9 @@ namespace PGRipper.ImageHosts
 
             try
             {
-                if (!Directory.Exists(this.mSavePath))
+                if (!Directory.Exists(this.SavePath))
                 {
-                    Directory.CreateDirectory(this.mSavePath);
+                    Directory.CreateDirectory(this.SavePath);
                 }
             }
             catch (IOException ex)
@@ -93,11 +88,13 @@ namespace PGRipper.ImageHosts
                 EventTable.Add(strImgURL, ccObj);
             }
 
-            var strNewURL = strImgURL.Replace(@"viewer.php", @"download.php");
+            // Set Image Download Path
+            var strNewURL = strImgURL.Replace(@"viewer.php?file=", @"images/");
 
-            strFilePath = strNewURL.Substring(strNewURL.IndexOf("=") + 1);
+            // Set Image Name instead of using random name
+            strFilePath = this.GetImageName(this.PostTitle, strNewURL);
 
-            strFilePath = Path.Combine(this.mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -105,7 +102,7 @@ namespace PGRipper.ImageHosts
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
             }
 
             try
@@ -119,7 +116,7 @@ namespace PGRipper.ImageHosts
             catch (ThreadAbortException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
@@ -129,20 +126,20 @@ namespace PGRipper.ImageHosts
                 MainForm.Delete = true;
 
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
-            CacheController.GetInstance().uSLastPic = ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
+            CacheController.GetInstance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
 
             return true;
         }
