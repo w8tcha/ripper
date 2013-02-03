@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Maintainance.cs" company="The Watcher">
+// <copyright file="Maintenance.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -16,9 +16,9 @@ namespace PGRipper
     using System.Text.RegularExpressions;
 
     /// <summary>
-    /// Maintainance Class.
+    /// Maintenance Class.
     /// </summary>
-    public class Maintainance
+    public class Maintenance
     {
         /// <summary>
         /// Gets or sets the MainForm Instance
@@ -26,9 +26,9 @@ namespace PGRipper
         public static System.Windows.Forms.Form Xform { get; set; }
 
         /// <summary>
-        /// Gets or sets the Maintainance Instance
+        /// Gets or sets the Maintenance Instance
         /// </summary>
-        public static Maintainance Instace { get; set; }
+        public static Maintenance Instace { get; set; }
 
         /// <summary>
         /// Gets the instance.
@@ -36,9 +36,9 @@ namespace PGRipper
         /// <returns>
         /// The get instance.
         /// </returns>
-        public static Maintainance GetInstance()
+        public static Maintenance GetInstance()
         {
-            return Instace ?? (Instace = new Maintainance());
+            return Instace ?? (Instace = new Maintenance());
         }
 
         /// <summary>
