@@ -37,8 +37,8 @@ namespace PGRipper.ImageHosts
         /// <param name="hashtable">
         /// The hashtable.
         /// </param>
-        public ImagePorter(ref string savePath, ref string imageUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, imageName, ref hashtable)
+        public ImagePorter(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
 
@@ -167,7 +167,7 @@ namespace PGRipper.ImageHosts
         }
 
         /// <summary>
-        /// a generic function to fetch urls.
+        /// Generic function to fetch URLs.
         /// </summary>
         /// <param name="strURL">
         /// The str URL.

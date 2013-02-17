@@ -27,8 +27,8 @@ namespace PGRipper
     /// </summary>
     public class ImageBeaver : ServiceTemplate
     {
-        public ImageBeaver(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public ImageBeaver(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
             //
             // Add constructor logic here
@@ -252,7 +252,6 @@ namespace PGRipper
 
                 req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
                 req.CookieContainer = cookieContainer;
-
 
                 res = (HttpWebResponse)req.GetResponse();
                 res.Cookies = req.CookieContainer.GetCookies(req.RequestUri);

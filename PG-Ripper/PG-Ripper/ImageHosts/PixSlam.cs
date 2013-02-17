@@ -27,8 +27,8 @@ namespace PGRipper.ImageHosts
     /// </summary>
     public class PixSlam : ServiceTemplate
     {
-        public PixSlam(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public PixSlam(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 

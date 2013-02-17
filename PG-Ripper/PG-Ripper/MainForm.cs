@@ -1763,6 +1763,7 @@ namespace PGRipper
                             CacheController.GetInstance()
                                            .DownloadImage(
                                                this.mImagesList[i].ImageUrl,
+                                               this.mImagesList[i].ThumbnailUrl,
                                                this.mCurrentJob.StorePath,
                                                !string.IsNullOrEmpty(this.mCurrentJob.PostTitle)
                                                    ? this.mCurrentJob.PostTitle

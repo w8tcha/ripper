@@ -32,8 +32,8 @@ namespace PGRipper
     public class PicTiger2 : ServiceTemplate
     {
 
-        public PicTiger2(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public PicTiger2(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
             //
             // Add constructor logic here

@@ -32,8 +32,8 @@ namespace PGRipper
     /// </summary>
     public class StormFactory : ServiceTemplate
     {
-        public StormFactory(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public StormFactory(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
             //
             // Add constructor logic here

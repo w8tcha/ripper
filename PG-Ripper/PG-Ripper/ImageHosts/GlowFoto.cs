@@ -30,8 +30,8 @@ namespace PGRipper.ImageHosts
         /// <param name="sSavePath">The s save path.</param>
         /// <param name="strURL">The STR URL.</param>
         /// <param name="hTbl">The h TBL.</param>
-        public GlowFoto(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public GlowFoto(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 

@@ -80,16 +80,21 @@ namespace PGRipper
         /// in a newly created thread.
         /// </summary>
         /// <param name="imageUrl">The Image Url.</param>
+        /// <param name="thumbImageUrl">The thumb image URL.</param>
         /// <param name="localPath">The Local Path.</param>
         /// <param name="imageName">Name of the image.</param>
-        public void DownloadImage(string imageUrl, string localPath, string imageName)
+        public void DownloadImage(string imageUrl, string thumbImageUrl, string localPath, string imageName)
         {
             ThreadStart lThreadStart;
+
+            imageUrl = imageUrl.ToLower();
+
+            thumbImageUrl = thumbImageUrl.ToLower();
 
             // ImageDownloader is the bridging class between this routine and the
             // ServiceTemplate base class (which is the parent to all hosting site's
             // fetch code).
-            var imageDownloader = new ImageDownloader(localPath, imageUrl, imageName, ref this.mEventTable);
+            var imageDownloader = new ImageDownloader(localPath, imageUrl, thumbImageUrl, imageName, ref this.mEventTable);
 
             if (imageUrl.IndexOf(@"/img.php?loc=loc") >= 0)
             {
@@ -571,6 +576,10 @@ namespace PGRipper
             else if (imageUrl.IndexOf(@"imgdino.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgDino;
+            }
+            else if (imageUrl.IndexOf(@"imgwoot.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

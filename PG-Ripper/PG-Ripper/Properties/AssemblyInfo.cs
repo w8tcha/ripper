@@ -32,7 +32,7 @@ using System.Reflection;
 [assembly: AssemblyCulture("")]
 
 [assembly: AssemblyVersion("1.4.0.5")]
-[assembly: AssemblyFileVersionAttribute("1.4.0.5")]
+[assembly: AssemblyFileVersionAttribute("1.4.0.6")]
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyName("")]

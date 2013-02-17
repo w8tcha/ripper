@@ -30,8 +30,8 @@ namespace PGRipper
     /// </summary>
     public class DumbARump : ServiceTemplate
     {
-        public DumbARump(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public DumbARump(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 

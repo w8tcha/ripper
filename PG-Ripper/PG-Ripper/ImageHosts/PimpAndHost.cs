@@ -30,8 +30,8 @@ namespace PGRipper.ImageHosts
         /// <param name="savePath">The save path.</param>
         /// <param name="imageURL">The image URL.</param>
         /// <param name="hashtable">The hashtable.</param>
-        public PimpAndHost(ref string savePath, ref string imageUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, imageName, ref hashtable)
+        public PimpAndHost(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
 
