@@ -184,6 +184,7 @@
     </Compile>
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
+    <Compile Include="ImageHosts\ImgWoot.cs" />
     <Compile Include="ImageHosts\PixRoute.cs" />
     <Compile Include="ImageHosts\ImagePicasa.cs" />
     <Compile Include="ImageHosts\DirectUpload.cs" />

@@ -37,8 +37,8 @@ namespace PGRipper.ImageHosts
         /// <param name="hashtable">
         /// The hashtable.
         /// </param>
-        public DirectUpload(ref string savePath, ref string imageUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, imageName, ref hashtable)
+        public DirectUpload(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
 

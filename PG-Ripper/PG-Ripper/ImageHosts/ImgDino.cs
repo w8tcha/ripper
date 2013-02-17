@@ -31,8 +31,8 @@ namespace PGRipper.ImageHosts
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgDino(ref string savePath, ref string imageUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, imageName, ref hashtable)
+        public ImgDino(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
 
@@ -98,7 +98,8 @@ namespace PGRipper.ImageHosts
 
             //////////////////////////////////////////////////////////////////////////
 
-            var newAlteredPath = Utility.GetSuitableName(strFilePath);
+            var newAlteredPath = Utility.GetSuitableName(strFilePath, true);
+
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;

@@ -23,23 +23,17 @@ namespace PGRipper
     public abstract class ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceTemplate"/> class.
+        /// Initializes a new instance of the <see cref="ServiceTemplate" /> class.
         /// </summary>
-        /// <param name="savePath">
-        /// The save path.
-        /// </param>
-        /// <param name="imageUrl">
-        /// The image url.
-        /// </param>
-        /// <param name="postTitle">
-        /// The post title
-        /// </param>
-        /// <param name="hashTable">
-        /// The url list.
-        /// </param>
-        protected ServiceTemplate(string savePath, string imageUrl, string postTitle, ref Hashtable hashTable)
+        /// <param name="savePath">The save path.</param>
+        /// <param name="imageUrl">The image url.</param>
+        /// <param name="thumbImageUrl">The thumb image URL.</param>
+        /// <param name="postTitle">The post title</param>
+        /// <param name="hashTable">The url list.</param>
+        protected ServiceTemplate(string savePath, string imageUrl, string thumbImageUrl, string postTitle, ref Hashtable hashTable)
         {
             this.ImageLinkURL = imageUrl;
+            this.ThumbImageURL = thumbImageUrl;
             this.EventTable = hashTable;
             this.SavePath = savePath;
             this.PostTitle = postTitle;
@@ -49,6 +43,11 @@ namespace PGRipper
         /// Gets or sets the HashTable with URLs.
         /// </summary>
         public Hashtable EventTable { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Thumb Image Url
+        /// </summary>
+        protected string ThumbImageURL { get; set; }
 
         /// <summary>
         /// Gets or sets the Image Link Url
@@ -98,45 +97,48 @@ namespace PGRipper
         /// a generic function to fetch URLs.
         /// </summary>
         /// <param name="imageHostURL">The image host URL.</param>
+        /// <param name="cookieValue">The cookie value.</param>
         /// <returns>
         /// Returns the Page as string.
         /// </returns>
-        protected string GetImageHostPage(ref string imageHostURL)
+        protected string GetImageHostPage(
+            ref string imageHostURL, string cookieValue = null)
         {
             string pageContent;
-
-            /*try
-            {
-                WebClient wc = new WebClient();
-                strPageRead = wc.DownloadString(strURL);
-                wc.T
-                wc.Dispose();
-            }
-            catch (ThreadAbortException)
-            {
-                return "";
-            }
-            catch (Exception)
-            {
-                return "";
-            }*/
-
+           
             try
             {
                 var webRequest = (HttpWebRequest)WebRequest.Create(imageHostURL);
 
-                webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
+                webRequest.UserAgent =
+                    "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
                 webRequest.Referer = imageHostURL;
                 webRequest.KeepAlive = true;
-                webRequest.Timeout = 20000;
+                webRequest.Timeout = 2000;
+
+                if (!string.IsNullOrEmpty(cookieValue))
+                {
+                    webRequest.Headers["Cookie"] = cookieValue;
+                }
 
                 var responseStream = webRequest.GetResponse().GetResponseStream();
 
-                var streamReader = new StreamReader(responseStream);
+                if (responseStream != null)
+                {
+                    var reader = new StreamReader(responseStream);
 
-                pageContent = streamReader.ReadToEnd();
+                    pageContent = reader.ReadToEnd();
 
-                responseStream.Close();
+                    TopMostMessageBox.Show(pageContent);
+
+                    responseStream.Close();
+                    reader.Close();
+                }
+                else
+                {
+                    responseStream.Close();
+                    return string.Empty;
+                }
             }
             catch (ThreadAbortException)
             {

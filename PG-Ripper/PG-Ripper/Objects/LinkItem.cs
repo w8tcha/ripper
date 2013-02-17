@@ -16,10 +16,19 @@ namespace PGRipper.Objects
     /// </summary>
     public class LinkItem
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LinkItem" /> class.
+        /// </summary>
+        public LinkItem()
+        {
+            this.Href = string.Empty;
+            this.Text = string.Empty;
+        }
+
         #region Properties
 
         /// <summary>
-        ///   Gets or sets Href.
+        ///   Gets or sets Link.
         /// </summary>
         public string Href { get; set; }
 

@@ -138,9 +138,7 @@ namespace PGRipper
         /// <summary>
         /// Gets the rip page.
         /// </summary>
-        /// <param name="strURL">
-        /// The STR URL.
-        /// </param>
+        /// <param name="strURL">The STR URL.</param>
         /// <returns>
         /// The get rip page.
         /// </returns>

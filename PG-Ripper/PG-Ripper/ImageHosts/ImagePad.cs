@@ -36,8 +36,8 @@ namespace PGRipper.ImageHosts
         /// <param name="hTbl">
         /// The h tbl.
         /// </param>
-        public ImagePad(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public ImagePad(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 

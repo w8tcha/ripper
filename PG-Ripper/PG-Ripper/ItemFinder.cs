@@ -40,18 +40,25 @@ namespace PGRipper
         {
             var linkList = new List<LinkItem>();
 
-            var m1 = Regex.Matches(page, @"(<a.*?>.*?)", RegexOptions.Multiline);
+            var linkMatch = Regex.Matches(page, @"(<a.*?>.*?</a>)", RegexOptions.Multiline);
 
-            foreach (Match m in m1)
+            foreach (Match match in linkMatch)
             {
-                var value = m.Groups[1].Value;
+                var value = match.Groups[1].Value;
                 var item = new LinkItem();
 
-                var m2 = Regex.Match(value, @"href=\""(.*?)\""", RegexOptions.IgnoreCase);
+                var hrefMatch = Regex.Match(value, @"href=\""(.*?)\""", RegexOptions.IgnoreCase);
 
-                if (m2.Success)
+                if (hrefMatch.Success)
                 {
-                    item.Href = m2.Groups[1].Value;
+                    item.Href = hrefMatch.Groups[1].Value;
+                }
+
+                var thumbNailMatch  = Regex.Match(value, @"src=\""(.*?)\""", RegexOptions.IgnoreCase);
+
+                if (thumbNailMatch.Success)
+                {
+                    item.Text = thumbNailMatch.Groups[1].Value;
                 }
 
                 linkList.Add(item);
@@ -73,18 +80,18 @@ namespace PGRipper
         {
             var anchorList = new List<LinkItem>();
 
-            var m1 = Regex.Matches(page, @"^(?!<a.*?>)(<img.*?>)", RegexOptions.IgnoreCase);
+            var linkImageMatch = Regex.Matches(page, @"^(?!<a.*?>)(<img.*?>)", RegexOptions.IgnoreCase);
 
-            foreach (Match m in m1)
+            foreach (Match match in linkImageMatch)
             {
-                var value = m.Groups[1].Value;
+                var value = match.Groups[1].Value;
                 var item = new LinkItem();
 
-                var m2 = Regex.Match(value, @"src=\""(.*?)\""", RegexOptions.IgnoreCase);
+                var hrefMatch = Regex.Match(value, @"src=\""(.*?)\""", RegexOptions.IgnoreCase);
 
-                if (m2.Success)
+                if (hrefMatch.Success)
                 {
-                    item.Href = m2.Groups[1].Value;
+                    item.Href = hrefMatch.Groups[1].Value;
                 }
 
                 anchorList.Add(item);

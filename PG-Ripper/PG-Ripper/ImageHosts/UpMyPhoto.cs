@@ -27,8 +27,8 @@ namespace PGRipper.ImageHosts
     /// </summary>
     public class UpMyPhoto : ServiceTemplate
     {
-        public UpMyPhoto(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public UpMyPhoto(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 

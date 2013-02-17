@@ -27,8 +27,8 @@ namespace PGRipper.ImageHosts
     /// </summary>
     public class FileMad : ServiceTemplate
     {
-        public FileMad(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public FileMad(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 

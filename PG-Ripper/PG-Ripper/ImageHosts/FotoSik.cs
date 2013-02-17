@@ -27,8 +27,8 @@ namespace PGRipper.ImageHosts
     /// </summary>
     public class FotoSik : ServiceTemplate
     {
-        public FotoSik(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public FotoSik(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 

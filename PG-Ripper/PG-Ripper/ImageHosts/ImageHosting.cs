@@ -32,8 +32,8 @@ namespace PGRipper
     /// </summary>
     public class ImageHosting : ServiceTemplate
     {
-        public ImageHosting(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, imageName, ref hTbl)
+        public ImageHosting(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 

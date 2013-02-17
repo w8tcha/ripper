@@ -26,19 +26,14 @@ namespace PGRipper.ImageHosts
     public class Hoooster : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Hoooster"/> class.
+        /// Initializes a new instance of the <see cref="Hoooster" /> class.
         /// </summary>
-        /// <param name="savePath">
-        /// The save Path.
-        /// </param>
-        /// <param name="imageUrl">
-        /// The image Url.
-        /// </param>
-        /// <param name="hashtable">
-        /// The hashtable.
-        /// </param>
-        public Hoooster(ref string savePath, ref string imageUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, imageName, ref hashtable)
+        /// <param name="savePath">The save Path.</param>
+        /// <param name="imageUrl">The image Url.</param>
+        /// <param name="imageName">Name of the image.</param>
+        /// <param name="hashtable">The hash table.</param>
+        public Hoooster(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
 
@@ -61,9 +56,9 @@ namespace PGRipper.ImageHosts
 
             try
             {
-                if (!Directory.Exists(SavePath))
+                if (!Directory.Exists(this.SavePath))
                 {
-                    Directory.CreateDirectory(SavePath);
+                    Directory.CreateDirectory(this.SavePath);
                 }
             }
             catch (IOException ex)
@@ -74,11 +69,11 @@ namespace PGRipper.ImageHosts
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
 
             try
             {
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(strImgURL, cacheObject);
             }
             catch (ThreadAbortException)
             {
@@ -91,19 +86,19 @@ namespace PGRipper.ImageHosts
                     return false;
                 }
 
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(strImgURL, cacheObject);
             }
 
-            string sPage = this.GetImageHostsPage(ref strImgURL);
+            var page = GetImageHostPage(ref strImgURL, "hoosterads=1;");
 
-            if (sPage.Length < 10)
+            if (page.Length < 10)
             {
                 return false;
             }
 
             string strNewURL;
 
-            var m = Regex.Match(sPage, @"img src=\""(?<inner>[^\""]*)\"" alt=\""", RegexOptions.Singleline);
+            var m = Regex.Match(page, @"img src=\""(?<inner>[^\""]*)\"" alt=\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
@@ -121,7 +116,7 @@ namespace PGRipper.ImageHosts
 
             strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -129,7 +124,7 @@ namespace PGRipper.ImageHosts
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+                ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = strFilePath;
             }
 
             try
@@ -143,7 +138,7 @@ namespace PGRipper.ImageHosts
             catch (ThreadAbortException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
@@ -153,14 +148,14 @@ namespace PGRipper.ImageHosts
                 MainForm.Delete = true;
 
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
@@ -169,57 +164,6 @@ namespace PGRipper.ImageHosts
             CacheController.GetInstance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
 
             return true;
-        }
-
-        /// <summary>
-        /// a generic function to fetch urls.
-        /// </summary>
-        /// <param name="strURL">
-        /// The str URL.
-        /// </param>
-        /// <returns>
-        /// Returns the Page as string.
-        /// </returns>
-        protected string GetImageHostsPage(ref string strURL)
-        {
-            string strPageRead;
-
-            try
-            {
-                var req = (HttpWebRequest)WebRequest.Create(strURL);
-
-                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-                req.Headers["Cookie"] = "hoosterads=1;";
-                req.Referer = strURL;
-
-                var res = (HttpWebResponse)req.GetResponse();
-
-                var stream = res.GetResponseStream();
-                if (stream != null)
-                {
-                    var reader = new StreamReader(stream);
-
-                    strPageRead = reader.ReadToEnd();
-
-                    res.Close();
-                    reader.Close();
-                }
-                else
-                {
-                    res.Close();
-                    return string.Empty;
-                }
-            }
-            catch (ThreadAbortException)
-            {
-                return string.Empty;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-
-            return strPageRead;
         }
 
         //////////////////////////////////////////////////////////////////////////

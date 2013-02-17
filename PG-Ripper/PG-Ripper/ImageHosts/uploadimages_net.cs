@@ -29,8 +29,8 @@ namespace PGRipper
 	/// </summary>
 	public class uploadimages_net : ServiceTemplate
 	{
-		public uploadimages_net(ref string sSavePath, ref string strURL, ref string imageName, ref Hashtable hTbl)
-			: base( sSavePath, strURL, imageName, ref hTbl )
+		public uploadimages_net(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+			: base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
 		{
 		}
 
