@@ -224,6 +224,8 @@
     </Compile>
     <Compile Include="AutoUpdater.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
+    <Compile Include="ImageHosts\ImgDino.cs" />
+    <Compile Include="ImageHosts\ImgWoot.cs" />
     <Compile Include="ImageHosts\PixRoute.cs" />
     <Compile Include="ImageHosts\ImagePicasa.cs" />
     <Compile Include="ImageHosts\DirectUpload.cs" />
@@ -404,7 +406,7 @@
     <Compile Include="LoginManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Maintainance.cs">
+    <Compile Include="Maintenance.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ImageHosts\Moast.cs">

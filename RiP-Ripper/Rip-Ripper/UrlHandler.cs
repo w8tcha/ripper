@@ -14,7 +14,7 @@ namespace RiPRipper
     using System;
 
     /// <summary>
-    /// Class to Convert rip urls in to xml url
+    /// Class to Convert rip URLs in to xml url
     /// </summary>
     public class UrlHandler
     {
@@ -32,32 +32,34 @@ namespace RiPRipper
         /// </returns>
         public static string GetXmlUrl(string inputUrl, int comboBoxValue)
         {
-            string sXmlUrl;
+            string xmlUrl;
 
             switch (comboBoxValue)
             {
                 case 0:
                     {
-                        sXmlUrl = string.Format(
-                            "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
+                        xmlUrl = string.Format(
+                            "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
+                            CacheController.GetInstance().userSettings.ForumURL,
                             Convert.ToInt64(inputUrl));
                         break;
                     }
 
                 case 1:
                     {
-                        sXmlUrl = string.Format(
-                            "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
+                        xmlUrl = string.Format(
+                            "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
+                            CacheController.GetInstance().userSettings.ForumURL,
                             Convert.ToInt64(inputUrl));
                         break;
                     }
 
                 default:
                     {
-                        sXmlUrl = inputUrl;
+                        xmlUrl = inputUrl;
 
                         // Make sure url starts with http://
-                        if (sXmlUrl.IndexOf("http://") != 0)
+                        if (xmlUrl.IndexOf("http://") != 0)
                         {
                             return string.Empty;
                         }
@@ -68,89 +70,92 @@ namespace RiPRipper
                         sXmlUrl = sXmlUrl.Replace("showthread.php?p=", "getSTDpost-imgXML.php?dpver=2&postid=");*/
 
                         // Old VB Forums 3.x
-                        if (sXmlUrl.Contains("showthread.php?t="))
+                        if (xmlUrl.Contains("showthread.php?t="))
                         {
                             // Threads
-                            sXmlUrl = sXmlUrl.Replace("showthread.php?t=", "getSTDpost-imgXML.php?dpver=2&threadid=");
+                            xmlUrl = xmlUrl.Replace("showthread.php?t=", "getSTDpost-imgXML.php?dpver=2&threadid=");
                         }
-                        else if (sXmlUrl.Contains("showpost.php?p="))
+                        else if (xmlUrl.Contains("showpost.php?p="))
                         {
                             // Posts
-                            sXmlUrl = sXmlUrl.Replace("showpost.php?p=", "getSTDpost-imgXML.php?dpver=2&postid=");
+                            xmlUrl = xmlUrl.Replace("showpost.php?p=", "getSTDpost-imgXML.php?dpver=2&postid=");
                         }
-                        else if (!sXmlUrl.Contains("#post") && sXmlUrl.Contains("showthread.php?"))
-                        { // New VB Forums 4.x
-                            // http://rip-productions.net/showthread.php?0123456-Thread-Title
+                        else if (!xmlUrl.Contains("#post") && xmlUrl.Contains("showthread.php?"))
+                        { 
+                            // New VB Forums 4.x
+                            // http://vipergirls.net/showthread.php?0123456-Thread-Title
                             // Threads
-                            string sThreadId = sXmlUrl.Substring(sXmlUrl.IndexOf(".php?") + 5);
+                            var threadId = xmlUrl.Substring(xmlUrl.IndexOf(".php?") + 5);
 
-                            if (sXmlUrl.Contains("-"))
+                            if (xmlUrl.Contains("-"))
                             {
-                                sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
+                                threadId = threadId.Remove(threadId.IndexOf("-"));
                             }
 
-                            sXmlUrl =
-                                string.Format(
-                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                    Convert.ToInt64(sThreadId));
+                            xmlUrl = string.Format(
+                                "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
+                                CacheController.GetInstance().userSettings.ForumURL,
+                                Convert.ToInt64(threadId));
                         }
-                        else if (sXmlUrl.Contains("goto=newpost") && sXmlUrl.Contains("showthread.php?"))
+                        else if (xmlUrl.Contains("goto=newpost") && xmlUrl.Contains("showthread.php?"))
                         {
-                            // http://rip-productions.net/showthread.php?0123456-Thread-Title&goto=newpost#post12345
+                            // http://vipergirls.net/showthread.php?0123456-Thread-Title&goto=newpost#post12345
                             // Threads
-                            string sThreadId = sXmlUrl.Substring(sXmlUrl.IndexOf(".php?") + 5);
+                            var threadId = xmlUrl.Substring(xmlUrl.IndexOf(".php?") + 5);
 
-                            if (sXmlUrl.Contains("-"))
+                            if (xmlUrl.Contains("-"))
                             {
-                                sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
+                                threadId = threadId.Remove(threadId.IndexOf("-"));
                             }
 
-                            sXmlUrl =
-                                string.Format(
-                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                    Convert.ToInt64(sThreadId));
+                            xmlUrl = string.Format(
+                                "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
+                                CacheController.GetInstance().userSettings.ForumURL,
+                                Convert.ToInt64(threadId));
                         }
-                        else if (sXmlUrl.Contains("&p=") && sXmlUrl.Contains("#post"))
+                        else if (xmlUrl.Contains("&p=") && xmlUrl.Contains("#post"))
                         {
-                            // http://rip-productions.net/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
+                            // http://vipergirls.net/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
                             // Posts
-                            string sPostId = sXmlUrl.Substring(sXmlUrl.IndexOf("#post") + 5);
-                            sXmlUrl =
-                                string.Format(
-                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
-                                    Convert.ToInt64(sPostId));
-                        }
-                        else if (!sXmlUrl.Contains(".php") && !sXmlUrl.Contains("#post"))
-                        {
-                            // http://rip-productions.net/subforumname/01234-threadtitle.html
-                            // Threads
-                            string sThreadId = sXmlUrl.Substring(sXmlUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
+                            var postId = xmlUrl.Substring(xmlUrl.IndexOf("#post") + 5);
 
-                            if (sXmlUrl.Contains("-"))
+                            xmlUrl = string.Format(
+                                "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
+                                CacheController.GetInstance().userSettings.ForumURL,
+                                Convert.ToInt64(postId));
+                        }
+                        else if (!xmlUrl.Contains(".php") && !xmlUrl.Contains("#post"))
+                        {
+                            // http://vipergirls.net/subforumname/01234-threadtitle.html
+                            // Threads
+                            var threadId = xmlUrl.Substring(xmlUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
+
+                            if (xmlUrl.Contains("-"))
                             {
-                                sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
+                                threadId = threadId.Remove(threadId.IndexOf("-"));
                             }
 
-                            sXmlUrl =
-                                string.Format(
-                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}",
-                                    Convert.ToInt64(sThreadId));
+                            xmlUrl = string.Format(
+                                "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
+                                CacheController.GetInstance().userSettings.ForumURL,
+                                Convert.ToInt64(threadId));
                         }
-                        else if (!sXmlUrl.Contains(".php") && sXmlUrl.Contains("#post"))
+                        else if (!xmlUrl.Contains(".php") && xmlUrl.Contains("#post"))
                         {
                             // Posts
-                            string sPostId = sXmlUrl.Substring(sXmlUrl.IndexOf("#post") + 5);
-                            sXmlUrl =
-                                string.Format(
-                                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}",
-                                    Convert.ToInt64(sPostId));
+                            var postId = xmlUrl.Substring(xmlUrl.IndexOf("#post") + 5);
+
+                            xmlUrl = string.Format(
+                                "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
+                                CacheController.GetInstance().userSettings.ForumURL,
+                                Convert.ToInt64(postId));
                         }
 
                         break;
                     }
             }
 
-            return sXmlUrl;
+            return xmlUrl;
         }
 
         /// <summary>
@@ -164,73 +169,83 @@ namespace RiPRipper
         /// </returns>
         public static string GetIndexUrl(string inputUrl)
         {
-            string sNewUrl = inputUrl;
+            var newUrl = inputUrl;
 
-            if (sNewUrl.Contains("showthread.php?t="))
+            if (newUrl.Contains("showthread.php?t="))
             {
                 // Threads
-                sNewUrl = sNewUrl.Replace("showthread.php?t=", "getSTDpost-imgXML.php?dpver=2&threadid=");
+                newUrl = newUrl.Replace("showthread.php?t=", "getSTDpost-imgXML.php?dpver=2&threadid=");
             }
-            else if (sNewUrl.Contains("showpost.php?p="))
+            else if (newUrl.Contains("showpost.php?p="))
             {
                 // Posts
-                sNewUrl = sNewUrl.Replace("showpost.php?p=", "getSTDpost-imgXML.php?dpver=2&postid=");
+                newUrl = newUrl.Replace("showpost.php?p=", "getSTDpost-imgXML.php?dpver=2&postid=");
             }
-            else if (!sNewUrl.Contains("#post") && sNewUrl.Contains("showthread.php?"))
+            else if (!newUrl.Contains("#post") && newUrl.Contains("showthread.php?"))
             {
                 // Threads
-                string sThreadId = sNewUrl.Substring(sNewUrl.IndexOf(".php?") + 5);
+                string sThreadId = newUrl.Substring(newUrl.IndexOf(".php?") + 5);
 
-                if (sNewUrl.Contains("-"))
+                if (newUrl.Contains("-"))
                 {
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                sNewUrl = string.Format(
-                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}", Convert.ToInt64(sThreadId));
+                newUrl = string.Format(
+                    "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
+                    CacheController.GetInstance().userSettings.ForumURL,
+                    Convert.ToInt64(sThreadId));
             }
-            else if (sNewUrl.Contains("goto=newpost") && sNewUrl.Contains("showthread.php?"))
+            else if (newUrl.Contains("goto=newpost") && newUrl.Contains("showthread.php?"))
             {
                 // Threads
-                string sThreadId = sNewUrl.Substring(sNewUrl.IndexOf(".php?") + 5);
+                string sThreadId = newUrl.Substring(newUrl.IndexOf(".php?") + 5);
 
-                if (sNewUrl.Contains("-"))
+                if (newUrl.Contains("-"))
                 {
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                sNewUrl = string.Format(
-                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}", Convert.ToInt64(sThreadId));
+                newUrl = string.Format(
+                    "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
+                    CacheController.GetInstance().userSettings.ForumURL,
+                    Convert.ToInt64(sThreadId));
             }
-            else if (sNewUrl.Contains("&p=") && sNewUrl.Contains("#post"))
+            else if (newUrl.Contains("&p=") && newUrl.Contains("#post"))
             {
                 // Posts
-                string sPostId = sNewUrl.Substring(sNewUrl.IndexOf("#post") + 5);
-                sNewUrl = string.Format(
-                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}", Convert.ToInt64(sPostId));
+                string sPostId = newUrl.Substring(newUrl.IndexOf("#post") + 5);
+                newUrl = string.Format(
+                    "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
+                    CacheController.GetInstance().userSettings.ForumURL,
+                    Convert.ToInt64(sPostId));
             }
-            else if (!sNewUrl.Contains(".php") && !sNewUrl.Contains("#post"))
+            else if (!newUrl.Contains(".php") && !newUrl.Contains("#post"))
             {
                 // Threads
-                string sThreadId = sNewUrl.Substring(sNewUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
+                string sThreadId = newUrl.Substring(newUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
-                if (sNewUrl.Contains("-"))
+                if (newUrl.Contains("-"))
                 {
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                sNewUrl = string.Format(
-                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&threadid={0}", Convert.ToInt64(sThreadId));
+                newUrl = string.Format(
+                    "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
+                    CacheController.GetInstance().userSettings.ForumURL,
+                    Convert.ToInt64(sThreadId));
             }
-            else if (!sNewUrl.Contains(".php") && sNewUrl.Contains("#post"))
+            else if (!newUrl.Contains(".php") && newUrl.Contains("#post"))
             {
                 // Posts
-                string sPostId = sNewUrl.Substring(sNewUrl.IndexOf("#post") + 5);
-                sNewUrl = string.Format(
-                    "http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}", Convert.ToInt64(sPostId));
+                string sPostId = newUrl.Substring(newUrl.IndexOf("#post") + 5);
+                newUrl = string.Format(
+                    "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
+                    CacheController.GetInstance().userSettings.ForumURL,
+                    Convert.ToInt64(sPostId));
             }
 
-            return sNewUrl;
+            return newUrl;
         }
     }
 }

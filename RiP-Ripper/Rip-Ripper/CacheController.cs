@@ -27,10 +27,10 @@ namespace RiPRipper
     {
         #region Constants and Fields
         /// <summary>
-        ///   Universal string, Last pic Race conditions happen alot on this string, 
+        ///   Universal string, Last pic Race conditions happen a lot on this string, 
         ///   but it's function is non-critical enough to ignore those races.
         /// </summary>
-        public string uSLastPic = string.Empty; // 
+        public string LastPic = string.Empty; 
 
         /// <summary>
         /// All Settings
@@ -73,504 +73,514 @@ namespace RiPRipper
         }
 
         /// <summary>
-        /// Generic method for downloading an image that calls appropriate site-specific downloader 
-        ///   in a newly created thread.
+        /// Generic method for downloading an image that calls appropriate site-specific downloader
+        /// in a newly created thread.
         /// </summary>
-        /// <param name="aImageUrl">
-        /// The a Image Url.
-        /// </param>
-        /// <param name="aLocalPath">
-        /// The a Local Path.
-        /// </param>
-        public void DownloadImage(string aImageUrl, string aLocalPath)
+        /// <param name="imageUrl">The Image Url.</param>
+        /// <param name="thumbImageUrl">The thumb image URL.</param>
+        /// <param name="localPath">The Local Path.</param>
+        /// <param name="imageName">Name of the image.</param>
+        public void DownloadImage(string imageUrl, string thumbImageUrl, string localPath, string imageName)
         {
+            imageUrl = imageUrl.ToLower();
+
+            thumbImageUrl = thumbImageUrl.ToLower();
+
             ThreadStart lThreadStart;
 
             // ImageDownloader is the bridging class between this routine and the
             // ServiceTemplate base class (which is the parent to all hosting site's
             // fetch code).
-            ImageDownloader lImageDownloader = new ImageDownloader(aLocalPath, aImageUrl, ref this.mEventTable);
+            var imageDownloader = new ImageDownloader(localPath, imageUrl, thumbImageUrl, imageName, ref this.mEventTable);
 
-            if (aImageUrl.IndexOf(@"/img.php?loc=loc") >= 0)
+            if (imageUrl.IndexOf(@"/img.php?loc=loc") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageVenue;
+                lThreadStart = imageDownloader.GetImageVenue;
             }
-            else if (aImageUrl.IndexOf(@"imagevenue.com/img.php?") >= 0)
+            else if (imageUrl.IndexOf(@"imagevenue.com/img.php?") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageVenueNew;
+                lThreadStart = imageDownloader.GetImageVenueNew;
             }
-            else if (aImageUrl.IndexOf("fapomatic.com/") >= 0)
+            else if (imageUrl.IndexOf("fapomatic.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFapomatic;
+                lThreadStart = imageDownloader.GetFapomatic;
             }
-            else if (aImageUrl.IndexOf("moast.com/html/") >= 0)
+            else if (imageUrl.IndexOf("moast.com/html/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetMoast;
+                lThreadStart = imageDownloader.GetMoast;
             }
-            else if (aImageUrl.IndexOf("watermark-it.com/view/") >= 0)
+            else if (imageUrl.IndexOf("watermark-it.com/view/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetwatermarkIt;
+                lThreadStart = imageDownloader.GetwatermarkIt;
             }
-            else if (aImageUrl.IndexOf("picbux.com/image.php?id=") >= 0)
+            else if (imageUrl.IndexOf("picbux.com/image.php?id=") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicBux;
+                lThreadStart = imageDownloader.GetPicBux;
             }
-            else if (aImageUrl.IndexOf("picturesupload.com/show.php/") >= 0)
+            else if (imageUrl.IndexOf("picturesupload.com/show.php/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicturesUpload;
+                lThreadStart = imageDownloader.GetPicturesUpload;
             }
-            else if (aImageUrl.IndexOf("imagehigh.com/") >= 0)
+            else if (imageUrl.IndexOf("imagehigh.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageHigh;
+                lThreadStart = imageDownloader.GetImageHigh;
             }
-            else if (aImageUrl.IndexOf("image2share.com/") >= 0)
+            else if (imageUrl.IndexOf("image2share.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImage2Share;
+                lThreadStart = imageDownloader.GetImage2Share;
             }
-            else if (aImageUrl.IndexOf("paintedover.com/uploads/show.php") >= 0)
+            else if (imageUrl.IndexOf("paintedover.com/uploads/show.php") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPaintedOver;
+                lThreadStart = imageDownloader.GetPaintedOver;
             }
-            else if (aImageUrl.IndexOf("dumparump.com/") >= 0)
+            else if (imageUrl.IndexOf("dumparump.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetDumbARump;
+                lThreadStart = imageDownloader.GetDumbARump;
             }
-            else if (aImageUrl.IndexOf("imagecrack.com/") >= 0)
+            else if (imageUrl.IndexOf("imagecrack.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageCrack;
+                lThreadStart = imageDownloader.GetImageCrack;
             }
-            else if (aImageUrl.IndexOf("10pix.com/") >= 0)
+            else if (imageUrl.IndexOf("10pix.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetTenPix;
+                lThreadStart = imageDownloader.GetTenPix;
             }
-            else if (aImageUrl.IndexOf("supload.com/") >= 0)
+            else if (imageUrl.IndexOf("supload.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetSupload;
+                lThreadStart = imageDownloader.GetSupload;
             }
-            else if (aImageUrl.IndexOf("imagethrust.com/") >= 0)
+            else if (imageUrl.IndexOf("imagethrust.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageThrust;
+                lThreadStart = imageDownloader.GetImageThrust;
             }
-            else if (aImageUrl.IndexOf("shareapic.net/") >= 0)
+            else if (imageUrl.IndexOf("shareapic.net/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetShareAPic;
+                lThreadStart = imageDownloader.GetShareAPic;
             }
-            else if (aImageUrl.IndexOf("fileden.com/pview.php") >= 0)
+            else if (imageUrl.IndexOf("fileden.com/pview.php") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFileDen;
+                lThreadStart = imageDownloader.GetFileDen;
             }
-            else if (aImageUrl.IndexOf("server5.pictiger.com/") >= 0)
+            else if (imageUrl.IndexOf("server5.pictiger.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicTiger;
+                lThreadStart = imageDownloader.GetPicTiger;
             }
-            else if (aImageUrl.IndexOf(@"pictiger.com/albums/") >= 0 || aImageUrl.IndexOf(@"pictiger.com/images/") >= 0)
+            else if (imageUrl.IndexOf(@"pictiger.com/albums/") >= 0 || imageUrl.IndexOf(@"pictiger.com/images/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicTiger2;
+                lThreadStart = imageDownloader.GetPicTiger2;
             }
-            else if (aImageUrl.IndexOf("celebs.myphotos.cc/") >= 0)
+            else if (imageUrl.IndexOf("celebs.myphotos.cc/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetMyPhotos;
+                lThreadStart = imageDownloader.GetMyPhotos;
             }
-            else if (aImageUrl.IndexOf(@"theimagehosting.com/image.php?") >= 0)
+            else if (imageUrl.IndexOf(@"theimagehosting.com/image.php?") >= 0)
             {
-                lThreadStart = lImageDownloader.GetTheImageHosting;
+                lThreadStart = imageDownloader.GetTheImageHosting;
             }
-            else if (aImageUrl.IndexOf("zshare.net/") >= 0)
+            else if (imageUrl.IndexOf("zshare.net/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetZShare;
+                lThreadStart = imageDownloader.GetZShare;
             }
-            else if (aImageUrl.IndexOf("keepmyfile.com/") >= 0)
+            else if (imageUrl.IndexOf("keepmyfile.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetKeepMyFile;
+                lThreadStart = imageDownloader.GetKeepMyFile;
             }
-            else if (aImageUrl.IndexOf("imagebeaver.com/") >= 0)
+            else if (imageUrl.IndexOf("imagebeaver.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageBeaver;
+                lThreadStart = imageDownloader.GetImageBeaver;
             }
-            else if (aImageUrl.IndexOf("shareavenue.com/") >= 0)
+            else if (imageUrl.IndexOf("shareavenue.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetShareAvenue;
+                lThreadStart = imageDownloader.GetShareAvenue;
             }
-            else if (aImageUrl.IndexOf("glowfoto.com/") >= 0)
+            else if (imageUrl.IndexOf("glowfoto.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetGlowFoto;
+                lThreadStart = imageDownloader.GetGlowFoto;
             }
-            else if (aImageUrl.IndexOf("jpghosting.com/images/") >= 0)
+            else if (imageUrl.IndexOf("jpghosting.com/images/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetJpgHosting;
+                lThreadStart = imageDownloader.GetJpgHosting;
             }
-            else if (aImageUrl.IndexOf("jpghosting.com/showpic.php") >= 0)
+            else if (imageUrl.IndexOf("jpghosting.com/showpic.php") >= 0)
             {
-                lThreadStart = lImageDownloader.GetJpgHosting2;
+                lThreadStart = imageDownloader.GetJpgHosting2;
             }
-            else if (aImageUrl.IndexOf("imagefling.com/") >= 0)
+            else if (imageUrl.IndexOf("imagefling.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageFling;
+                lThreadStart = imageDownloader.GetImageFling;
             }
-            else if (aImageUrl.IndexOf("yourpix.org/view/") >= 0)
+            else if (imageUrl.IndexOf("yourpix.org/view/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetYourPix;
+                lThreadStart = imageDownloader.GetYourPix;
             }
-            else if (aImageUrl.IndexOf("freeimagehost.eu/") >= 0)
+            else if (imageUrl.IndexOf("freeimagehost.eu/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFreeImageHost;
+                lThreadStart = imageDownloader.GetFreeImageHost;
             }
-            else if (aImageUrl.IndexOf("freeshare.us/") >= 0)
+            else if (imageUrl.IndexOf("freeshare.us/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFreeShare;
+                lThreadStart = imageDownloader.GetFreeShare;
             }
-            else if (aImageUrl.IndexOf("suprfile.com/") >= 0)
+            else if (imageUrl.IndexOf("suprfile.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetSuprFile;
+                lThreadStart = imageDownloader.GetSuprFile;
             }
-            else if (aImageUrl.IndexOf("letmehost.com/") >= 0)
+            else if (imageUrl.IndexOf("letmehost.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetLetMeHost;
+                lThreadStart = imageDownloader.GetLetMeHost;
             }
-            else if (aImageUrl.IndexOf("filehost.to/") >= 0)
+            else if (imageUrl.IndexOf("filehost.to/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFileHost;
+                lThreadStart = imageDownloader.GetFileHost;
             }
-            else if (aImageUrl.IndexOf("thefreeimagehosting.com/") >= 0)
+            else if (imageUrl.IndexOf("thefreeimagehosting.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetTheFreeImageHosting;
+                lThreadStart = imageDownloader.GetTheFreeImageHosting;
             }
-            else if (aImageUrl.IndexOf("yesalbum.com/") >= 0)
+            else if (imageUrl.IndexOf("yesalbum.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetYesAlbum;
+                lThreadStart = imageDownloader.GetYesAlbum;
             }
-            else if (aImageUrl.IndexOf("picsplace.to") >= 0)
+            else if (imageUrl.IndexOf("picsplace.to") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicsPlace;
+                lThreadStart = imageDownloader.GetPicsPlace;
             }
-            else if (aImageUrl.IndexOf("xs.to/") >= 0)
+            else if (imageUrl.IndexOf("xs.to/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetXsHosting;
+                lThreadStart = imageDownloader.GetXsHosting;
             }
-            else if (aImageUrl.IndexOf("celebs.sytes.net/") >= 0)
+            else if (imageUrl.IndexOf("celebs.sytes.net/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetCelebs;
+                lThreadStart = imageDownloader.GetCelebs;
             }
-            else if (aImageUrl.IndexOf("rip-hq.com/") >= 0)
+            else if (imageUrl.IndexOf("rip-hq.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetRipHq;
+                lThreadStart = imageDownloader.GetRipHq;
             }
-            else if (aImageUrl.IndexOf("benuri.com/") >= 0)
+            else if (imageUrl.IndexOf("benuri.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetBenuri;
+                lThreadStart = imageDownloader.GetBenuri;
             }
-            else if (aImageUrl.IndexOf(@"imagehaven.net/img.php?id=") >= 0)
+            else if (imageUrl.IndexOf(@"imagehaven.net/img.php?id=") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageHaven;
+                lThreadStart = imageDownloader.GetImageHaven;
             }
-            else if (aImageUrl.IndexOf("imagepundit.com/") >= 0)
+            else if (imageUrl.IndexOf("imagepundit.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImagePundit;
+                lThreadStart = imageDownloader.GetImagePundit;
             }
-            else if (aImageUrl.IndexOf(@"uploadem.com/") >= 0)
+            else if (imageUrl.IndexOf(@"uploadem.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetUploadEm;
+                lThreadStart = imageDownloader.GetUploadEm;
             }
-            else if (aImageUrl.IndexOf("uppix.info/") >= 0)
+            else if (imageUrl.IndexOf("uppix.info/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetUpPix;
+                lThreadStart = imageDownloader.GetUpPix;
             }
-            else if (aImageUrl.IndexOf("pixhosting.info/") >= 0)
+            else if (imageUrl.IndexOf("pixhosting.info/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPixHosting;
+                lThreadStart = imageDownloader.GetPixHosting;
             }
-            else if (aImageUrl.IndexOf("pussyupload.com/") >= 0)
+            else if (imageUrl.IndexOf("pussyupload.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPussyUpload;
+                lThreadStart = imageDownloader.GetPussyUpload;
             }
-            else if (aImageUrl.IndexOf(@"hotlinkimage.com/img.php?") >= 0)
+            else if (imageUrl.IndexOf(@"hotlinkimage.com/img.php?") >= 0)
             {
-                lThreadStart = lImageDownloader.GetHotLinkImage;
+                lThreadStart = imageDownloader.GetHotLinkImage;
             }
-            else if (aImageUrl.IndexOf(@"imagebam.com/image/") >= 0)
+            else if (imageUrl.IndexOf(@"imagebam.com/image/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageBam;
+                lThreadStart = imageDownloader.GetImageBam;
             }
-            else if (aImageUrl.IndexOf(@"imagehosting.gr/") >= 0)
+            else if (imageUrl.IndexOf(@"imagehosting.gr/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageHosting;
+                lThreadStart = imageDownloader.GetImageHosting;
             }
-            else if (aImageUrl.IndexOf(@"imagefap.com/image.php") >= 0)
+            else if (imageUrl.IndexOf(@"imagefap.com/image.php") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageFap;
+                lThreadStart = imageDownloader.GetImageFap;
             }
-            else if (aImageUrl.IndexOf(@"allyoucanupload.webshots.com/v/") >= 0)
+            else if (imageUrl.IndexOf(@"allyoucanupload.webshots.com/v/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetAllYouCanUpload;
+                lThreadStart = imageDownloader.GetAllYouCanUpload;
             }
-            else if (aImageUrl.IndexOf(@"largeimagehost.com/img/") >= 0)
+            else if (imageUrl.IndexOf(@"largeimagehost.com/img/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetLargeImageHost;
+                lThreadStart = imageDownloader.GetLargeImageHost;
             }
-            else if (aImageUrl.IndexOf(@"radikal.ru/") >= 0)
+            else if (imageUrl.IndexOf(@"radikal.ru/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetRadikal;
+                lThreadStart = imageDownloader.GetRadikal;
             }
-            else if (aImageUrl.IndexOf(@"pixup.info/") >= 0)
+            else if (imageUrl.IndexOf(@"pixup.info/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPixUp;
+                lThreadStart = imageDownloader.GetPixUp;
             }
-            else if (aImageUrl.IndexOf(@"freeporndumpster.com/") >= 0)
+            else if (imageUrl.IndexOf(@"freeporndumpster.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFreePornDumpster;
+                lThreadStart = imageDownloader.GetFreePornDumpster;
             }
-            else if (aImageUrl.IndexOf(@"imagesocket.com/view/") >= 0)
+            else if (imageUrl.IndexOf(@"imagesocket.com/view/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageSocket;
+                lThreadStart = imageDownloader.GetImageSocket;
             }
-            else if (aImageUrl.IndexOf(@"storm-factory.org/") >= 0)
+            else if (imageUrl.IndexOf(@"storm-factory.org/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetStormFactory;
+                lThreadStart = imageDownloader.GetStormFactory;
             }
-            else if (aImageUrl.IndexOf(@"pichoarder.com/") >= 0)
+            else if (imageUrl.IndexOf(@"pichoarder.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicHoarder;
+                lThreadStart = imageDownloader.GetPicHoarder;
             }
-            else if (aImageUrl.IndexOf(@"multipics.net/") >= 0)
+            else if (imageUrl.IndexOf(@"multipics.net/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetMultiPics;
+                lThreadStart = imageDownloader.GetMultiPics;
             }
-            else if (aImageUrl.IndexOf(@".imagefoco.com/") >= 0 || aImageUrl.IndexOf(@".cocopic.com/") >= 0 ||
-                     aImageUrl.IndexOf(@".cocoimage.com/") >= 0 || aImageUrl.IndexOf(@".picfoco.com/") >= 0)
+            else if (imageUrl.IndexOf(@".imagefoco.com/") >= 0 || imageUrl.IndexOf(@".cocopic.com/") >= 0 ||
+                     imageUrl.IndexOf(@".cocoimage.com/") >= 0 || imageUrl.IndexOf(@".picfoco.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageFoco;
+                lThreadStart = imageDownloader.GetImageFoco;
             }
-            else if (aImageUrl.IndexOf(@".speedimg.com/") >= 0)
+            else if (imageUrl.IndexOf(@".speedimg.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetSpeedImg;
+                lThreadStart = imageDownloader.GetSpeedImg;
             }
-            else if (aImageUrl.IndexOf(@".dollarlink.biz/") >= 0)
+            else if (imageUrl.IndexOf(@".dollarlink.biz/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetDollarLink;
+                lThreadStart = imageDownloader.GetDollarLink;
             }
-            else if (aImageUrl.IndexOf(@"picseasy.com/") >= 0)
+            else if (imageUrl.IndexOf(@"picseasy.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicEasy;
+                lThreadStart = imageDownloader.GetPicEasy;
             }
-            else if (aImageUrl.IndexOf(@"pictureshoster.com/") >= 0)
+            else if (imageUrl.IndexOf(@"pictureshoster.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicturesHoster;
+                lThreadStart = imageDownloader.GetPicturesHoster;
             }
-            else if (aImageUrl.IndexOf(@".picjackal.com/") >= 0 || aImageUrl.IndexOf(@".picsharebunny.com/") >= 0)
+            else if (imageUrl.IndexOf(@".picjackal.com/") >= 0 || imageUrl.IndexOf(@".picsharebunny.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicJackal;
+                lThreadStart = imageDownloader.GetPicJackal;
             }
-            else if (aImageUrl.IndexOf(@"amazingdicksuckingsluts.com/") >= 0)
+            else if (imageUrl.IndexOf(@"amazingdicksuckingsluts.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetAmazingDickSSl;
+                lThreadStart = imageDownloader.GetAmazingDickSSl;
             }
-            else if (aImageUrl.IndexOf(@"imagesgal.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagesgal.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImagesGal;
+                lThreadStart = imageDownloader.GetImagesGal;
             }
-            else if (aImageUrl.IndexOf(@"bigpics.ru/") >= 0)
+            else if (imageUrl.IndexOf(@"bigpics.ru/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetBigPics;
+                lThreadStart = imageDownloader.GetBigPics;
             }
-            else if (aImageUrl.IndexOf(@"xxxphotosharing.com/") >= 0 || aImageUrl.IndexOf(@"myadultimage.com/") >= 0)
+            else if (imageUrl.IndexOf(@"xxxphotosharing.com/") >= 0 || imageUrl.IndexOf(@"myadultimage.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetXPhotoSharing;
+                lThreadStart = imageDownloader.GetXPhotoSharing;
             }
-            else if (aImageUrl.IndexOf(@"busyupload.com/") >= 0)
+            else if (imageUrl.IndexOf(@"busyupload.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetBusyUpload;
+                lThreadStart = imageDownloader.GetBusyUpload;
             }
-            else if (aImageUrl.IndexOf(@"upmyphoto.com/") >= 0)
+            else if (imageUrl.IndexOf(@"upmyphoto.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetUpMyPhoto;
+                lThreadStart = imageDownloader.GetUpMyPhoto;
             }
-            else if (aImageUrl.IndexOf(@"turboimagehost.com/") >= 0)
+            else if (imageUrl.IndexOf(@"turboimagehost.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetTurboImageHost;
+                lThreadStart = imageDownloader.GetTurboImageHost;
             }
-            else if (aImageUrl.IndexOf(@"abload.de/") >= 0)
+            else if (imageUrl.IndexOf(@"abload.de/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetAbload;
+                lThreadStart = imageDownloader.GetAbload;
             }
-            else if (aImageUrl.IndexOf(@"imagedoza.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagedoza.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageDoza;
+                lThreadStart = imageDownloader.GetImageDoza;
             }
-            else if (aImageUrl.IndexOf(@"imagewam.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagewam.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageWam;
+                lThreadStart = imageDownloader.GetImageWam;
             }
-            else if (aImageUrl.IndexOf(@"imageflea.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imageflea.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageFlea;
+                lThreadStart = imageDownloader.GetImageFlea;
             }
-            else if (aImageUrl.IndexOf(@"imagecargo.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagecargo.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageCargo;
+                lThreadStart = imageDownloader.GetImageCargo;
             }
-            else if (aImageUrl.IndexOf(@"pixslam.com/") >= 0)
+            else if (imageUrl.IndexOf(@"pixslam.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPixSlam;
+                lThreadStart = imageDownloader.GetPixSlam;
             }
-            else if (aImageUrl.IndexOf(@"imagehost.org/") >= 0)
+            else if (imageUrl.IndexOf(@"imagehost.org/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageHost;
+                lThreadStart = imageDownloader.GetImageHost;
             }
-            else if (aImageUrl.IndexOf(@"my-image-host.com/") >= 0)
+            else if (imageUrl.IndexOf(@"my-image-host.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetMyImageHost;
+                lThreadStart = imageDownloader.GetMyImageHost;
             }
-            else if (aImageUrl.IndexOf(@"sharenxs.com/") >= 0)
+            else if (imageUrl.IndexOf(@"sharenxs.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetShareNxs;
+                lThreadStart = imageDownloader.GetShareNxs;
             }
-            else if (aImageUrl.IndexOf(@"kemipic.com/") >= 0)
+            else if (imageUrl.IndexOf(@"kemipic.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetKemiPic;
+                lThreadStart = imageDownloader.GetKemiPic;
             }
-            else if (aImageUrl.IndexOf(@"fototube.pl/") >= 0)
+            else if (imageUrl.IndexOf(@"fototube.pl/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFotoTube;
+                lThreadStart = imageDownloader.GetFotoTube;
             }
-            else if (aImageUrl.IndexOf(@"immage.de/") >= 0)
+            else if (imageUrl.IndexOf(@"immage.de/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImmage;
+                lThreadStart = imageDownloader.GetImmage;
             }
-            else if (aImageUrl.IndexOf(@"ipicture.ru/") >= 0)
+            else if (imageUrl.IndexOf(@"ipicture.ru/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetIpicture;
+                lThreadStart = imageDownloader.GetIpicture;
             }
-            else if (aImageUrl.IndexOf(@"pornimghost.com/") >= 0)
+            else if (imageUrl.IndexOf(@"pornimghost.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPornImgHost;
+                lThreadStart = imageDownloader.GetPornImgHost;
             }
-            else if (aImageUrl.IndexOf(@"imagetwist.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagetwist.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageTwist;
+                lThreadStart = imageDownloader.GetImageTwist;
             }
-            else if (aImageUrl.IndexOf(@"imagewaste.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagewaste.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageWaste;
+                lThreadStart = imageDownloader.GetImageWaste;
             }
-            else if (aImageUrl.IndexOf(@"pixhost.org/") >= 0)
+            else if (imageUrl.IndexOf(@"pixhost.org/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPixHost;
+                lThreadStart = imageDownloader.GetPixHost;
             }
-            else if (aImageUrl.IndexOf(@"fastpic.ru/") >= 0)
+            else if (imageUrl.IndexOf(@"fastpic.ru/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFastPic;
+                lThreadStart = imageDownloader.GetFastPic;
             }
-            else if (aImageUrl.IndexOf(@"picdir.de/") >= 0)
+            else if (imageUrl.IndexOf(@"picdir.de/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPicDir;
+                lThreadStart = imageDownloader.GetPicDir;
             }
-            else if (aImageUrl.IndexOf(@"fotosik.pl/") >= 0)
+            else if (imageUrl.IndexOf(@"fotosik.pl/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFotoSik;
+                lThreadStart = imageDownloader.GetFotoSik;
             }
-            else if (aImageUrl.IndexOf(@"dailypoa.com/") >= 0)
+            else if (imageUrl.IndexOf(@"dailypoa.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetDailyPoa;
+                lThreadStart = imageDownloader.GetDailyPoa;
             }
-            else if (aImageUrl.IndexOf(@"imagehost.li/") >= 0)
+            else if (imageUrl.IndexOf(@"imagehost.li/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageHostLi;
+                lThreadStart = imageDownloader.GetImageHostLi;
             }
-            else if (aImageUrl.IndexOf(@"stooorage.com/") >= 0)
+            else if (imageUrl.IndexOf(@"stooorage.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetStooorage;
+                lThreadStart = imageDownloader.GetStooorage;
             }
-            else if (aImageUrl.IndexOf(@"imageporter.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imageporter.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImagePorter;
+                lThreadStart = imageDownloader.GetImagePorter;
             }
-            else if (aImageUrl.IndexOf(@"filemad.com/") >= 0)
+            else if (imageUrl.IndexOf(@"filemad.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetFileMad;
+                lThreadStart = imageDownloader.GetFileMad;
             }
-            else if (aImageUrl.IndexOf(@"mypixhost.com/") >= 0)
+            else if (imageUrl.IndexOf(@"mypixhost.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetMyPixHost;
+                lThreadStart = imageDownloader.GetMyPixHost;
             }
-            else if (aImageUrl.IndexOf(@"7bucket.com/") >= 0)
+            else if (imageUrl.IndexOf(@"7bucket.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetSevenBucket;
+                lThreadStart = imageDownloader.GetSevenBucket;
             }
-            else if (aImageUrl.IndexOf(@"imagehyper.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagehyper.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageHyper;
+                lThreadStart = imageDownloader.GetImageHyper;
             }
-            else if (aImageUrl.IndexOf(@"imgiga.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imgiga.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageGiga;
+                lThreadStart = imageDownloader.GetImageGiga;
             }
-            else if (aImageUrl.IndexOf(@"imageswitch.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imageswitch.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageSwitch;
+                lThreadStart = imageDownloader.GetImageSwitch;
             }
-            else if (aImageUrl.IndexOf(@"imageupper.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imageupper.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageUpper;
+                lThreadStart = imageDownloader.GetImageUpper;
             }
-            else if (aImageUrl.IndexOf(@"imgchili.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imgchili.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImgChili;
+                lThreadStart = imageDownloader.GetImgChili;
             }
-            else if (aImageUrl.IndexOf(@"imgdepot.org/") >= 0)
+            else if (imageUrl.IndexOf(@"imgdepot.org/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImgDepot;
+                lThreadStart = imageDownloader.GetImgDepot;
             }
-            else if (aImageUrl.IndexOf(@"imagepad.us/") >= 0)
+            else if (imageUrl.IndexOf(@"imagepad.us/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImagePad;
+                lThreadStart = imageDownloader.GetImagePad;
             }
-            else if (aImageUrl.IndexOf(@"imagebunk.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagebunk.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImageBunk;
+                lThreadStart = imageDownloader.GetImageBunk;
             }
-            else if (aImageUrl.IndexOf(@"pimpandhost.com/") >= 0)
+            else if (imageUrl.IndexOf(@"pimpandhost.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPimpAndHost;
+                lThreadStart = imageDownloader.GetPimpAndHost;
             }
-            else if (aImageUrl.IndexOf(@"dumppix.com/") >= 0)
+            else if (imageUrl.IndexOf(@"dumppix.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetDumpPix;
+                lThreadStart = imageDownloader.GetDumpPix;
             }
-            else if (aImageUrl.IndexOf(@"hoooster.com/") >= 0)
+            else if (imageUrl.IndexOf(@"hoooster.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetHoooster;
+                lThreadStart = imageDownloader.GetHoooster;
             }
-            else if (aImageUrl.IndexOf(@"pixhub.eu/") >= 0)
+            else if (imageUrl.IndexOf(@"pixhub.eu/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPixHub;
+                lThreadStart = imageDownloader.GetPixHub;
             }
-            else if (aImageUrl.IndexOf(@"pixroute.com/") >= 0)
+            else if (imageUrl.IndexOf(@"pixroute.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetPixRoute;
+                lThreadStart = imageDownloader.GetPixRoute;
             }
-            else if (aImageUrl.IndexOf(@"imagepicsa.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imagepicsa.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImagePicasa;
+                lThreadStart = imageDownloader.GetImagePicasa;
             }
-            else if (aImageUrl.IndexOf(@"directupload.net/") >= 0)
+            else if (imageUrl.IndexOf(@"directupload.net/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetDirectUpload;
+                lThreadStart = imageDownloader.GetDirectUpload;
             }
-            else if (aImageUrl.IndexOf(@"imgbox.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imgbox.com/") >= 0)
             {
-                lThreadStart = lImageDownloader.GetImgBox;
+                lThreadStart = imageDownloader.GetImgBox;
             }
-            else if (aImageUrl.IndexOf("ayhja.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imgdino.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgDino;
+            }
+            else if (imageUrl.IndexOf(@"imgwoot.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
             }
             else
             {
-                lThreadStart = lImageDownloader.GetImage; // hotlinked.
+                lThreadStart = imageDownloader.GetImage; // hotlinked.
             }
 
             ThreadManager lTdm = ThreadManager.GetInstance();
-            lTdm.LaunchThread(aImageUrl, lThreadStart);
+            lTdm.LaunchThread(imageUrl, lThreadStart);
         }
 
         /// <summary>

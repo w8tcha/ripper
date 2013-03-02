@@ -34,32 +34,32 @@ namespace RiPRipper.Objects
         public string ForumTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets sImageCount.
+        /// Gets or sets Image Count.
         /// </summary>
         public int ImageCount { get; set; }
 
         /// <summary>
-        /// Gets or sets sPostTitle.
+        /// Gets or sets Post Title.
         /// </summary>
         public string PostTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets sStorePath.
+        /// Gets or sets Store Path.
         /// </summary>
         public string StorePath { get; set; }
 
         /// <summary>
-        /// Gets or sets sTitle.
+        /// Gets or sets Title.
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets sURL.
+        /// Gets or sets URL.
         /// </summary>
         public string URL { get; set; }
 
         /// <summary>
-        /// Gets or sets sXMLPayLoad.
+        /// Gets or sets XML Pay Load.
         /// </summary>
         public string XMLPayLoad { get; set; }
 

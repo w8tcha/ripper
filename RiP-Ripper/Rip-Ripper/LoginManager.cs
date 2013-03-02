@@ -53,7 +53,7 @@ namespace RiPRipper
         /// </returns>
         public bool DoLogin()
         {
-            const string LoginURL = "http://rip-productions.net/login.php";
+            var loginURL = string.Format("{0}login.php", CacheController.GetInstance().userSettings.ForumURL);
 
             var postData =
                 "do=login&forceredirect=1&url=%2Fforum%2F&vb_login_md5password=%md5pass%&vb_login_md5password_utf=%md5pass%&s=&vb_login_username=%md5user%&vb_login_password=&cookieuser=1";
@@ -70,7 +70,7 @@ namespace RiPRipper
             {
                 var cookieContainer = new CookieContainer();
 
-                var req = (HttpWebRequest)WebRequest.Create(LoginURL);
+                var req = (HttpWebRequest)WebRequest.Create(loginURL);
 
                 req.UserAgent =
                     "Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20120716 Firefox/15.0";

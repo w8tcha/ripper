@@ -32,14 +32,14 @@ namespace RiPRipper
     /// </summary>
     public class ImageHosting : ServiceTemplate
     {
-        public ImageHosting(ref string sSavePath, ref string strURL, ref Hashtable hTbl)
-            : base(sSavePath, strURL, ref hTbl)
+        public ImageHosting(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
+            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
         {
         }
 
         protected override bool DoDownload()
         {
-            string strImgURL = mstrURL;
+            string strImgURL = ImageLinkURL;
 
             if (EventTable.ContainsKey(strImgURL))
             {
@@ -52,9 +52,9 @@ namespace RiPRipper
 
             try
             {
-                if (!Directory.Exists(mSavePath))
+                if (!Directory.Exists(SavePath))
                 {
-                    Directory.CreateDirectory(mSavePath);
+                    Directory.CreateDirectory(SavePath);
                 }
             }
             catch (IOException ex)
@@ -65,7 +65,7 @@ namespace RiPRipper
                 return false;
             }
 
-            strFilePath = Path.Combine(mSavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
 
             CacheObject CCObj = new CacheObject();
@@ -127,7 +127,7 @@ namespace RiPRipper
             if (strFilePath != NewAlteredPath)
             {
                 strFilePath = NewAlteredPath;
-                ((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
             }
 
             try
@@ -142,7 +142,7 @@ namespace RiPRipper
             catch (ThreadAbortException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
 
                 return true;
             }
@@ -152,21 +152,21 @@ namespace RiPRipper
                 MainForm.Delete = true;
 
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(mstrURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[mstrURL]).IsDownloaded = true;
+            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
             //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.GetInstance().uSLastPic =((CacheObject)EventTable[mstrURL]).FilePath = strFilePath;
+            CacheController.GetInstance().LastPic =((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
 
             return true;
         }
