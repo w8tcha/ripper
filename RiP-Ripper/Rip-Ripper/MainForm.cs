@@ -168,10 +168,9 @@ namespace RiPRipper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected void SDownloadClick(Object sender, EventArgs e)
+        protected void SDownloadClick(object sender, EventArgs e)
         {
-            if (Clipboard.GetText().IndexOf(@"http://rip-productions.net/") <
-                0 || this.bParseAct)
+            if (Clipboard.GetText().IndexOf(this.cacheController.userSettings.ForumURL) < 0 || this.bParseAct)
             {
                 return;
             }
@@ -180,9 +179,9 @@ namespace RiPRipper
 
             this.textBox1.Text = Clipboard.GetText();
 
-            if (InvokeRequired)
+            if (this.InvokeRequired)
             {
-                Invoke((MethodInvoker)this.EnqueueJob);
+                this.Invoke((MethodInvoker)this.EnqueueJob);
             }
             else
             {
@@ -273,7 +272,7 @@ namespace RiPRipper
         public void LoadSettings()
         {
             // Reading Settings
-
+            
             // Load "Offline Modus" Setting
             try
             {
@@ -938,7 +937,7 @@ namespace RiPRipper
 
             try
             {
-                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
                 {
                     TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
@@ -961,7 +960,7 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
                 {
                     TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
@@ -1013,7 +1012,7 @@ namespace RiPRipper
 
             try
             {
-                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
                 {
                     TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
@@ -1036,7 +1035,7 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                if (string.IsNullOrEmpty(Maintainance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTitleFromXML(Utility.DownloadRipPage(sXmlUrl))))
                 {
                     TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
@@ -1083,20 +1082,20 @@ namespace RiPRipper
 
             JobInfo job = new JobInfo { URL = sXmlUrl, XMLPayLoad = Utility.DownloadRipPage(sXmlUrl) };
 
-            job.ImageCount = Maintainance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
+            job.ImageCount = Maintenance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
 
             if (job.ImageCount.Equals(0))
             {
                 this.UnlockControls();
             }
 
-            job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
-            job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
-            job.Title = Maintainance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
+            job.PostTitle = Maintenance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
+            job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
+            job.Title = Maintenance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
             job.Title = Utility.ReplaceHexWithAscii(job.Title);
             job.PostTitle = Utility.ReplaceHexWithAscii(job.PostTitle);
 
-            job.PostIds = Maintainance.GetInstance().GetAllPostIds(job.XMLPayLoad);
+            job.PostIds = Maintenance.GetInstance().GetAllPostIds(job.XMLPayLoad);
 
             job.StorePath = this.GenerateStorePath(job);
 
@@ -1111,7 +1110,7 @@ namespace RiPRipper
 
             if (this.cacheController.userSettings.AutoThank)
             {
-                var token = Utility.GetSToken("http://rip-productions.net/");
+                var token = Utility.GetSToken(this.cacheController.userSettings.ForumURL);
 
                 foreach (string postId in job.PostIds)
                 {
@@ -1155,14 +1154,18 @@ namespace RiPRipper
             // Complete Thread
             if (postId != null)
             {
-                //string sToken = Utility.GetSToken("http://rip-productions.net/showpost.php?p=" + sPostId);
+                //string sToken = Utility.GetSToken(this.cacheController.userSettings.ForumURL + "showpost.php?p=" + sPostId);
 
                 if (string.IsNullOrEmpty(token))
                 {
                     return;
                 }
 
-                tyURL = string.Format("http://rip-productions.net/post_thanks.php?do=post_thanks_add&p={0}&securitytoken={1}", postId, token);
+                tyURL = string.Format(
+                    "{0}post_thanks.php?do=post_thanks_add&p={1}&securitytoken={2}",
+                    this.cacheController.userSettings.ForumURL,
+                    postId,
+                    token);
 
                 // SendThankYou(tyURL);
                 this.Invoke(lSendThankYouDel, new object[] { tyURL });
@@ -1178,7 +1181,8 @@ namespace RiPRipper
 
                             tyURL =
                                 string.Format(
-                                    "http://rip-productions.net/post_thanks.php?do=post_thanks_add&p={0}&securitytoken={1}",
+                                    "{0}post_thanks.php?do=post_thanks_add&p={1}&securitytoken={2}",
+                                    this.cacheController.userSettings.ForumURL,
                                     url.Substring(url.IndexOf("?p=") + 3),
                                     token);
 
@@ -1219,8 +1223,6 @@ namespace RiPRipper
         /// <param name="aUrl">A URL.</param>
         private static void SendThankYou(string aUrl)
         {
-            const string tyURLRef = "http://rip-productions.net/";
-
             HttpWebResponse lHttpWebResponse = null;
             Stream lHttpWebResponseStream = null;
 
@@ -1233,7 +1235,7 @@ namespace RiPRipper
             lHttpWebRequest.Accept = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
             lHttpWebRequest.KeepAlive = true;
             //lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
-            lHttpWebRequest.Referer = tyURLRef;
+            lHttpWebRequest.Referer = CacheController.GetInstance().userSettings.ForumURL;
             lHttpWebRequest.AllowAutoRedirect = false;
             lHttpWebRequest.Timeout = 1500;
             ///////////////////////////////////
@@ -1280,7 +1282,7 @@ namespace RiPRipper
 
             List<ImageInfo> arlst = threadPosts.ParseXML(sPagecontent);
 
-            string sToken = Utility.GetSToken("http://rip-productions.net/");
+            string sToken = Utility.GetSToken(this.cacheController.userSettings.ForumURL);
 
             for (int po = 0; po < arlst.Count; po++)
             {
@@ -1308,15 +1310,15 @@ namespace RiPRipper
 
                 //////////////////////////////////////////////////////////////////////////
 
-                if (this.cacheController.userSettings.SavePids && IsPostAlreadyRipped(sLpostId))
+                if (this.cacheController.userSettings.SavePids && this.IsPostAlreadyRipped(sLpostId))
                 {
                     continue;
                 }
 
-                string sLComposedURL = string.Format("http://rip-productions.net/getSTDpost-imgXML.php?dpver=2&postid={0}", sLpostId);
+                var composedURL = string.Format("{0}getSTDpost-imgXML.php?dpver=2&postid={1}", this.cacheController.userSettings.ForumURL, sLpostId);
 
 
-                JobInfo jobInfo = mJobsList.Find(doubleJob => (doubleJob.URL.Equals(sLComposedURL)));
+                var jobInfo = this.mJobsList.Find(doubleJob => doubleJob.URL.Equals(composedURL));
 
                 if (jobInfo != null)
                 {
@@ -1325,7 +1327,7 @@ namespace RiPRipper
 
                 if (mCurrentJob != null)
                 {
-                    if (mCurrentJob.URL.Equals(sLComposedURL))
+                    if (mCurrentJob.URL.Equals(composedURL))
                     {
                         continue;
                     }
@@ -1333,20 +1335,20 @@ namespace RiPRipper
 
                 JobInfo job = new JobInfo
                                   {
-                                      URL = sLComposedURL,
-                                      XMLPayLoad = Utility.DownloadRipPage(sLComposedURL)
+                                      URL = composedURL,
+                                      XMLPayLoad = Utility.DownloadRipPage(composedURL)
                                   };
 
-                job.ImageCount = Maintainance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
+                job.ImageCount = Maintenance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
 
                 if (job.ImageCount.Equals(0))
                 {
                     continue;
                 }
 
-                job.PostTitle = Maintainance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
-                job.ForumTitle = Maintainance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
-                job.Title = Maintainance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
+                job.PostTitle = Maintenance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
+                job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
+                job.Title = Maintenance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
                 
 
                 job.Title = Utility.ReplaceHexWithAscii(job.Title);
@@ -1669,32 +1671,41 @@ namespace RiPRipper
                     try
                     {
                         // Attempts to download an image when the URL is longer than http://
-                        if (mImagesList[i].ImageUrl.Length > 6)
+                        if (this.mImagesList[i].ImageUrl.Length > 6)
                         {
-                            if (!(i > lvCurJob.Items.Count))
+                            if (!(i > this.lvCurJob.Items.Count))
                             {
-                                lvCurJob.Items[i].Selected = true;
-                                lvCurJob.EnsureVisible(i);
+                                this.lvCurJob.Items[i].Selected = true;
+                                this.lvCurJob.EnsureVisible(i);
                             }
 
-                            CacheController.GetInstance().DownloadImage(mImagesList[i].ImageUrl, mCurrentJob.StorePath);
+                            CacheController.GetInstance()
+                                           .DownloadImage(
+                                               this.mImagesList[i].ImageUrl,
+                                               this.mImagesList[i].ThumbnailUrl,
+                                               this.mCurrentJob.StorePath,
+                                               !string.IsNullOrEmpty(this.mCurrentJob.PostTitle)
+                                                   ? this.mCurrentJob.PostTitle
+                                                   : this.mCurrentJob.Title);
                         }
 
-                        if (!(i > lvCurJob.Items.Count))
+                        if (i > this.lvCurJob.Items.Count)
                         {
-                            if (InvokeRequired)
-                            {
-                               this.Invoke((MethodInvoker)this.ShowLastPic);
-                            }
-                            else
-                            {
-                                this.ShowLastPic();
-                            }
+                            continue;
+                        }
 
-                            if (!this.bRipperClosing)
-                            {
-                                lvCurJob.Items[i].ForeColor = Color.Green;
-                            }
+                        if (this.InvokeRequired)
+                        {
+                            this.Invoke((MethodInvoker)this.ShowLastPic);
+                        }
+                        else
+                        {
+                            this.ShowLastPic();
+                        }
+
+                        if (!this.bRipperClosing)
+                        {
+                            this.lvCurJob.Items[i].ForeColor = Color.Green;
                         }
                     }
                     catch (ArgumentOutOfRangeException)
@@ -1778,7 +1789,7 @@ namespace RiPRipper
             }
             ///////////////////////////
 
-            this.sLastPic = this.cacheController.uSLastPic;
+            this.sLastPic = this.cacheController.LastPic;
 
             if (!File.Exists(this.sLastPic))
             {
@@ -2453,7 +2464,7 @@ namespace RiPRipper
                 }
 
                 // Ignore other input
-                if (!Clipboard.GetText().StartsWith("http://rip-productions.net/"))
+                if (!Clipboard.GetText().StartsWith(this.cacheController.userSettings.ForumURL))
                 {
                     return;
                 }
@@ -2467,8 +2478,8 @@ namespace RiPRipper
                 foreach (string sClipBoardURL in
                     sClipBoardUrLs.Where(
                         sClipBoardURL =>
-                        sClipBoardURL.StartsWith(@"http://rip-productions.net/")
-                        || sClipBoardURL.StartsWith(@"http://www.rip-productions.net/")))
+                        sClipBoardURL.StartsWith(this.cacheController.userSettings.ForumURL)
+                        || sClipBoardURL.StartsWith(this.cacheController.userSettings.ForumURL)))
                 {
                     if (!this.bParseAct)
                     {
@@ -2787,8 +2798,8 @@ namespace RiPRipper
                 foreach (string sRipUrl in
                     sRipUrls.Where(
                         sRipUrl =>
-                        sRipUrl.StartsWith(@"http://rip-productions.net/") ||
-                        sRipUrl.StartsWith(@"http://www.rip-productions.net/")))
+                        sRipUrl.StartsWith(this.cacheController.userSettings.ForumURL) ||
+                        sRipUrl.StartsWith(this.cacheController.userSettings.ForumURL)))
                 {
                    this.ExtractUrls.Add(sRipUrl);
                 }

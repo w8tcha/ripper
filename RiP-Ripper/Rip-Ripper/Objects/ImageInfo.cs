@@ -17,6 +17,11 @@ namespace RiPRipper.Objects
     public class ImageInfo
     {
         /// <summary>
+        /// Gets or sets Thumbnail Url.
+        /// </summary>
+        public string ThumbnailUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets Image Url.
         /// </summary>
         public string ImageUrl { get; set; }

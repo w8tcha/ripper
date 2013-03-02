@@ -17,6 +17,22 @@ namespace RiPRipper.Objects
     public class SettingBase : object
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="SettingBase"/> class.
+        /// </summary>
+        public SettingBase()
+        {
+            this.ForumURL = "http://vipergirls.net/";
+        }
+
+        /// <summary>
+        /// Gets or sets the forum URL.
+        /// </summary>
+        /// <value>
+        /// The forum URL.
+        /// </value>
+        public string ForumURL { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether Hidden Options
         /// "Offline Modus" Setting
         /// </summary>
@@ -28,7 +44,7 @@ namespace RiPRipper.Objects
         public bool GuestMode { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether "Firefox Exension Enabled" Setting
+        /// Gets or sets a value indicating whether "Firefox Extension Enabled" Setting
         /// </summary>
         public bool Extension { get; set; }
 
@@ -88,7 +104,7 @@ namespace RiPRipper.Objects
         public int ThreadLimit { get; set; }
 
         /// <summary>
-        /// Gets or sets the The Downloadfolder Location
+        /// Gets or sets the The Download folder Location
         /// </summary>
         public string DownloadFolder { get; set; }
 

@@ -1,7 +1,7 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Hoooster.cs" company="The Watcher">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImgDino.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
-//  This software is licensed under the MIT license. See license.txt for details.
+//   //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
 // <summary>
 //   Code Named: RiP-Ripper
@@ -15,23 +15,22 @@ namespace RiPRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
-    using System.Text.RegularExpressions;
     using System.Threading;
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from Hooster.com
+    /// Worker class to get images from ImgDino.com
     /// </summary>
-    public class Hoooster : ServiceTemplate
+    public class ImgDino : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Hoooster" /> class.
+        /// Initializes a new instance of the <see cref="ImgDino" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public Hoooster(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+        public ImgDino(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
@@ -44,7 +43,7 @@ namespace RiPRipper.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            var strImgURL = ImageLinkURL;
 
             if (EventTable.ContainsKey(strImgURL))
             {
@@ -68,11 +67,11 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            var ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
 
             try
             {
-                EventTable.Add(strImgURL, cacheObject);
+                EventTable.Add(strImgURL, ccObj);
             }
             catch (ThreadAbortException)
             {
@@ -85,50 +84,29 @@ namespace RiPRipper.ImageHosts
                     return false;
                 }
 
-                EventTable.Add(strImgURL, cacheObject);
+                EventTable.Add(strImgURL, ccObj);
             }
 
-            var page = GetImageHostPage(ref strImgURL, "hoosterads=1;");
+            // Set Image Download Path
+            var strNewURL = strImgURL.Replace(@"viewer.php?file=", @"images/");
 
-            if (page.Length < 10)
-            {
-                return false;
-            }
-
-            string strNewURL;
-
-            var m = Regex.Match(page, @"img src=\""(?<inner>[^\""]*)\"" alt=\""", RegexOptions.Singleline);
-
-            if (m.Success)
-            {
-                strNewURL = m.Groups["inner"].Value;
-            }
-            else
-            {
-                return false;
-            }
-
-            if (strNewURL.StartsWith(" "))
-            {
-                strNewURL = strNewURL.Replace(" ", string.Empty);
-            }
-
-            strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            // Set Image Name instead of using random name
+            strFilePath = this.GetImageName(this.PostTitle, strNewURL);
 
             strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
 
-            string newAlteredPath = Utility.GetSuitableName(strFilePath);
+            var newAlteredPath = Utility.GetSuitableName(strFilePath, true);
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = strFilePath;
+                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
             }
 
             try
             {
-                WebClient client = new WebClient();
+                var client = new WebClient();
                 client.Headers.Add(string.Format("Referer: {0}", strImgURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
