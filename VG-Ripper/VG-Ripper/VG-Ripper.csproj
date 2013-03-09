@@ -1,0 +1,534 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FAA3C26B-5C99-45ED-A489-CFE19C76EB44}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>VG-Ripper</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>RiPRipper</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>RiPRipper.MainForm</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>http://localhost/RiPRipper/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipper|AnyCPU' ">
+    <OutputPath>bin\RiPRipper\</OutputPath>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <DefineConstants>RIPRIPPER;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipperX|AnyCPU' ">
+    <OutputPath>bin\RiPRipperX\</OutputPath>
+    <DefineConstants>RIPRIPPERX;</DefineConstants>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipper|x86' ">
+    <OutputPath>bin\RiPRipper\</OutputPath>
+    <DefineConstants>RIPRIPPER;</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipperX|x86' ">
+    <OutputPath>bin\RiPRipperX\</OutputPath>
+    <DefineConstants>RIPRIPPERX;</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipper64|AnyCPU' ">
+    <OutputPath>bin\RiPRipper64\</OutputPath>
+    <DefineConstants>RIPRIPPER;</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipper64|x86' ">
+    <OutputPath>bin\RiPRipper\</OutputPath>
+    <DefineConstants>RIPRIPPER;</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipper|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\RiPRipper\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipperX|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\RiPRipperX\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'RiPRipper64|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\RiPRipper64\</OutputPath>
+    <Optimize>true</Optimize>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>450F2634545BFCB57E3A80119BAE565444B47168</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>RiPRipper_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Windows7APICodePack-Core.1.1.0.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Windows7APICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App.ico" />
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoUpdater.cs" />
+    <Compile Include="ImageHosts\ImgBox.cs" />
+    <Compile Include="ImageHosts\ImgDino.cs" />
+    <Compile Include="ImageHosts\ImgWoot.cs" />
+    <Compile Include="ImageHosts\PixRoute.cs" />
+    <Compile Include="ImageHosts\ImagePicasa.cs" />
+    <Compile Include="ImageHosts\DirectUpload.cs" />
+    <Compile Include="ImageHosts\PixHub.cs" />
+    <Compile Include="ImageHosts\Hoooster.cs" />
+    <Compile Include="ImageHosts\PimpAndHost.cs" />
+    <Compile Include="ImageHosts\DumpPix.cs" />
+    <Compile Include="ImageHosts\ImageBunk.cs" />
+    <Compile Include="ImageHosts\ImagePad.cs" />
+    <Compile Include="ImageHosts\ImageUpper.cs" />
+    <Compile Include="ImageHosts\ImgChili.cs" />
+    <Compile Include="ImageHosts\ImgDepot.cs" />
+    <Compile Include="Objects\CacheObject.cs" />
+    <Compile Include="Objects\CookiePair.cs" />
+    <Compile Include="ImageDownloader.cs" />
+    <Compile Include="ImageHosts\Abload.cs" />
+    <Compile Include="ImageHosts\AllYouCanUpload.cs" />
+    <Compile Include="ImageHosts\AmazingDickSSl.cs" />
+    <Compile Include="ImageHosts\BigPics.cs" />
+    <Compile Include="ImageHosts\BusyUpload.cs" />
+    <Compile Include="ImageHosts\DailyPoa.cs" />
+    <Compile Include="ImageHosts\DollarLink.cs" />
+    <Compile Include="ImageHosts\FastPic.cs" />
+    <Compile Include="ImageHosts\FileMad.cs" />
+    <Compile Include="ImageHosts\FotoSik.cs" />
+    <Compile Include="ImageHosts\FotoTube.cs" />
+    <Compile Include="ImageHosts\FreePornDumpster.cs" />
+    <Compile Include="ImageHosts\HotLinkImage.cs" />
+    <Compile Include="ImageHosts\ImageBam.cs" />
+    <Compile Include="ImageHosts\ImageCargo.cs" />
+    <Compile Include="ImageHosts\ImageDoza.cs" />
+    <Compile Include="ImageHosts\ImageFap.cs" />
+    <Compile Include="ImageHosts\ImageFlea.cs" />
+    <Compile Include="ImageHosts\ImageFoco.cs" />
+    <Compile Include="ImageHosts\ImageGiga.cs" />
+    <Compile Include="ImageHosts\ImageHost.cs" />
+    <Compile Include="ImageHosts\ImageHosting.cs" />
+    <Compile Include="ImageHosts\ImageHostLi.cs" />
+    <Compile Include="ImageHosts\ImageHyper.cs" />
+    <Compile Include="ImageHosts\ImagePorter.cs" />
+    <Compile Include="ImageHosts\ImagesGal.cs" />
+    <Compile Include="ImageHosts\ImageSocket.cs" />
+    <Compile Include="ImageHosts\ImageSwitch.cs" />
+    <Compile Include="ImageHosts\ImageTwist.cs" />
+    <Compile Include="ImageHosts\ImageWam.cs" />
+    <Compile Include="ImageHosts\ImageWaste.cs" />
+    <Compile Include="ImageHosts\Immage.cs" />
+    <Compile Include="ImageHosts\Ipicture.cs" />
+    <Compile Include="ImageHosts\KemiPic.cs" />
+    <Compile Include="ImageHosts\LargeImageHost.cs" />
+    <Compile Include="ImageHosts\MultiPics.cs" />
+    <Compile Include="ImageHosts\MyImageHost.cs" />
+    <Compile Include="ImageHosts\MyPixHost.cs" />
+    <Compile Include="ImageHosts\PicDir.cs" />
+    <Compile Include="ImageHosts\PicEasy.cs" />
+    <Compile Include="ImageHosts\PicHoarder.cs" />
+    <Compile Include="ImageHosts\PicJackal.cs" />
+    <Compile Include="ImageHosts\PicTiger2.cs" />
+    <Compile Include="ImageHosts\PicturesHoster.cs" />
+    <Compile Include="ImageHosts\PixHost.cs" />
+    <Compile Include="ImageHosts\PixSlam.cs" />
+    <Compile Include="ImageHosts\PixUp.cs" />
+    <Compile Include="ImageHosts\PornImgHost.cs" />
+    <Compile Include="ImageHosts\Radikal.cs" />
+    <Compile Include="ImageHosts\SevenBucket.cs" />
+    <Compile Include="ImageHosts\ShareNxs.cs" />
+    <Compile Include="ImageHosts\SpeedImg.cs" />
+    <Compile Include="ImageHosts\Stooorage.cs" />
+    <Compile Include="ImageHosts\StormFactory.cs" />
+    <Compile Include="ImageHosts\TurboImageHost.cs" />
+    <Compile Include="ImageHosts\UpMyPhoto.cs" />
+    <Compile Include="ImageHosts\XPhotoSharing.cs" />
+    <Compile Include="Objects\JobInfo.cs" />
+    <Compile Include="Languages\english.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>english.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Languages\french.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>french.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Languages\german.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>german.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ImageHosts\Benuri.cs" />
+    <Compile Include="ImageHosts\Celebs.cs" />
+    <Compile Include="ImageHosts\FileHost.cs" />
+    <Compile Include="ImageHosts\FreeImageHost.cs" />
+    <Compile Include="ImageHosts\FreeShare.cs" />
+    <Compile Include="ImageHosts\GlowFoto.cs" />
+    <Compile Include="ImageHosts\ImageBeaver.cs" />
+    <Compile Include="ImageHosts\ImageFling.cs" />
+    <Compile Include="ImageHosts\ImageHaven.cs" />
+    <Compile Include="ImageHosts\ImagePundit.cs" />
+    <Compile Include="ImageHosts\JpgHosting.cs" />
+    <Compile Include="ImageHosts\JpgHosting2.cs" />
+    <Compile Include="ImageHosts\LetMeHost.cs" />
+    <Compile Include="ImageHosts\PicsPlace.cs" />
+    <Compile Include="ImageHosts\PixHosting.cs" />
+    <Compile Include="ImageHosts\PussyUpload.cs" />
+    <Compile Include="ImageHosts\RipHq.cs" />
+    <Compile Include="ImageHosts\ShareAvenue.cs" />
+    <Compile Include="ImageHosts\SuprFile.cs" />
+    <Compile Include="ImageHosts\TheFreeImageHosting.cs" />
+    <Compile Include="ImageHosts\UploadEm.cs" />
+    <Compile Include="ImageHosts\UpPix.cs" />
+    <Compile Include="ImageHosts\XsHosting.cs" />
+    <Compile Include="ImageHosts\YesAlbum.cs" />
+    <Compile Include="ImageHosts\YourPix.cs" />
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CacheController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CookieManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageHosts\FileDen.cs" />
+    <Compile Include="ImageHosts\KeepMyFile.cs" />
+    <Compile Include="ImageHosts\ZShare.cs" />
+    <Compile Include="ImageHosts\MyPhotos.cs" />
+    <Compile Include="ImageHosts\PicTiger.cs" />
+    <Compile Include="ImageHosts\ShareAPic.cs" />
+    <Compile Include="ImageHosts\Supload.cs" />
+    <Compile Include="ImageHosts\TenPix.cs" />
+    <Compile Include="ImageHosts\DumbARump.cs" />
+    <Compile Include="ImageHosts\fapomatic.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageHosts\TheImageHosting.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceTemplate.cs" />
+    <Compile Include="Objects\SettingBase.cs" />
+    <Compile Include="SingleInstanceController.cs" />
+    <Compile Include="ThreadToPost.cs" />
+    <Compile Include="TopMostMessageBox.cs" />
+    <Compile Include="UrlHandler.cs" />
+    <Compile Include="ImageHosts\Image2Share.cs" />
+    <Compile Include="ImageHosts\ImageCrack.cs" />
+    <Compile Include="ImageHosts\ImageHigh.cs" />
+    <Compile Include="ImageHosts\imagevenue.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageHosts\imagevenueNew.cs" />
+    <Compile Include="ImageHosts\ImageThrust.cs" />
+    <Compile Include="ImageHosts\PaintedOver.cs" />
+    <Compile Include="Objects\ImageInfo.cs" />
+    <Compile Include="Indexes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Maintenance.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageHosts\Moast.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NetCommandProcessor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageHosts\PicBux.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageHosts\PicturesUpload.cs" />
+    <Compile Include="ThreadManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageHosts\uploadimages_net.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VersionCheck.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ImageHosts\watermarkIt.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="About.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\english.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>english.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\french.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>french.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\german.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>german.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Options.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="license.txt" />
+    <None Include="BuildScripts\MSBuild.Community.Tasks.Targets">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BuildScripts\RipperPackage.targets">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Resources\de.gif" />
+    <Content Include="Resources\delete.png" />
+    <None Include="Resources\Download.ico" />
+    <Content Include="Resources\download.png" />
+    <None Include="Resources\fr.gif" />
+    <None Include="Resources\Sleep.ico" />
+    <Content Include="Resources\stop.png" />
+    <None Include="Resources\us.gif" />
+    <None Include="Resources\play1.png" />
+    <None Include="Resources\ok1.gif" />
+    <None Include="Resources\ok.gif" />
+    <None Include="Resources\play.png" />
+    <None Include="Resources\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Extension>zip</Extension>
+    <PackageName>VG-Ripper</PackageName>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\BuildScripts</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+  <Import Project="BuildScripts\RipperPackage.Targets" />
+  <Target Name="AfterBuild" DependsOnTargets="PackageModule">
+  </Target>
+</Project>
