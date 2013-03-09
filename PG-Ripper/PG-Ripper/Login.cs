@@ -217,7 +217,7 @@ namespace PGRipper
                     this.textBox3.Text = "http://www.kitty-kats.net/";
                     break;
                 case 2:
-                    this.textBox3.Text = "http://rip-productions.net/";
+                    this.textBox3.Text = "http://vipergirls.to/";
                     break;
                 case 3:
                     this.textBox3.Text = "http://forums.sexyandfunny.com/";

@@ -75,7 +75,7 @@ namespace PGRipper
             this.groupBox1.Size = new System.Drawing.Size(376, 263);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Provide Login Credentials to RiP Forums";
+            this.groupBox1.Text = "Provide Login Credentials for the Forums";
             this.groupBox1.UseCompatibleTextRendering = true;
             // 
             // cBForum
@@ -85,7 +85,7 @@ namespace PGRipper
             this.cBForum.Items.AddRange(new object[] {
             "<Select a Forum>",
             "The Kitty-Kats Forum (perved.com)",
-            "Rip-Productions",
+            "ViperGirls Forums",
             "Sexy and Funny Forums",
             "Scanlover Forums",
             "Big Naturals Only",

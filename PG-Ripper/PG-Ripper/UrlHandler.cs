@@ -56,12 +56,10 @@ namespace PGRipper
                             return string.Empty;
                         }
 
-                        if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                        if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
                             CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") ||
                             CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
-                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
-                            )
+                            CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
                         {
                             if (sHtmlUrl.Contains(".html") && !sHtmlUrl.Contains(".php"))
                             {

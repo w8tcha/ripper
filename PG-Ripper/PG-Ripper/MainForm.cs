@@ -552,7 +552,7 @@ namespace PGRipper
             }
 
             // Hide Index Thread Checkbox if not RiP Forums
-            if (!this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
+            if (!this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
             {
                 mIsIndexChk.Visible = false;
             }
@@ -945,8 +945,7 @@ namespace PGRipper
             }
             else
             {
-                if (this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                    this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                if (this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
                     this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") ||
                     this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com") ||
                     this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/"))
@@ -1157,8 +1156,7 @@ namespace PGRipper
             if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net/") ||
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
                 this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
             {
                 job.SecurityToken = Maintenance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
@@ -1170,7 +1168,7 @@ namespace PGRipper
                     Utility.ReplaceHexWithAscii(
                         Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sHtmlUrl));
 
-                if (this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
+                if (this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
                 {
                     job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.URL, true);
                 }
@@ -1185,7 +1183,7 @@ namespace PGRipper
             }
             else
             {
-                if (this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
+                if (this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
                 {
                     job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.URL, false);
                 }
@@ -1270,8 +1268,7 @@ namespace PGRipper
             else if (this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") || 
                 this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
                      this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                     this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                     this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                     this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
                     this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
             {
                 tyURL = string.Format(
@@ -1339,7 +1336,7 @@ namespace PGRipper
         {
             Indexes idxs = new Indexes();
 
-            string sPagecontent = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net")
+            string sPagecontent = this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
                                   || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                                   || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
                                   || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
@@ -1361,11 +1358,9 @@ namespace PGRipper
 
             string sPagecontent;
 
-            if (this.userSettings.CurrentForumUrl.Contains(@"http://rip-") 
-                || this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") 
+            if (this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") 
                 || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") 
-                || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/")
-                                 )
+                || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/"))
             {
                 sPagecontent = threads.GetThreadPagesNew(htmlUrl);
             }
@@ -1409,7 +1404,7 @@ namespace PGRipper
                     goto SKIPIT;
                 }
 
-                string sLComposedURL = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net")
+                string sLComposedURL = this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
                                        || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                                        || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
                                        || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
@@ -1445,14 +1440,13 @@ namespace PGRipper
                 if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") || 
                     this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
                     this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                    this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://rip-") ||
-                    this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"http://www.rip-") ||
+                    this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
                     this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
                 {
                     job.SecurityToken = Maintenance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
                 }
 
-                job.ForumTitle = this.userSettings.CurrentForumUrl.Contains(@"rip-productions.net")
+                job.ForumTitle = this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
                                  || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                                  || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
                                  || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")

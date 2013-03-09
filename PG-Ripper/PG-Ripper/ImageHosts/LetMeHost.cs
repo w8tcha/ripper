@@ -91,7 +91,7 @@ namespace PGRipper
                     EventTable.Add(strImgURL, CCObj);
                 }
             }
-            MessageBox.Show(strImgURL);
+            
             string strNewURL = "http://" + strImgURL.Substring(strImgURL.IndexOf("://") + 3, 4) + "letmehost.com/" + strImgURL.Substring(strImgURL.IndexOf("file=") + 5);
 
 
