@@ -129,8 +129,6 @@ namespace PGRipper
 
                     pageContent = reader.ReadToEnd();
 
-                    TopMostMessageBox.Show(pageContent);
-
                     responseStream.Close();
                     reader.Close();
                 }

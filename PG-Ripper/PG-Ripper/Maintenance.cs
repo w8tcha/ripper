@@ -63,8 +63,7 @@ namespace PGRipper
 
             iTitleStart += 7;
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-"))
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
             {
                 iTitleStart += 1;
             }
@@ -78,7 +77,7 @@ namespace PGRipper
 
             string sTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains("rip-productions.net")
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains("vipergirls.to")
                 || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                 || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
                 || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
@@ -143,7 +142,7 @@ namespace PGRipper
         {
             string sPage;
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"rip-productions.net"))
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
             {
                 sPage = GetRipPage(content);
 
@@ -260,8 +259,7 @@ namespace PGRipper
 
             string sPostTitle;
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-")
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
                 || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                 || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
                 || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
@@ -332,8 +330,7 @@ namespace PGRipper
 
             if (string.IsNullOrEmpty(sPostTitle))
             {
-                if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://rip-")
-                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"http://www.rip-")
+                if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
                     || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
                     || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
                     || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))

@@ -87,7 +87,7 @@ namespace PGRipper
         {
             ThreadStart lThreadStart;
 
-            imageUrl = imageUrl.ToLower();
+            //imageUrl = imageUrl.ToLower();
 
             thumbImageUrl = thumbImageUrl.ToLower();
 
