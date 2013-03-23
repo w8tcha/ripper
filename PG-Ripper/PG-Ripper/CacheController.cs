@@ -577,7 +577,11 @@ namespace PGRipper
             {
                 lThreadStart = imageDownloader.GetImgDino;
             }
-            else if (imageUrl.IndexOf(@"imgwoot.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imgwoot.com/") >= 0 || imageUrl.IndexOf(@"Imgwoot.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgmoney.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
