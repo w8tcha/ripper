@@ -69,7 +69,7 @@ namespace RiPRipper.Objects
         /// <value>
         /// The post ids.
         /// </value>
-        public IList<string> PostIds { get; set; }
+        public List<string> PostIds { get; set; }
 
         #endregion
     }

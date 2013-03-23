@@ -53,7 +53,7 @@ namespace RiPRipper
         /// </returns>
         public bool DoLogin()
         {
-            var loginURL = string.Format("{0}login.php", CacheController.GetInstance().UserSettings.ForumURL);
+            var loginURL = string.Format("{0}login.php", CacheController.Instance().UserSettings.ForumURL);
 
             var postData =
                 "do=login&forceredirect=1&url=%2Fforum%2F&vb_login_md5password=%md5pass%&vb_login_md5password_utf=%md5pass%&s=&vb_login_username=%md5user%&vb_login_password=&cookieuser=1";

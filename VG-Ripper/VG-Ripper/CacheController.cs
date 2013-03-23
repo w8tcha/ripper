@@ -25,39 +25,35 @@ namespace RiPRipper
     /// </summary>
     public class CacheController
     {
-        #region Constants and Fields
         /// <summary>
-        ///   Universal string, Last pic Race conditions happen a lot on this string, 
-        ///   but it's function is non-critical enough to ignore those races.
-        /// </summary>
-        public string LastPic = string.Empty; 
-
-        /// <summary>
-        /// All Settings
-        /// </summary>
-        public SettingBase UserSettings = new SettingBase();
-
-        /// <summary>
+        /// The CacheController Instance
         /// </summary>
         private static CacheController _mInstance;
 
         /// <summary>
+        /// The Event Table
         /// </summary>
-        private Hashtable mEventTable;
-
-        #endregion
-
-        #region Constructors and Destructors
+        private Hashtable eventTable;
 
         /// <summary>
         /// Prevents a default instance of the <see cref="CacheController"/> class from being created.
         /// </summary>
         private CacheController()
         {
-            this.mEventTable = new Hashtable();
+            this.eventTable = new Hashtable();
+            this.UserSettings = new SettingBase();
         }
 
-        #endregion
+        /// <summary>
+        /// Gets or sets the User Settings
+        /// </summary>
+        public SettingBase UserSettings { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the Universal string, Last pic Race conditions happen a lot on this string, 
+        ///   but it's function is non-critical enough to ignore those races.
+        /// </summary>
+        public string LastPic { get; set; }
 
         #region Public Methods
 
@@ -67,7 +63,7 @@ namespace RiPRipper
         /// <returns>
         /// Returns the instance.
         /// </returns>
-        public static CacheController GetInstance()
+        public static CacheController Instance()
         {
             return _mInstance ?? (_mInstance = new CacheController());
         }
@@ -92,7 +88,7 @@ namespace RiPRipper
             // ImageDownloader is the bridging class between this routine and the
             // ServiceTemplate base class (which is the parent to all hosting site's
             // fetch code).
-            var imageDownloader = new ImageDownloader(localPath, imageUrl, thumbImageUrl, imageName, ref this.mEventTable);
+            var imageDownloader = new ImageDownloader(localPath, imageUrl, thumbImageUrl, imageName, ref this.eventTable);
 
             if (imageUrl.IndexOf(@"/img.php?loc=loc") >= 0)
             {
@@ -567,7 +563,11 @@ namespace RiPRipper
             {
                 lThreadStart = imageDownloader.GetImgDino;
             }
-            else if (imageUrl.IndexOf(@"imgwoot.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imgwoot.com/") >= 0 || imageUrl.IndexOf(@"Imgwoot.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgmoney.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
@@ -589,7 +589,7 @@ namespace RiPRipper
         /// </summary>
         public void EraseEventTable()
         {
-            this.mEventTable.Clear();
+            this.eventTable.Clear();
         }
 
         /// <summary>
@@ -601,9 +601,9 @@ namespace RiPRipper
         /// </returns>
         public CacheObject GetObject(string url)
         {
-            if (this.mEventTable.ContainsKey(url))
+            if (this.eventTable.ContainsKey(url))
             {
-                return (CacheObject)this.mEventTable[url];
+                return (CacheObject)this.eventTable[url];
             }
 
             return null;

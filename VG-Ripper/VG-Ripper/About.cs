@@ -48,21 +48,21 @@ namespace RiPRipper
 
 #if (RIPRIPPER)
             label1.Text = String.Format(
-                "RiP-Ripper {0}.{1}.{2}{3}",
+                "Viper Girls Ripper {0}.{1}.{2}{3}",
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"));
 #elif (RIPRIPPERX)
             label1.Text = String.Format(
-                "RiP-Ripper X {0}.{1}.{2}{3}",
+                "Viper Girls Ripper X {0}.{1}.{2}{3}",
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"));
 #else
             this.label1.Text = string.Format(
-                "RiP-Ripper {0}.{1}.{2}{3}", 
+                "Viper Girls Ripper {0}.{1}.{2}{3}", 
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
@@ -79,9 +79,9 @@ namespace RiPRipper
         /// </summary>
         public void LoadSettings()
         {
-            this.TopMost = CacheController.GetInstance().UserSettings.TopMost;
+            this.TopMost = CacheController.Instance().UserSettings.TopMost;
 
-            switch (CacheController.GetInstance().UserSettings.Language)
+            switch (CacheController.Instance().UserSettings.Language)
             {
                 case "de-DE":
                     this.rm = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());

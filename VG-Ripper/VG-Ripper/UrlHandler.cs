@@ -40,7 +40,7 @@ namespace RiPRipper
                     {
                         xmlUrl = string.Format(
                             "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                            CacheController.GetInstance().UserSettings.ForumURL,
+                            CacheController.Instance().UserSettings.ForumURL,
                             Convert.ToInt64(inputUrl));
                         break;
                     }
@@ -49,7 +49,7 @@ namespace RiPRipper
                     {
                         xmlUrl = string.Format(
                             "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                            CacheController.GetInstance().UserSettings.ForumURL,
+                            CacheController.Instance().UserSettings.ForumURL,
                             Convert.ToInt64(inputUrl));
                         break;
                     }
@@ -94,7 +94,7 @@ namespace RiPRipper
 
                             xmlUrl = string.Format(
                                 "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                                CacheController.GetInstance().UserSettings.ForumURL,
+                                CacheController.Instance().UserSettings.ForumURL,
                                 Convert.ToInt64(threadId));
                         }
                         else if (xmlUrl.Contains("goto=newpost") && xmlUrl.Contains("showthread.php?"))
@@ -110,7 +110,7 @@ namespace RiPRipper
 
                             xmlUrl = string.Format(
                                 "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                                CacheController.GetInstance().UserSettings.ForumURL,
+                                CacheController.Instance().UserSettings.ForumURL,
                                 Convert.ToInt64(threadId));
                         }
                         else if (xmlUrl.Contains("&p=") && xmlUrl.Contains("#post"))
@@ -121,7 +121,7 @@ namespace RiPRipper
 
                             xmlUrl = string.Format(
                                 "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                                CacheController.GetInstance().UserSettings.ForumURL,
+                                CacheController.Instance().UserSettings.ForumURL,
                                 Convert.ToInt64(postId));
                         }
                         else if (!xmlUrl.Contains(".php") && !xmlUrl.Contains("#post"))
@@ -137,7 +137,7 @@ namespace RiPRipper
 
                             xmlUrl = string.Format(
                                 "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                                CacheController.GetInstance().UserSettings.ForumURL,
+                                CacheController.Instance().UserSettings.ForumURL,
                                 Convert.ToInt64(threadId));
                         }
                         else if (!xmlUrl.Contains(".php") && xmlUrl.Contains("#post"))
@@ -147,7 +147,7 @@ namespace RiPRipper
 
                             xmlUrl = string.Format(
                                 "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                                CacheController.GetInstance().UserSettings.ForumURL,
+                                CacheController.Instance().UserSettings.ForumURL,
                                 Convert.ToInt64(postId));
                         }
 
@@ -193,7 +193,7 @@ namespace RiPRipper
 
                 newUrl = string.Format(
                     "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                    CacheController.GetInstance().UserSettings.ForumURL,
+                    CacheController.Instance().UserSettings.ForumURL,
                     Convert.ToInt64(sThreadId));
             }
             else if (newUrl.Contains("goto=newpost") && newUrl.Contains("showthread.php?"))
@@ -208,7 +208,7 @@ namespace RiPRipper
 
                 newUrl = string.Format(
                     "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                    CacheController.GetInstance().UserSettings.ForumURL,
+                    CacheController.Instance().UserSettings.ForumURL,
                     Convert.ToInt64(sThreadId));
             }
             else if (newUrl.Contains("&p=") && newUrl.Contains("#post"))
@@ -217,7 +217,7 @@ namespace RiPRipper
                 string sPostId = newUrl.Substring(newUrl.IndexOf("#post") + 5);
                 newUrl = string.Format(
                     "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                    CacheController.GetInstance().UserSettings.ForumURL,
+                    CacheController.Instance().UserSettings.ForumURL,
                     Convert.ToInt64(sPostId));
             }
             else if (!newUrl.Contains(".php") && !newUrl.Contains("#post"))
@@ -232,7 +232,7 @@ namespace RiPRipper
 
                 newUrl = string.Format(
                     "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                    CacheController.GetInstance().UserSettings.ForumURL,
+                    CacheController.Instance().UserSettings.ForumURL,
                     Convert.ToInt64(sThreadId));
             }
             else if (!newUrl.Contains(".php") && newUrl.Contains("#post"))
@@ -241,7 +241,7 @@ namespace RiPRipper
                 string sPostId = newUrl.Substring(newUrl.IndexOf("#post") + 5);
                 newUrl = string.Format(
                     "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                    CacheController.GetInstance().UserSettings.ForumURL,
+                    CacheController.Instance().UserSettings.ForumURL,
                     Convert.ToInt64(sPostId));
             }
 

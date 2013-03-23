@@ -28,6 +28,7 @@ namespace RiPRipper.ImageHosts
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
+        /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
         public ImgDino(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
@@ -88,7 +89,9 @@ namespace RiPRipper.ImageHosts
             }
 
             // Set Image Download Path
-            var strNewURL = strImgURL.Replace(@"viewer.php?file=", @"images/");
+            var strNewURL = ThumbImageURL;
+
+            strNewURL = strNewURL.Replace("_thumb", string.Empty);
 
             // Set Image Name instead of using random name
             strFilePath = this.GetImageName(this.PostTitle, strNewURL);
@@ -138,7 +141,7 @@ namespace RiPRipper.ImageHosts
             }
 
             ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.GetInstance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
 
             return true;
         }

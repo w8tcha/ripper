@@ -818,7 +818,7 @@ namespace RiPRipper
                 lHttpWebRequest.KeepAlive = true;
                 lHttpWebRequest.Timeout = 20000;
 
-                lHttpWebRequest.Referer = strImgURL.IndexOf("www.ripnetwork.net:82") >= 0 ? string.Format("{0}showthread.php", CacheController.GetInstance().UserSettings.ForumURL) : strImgURL;
+                lHttpWebRequest.Referer = strImgURL.IndexOf("www.ripnetwork.net:82") >= 0 ? string.Format("{0}showthread.php", CacheController.Instance().UserSettings.ForumURL) : strImgURL;
 
                 var lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
 
@@ -852,7 +852,7 @@ namespace RiPRipper
                 ////client.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
                 client.Headers.Add(
                     strImgURL.IndexOf("www.ripnetwork.net:82") >= 0
-                        ? string.Format("Referer: {0}showthread.php", CacheController.GetInstance().UserSettings.ForumURL)
+                        ? string.Format("Referer: {0}showthread.php", CacheController.Instance().UserSettings.ForumURL)
                         : string.Format("Referer: {0}", strImgURL));
 
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
@@ -875,7 +875,7 @@ namespace RiPRipper
 
             ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = true;
             ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
-            CacheController.GetInstance().LastPic = ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
+            CacheController.Instance().LastPic = ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
         }
     }
 }
