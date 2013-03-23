@@ -528,7 +528,7 @@ namespace RiPRipper
 
         private List<JobInfo> mJobsList = null;
         private System.Timers.Timer tmrPageUpdate;
-        private JobInfo mCurrentJob = null;
+        private JobInfo currentJob = null;
         private List<ImageInfo> mImagesList = null;
         private CacheController cacheController = null;
         private ThreadManager mrefTM = null;

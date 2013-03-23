@@ -98,7 +98,10 @@ namespace RiPRipper
         /// </summary>
         private ResourceManager _ResourceManager;
 
-       
+        /// <summary>
+        /// Indicator if the ripper is currently hidden in the tray
+        /// </summary>
+        private bool isHiddenInTray;
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="MainForm"/> is delete.
@@ -125,7 +128,7 @@ namespace RiPRipper
         /// </summary>
         public MainForm()
         {
-            this.cacheController = CacheController.GetInstance();
+            this.cacheController = CacheController.Instance();
 
 #if (!RIPRIPPERX)
 
@@ -206,7 +209,8 @@ namespace RiPRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void HideClick(Object sender, EventArgs e)
         {
-            Hide();
+            this.Hide();
+            this.isHiddenInTray = true;
 
             trayMenu.MenuItems.RemoveAt(0);
             MenuItem show = new MenuItem("Show VG-Ripper", this.ShowClick);
@@ -230,7 +234,8 @@ namespace RiPRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void ShowClick(Object sender, EventArgs e)
         {
-            Show();
+            this.Show();
+            this.isHiddenInTray = false;
 
             trayMenu.MenuItems.RemoveAt(0);
             MenuItem hide = new MenuItem("Hide VG-Ripper", HideClick);
@@ -654,6 +659,11 @@ namespace RiPRipper
         }
         */
 
+        /// <summary>
+        /// Mains the form load.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void MainFormLoad(object sender, EventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += (UnhandledExceptionFunction);
@@ -1255,7 +1265,7 @@ namespace RiPRipper
             lHttpWebRequest.Accept = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
             lHttpWebRequest.KeepAlive = true;
             //lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
-            lHttpWebRequest.Referer = CacheController.GetInstance().UserSettings.ForumURL;
+            lHttpWebRequest.Referer = CacheController.Instance().UserSettings.ForumURL;
             lHttpWebRequest.AllowAutoRedirect = false;
             lHttpWebRequest.Timeout = 1500;
             ///////////////////////////////////
@@ -1345,9 +1355,9 @@ namespace RiPRipper
                     continue;
                 }
 
-                if (mCurrentJob != null)
+                if (currentJob != null)
                 {
-                    if (mCurrentJob.URL.Equals(composedURL))
+                    if (currentJob.URL.Equals(composedURL))
                     {
                         continue;
                     }
@@ -1405,7 +1415,7 @@ namespace RiPRipper
 
             if (this.StatusLabelInfo.Text.Equals(this._ResourceManager.GetString("StatusLabelInfo")) &&
                 this.mJobsList.Count.Equals(0) &&
-                this.mCurrentJob == null)
+                this.currentJob == null)
             {
                 this.IdleRipper();
             }
@@ -1460,7 +1470,7 @@ namespace RiPRipper
             if (mrefTM.GetThreadCount() > 0)
             {
                 // If Joblist empty and the last Threads of Current Job are parsed
-                if (mCurrentJob == null && mJobsList.Count.Equals(0) && !bParseAct)
+                if (currentJob == null && mJobsList.Count.Equals(0) && !bParseAct)
                 {
                     bEndRip = true;
 
@@ -1498,7 +1508,7 @@ namespace RiPRipper
                         StatusLabelImageC.Text = string.Empty;
                     }
 
-                    if (mCurrentJob == null && mJobsList.Count > 0)
+                    if (currentJob == null && mJobsList.Count > 0)
                     {
 #if (!RIPRIPPERX)
                         if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -1512,7 +1522,7 @@ namespace RiPRipper
                         // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
                         this.ProcessNextJob();
                     }
-                    else if (mCurrentJob == null && mJobsList.Count.Equals(0))
+                    else if (currentJob == null && mJobsList.Count.Equals(0))
                     {
                         this.IdleRipper();
                     }
@@ -1553,9 +1563,9 @@ namespace RiPRipper
                 return;
             }
 
-            mCurrentJob = mJobsList[0];
+            currentJob = mJobsList[0];
 
-            JobListRemove(mCurrentJob, 0);
+            JobListRemove(currentJob, 0);
 
             string bSystemExtr = _ResourceManager.GetString("bSystemExtr");
 
@@ -1563,28 +1573,28 @@ namespace RiPRipper
 
             groupBox2.Text = string.Format("{0}...", _ResourceManager.GetString("gbCurrentlyExtract"));
 
-            if (mCurrentJob.Title.Equals(mCurrentJob.PostTitle))
+            if (currentJob.Title.Equals(currentJob.PostTitle))
             {
-                Text = string.Format("{0}: {1} - x{2}", _ResourceManager.GetString("gbCurrentlyExtract"), mCurrentJob.Title,
+                Text = string.Format("{0}: {1} - x{2}", _ResourceManager.GetString("gbCurrentlyExtract"), currentJob.Title,
                                                 mImagesList.Count);
             }
             else
             {
                 Text = string.Format("{0}: {1} - {2} - x{3}", _ResourceManager.GetString("gbCurrentlyExtract"),
-                                               mCurrentJob.Title, mCurrentJob.PostTitle, mImagesList.Count);
+                                               currentJob.Title, currentJob.PostTitle, mImagesList.Count);
             }
 
-            lvCurJob.Columns[0].Text = string.Format("{0} - x{1}", mCurrentJob.PostTitle, mImagesList.Count);
+            lvCurJob.Columns[0].Text = string.Format("{0} - x{1}", currentJob.PostTitle, mImagesList.Count);
 
 #if (!RIPRIPPERX)
             try
             {
                 if (this.cacheController.UserSettings.ShowPopUps)
                 {
-                    trayIcon.Text = _ResourceManager.GetString("gbCurrentlyExtract") + mCurrentJob.Title;
+                    trayIcon.Text = _ResourceManager.GetString("gbCurrentlyExtract") + currentJob.Title;
                     trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                     trayIcon.BalloonTipTitle = _ResourceManager.GetString("gbCurrentlyExtract");
-                    trayIcon.BalloonTipText = mCurrentJob.Title;
+                    trayIcon.BalloonTipText = currentJob.Title;
                     trayIcon.ShowBalloonTip(10);
                 }
             }
@@ -1599,6 +1609,7 @@ namespace RiPRipper
                 }
             }
 #endif
+
             //ResetTimer();
 
             ProcessCurImgLst();
@@ -1606,7 +1617,7 @@ namespace RiPRipper
 
         private void ParseJobXml()
         {
-            mImagesList = Utility.ExtractImages(mCurrentJob.XMLPayLoad);
+            mImagesList = Utility.ExtractImages(currentJob.XMLPayLoad);
         }
 
         /// <summary>
@@ -1622,7 +1633,7 @@ namespace RiPRipper
 
             ThreadManager lTdm = ThreadManager.GetInstance();
 
-            this.sLastDownFolder = this.mCurrentJob.StorePath;
+            this.sLastDownFolder = this.currentJob.StorePath;
 
             if (mImagesList.Count > 0)
             {
@@ -1699,14 +1710,14 @@ namespace RiPRipper
                                 this.lvCurJob.EnsureVisible(i);
                             }
 
-                            CacheController.GetInstance()
+                            CacheController.Instance()
                                            .DownloadImage(
                                                this.mImagesList[i].ImageUrl,
                                                this.mImagesList[i].ThumbnailUrl,
-                                               this.mCurrentJob.StorePath,
-                                               !string.IsNullOrEmpty(this.mCurrentJob.PostTitle)
-                                                   ? this.mCurrentJob.PostTitle
-                                                   : this.mCurrentJob.Title);
+                                               this.currentJob.StorePath,
+                                               !string.IsNullOrEmpty(this.currentJob.PostTitle)
+                                                   ? this.currentJob.PostTitle
+                                                   : this.currentJob.Title);
                         }
 
                         if (i > this.lvCurJob.Items.Count)
@@ -1747,7 +1758,7 @@ namespace RiPRipper
                 }
 
                 // FINISED A THREAD/POST DOWNLOAD JOB
-                mCurrentJob = null;
+                currentJob = null;
 
                 if (!string.IsNullOrEmpty(this.sLastDownFolder))
                 {
@@ -1773,7 +1784,7 @@ namespace RiPRipper
             {
                 // NO IMAGES TO PROCESS SO ABANDON CURRENT THREAD
                 lvCurJob.Items.Clear();
-                mCurrentJob = null;
+                currentJob = null;
                 if (this.InvokeRequired)
                 {
                     this.Invoke(
@@ -2046,9 +2057,9 @@ namespace RiPRipper
             //JobListAdd(mCurrentJob);
 
             JobListAddDelegate newJob = JobListAdd;
-            Invoke(newJob, new object[] { mCurrentJob });
+            Invoke(newJob, new object[] { currentJob });
 
-            mCurrentJob = null;
+            currentJob = null;
             StatusLabelInfo.Text = string.Empty;
             lvCurJob.Items.Clear();
 
@@ -2086,43 +2097,48 @@ namespace RiPRipper
 
             bFullDisc = false;
         }
+
         /// <summary>
         /// Delete Selected Jobs
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void DeleteJobClick(object sender, EventArgs e)
         {
             try
             {
-                if (listViewJobList.SelectedItems.Count > 0)
+                if (this.listViewJobList.SelectedItems.Count <= 0)
                 {
-                    mJobsList.RemoveRange(listViewJobList.SelectedItems[0].Index, listViewJobList.SelectedIndices.Count);
+                    return;
+                }
 
-                    foreach (ListViewItem deleteItem in listViewJobList.SelectedItems)
-                    {
-                        listViewJobList.Items.Remove(deleteItem);
-                    }
+                this.mJobsList.RemoveRange(this.listViewJobList.SelectedItems[0].Index, this.listViewJobList.SelectedIndices.Count);
+
+                foreach (ListViewItem deleteItem in this.listViewJobList.SelectedItems)
+                {
+                    this.listViewJobList.Items.Remove(deleteItem);
                 }
             }
             catch (Exception)
             {
-                listViewJobList.Items.Clear();
+                this.listViewJobList.Items.Clear();
 
-                for (int i = 0; i < mJobsList.Count; i++)
+                for (int i = 0; i < this.mJobsList.Count; i++)
                 {
-                    StatusLabelInfo.Text = string.Format("{0}{1}/{2}", _ResourceManager.GetString("gbParse2"), i, mJobsList.Count);
-                    StatusLabelInfo.ForeColor = Color.Green;
+                    this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this._ResourceManager.GetString("gbParse2"), i, this.mJobsList.Count);
+                    this.StatusLabelInfo.ForeColor = Color.Green;
 
-                    ListViewItem ijobJob = new ListViewItem(mJobsList[i].Title, 0);
-                    ijobJob.SubItems.Add(mJobsList[i].PostTitle);
-                    ijobJob.SubItems.Add(mJobsList[i].ImageCount.ToString());
-                    listViewJobList.Items.AddRange(new[] { ijobJob });
+                    var jobItem = new ListViewItem(this.mJobsList[i].Title, 0);
+
+                    jobItem.SubItems.Add(this.mJobsList[i].PostTitle);
+                    jobItem.SubItems.Add(this.mJobsList[i].ImageCount.ToString());
+
+                    this.listViewJobList.Items.AddRange(new[] { jobItem });
                 }
             }
             finally
             {
-                groupBox5.Text = string.Format("{0} ({1}):", _ResourceManager.GetString("lblRippingQue"), mJobsList.Count);
+                this.groupBox5.Text = string.Format("{0} ({1}):", this._ResourceManager.GetString("lblRippingQue"), this.mJobsList.Count);
             }
         }
 
@@ -2133,7 +2149,7 @@ namespace RiPRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void StopCurrentThreadsClick(object sender, EventArgs e)
         {
-            if (mCurrentJob == null)
+            if (currentJob == null)
             {
                 return;
             }
@@ -2143,10 +2159,10 @@ namespace RiPRipper
 
             ThreadManager.GetInstance().DismantleAllThreads();
 
-            string sLastJobFolder = mCurrentJob.StorePath;
+            string sLastJobFolder = currentJob.StorePath;
 
             lvCurJob.Items.Clear();
-            mCurrentJob = null;
+            currentJob = null;
 
             if (this.InvokeRequired)
             {
@@ -2257,7 +2273,9 @@ namespace RiPRipper
 #if (!RIPRIPPERX)
             if (WindowState == FormWindowState.Minimized)
             {
-                Hide();
+                this.Hide();
+                this.isHiddenInTray = true;
+
                 trayIcon.MouseDoubleClick -= (HideClick);
                 trayIcon.MouseDoubleClick += (ShowClick);
 
@@ -2277,45 +2295,55 @@ namespace RiPRipper
             lvCurJob.Columns[0].Width = lvCurJob.Width - 22;
         }
 
+        /// <summary>
+        /// Exits the tool strip menu item click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void ExitToolStripMenuItemClick(object sender, EventArgs e)
         {
             Close();
         }
+
         /// <summary>
         /// Save all Jobs
         /// </summary>
         public void SaveOnExit()
         {
-            if (mCurrentJob == null && mJobsList.Count <= 0) return;
+            if (this.currentJob == null && this.mJobsList.Count <= 0)
+            {
+                return;
+            }
+
             try
             {
                 // Save Current Job to quere List
-                if (mCurrentJob != null)
+                if (this.currentJob != null)
                 {
-                    bRipperClosing = true;
+                    this.bRipperClosing = true;
 
                     ThreadManager.GetInstance().DismantleAllThreads();
-                    mJobsList.Add(mCurrentJob);
+                    this.mJobsList.Add(this.currentJob);
 
-                    mCurrentJob = null;
+                    this.currentJob = null;
                 }
 
-                XmlSerializer serializer = new XmlSerializer(typeof (List<JobInfo>));
-                TextWriter tr = new StreamWriter(Path.Combine(Application.StartupPath, "jobs.xml"));
-                serializer.Serialize(tr, mJobsList);
-                tr.Close();
+                var serializer = new XmlSerializer(typeof(List<JobInfo>));
+                var textWriter = new StreamWriter(Path.Combine(Application.StartupPath, "jobs.xml"));
+
+                serializer.Serialize(textWriter, this.mJobsList);
+                textWriter.Close();
 
                 // If Pause
-                if (bCurPause)
+                if (this.bCurPause)
                 {
                     Utility.SaveSetting("CurrentlyPauseThreads", "true");
                 }
             }
             catch (Exception ex)
             {
-                Utility.SaveOnCrash(ex.Message, ex.StackTrace, mCurrentJob);
+                Utility.SaveOnCrash(ex.Message, ex.StackTrace, this.currentJob);
             }
-
         }
 
         /// <summary>
@@ -2380,6 +2408,7 @@ namespace RiPRipper
             sw.Close();
             file.Close();
         }
+
         /// <summary>
         /// Check if Post is already Ripped
         /// </summary>
@@ -2396,13 +2425,13 @@ namespace RiPRipper
 
             try
             {
-                if (sRippedPosts.Contains(sPostId))
+                if (this.sRippedPosts.Contains(sPostId))
                 {
                     bCheck = true;
                 }
                 else
                 {
-                    sRippedPosts.Add(sPostId);
+                    this.sRippedPosts.Add(sPostId);
                 }
             }
             catch (Exception)
@@ -2467,36 +2496,38 @@ namespace RiPRipper
         }
 
         /// <summary>
-        /// Check Windows Clip board for Urls to Rip
+        /// Check Windows Clip board for URL's to Rip
         /// </summary>
         private void CheckClipboardData()
         {
-            if (!cacheController.UserSettings.ClipBWatch)
+            if (!this.cacheController.UserSettings.ClipBWatch)
             {
                 return;
             }
 
             try
             {
-                if (string.IsNullOrEmpty(Clipboard.GetText()))
+                var clipboardText = Clipboard.GetText();
+
+                if (string.IsNullOrEmpty(clipboardText))
                 {
                     return;
                 }
 
                 // Ignore other input
-                if (!Clipboard.GetText().StartsWith(this.cacheController.UserSettings.ForumURL))
+                if (!clipboardText.StartsWith(this.cacheController.UserSettings.ForumURL))
                 {
                     return;
                 }
 
-                var clipBoardURLTemp = Clipboard.GetText();
+                var clipBoardURLTemp = clipboardText;
 
                 Clipboard.Clear();
 
-                string[] sClipBoardUrLs = clipBoardURLTemp.Split(new[] { '\n' });
+                var clipBoardUrLs = clipBoardURLTemp.Split(new[] { '\n' });
 
-                foreach (string sClipBoardURL in
-                    sClipBoardUrLs.Where(
+                foreach (var clipBoardURL in
+                    clipBoardUrLs.Where(
                         sClipBoardURL =>
                         sClipBoardURL.StartsWith(this.cacheController.UserSettings.ForumURL)
                         || sClipBoardURL.StartsWith(this.cacheController.UserSettings.ForumURL)))
@@ -2505,11 +2536,11 @@ namespace RiPRipper
                     {
                         this.comboBox1.SelectedIndex = 2;
 
-                        this.textBox1.Text = sClipBoardURL;
+                        this.textBox1.Text = clipBoardURL;
 
-                        if (InvokeRequired)
+                        if (this.InvokeRequired)
                         {
-                            Invoke((MethodInvoker)this.EnqueueJob);
+                            this.Invoke((MethodInvoker)this.EnqueueJob);
                         }
                         else
                         {
@@ -2518,13 +2549,13 @@ namespace RiPRipper
                     }
                     else
                     {
-                        this.ExtractUrls.Add(sClipBoardURL);
+                        this.ExtractUrls.Add(clipBoardURL);
                     }
                 }
             }
             catch (Exception)
             {
-                Clipboard.Clear();
+                //Clipboard.Clear();
             }
         }
 
@@ -2623,7 +2654,7 @@ namespace RiPRipper
                 this.SaveHistory();
             }
 
-            if (this.WindowState == FormWindowState.Minimized)
+            if (this.WindowState == FormWindowState.Minimized || this.isHiddenInTray)
             {
                 return;
             }
@@ -2843,7 +2874,7 @@ namespace RiPRipper
         {
             Exception ex = (Exception)e.ExceptionObject;
 
-            Utility.SaveOnCrash(ex.Message, ex.StackTrace, mCurrentJob);
+            Utility.SaveOnCrash(ex.Message, ex.StackTrace, currentJob);
 
             if (mJobsList.Count > 0)
             {
@@ -2886,7 +2917,7 @@ namespace RiPRipper
         {
             Exception ex = e.Exception;
 
-            Utility.SaveOnCrash(ex.Message, ex.StackTrace, mCurrentJob);
+            Utility.SaveOnCrash(ex.Message, ex.StackTrace, currentJob);
 
             if (mJobsList.Count > 0)
             {

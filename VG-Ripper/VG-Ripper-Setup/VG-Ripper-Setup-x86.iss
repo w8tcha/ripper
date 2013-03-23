@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VG-Ripper"
-#define MyAppVersion "2.9.3.6"
+#define MyAppVersion "2.9.3.7"
 #define MyAppPublisher "The Watcher"
 #define MyAppURL "http://ripper.codeplex.com"
 #define MyAppExeName "VG-Ripper.exe"

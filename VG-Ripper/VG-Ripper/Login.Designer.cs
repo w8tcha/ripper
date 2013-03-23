@@ -37,6 +37,7 @@ namespace RiPRipper
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.RegisterLink = new System.Windows.Forms.LinkLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -50,7 +51,6 @@ namespace RiPRipper
             this.timer1 = new System.Timers.Timer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.GuestLoginButton = new System.Windows.Forms.Button();
-            this.RegisterLink = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timer1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -74,6 +74,17 @@ namespace RiPRipper
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Provide Login Credentials for the ViperGirls Forums";
             this.groupBox1.UseCompatibleTextRendering = true;
+            // 
+            // RegisterLink
+            // 
+            this.RegisterLink.AutoSize = true;
+            this.RegisterLink.Location = new System.Drawing.Point(99, 183);
+            this.RegisterLink.Name = "RegisterLink";
+            this.RegisterLink.Size = new System.Drawing.Size(180, 13);
+            this.RegisterLink.TabIndex = 7;
+            this.RegisterLink.TabStop = true;
+            this.RegisterLink.Text = "Not a Member yet? Click to Register.";
+            this.RegisterLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.RegisterLink_LinkClicked);
             // 
             // checkBox1
             // 
@@ -213,17 +224,6 @@ namespace RiPRipper
             this.GuestLoginButton.Text = "Guest Login";
             this.GuestLoginButton.UseCompatibleTextRendering = true;
             this.GuestLoginButton.Click += new System.EventHandler(this.GuestLoginButton_Click);
-            // 
-            // RegisterLink
-            // 
-            this.RegisterLink.AutoSize = true;
-            this.RegisterLink.Location = new System.Drawing.Point(99, 183);
-            this.RegisterLink.Name = "RegisterLink";
-            this.RegisterLink.Size = new System.Drawing.Size(222, 13);
-            this.RegisterLink.TabIndex = 7;
-            this.RegisterLink.TabStop = true;
-            this.RegisterLink.Text = "Not a Member yet Register? Click to Register.";
-            this.RegisterLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.RegisterLink_LinkClicked);
             // 
             // Login
             // 

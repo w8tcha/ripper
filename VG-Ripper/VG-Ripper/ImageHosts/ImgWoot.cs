@@ -92,6 +92,11 @@ namespace RiPRipper.ImageHosts
             // Set the download Path
             var downloadURL = thumbURL.Replace(@".com/upload/small", @".com/upload/big");
 
+            if (downloadURL.Contains("imgmoney.com"))
+            {
+                downloadURL = downloadURL.Replace(".jpg", ".JPG");
+            }
+
             // Set Image Name instead of using random name
             filePath = this.GetImageName(this.PostTitle, downloadURL);
 
@@ -141,7 +146,7 @@ namespace RiPRipper.ImageHosts
             }
 
             ((CacheObject)EventTable[imageURL]).IsDownloaded = true;
-            CacheController.GetInstance().LastPic = ((CacheObject)EventTable[imageURL]).FilePath = filePath;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[imageURL]).FilePath = filePath;
 
             return true;
         }

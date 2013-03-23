@@ -191,7 +191,7 @@ namespace RiPRipper.ImageHosts
             }
 
             ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
-            CacheController.GetInstance().LastPic =
+            CacheController.Instance().LastPic =
                 ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
 
             return true;

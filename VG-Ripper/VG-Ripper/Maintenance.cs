@@ -57,7 +57,7 @@ namespace RiPRipper
         /// <returns>
         /// Returns How Many Images the Post contains
         /// </returns>
-        public IList<string> GetAllPostIds(string xmlPayload)
+        public List<string> GetAllPostIds(string xmlPayload)
         {
             var postIds = new List<string>();
 

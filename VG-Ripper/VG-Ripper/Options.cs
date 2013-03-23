@@ -40,7 +40,7 @@ namespace RiPRipper
             showTrayPopups.Enabled = false;
             checkBox10.Enabled = false;
 #endif
-            var cacheController = CacheController.GetInstance();
+            var cacheController = CacheController.Instance();
 
             // Load "Show Tray PopUps" Setting
             this.showTrayPopups.Checked = cacheController.UserSettings.ShowPopUps;
@@ -170,7 +170,7 @@ namespace RiPRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void Button4Click(object sender, EventArgs e)
         {
-            var cacheController = CacheController.GetInstance();
+            var cacheController = CacheController.Instance();
 
             this.FBD.ShowDialog(this);
 

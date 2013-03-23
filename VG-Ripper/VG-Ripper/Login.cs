@@ -132,7 +132,7 @@ namespace RiPRipper
             this.timer1.Enabled = false;
             ((MainForm)Owner).bCameThroughCorrectLogin = true;
 
-            var cacheController = CacheController.GetInstance();
+            var cacheController = CacheController.Instance();
 
             cacheController.UserSettings.User = this.textBox1.Text;
             cacheController.UserSettings.Pass = this.textBox2.Text;
@@ -175,7 +175,7 @@ namespace RiPRipper
         {
             ((MainForm)Owner).bCameThroughCorrectLogin = true;
 
-            var cacheController = CacheController.GetInstance();
+            var cacheController = CacheController.Instance();
 
             cacheController.UserSettings.GuestMode = true;
 
@@ -191,7 +191,7 @@ namespace RiPRipper
         /// <param name="e">The <see cref="LinkLabelLinkClickedEventArgs"/> instance containing the event data.</param>
         private void RegisterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(CacheController.GetInstance().UserSettings.ForumURL);
+            Process.Start(CacheController.Instance().UserSettings.ForumURL);
         }
     }
 }
