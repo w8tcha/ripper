@@ -176,6 +176,7 @@
             "ImgChili.com",
             "ImgDepot.org",
             "ImgDino.com",
+            "ImgMoney.com",
             "ImgWoot.com",
             "Immage.de",
             "IPicture.ru",

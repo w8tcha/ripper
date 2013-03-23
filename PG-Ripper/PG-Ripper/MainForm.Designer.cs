@@ -530,7 +530,7 @@ namespace PGRipper
 
         private List<JobInfo> mJobsList = null;
         private System.Timers.Timer tmrPageUpdate;
-        private JobInfo mCurrentJob = null;
+        private JobInfo currentJob = null;
         private List<ImageInfo> mImagesList = null;
         private string sLastPic = string.Empty;
         private CacheController mrefCC = null;
