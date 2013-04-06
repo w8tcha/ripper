@@ -121,7 +121,7 @@
     <value>Extraction en cours...</value>
   </data>
   <data name="btexExit" xml:space="preserve">
-    <value>RiP-Ripper a fini tout Télécharge</value>
+    <value>VG-Ripper a fini tout Télécharge</value>
   </data>
   <data name="btleExit" xml:space="preserve">
     <value>Télécharge complet</value>
@@ -283,7 +283,7 @@
     <value>{0} Images restantes (Total Téléchargé: {1}%)</value>
   </data>
   <data name="tthisText" xml:space="preserve">
-    <value>RiP-Ripper Télécharge ...</value>
+    <value>VG-Ripper Télécharge ...</value>
   </data>
   <data name="ttlHeader" xml:space="preserve">
     <value> [Identifié comme: "</value>

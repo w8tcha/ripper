@@ -70,7 +70,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RiP-Ripper hat alle Downloads abgeschlossen.
+        ///   Looks up a localized string similar to VG-Ripper hat alle Downloads abgeschlossen.
         /// </summary>
         internal static string btexExit {
             get {
@@ -304,7 +304,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Geben Sie ihere Zugangsdaten aus dem Rip Forum ein.
+        ///   Looks up a localized string similar to Geben Sie ihere Zugangsdaten aus dem Forum ein.
         /// </summary>
         internal static string gbLoginHead {
             get {
@@ -430,7 +430,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Warte auf RiP-Productions....
+        ///   Looks up a localized string similar to Warte auf Forum....
         /// </summary>
         internal static string lblStatWait {
             get {
@@ -682,7 +682,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RiP-Ripper lädt ....
+        ///   Looks up a localized string similar to VG-Ripper lädt ....
         /// </summary>
         internal static string tthisText {
             get {

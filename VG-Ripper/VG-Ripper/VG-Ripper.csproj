@@ -486,7 +486,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Properties\app.manifest" />
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\de.gif" />
     <Content Include="Resources\delete.png" />
     <None Include="Resources\Download.ico" />

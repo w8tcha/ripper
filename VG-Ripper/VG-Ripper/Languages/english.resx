@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="App1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\App.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -125,7 +125,7 @@
     <value>System is extracting...</value>
   </data>
   <data name="btexExit" xml:space="preserve">
-    <value>RiP-Ripper finished all Downloads</value>
+    <value>VG-Ripper finished all Downloads</value>
   </data>
   <data name="btleExit" xml:space="preserve">
     <value>Downloads Complete</value>
@@ -197,7 +197,7 @@
     <value>Select Language</value>
   </data>
   <data name="gbLoginHead" xml:space="preserve">
-    <value>Provide Login Credentials to RiP Forums</value>
+    <value>Provide Login Credentials to the Forums</value>
   </data>
   <data name="gbMainOptions" xml:space="preserve">
     <value>Main Options</value>
@@ -230,7 +230,7 @@
     <value>Ripping Queue</value>
   </data>
   <data name="lblStatWait" xml:space="preserve">
-    <value>Waiting for RiP-Productions...</value>
+    <value>Waiting for the Forum...</value>
   </data>
   <data name="lblThreadLimit" xml:space="preserve">
     <value>Maximum Simultaneous Downloads:</value>
@@ -245,7 +245,7 @@
     <value>User Name :</value>
   </data>
   <data name="lblWarningLogin" xml:space="preserve">
-    <value>WARNING! More than 3 failed tries will result in your RiP Account being locked! You have been warned!</value>
+    <value>WARNING! More than 5 failed tries will result in your Account being locked! You have been warned!</value>
   </data>
   <data name="lblWelcome" xml:space="preserve">
     <value>Welcome, </value>
@@ -254,7 +254,7 @@
     <value>Login</value>
   </data>
   <data name="mbAlreadyQueued" xml:space="preserve">
-    <value>That Thread or Post is Already Queued for RIP</value>
+    <value>That Thread or Post is Already Queued.</value>
   </data>
   <data name="mbIncorrectURL" xml:space="preserve">
     <value>You entered an incorrect URL.</value>
@@ -278,7 +278,7 @@
     <value>ID MUST be numeric!</value>
   </data>
   <data name="mbUpdate" xml:space="preserve">
-    <value>A new version of RiP-Ripper is available. Would You like to upgrade?</value>
+    <value>A new version of VG-Ripper is available. Would You like to upgrade?</value>
   </data>
   <data name="mbUpdate2" xml:space="preserve">
     <value>New Version Available!</value>
@@ -293,7 +293,7 @@
     <value>{0} Images remaining (Total Downloaded: {1}%)</value>
   </data>
   <data name="tthisText" xml:space="preserve">
-    <value>RiP-Ripper Downloading ...</value>
+    <value>VG-Ripper Downloading ...</value>
   </data>
   <data name="ttlHeader" xml:space="preserve">
     <value> [Logged in as: "</value>

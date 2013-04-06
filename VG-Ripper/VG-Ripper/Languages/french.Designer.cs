@@ -70,7 +70,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RiP-Ripper a fini tout Télécharge.
+        ///   Looks up a localized string similar to VG-Ripper a fini tout Télécharge.
         /// </summary>
         internal static string btexExit {
             get {
@@ -682,7 +682,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RiP-Ripper Télécharge ....
+        ///   Looks up a localized string similar to VG-Ripper Télécharge ....
         /// </summary>
         internal static string tthisText {
             get {

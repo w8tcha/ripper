@@ -84,7 +84,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 110);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(572, 300);
+            this.tabControl1.Size = new System.Drawing.Size(572, 325);
             this.tabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -93,7 +93,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(564, 274);
+            this.tabPage1.Size = new System.Drawing.Size(564, 299);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "License";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -102,7 +102,7 @@
             // 
             this.label2.Location = new System.Drawing.Point(7, 7);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(552, 254);
+            this.label2.Size = new System.Drawing.Size(552, 284);
             this.label2.TabIndex = 0;
             this.label2.Text = resources.GetString("label2.Text");
             this.label2.UseCompatibleTextRendering = true;
@@ -282,7 +282,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(12, 416);
+            this.btnClose.Location = new System.Drawing.Point(12, 452);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 7;
@@ -292,7 +292,7 @@
             // 
             // About
             // 
-            this.ClientSize = new System.Drawing.Size(595, 448);
+            this.ClientSize = new System.Drawing.Size(595, 487);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.pictureBox1);
