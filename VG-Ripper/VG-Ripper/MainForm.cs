@@ -96,7 +96,8 @@ namespace RiPRipper
         /// <summary>
         /// The Resource Manger that is used for Icons and Labels etc.
         /// </summary>
-        private ResourceManager _ResourceManager;
+        private ResourceManager _ResourceManager = new ResourceManager(
+            "RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
 
         /// <summary>
         /// Indicator if the ripper is currently hidden in the tray
@@ -681,11 +682,12 @@ namespace RiPRipper
 #if (!RIPRIPPERX)
 
 
-            if (VersionCheck.UpdateAvailable() && File.Exists(Application.StartupPath + "\\ICSharpCode.SharpZipLib.dll"))
+            if (VersionCheck.UpdateAvailable() && File.Exists(Path.Combine(Application.StartupPath, "ICSharpCode.SharpZipLib.dll")))
             {
-                string mbUpdate = _ResourceManager.GetString("mbUpdate"), mbUpdate2 = _ResourceManager.GetString("mbUpdate2");
-                DialogResult result = TopMostMessageBox.Show(mbUpdate, mbUpdate2, MessageBoxButtons.YesNo,
-                                                             MessageBoxIcon.Question);
+                string mbUpdate = this._ResourceManager.GetString("mbUpdate"), mbUpdate2 = this._ResourceManager.GetString("mbUpdate2");
+
+                DialogResult result = TopMostMessageBox.Show(
+                    mbUpdate, mbUpdate2, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result.Equals(DialogResult.Yes))
                 {
@@ -724,7 +726,10 @@ namespace RiPRipper
             }
 
 #if (!RIPRIPPERX)
-            this.trayIcon.Visible = true;
+            if (this.trayIcon.Icon != null)
+            {
+                this.trayIcon.Visible = true;
+            }
 #endif
 
 #if (!RIPRIPPERX)
@@ -2609,13 +2614,19 @@ namespace RiPRipper
                 this.cacheController.UserSettings.WindowLeft = int.Parse(Utility.LoadSetting("Window left"));
                 this.cacheController.UserSettings.WindowTop = int.Parse(Utility.LoadSetting("Window top"));
 
-                this.Left = this.cacheController.UserSettings.WindowLeft;
-                this.Top = this.cacheController.UserSettings.WindowTop;
+                if (!this.cacheController.UserSettings.WindowLeft.Equals(-32000)
+                    && !this.cacheController.UserSettings.WindowTop.Equals(-32000))
+                {
+                    this.Left = this.cacheController.UserSettings.WindowLeft;
+                    this.Top = this.cacheController.UserSettings.WindowTop;
+                }
             }
             catch (Exception)
             {
                 this.StartPosition = FormStartPosition.CenterScreen;
             }
+
+
 
             try
             {
@@ -2659,8 +2670,13 @@ namespace RiPRipper
                 return;
             }
 
-            Utility.SaveSetting("Window left", this.Left.ToString());
-            Utility.SaveSetting("Window top", this.Top.ToString());
+            if (!this.cacheController.UserSettings.WindowLeft.Equals(-32000)
+                && !this.cacheController.UserSettings.WindowTop.Equals(-32000))
+            {
+                Utility.SaveSetting("Window left", this.Left.ToString());
+                Utility.SaveSetting("Window top", this.Top.ToString());
+            }
+
             Utility.SaveSetting("Window width", this.Width.ToString());
             Utility.SaveSetting("Window height", this.Height.ToString());
         }
@@ -2671,7 +2687,15 @@ namespace RiPRipper
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void OnLoad(EventArgs args)
         {
-            base.OnLoad(args);
+            try
+            {
+                base.OnLoad(args);
+            }
+            catch (Exception)
+            {
+                // Throws when exiting
+            }
+            
 
             Application.Idle += this.OnLoaded;
         }

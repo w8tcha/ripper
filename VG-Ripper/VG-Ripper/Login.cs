@@ -191,7 +191,7 @@ namespace RiPRipper
         /// <param name="e">The <see cref="LinkLabelLinkClickedEventArgs"/> instance containing the event data.</param>
         private void RegisterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(CacheController.Instance().UserSettings.ForumURL);
+            Process.Start(string.Format("{0}register.php", CacheController.Instance().UserSettings.ForumURL));
         }
     }
 }

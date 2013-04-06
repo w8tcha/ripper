@@ -98,7 +98,7 @@ namespace RiPRipper.ImageHosts
 
             string strNewURL;
 
-            var m = Regex.Match(page, @"id=\""img\"".*?src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""", RegexOptions.Multiline);
+            var m = Regex.Match(page, @"id=\""img\"".*?src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""", RegexOptions.Compiled);
 
             if (m.Success)
             {

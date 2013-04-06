@@ -121,7 +121,7 @@
     <value>System extrahiert...</value>
   </data>
   <data name="btexExit" xml:space="preserve">
-    <value>RiP-Ripper hat alle Downloads abgeschlossen</value>
+    <value>VG-Ripper hat alle Downloads abgeschlossen</value>
   </data>
   <data name="btleExit" xml:space="preserve">
     <value>Downloads abgeschlossen</value>
@@ -193,7 +193,7 @@
     <value>Sprachauswahl</value>
   </data>
   <data name="gbLoginHead" xml:space="preserve">
-    <value>Geben Sie ihere Zugangsdaten aus dem Rip Forum ein</value>
+    <value>Geben Sie ihere Zugangsdaten aus dem Forum ein</value>
   </data>
   <data name="gbMainOptions" xml:space="preserve">
     <value>Programm Optionen</value>
@@ -226,7 +226,7 @@
     <value>Ausstehende Jobs</value>
   </data>
   <data name="lblStatWait" xml:space="preserve">
-    <value>Warte auf RiP-Productions...</value>
+    <value>Warte auf Forum...</value>
   </data>
   <data name="lblThreadLimit" xml:space="preserve">
     <value>Maximale Gleichzeitige Downloads:</value>
@@ -283,7 +283,7 @@
     <value>{0} Bilder verbleiben (Insgesamt geladen: {1}%) </value>
   </data>
   <data name="tthisText" xml:space="preserve">
-    <value>RiP-Ripper lädt ...</value>
+    <value>VG-Ripper lädt ...</value>
   </data>
   <data name="ttlHeader" xml:space="preserve">
     <value> [Angemeldet als: "</value>

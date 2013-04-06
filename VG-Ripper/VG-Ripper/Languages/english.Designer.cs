@@ -80,7 +80,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RiP-Ripper finished all Downloads.
+        ///   Looks up a localized string similar to VG-Ripper finished all Downloads.
         /// </summary>
         internal static string btexExit {
             get {
@@ -344,7 +344,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide Login Credentials to RiP Forums.
+        ///   Looks up a localized string similar to Provide Login Credentials to the Forums.
         /// </summary>
         internal static string gbLoginHead {
             get {
@@ -470,7 +470,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Waiting for RiP-Productions....
+        ///   Looks up a localized string similar to Waiting for the Forum....
         /// </summary>
         internal static string lblStatWait {
             get {
@@ -515,7 +515,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WARNING! More than 3 failed tries will result in your RiP Account being locked! You have been warned!.
+        ///   Looks up a localized string similar to WARNING! More than 5 failed tries will result in your Account being locked! You have been warned!.
         /// </summary>
         internal static string lblWarningLogin {
             get {
@@ -551,7 +551,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to That Thread or Post is Already Queued for RIP.
+        ///   Looks up a localized string similar to That Thread or Post is Already Queued..
         /// </summary>
         internal static string mbAlreadyQueued {
             get {
@@ -641,7 +641,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A new version of RiP-Ripper is available. Would You like to upgrade?.
+        ///   Looks up a localized string similar to A new version of VG-Ripper is available. Would You like to upgrade?.
         /// </summary>
         internal static string mbUpdate {
             get {
@@ -762,7 +762,7 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RiP-Ripper Downloading ....
+        ///   Looks up a localized string similar to VG-Ripper Downloading ....
         /// </summary>
         internal static string tthisText {
             get {

@@ -80,10 +80,10 @@ namespace RiPRipper
             this.RegisterLink.AutoSize = true;
             this.RegisterLink.Location = new System.Drawing.Point(99, 183);
             this.RegisterLink.Name = "RegisterLink";
-            this.RegisterLink.Size = new System.Drawing.Size(180, 13);
+            this.RegisterLink.Size = new System.Drawing.Size(177, 13);
             this.RegisterLink.TabIndex = 7;
             this.RegisterLink.TabStop = true;
-            this.RegisterLink.Text = "Not a Member yet? Click to Register.";
+            this.RegisterLink.Text = "Not a Member yet? Click to Register";
             this.RegisterLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.RegisterLink_LinkClicked);
             // 
             // checkBox1
