@@ -182,8 +182,10 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageHosts\ImageFolks.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
+    <Compile Include="ImageHosts\ImgPo.cs" />
     <Compile Include="ImageHosts\ImgWoot.cs" />
     <Compile Include="ImageHosts\PixRoute.cs" />
     <Compile Include="ImageHosts\ImagePicasa.cs" />
@@ -453,6 +455,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

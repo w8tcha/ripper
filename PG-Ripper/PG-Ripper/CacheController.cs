@@ -70,7 +70,7 @@ namespace PGRipper
         /// <returns>
         /// The get instance.
         /// </returns>
-        public static CacheController GetInstance()
+        public static CacheController Instance()
         {
             return _mInstance ?? (_mInstance = new CacheController());
         }
@@ -584,6 +584,18 @@ namespace PGRipper
             else if (imageUrl.IndexOf(@"imgmoney.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgproof.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imagefolks.com/") >= 0 || imageUrl.IndexOf(@"ImageFolks.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImageFolks;
+            }
+            else if (imageUrl.IndexOf(@"imgpo.st/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgPo;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

@@ -30,6 +30,7 @@ namespace PGRipper
         private void InitializeComponent()
         {
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBox11 = new System.Windows.Forms.CheckBox();
             this.checkBox10 = new System.Windows.Forms.CheckBox();
             this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
@@ -56,7 +57,6 @@ namespace PGRipper
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.FBD = new System.Windows.Forms.FolderBrowserDialog();
-            this.checkBox11 = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -81,6 +81,16 @@ namespace PGRipper
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Main Options";
             this.groupBox3.UseCompatibleTextRendering = true;
+            // 
+            // checkBox11
+            // 
+            this.checkBox11.AutoSize = true;
+            this.checkBox11.Location = new System.Drawing.Point(8, 135);
+            this.checkBox11.Name = "checkBox11";
+            this.checkBox11.Size = new System.Drawing.Size(159, 17);
+            this.checkBox11.TabIndex = 24;
+            this.checkBox11.Text = "Show Last Download Image";
+            this.checkBox11.UseVisualStyleBackColor = true;
             // 
             // checkBox10
             // 
@@ -144,9 +154,9 @@ namespace PGRipper
             // pictureBox2
             // 
             this.pictureBox2.Location = new System.Drawing.Point(9, 25);
-            this.pictureBox2.MaximumSize = new System.Drawing.Size(16, 11);
+            this.pictureBox2.MaximumSize = new System.Drawing.Size(16, 16);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 11);
+            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
             this.pictureBox2.TabIndex = 12;
             this.pictureBox2.TabStop = false;
             // 
@@ -377,16 +387,6 @@ namespace PGRipper
             // FBD
             // 
             this.FBD.ShowNewFolderButton = false;
-            // 
-            // checkBox11
-            // 
-            this.checkBox11.AutoSize = true;
-            this.checkBox11.Location = new System.Drawing.Point(8, 135);
-            this.checkBox11.Name = "checkBox11";
-            this.checkBox11.Size = new System.Drawing.Size(159, 17);
-            this.checkBox11.TabIndex = 24;
-            this.checkBox11.Text = "Show Last Download Image";
-            this.checkBox11.UseVisualStyleBackColor = true;
             // 
             // Options
             // 

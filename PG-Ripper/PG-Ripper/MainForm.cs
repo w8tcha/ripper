@@ -510,7 +510,7 @@ namespace PGRipper
 
             this.LastWorkingTime = DateTime.Now;
 
-            this.mrefCC = CacheController.GetInstance();
+            this.mrefCC = CacheController.Instance();
             this.mrefTM = ThreadManager.GetInstance();
 
             this.LoadSettings();
@@ -1761,7 +1761,7 @@ namespace PGRipper
                                 this.lvCurJob.EnsureVisible(i);
                             }
 
-                            CacheController.GetInstance()
+                            CacheController.Instance()
                                            .DownloadImage(
                                                this.mImagesList[i].ImageUrl,
                                                this.mImagesList[i].ThumbnailUrl,

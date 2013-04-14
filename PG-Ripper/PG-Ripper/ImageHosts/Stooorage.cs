@@ -1,25 +1,22 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: PG-Ripper
-// Function  : Extracts Images posted on PG forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher 
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the PG-Ripper project base.
-
-using System.Collections;
-using System.IO;
-using System.Net;
-using System.Threading;
-using System;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Stooorage.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//   //  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: PG-Ripper
+//   Function  : Extracts Images posted on VB forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace PGRipper.ImageHosts
 {
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Net;
+    using System.Threading;
+
     using PGRipper.Objects;
 
     /// <summary>
@@ -27,26 +24,41 @@ namespace PGRipper.ImageHosts
     /// </summary>
     public class Stooorage : ServiceTemplate
     {
-        public Stooorage(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Stooorage"/> class.
+        /// </summary>
+        /// <param name="savePath">The save path.</param>
+        /// <param name="imageHostURL">The image host URL.</param>
+        /// <param name="thumbURL">The thumb URL.</param>
+        /// <param name="imageName">Name of the image.</param>
+        /// <param name="hashTable">The hash table.</param>
+        public Stooorage(ref string savePath, ref string imageHostURL, ref string thumbURL, ref string imageName, ref Hashtable hashTable)
+            : base(savePath, imageHostURL, thumbURL, imageName, ref hashTable)
         {
         }
 
+        /// <summary>
+        /// Do the image Download
+        /// </summary>
+        /// <returns>
+        /// Returns if the Image was downloaded
+        /// </returns>
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            var imageHostURL = ImageLinkURL;
+            var filePath = string.Empty;
 
-            if (EventTable.ContainsKey(strImgURL))
+            if (EventTable.ContainsKey(imageHostURL))
             {
                 return true;
             }
 
-            string strFilePath = string.Empty;
-
             try
             {
-                if (!Directory.Exists(SavePath))
-                    Directory.CreateDirectory(SavePath);
+                if (!Directory.Exists(this.SavePath))
+                {
+                    Directory.CreateDirectory(this.SavePath);
+                }
             }
             catch (IOException ex)
             {
@@ -56,11 +68,11 @@ namespace PGRipper.ImageHosts
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = imageHostURL };
 
             try
             {
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(imageHostURL, cacheObject);
             }
             catch (ThreadAbortException)
             {
@@ -68,42 +80,45 @@ namespace PGRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (EventTable.ContainsKey(strImgURL))
+                if (EventTable.ContainsKey(imageHostURL))
                 {
                     return false;
                 }
 
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(imageHostURL, cacheObject);
             }
 
-            string strNewURL = strImgURL.Replace("/show/", "/images/");
+            var imageDownloadURL = this.ThumbImageURL.Replace("/thumbs/", "/images/").Replace("http://t", "http://img");
 
-            strFilePath = strNewURL.Substring(strNewURL.IndexOf("_") + 1);
+            filePath = imageDownloadURL.Substring(imageDownloadURL.IndexOf("_") + 1);
 
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
             //////////////////////////////////////////////////////////////////////////
 
-            string newAlteredPath = Utility.GetSuitableName(strFilePath);
-            if (strFilePath != newAlteredPath)
+            var newAlteredPath = Utility.GetSuitableName(filePath);
+
+            if (filePath != newAlteredPath)
             {
-                strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+                filePath = newAlteredPath;
+                ((CacheObject)EventTable[ImageLinkURL]).FilePath = filePath;
             }
 
             try
             {
-                WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(strNewURL, strFilePath);
-                client.Dispose();
+                var client = new WebClient();
 
+                client.Headers.Add(string.Format("Referer: {0}", imageHostURL));
+                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
+
+                client.DownloadFile(imageDownloadURL, filePath);
+
+                client.Dispose();
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageHostURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
@@ -112,26 +127,25 @@ namespace PGRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageHostURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageHostURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.GetInstance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[this.ImageLinkURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
 
             return true;
         }
 
         //////////////////////////////////////////////////////////////////////////
-
     }
 }

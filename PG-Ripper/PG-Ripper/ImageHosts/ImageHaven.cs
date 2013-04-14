@@ -181,7 +181,7 @@ namespace PGRipper
             }
 
             ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.GetInstance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
 
             return true;
         }

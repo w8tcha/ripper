@@ -896,6 +896,24 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Get ImageFolks Download
+        /// </summary>
+        public void GetImageFolks()
+        {
+            this.xService = new ImageFolks(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get ImgPo Download
+        /// </summary>
+        public void GetImgPo()
+        {
+            this.xService = new ImgPo(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()
@@ -1031,7 +1049,7 @@ namespace PGRipper
 
             ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = true;
             ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
-            CacheController.GetInstance().LastPic =
+            CacheController.Instance().LastPic =
                 ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
             return;
         }
