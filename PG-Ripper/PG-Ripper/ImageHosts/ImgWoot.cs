@@ -20,7 +20,7 @@ namespace PGRipper.ImageHosts
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgWoot.com
+    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {
@@ -91,15 +91,15 @@ namespace PGRipper.ImageHosts
             }
             
             // Set the download Path
-            var downloadURL = thumbURL.Replace(@".com/upload/small", @".com/upload/big");
+            var imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
 
-            if (downloadURL.Contains("imgmoney.com"))
+            /*if (downloadURL.Contains("imgmoney.com"))
             {
                 downloadURL = downloadURL.Replace(".jpg", ".JPG");
-            }
+            }*/
 
             // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, downloadURL);
+            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
@@ -118,7 +118,7 @@ namespace PGRipper.ImageHosts
                 var client = new WebClient();
                 client.Headers.Add(string.Format("Referer: {0}", imageURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(downloadURL, filePath);
+                client.DownloadFile(imageDownloadURL, filePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
@@ -147,7 +147,7 @@ namespace PGRipper.ImageHosts
             }
 
             ((CacheObject)EventTable[imageURL]).IsDownloaded = true;
-            CacheController.GetInstance().LastPic = ((CacheObject)EventTable[imageURL]).FilePath = filePath;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[imageURL]).FilePath = filePath;
 
             return true;
         }
