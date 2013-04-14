@@ -146,9 +146,9 @@ namespace RiPRipper
             // pictureBox2
             // 
             this.pictureBox2.Location = new System.Drawing.Point(8, 24);
-            this.pictureBox2.MaximumSize = new System.Drawing.Size(16, 11);
+            this.pictureBox2.MaximumSize = new System.Drawing.Size(16, 16);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 11);
+            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
             this.pictureBox2.TabIndex = 12;
             this.pictureBox2.TabStop = false;
             // 

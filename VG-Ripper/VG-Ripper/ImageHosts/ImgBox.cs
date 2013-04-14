@@ -45,14 +45,13 @@ namespace RiPRipper.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            var imageURL = ImageLinkURL;
+            var filePath = string.Empty;
 
-            if (EventTable.ContainsKey(strImgURL))
+            if (EventTable.ContainsKey(imageURL))
             {
                 return true;
             }
-
-            var filePath = string.Empty;
 
             try
             {
@@ -69,11 +68,11 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = strImgURL };
+            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = imageURL };
 
             try
             {
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(imageURL, cacheObject);
             }
             catch (ThreadAbortException)
             {
@@ -81,28 +80,28 @@ namespace RiPRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (EventTable.ContainsKey(strImgURL))
+                if (EventTable.ContainsKey(imageURL))
                 {
                     return false;
                 }
 
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(imageURL, cacheObject);
             }
 
-            var page = GetImageHostPage(ref strImgURL);
+            var page = GetImageHostPage(ref imageURL);
 
             if (page.Length < 10)
             {
                 return false;
             }
 
-            string strNewURL;
+            string imageDownloadURL;
 
             var m = Regex.Match(page, @"id=\""img\"".*?src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""", RegexOptions.Compiled);
 
             if (m.Success)
             {
-                strNewURL = m.Groups["inner"].Value.Replace("&amp;", "&");
+                imageDownloadURL = m.Groups["inner"].Value.Replace("&amp;", "&");
                 filePath = m.Groups["title"].Value;
             }
             else
@@ -129,13 +128,13 @@ namespace RiPRipper.ImageHosts
             try
             {
                 var webClient = new WebClient();
-                webClient.Headers.Add(string.Format("Referer: {0}", strImgURL));
-                webClient.DownloadFile(strNewURL, filePath);
+                webClient.Headers.Add(string.Format("Referer: {0}", imageURL));
+                webClient.DownloadFile(imageDownloadURL, filePath);
                 webClient.Dispose();
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
@@ -145,14 +144,14 @@ namespace RiPRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
