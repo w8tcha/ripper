@@ -224,10 +224,13 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoUpdater.cs" />
+    <Compile Include="ImageHosts\FreeImagePic.cs" />
     <Compile Include="ImageHosts\ImageFolks.cs" />
+    <Compile Include="ImageHosts\ImGah.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
+    <Compile Include="ImageHosts\ImgUr.cs" />
     <Compile Include="ImageHosts\ImgWoot.cs" />
     <Compile Include="ImageHosts\PixRoute.cs" />
     <Compile Include="ImageHosts\ImagePicasa.cs" />
@@ -241,6 +244,7 @@
     <Compile Include="ImageHosts\ImageUpper.cs" />
     <Compile Include="ImageHosts\ImgChili.cs" />
     <Compile Include="ImageHosts\ImgDepot.cs" />
+    <Compile Include="ImageHosts\TusPics.cs" />
     <Compile Include="Objects\CacheObject.cs" />
     <Compile Include="Objects\CookiePair.cs" />
     <Compile Include="ImageDownloader.cs" />

@@ -583,6 +583,22 @@ namespace RiPRipper
             {
                 lThreadStart = imageDownloader.GetImgPo;
             }
+            else if (imageUrl.IndexOf(@"imgah.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImGah;
+            }
+            else if (imageUrl.IndexOf(@"imgur.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgUr;
+            }
+            else if (imageUrl.IndexOf(@"tuspics.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetTusPics;
+            }
+            else if (imageUrl.IndexOf(@"freeimagepic.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetFreeImagePic;
+            }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
