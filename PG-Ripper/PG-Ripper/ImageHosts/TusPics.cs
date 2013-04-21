@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgBox.cs" company="The Watcher">
+// <copyright file="TusPics.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -15,25 +15,24 @@ namespace PGRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
-    using System.Text.RegularExpressions;
     using System.Threading;
 
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgBox.com
+    /// Worker class to get images from TusPics.net
     /// </summary>
-    public class ImgBox : ServiceTemplate
+    public class TusPics : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgBox" /> class.
+        /// Initializes a new instance of the <see cref="TusPics" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgBox(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+        public TusPics(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
@@ -42,17 +41,19 @@ namespace PGRipper.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Returns if the Image was downloaded
+        /// Return if Downloaded or not
         /// </returns>
         protected override bool DoDownload()
         {
             var imageURL = ImageLinkURL;
-            var filePath = string.Empty;
+            var thumbURL = ThumbImageURL;
 
             if (EventTable.ContainsKey(imageURL))
             {
                 return true;
             }
+
+            var filePath = string.Empty;
 
             try
             {
@@ -89,54 +90,36 @@ namespace PGRipper.ImageHosts
                 EventTable.Add(imageURL, cacheObject);
             }
 
-            var page = GetImageHostPage(ref imageURL);
+            // Set the download Path
+            var imageDownloadURL = thumbURL.Replace(@"_t", string.Empty);
 
-            if (page.Length < 10)
-            {
-                return false;
-            }
-
-            string imageDownloadURL;
-
-            var m = Regex.Match(page, @"id=\""img\"".*?src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""", RegexOptions.Compiled);
-
-            if (m.Success)
-            {
-                imageDownloadURL = m.Groups["inner"].Value.Replace("&amp;", "&");
-                filePath = m.Groups["title"].Value;
-            }
-            else
-            {
-                return false;
-            }
+            // Set Image Name instead of using random name
+            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
-            if (!Directory.Exists(this.SavePath))
-            {
-                Directory.CreateDirectory(this.SavePath);
-            }
-
             //////////////////////////////////////////////////////////////////////////
 
-            string newAlteredPath = Utility.GetSuitableName(filePath);
+            var newAlteredPath = Utility.GetSuitableName(filePath, true);
+
             if (filePath != newAlteredPath)
             {
                 filePath = newAlteredPath;
-                ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
+                ((CacheObject)EventTable[imageURL]).FilePath = filePath;
             }
 
             try
             {
-                var webClient = new WebClient();
-                webClient.Headers.Add(string.Format("Referer: {0}", imageURL));
-                webClient.DownloadFile(imageDownloadURL, filePath);
-                webClient.Dispose();
+                var client = new WebClient();
+                client.Headers.Add(string.Format("Referer: {0}", imageURL));
+                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
+                client.DownloadFile(imageDownloadURL, filePath);
+                client.Dispose();
             }
             catch (ThreadAbortException)
             {
                 ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
 
                 return true;
             }
@@ -146,20 +129,20 @@ namespace PGRipper.ImageHosts
                 MainForm.Delete = true;
 
                 ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
 
                 return true;
             }
             catch (WebException)
             {
                 ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = filePath;
+            ((CacheObject)EventTable[imageURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[imageURL]).FilePath = filePath;
 
             return true;
         }

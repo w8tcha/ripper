@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgBox.cs" company="The Watcher">
+// <copyright file="ImGah.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -21,19 +21,19 @@ namespace PGRipper.ImageHosts
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgBox.com
+    /// Worker class to get images from ImGah.com
     /// </summary>
-    public class ImgBox : ServiceTemplate
+    public class ImGah : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgBox" /> class.
+        /// Initializes a new instance of the <see cref="ImGah" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgBox(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+        public ImGah(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
@@ -98,11 +98,11 @@ namespace PGRipper.ImageHosts
 
             string imageDownloadURL;
 
-            var m = Regex.Match(page, @"id=\""img\"".*?src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""", RegexOptions.Compiled);
+            var m = Regex.Match(page, @"<img class=\""pic\"" src=\""(?<inner>[^\""]*)\"".*?alt=\""(?<title>[^\""]*)\""", RegexOptions.Compiled);
 
             if (m.Success)
             {
-                imageDownloadURL = m.Groups["inner"].Value.Replace("&amp;", "&");
+                imageDownloadURL = m.Groups["inner"].Value;
                 filePath = m.Groups["title"].Value;
             }
             else
@@ -158,8 +158,8 @@ namespace PGRipper.ImageHosts
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = filePath;
+            ((CacheObject)EventTable[this.ImageLinkURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
 
             return true;
         }

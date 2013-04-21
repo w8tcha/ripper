@@ -93,11 +93,6 @@ namespace PGRipper.ImageHosts
             // Set the download Path
             var imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
 
-            /*if (downloadURL.Contains("imgmoney.com"))
-            {
-                downloadURL = downloadURL.Replace(".jpg", ".JPG");
-            }*/
-
             // Set Image Name instead of using random name
             filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
