@@ -914,6 +914,42 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Get ImGah Download
+        /// </summary>
+        public void GetImGah()
+        {
+            this.xService = new ImGah(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get ImgUr Download
+        /// </summary>
+        public void GetImgUr()
+        {
+            this.xService = new ImgUr(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get TusPics Download
+        /// </summary>
+        public void GetTusPics()
+        {
+            this.xService = new TusPics(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get FreeImagePic Download
+        /// </summary>
+        public void GetFreeImagePic()
+        {
+            this.xService = new FreeImagePic(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()
