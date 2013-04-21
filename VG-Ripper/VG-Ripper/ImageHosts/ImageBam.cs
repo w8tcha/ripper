@@ -36,19 +36,15 @@ namespace RiPRipper.ImageHosts
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImageBam"/> class.
+        /// Initializes a new instance of the <see cref="ImageBam" /> class.
         /// </summary>
-        /// <param name="sSavePath">
-        /// The s save path.
-        /// </param>
-        /// <param name="strURL">
-        /// The str url.
-        /// </param>
-        /// <param name="hTbl">
-        /// The h tbl.
-        /// </param>
-        public ImageBam(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        /// <param name="savePath">The save path.</param>
+        /// <param name="imageUrl">The image URL.</param>
+        /// <param name="thumbUrl">The thumb URL.</param>
+        /// <param name="imageName">Name of the image.</param>
+        /// <param name="hashtable">The hash table.</param>
+        public ImageBam(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
             // Add constructor logic here
         }
@@ -65,9 +61,9 @@ namespace RiPRipper.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            string strImgURL = this.ImageLinkURL;
+            string imageURL = this.ImageLinkURL;
 
-            if (this.EventTable.ContainsKey(strImgURL))
+            if (this.EventTable.ContainsKey(imageURL))
             {
                 return true;
             }
@@ -87,13 +83,13 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            string strFilePath = string.Empty;
+            var filePath = string.Empty;
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            CacheObject cacheObject = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = imageURL };
 
             try
             {
-                this.EventTable.Add(strImgURL, ccObj);
+                this.EventTable.Add(imageURL, cacheObject);
             }
             catch (ThreadAbortException)
             {
@@ -101,73 +97,62 @@ namespace RiPRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (this.EventTable.ContainsKey(strImgURL))
+                if (this.EventTable.ContainsKey(imageURL))
                 {
                     return false;
                 }
 
-                this.EventTable.Add(strImgURL, ccObj);
+                this.EventTable.Add(imageURL, cacheObject);
             }
 
-            string pageContent = this.GetImageHostPage(ref strImgURL);
+            string pageContent = this.GetImageHostPage(ref imageURL);
 
             if (pageContent.Length < 10)
             {
                 return false;
             }
 
-            string strNewURL;
+            string imageDownloadURL;
 
             var m = Regex.Match(pageContent, @";\"" src=\""(?<inner>[^\""]*)\"" alt=\""loading\""", RegexOptions.Singleline);
 
             if (m.Success)
             {
-                strNewURL = m.Groups["inner"].Value;
+                imageDownloadURL = m.Groups["inner"].Value;
             }
             else
             {
                 return false;
             }
 
-            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
-
-            if (strNewURL.Contains("amazonaws.com/bambackup/"))
+            if (imageDownloadURL.Contains("filename="))
             {
-                var fileMatch = Regex.Match(
-                    strNewURL, @"bambackup/(?<inner>[^AWS]*)AWSAccessKeyId", RegexOptions.Singleline);
-
-                if (fileMatch.Success)
-                {
-                    strFilePath = string.Format("{0}.jpg", fileMatch.Groups["inner"].Value);
-                }
+                imageDownloadURL = HttpUtility.HtmlDecode(imageDownloadURL);
             }
 
-            if (strNewURL.Contains("filename="))
-            {
-                strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("=", StringComparison.Ordinal) + 1);
-                strNewURL = HttpUtility.HtmlDecode(strNewURL);
-            }
+            // Set Image Name instead of using random name
+            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
-            strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
             //////////////////////////////////////////////////////////////////////////
-            string sNewAlteredPath = Utility.GetSuitableName(strFilePath);
-            if (strFilePath != sNewAlteredPath)
+            string sNewAlteredPath = Utility.GetSuitableName(filePath);
+            if (filePath != sNewAlteredPath)
             {
-                strFilePath = sNewAlteredPath;
-                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
+                filePath = sNewAlteredPath;
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = filePath;
             }
 
             try
             {
                 WebClient client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
-                client.DownloadFile(strNewURL, strFilePath);
+                client.Headers.Add(string.Format("Referer: {0}", imageURL));
+                client.DownloadFile(imageDownloadURL, filePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
@@ -177,14 +162,14 @@ namespace RiPRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
@@ -192,7 +177,7 @@ namespace RiPRipper.ImageHosts
 
             ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
             CacheController.Instance().LastPic =
-                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = filePath;
 
             return true;
         }

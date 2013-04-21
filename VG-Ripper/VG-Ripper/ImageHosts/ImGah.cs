@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImagePicasa.cs" company="The Watcher">
+// <copyright file="ImGah.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -15,23 +15,24 @@ namespace RiPRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImagePicasa.com
+    /// Worker class to get images from ImGah.com
     /// </summary>
-    public class ImagePicasa : ServiceTemplate
+    public class ImGah : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImagePicasa" /> class.
+        /// Initializes a new instance of the <see cref="ImGah" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImagePicasa(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+        public ImGah(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
@@ -45,14 +46,12 @@ namespace RiPRipper.ImageHosts
         protected override bool DoDownload()
         {
             var imageURL = ImageLinkURL;
-            var thumbURL = ThumbImageURL;
+            var filePath = string.Empty;
 
             if (EventTable.ContainsKey(imageURL))
             {
                 return true;
             }
-
-            var filePath = string.Empty;
 
             try
             {
@@ -89,30 +88,49 @@ namespace RiPRipper.ImageHosts
                 EventTable.Add(imageURL, cacheObject);
             }
 
-            // Set the download Path
-            var imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
+            var page = GetImageHostPage(ref imageURL);
 
-            // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            if (page.Length < 10)
+            {
+                return false;
+            }
+
+            string imageDownloadURL;
+
+            var m = Regex.Match(page, @"<img class=\""pic\"" src=\""(?<inner>[^\""]*)\"".*?alt=\""(?<title>[^\""]*)\""", RegexOptions.Compiled);
+
+            if (m.Success)
+            {
+                imageDownloadURL = m.Groups["inner"].Value;
+                filePath = m.Groups["title"].Value;
+            }
+            else
+            {
+                return false;
+            }
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
+            if (!Directory.Exists(this.SavePath))
+            {
+                Directory.CreateDirectory(this.SavePath);
+            }
+
             //////////////////////////////////////////////////////////////////////////
 
-            var newAlteredPath = Utility.GetSuitableName(filePath);
+            string newAlteredPath = Utility.GetSuitableName(filePath);
             if (filePath != newAlteredPath)
             {
                 filePath = newAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = filePath;
+                ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
             }
 
             try
             {
-                WebClient client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", imageURL));
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(imageDownloadURL, filePath);
-                client.Dispose();
+                var webClient = new WebClient();
+                webClient.Headers.Add(string.Format("Referer: {0}", imageURL));
+                webClient.DownloadFile(imageDownloadURL, filePath);
+                webClient.Dispose();
             }
             catch (ThreadAbortException)
             {
@@ -139,8 +157,8 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = filePath;
+            ((CacheObject)EventTable[this.ImageLinkURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
 
             return true;
         }
