@@ -73,8 +73,14 @@ namespace RiPRipper
             this.tmrPageUpdate = new System.Timers.Timer();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.afterDownloadsFinishedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.doNothingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeRipperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showLastImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.useCliboardMonitoringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -332,6 +338,7 @@ namespace RiPRipper
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.settingsToolStripMenuItem2,
             this.settingsToolStripMenuItem});
             this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
@@ -343,31 +350,79 @@ namespace RiPRipper
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.settingsToolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
-            // settingsToolStripMenuItem1
-            // 
-            this.settingsToolStripMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.settingsToolStripMenuItem1.Name = "settingsToolStripMenuItem1";
-            this.settingsToolStripMenuItem1.Size = new System.Drawing.Size(116, 22);
-            this.settingsToolStripMenuItem1.Text = "&Settings";
-            this.settingsToolStripMenuItem1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.settingsToolStripMenuItem1.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.settingsToolStripMenuItem1.Click += new System.EventHandler(this.SettingsToolStripMenuItem1Click);
-            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.exitToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
+            // 
+            // settingsToolStripMenuItem2
+            // 
+            this.settingsToolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem,
+            this.afterDownloadsFinishedToolStripMenuItem,
+            this.showLastImageToolStripMenuItem,
+            this.useCliboardMonitoringToolStripMenuItem});
+            this.settingsToolStripMenuItem2.Name = "settingsToolStripMenuItem2";
+            this.settingsToolStripMenuItem2.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem2.Text = "Settings";
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.optionsToolStripMenuItem.Text = "Options";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem1Click);
+            // 
+            // afterDownloadsFinishedToolStripMenuItem
+            // 
+            this.afterDownloadsFinishedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.doNothingToolStripMenuItem,
+            this.closeRipperToolStripMenuItem});
+            this.afterDownloadsFinishedToolStripMenuItem.Name = "afterDownloadsFinishedToolStripMenuItem";
+            this.afterDownloadsFinishedToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.afterDownloadsFinishedToolStripMenuItem.Text = "After Download(s) finished...";
+            // 
+            // doNothingToolStripMenuItem
+            // 
+            this.doNothingToolStripMenuItem.CheckOnClick = true;
+            this.doNothingToolStripMenuItem.Name = "doNothingToolStripMenuItem";
+            this.doNothingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.doNothingToolStripMenuItem.Text = "Do Nothing";
+            this.doNothingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.DoNothingToolStripMenuItem_CheckedChanged);
+            // 
+            // closeRipperToolStripMenuItem
+            // 
+            this.closeRipperToolStripMenuItem.CheckOnClick = true;
+            this.closeRipperToolStripMenuItem.Name = "closeRipperToolStripMenuItem";
+            this.closeRipperToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeRipperToolStripMenuItem.Text = "Close Ripper";
+            this.closeRipperToolStripMenuItem.CheckedChanged += new System.EventHandler(this.CloseRipperToolStripMenuItem_CheckedChanged);
+            // 
+            // showLastImageToolStripMenuItem
+            // 
+            this.showLastImageToolStripMenuItem.CheckOnClick = true;
+            this.showLastImageToolStripMenuItem.Name = "showLastImageToolStripMenuItem";
+            this.showLastImageToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.showLastImageToolStripMenuItem.Text = "Show Last Image";
+            this.showLastImageToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ShowLastImageToolStripMenuItem_CheckedChanged);
+            // 
+            // useCliboardMonitoringToolStripMenuItem
+            // 
+            this.useCliboardMonitoringToolStripMenuItem.CheckOnClick = true;
+            this.useCliboardMonitoringToolStripMenuItem.Name = "useCliboardMonitoringToolStripMenuItem";
+            this.useCliboardMonitoringToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.useCliboardMonitoringToolStripMenuItem.Text = "Use Cliboard Monitoring";
+            this.useCliboardMonitoringToolStripMenuItem.CheckedChanged += new System.EventHandler(this.UseCliboardMonitoringToolStripMenuItem_CheckedChanged);
             // 
             // settingsToolStripMenuItem
             // 
@@ -541,7 +596,6 @@ namespace RiPRipper
         private CheckBox mIsIndexChk;
         private MenuStrip menuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem settingsToolStripMenuItem1;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
@@ -564,5 +618,12 @@ namespace RiPRipper
         private ColumnHeader columnHeader2;
         private System.ComponentModel.BackgroundWorker GetPostsWorker;
         private System.ComponentModel.BackgroundWorker GetIdxsWorker;
+        private ToolStripMenuItem settingsToolStripMenuItem2;
+        private ToolStripMenuItem optionsToolStripMenuItem;
+        private ToolStripMenuItem showLastImageToolStripMenuItem;
+        private ToolStripMenuItem useCliboardMonitoringToolStripMenuItem;
+        private ToolStripMenuItem afterDownloadsFinishedToolStripMenuItem;
+        private ToolStripMenuItem doNothingToolStripMenuItem;
+        private ToolStripMenuItem closeRipperToolStripMenuItem;
     }
 }

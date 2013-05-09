@@ -61,6 +61,15 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wenn alle Download(s) beendet sind....
+        /// </summary>
+        internal static string AfterDownload {
+            get {
+                return ResourceManager.GetString("AfterDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System extrahiert....
         /// </summary>
         internal static string bSystemExtr {
@@ -237,6 +246,33 @@ namespace RiPRipper.Languages {
         internal static string chRememberCred {
             get {
                 return ResourceManager.GetString("chRememberCred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zwischenablage überwachen.
+        /// </summary>
+        internal static string clipboardWatch {
+            get {
+                return ResourceManager.GetString("clipboardWatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ripper Schließen.
+        /// </summary>
+        internal static string CloseRipper {
+            get {
+                return ResourceManager.GetString("CloseRipper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nichts tun.
+        /// </summary>
+        internal static string DoNothing {
+            get {
+                return ResourceManager.GetString("DoNothing", resourceCulture);
             }
         }
         
@@ -655,11 +691,29 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optionen.
+        /// </summary>
+        internal static string MenuOptions {
+            get {
+                return ResourceManager.GetString("MenuOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Einstellungen.
         /// </summary>
         internal static string MenuSettings {
             get {
                 return ResourceManager.GetString("MenuSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zuletzt heruntergeladenes Bild anzeigen.
+        /// </summary>
+        internal static string ShowLastDownloaded {
+            get {
+                return ResourceManager.GetString("ShowLastDownloaded", resourceCulture);
             }
         }
         

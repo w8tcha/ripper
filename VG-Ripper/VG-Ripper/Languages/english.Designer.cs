@@ -61,6 +61,15 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to After Download(s) finished....
+        /// </summary>
+        internal static string AfterDownload {
+            get {
+                return ResourceManager.GetString("AfterDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap App1 {
@@ -242,6 +251,24 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clipboard Monitoring.
+        /// </summary>
+        internal static string clipboardWatch {
+            get {
+                return ResourceManager.GetString("clipboardWatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Ripper.
+        /// </summary>
+        internal static string CloseRipper {
+            get {
+                return ResourceManager.GetString("CloseRipper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extracting.
         /// </summary>
         internal static string CurrentlyExtract {
@@ -261,12 +288,11 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized string similar to Do Nothing.
         /// </summary>
-        internal static System.Drawing.Icon Download {
+        internal static string DoNothing {
             get {
-                object obj = ResourceManager.GetObject("Download", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetString("DoNothing", resourceCulture);
             }
         }
         
@@ -695,6 +721,15 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        internal static string MenuOptions {
+            get {
+                return ResourceManager.GetString("MenuOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string MenuSettings {
@@ -734,12 +769,11 @@ namespace RiPRipper.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized string similar to Show Last Download Image.
         /// </summary>
-        internal static System.Drawing.Icon Sleep {
+        internal static string ShowLastDownloaded {
             get {
-                object obj = ResourceManager.GetObject("Sleep", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                return ResourceManager.GetString("ShowLastDownloaded", resourceCulture);
             }
         }
         
