@@ -31,8 +31,8 @@ using System.Reflection;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("1.4.1.0")]
-[assembly: AssemblyFileVersionAttribute("1.4.1.0")]
+[assembly: AssemblyVersion("1.4.1.1")]
+[assembly: AssemblyFileVersionAttribute("1.4.1.1")]
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyName("")]

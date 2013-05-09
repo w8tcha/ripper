@@ -409,8 +409,23 @@ namespace PGRipper
                     "PGRipper.Languages.english", Assembly.GetExecutingAssembly());
             }
 
+            switch (this.userSettings.AfterDownloads)
+            {
+                case 0:
+                    this.doNothingToolStripMenuItem.Checked = true;
+                    this.closeRipperToolStripMenuItem.Checked = false;
+                    break;
+                case 1:
+                    this.doNothingToolStripMenuItem.Checked = false;
+                    this.closeRipperToolStripMenuItem.Checked = true;
+                    break;
+            }
+
             // Load Show Last Download Image
             this.groupBox4.Visible = this.userSettings.ShowLastDownloaded;
+
+            this.showLastImageToolStripMenuItem.Checked = this.userSettings.ShowLastDownloaded;
+            this.useCliboardMonitoringToolStripMenuItem.Checked = this.userSettings.ClipBWatch;
 
             try
             {
@@ -490,9 +505,17 @@ namespace PGRipper
 
             // Menue
             this.fileToolStripMenuItem.Text = this._ResourceManager.GetString("MenuFile");
-            this.settingsToolStripMenuItem1.Text = this._ResourceManager.GetString("MenuSettings");
             this.exitToolStripMenuItem.Text = this._ResourceManager.GetString("MenuExit");
+
             this.accountsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuAccounts");
+
+            this.optionsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuOptions");
+            this.settingsToolStripMenuItem2.Text = this._ResourceManager.GetString("MenuSettings");
+            this.showLastImageToolStripMenuItem.Text = this._ResourceManager.GetString("ShowLastDownloaded");
+            this.useCliboardMonitoringToolStripMenuItem.Text = this._ResourceManager.GetString("clipboardWatch");
+            this.afterDownloadsFinishedToolStripMenuItem.Text = this._ResourceManager.GetString("AfterDownload");
+            this.doNothingToolStripMenuItem.Text = this._ResourceManager.GetString("DoNothing");
+            this.closeRipperToolStripMenuItem.Text = this._ResourceManager.GetString("CloseRipper"); 
 
             this.settingsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuHelp");
             this.helpToolStripMenuItem.Text = this._ResourceManager.GetString("MenuAbout");
@@ -1021,7 +1044,6 @@ namespace PGRipper
                 Environment.OSVersion.Version.Minor >= 1)
             {
                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
             }
 #endif
 
@@ -1039,7 +1061,6 @@ namespace PGRipper
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                         this.windowsTaskbar.SetProgressValue(10, 100);
-                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
                     // Unlock Controls
@@ -1058,7 +1079,6 @@ namespace PGRipper
                 {
                     this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                     this.windowsTaskbar.SetProgressValue(10, 100);
-                    this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                 }
 #endif
                 // Unlock Controls
@@ -1088,7 +1108,6 @@ namespace PGRipper
                 Environment.OSVersion.Version.Minor >= 1)
             {
                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
             }
 #endif
 
@@ -1106,7 +1125,6 @@ namespace PGRipper
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                         this.windowsTaskbar.SetProgressValue(10, 100);
-                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
                     // Unlock Controls
@@ -1125,7 +1143,6 @@ namespace PGRipper
                 {
                     this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                     this.windowsTaskbar.SetProgressValue(10, 100);
-                    this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                 }
 #endif
                 // Unlock Controls
@@ -1572,7 +1589,6 @@ namespace PGRipper
                             Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 1)
                         {
                             this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                            this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
                         }
 #endif
 
@@ -1821,7 +1837,6 @@ namespace PGRipper
                         Environment.OSVersion.Version.Minor >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
                     }
 #endif
                     // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
@@ -1970,25 +1985,23 @@ namespace PGRipper
             {
                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                 this.windowsTaskbar.SetProgressValue(10, 100);
-                this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
             }
 
             string btleExit = this._ResourceManager.GetString("btleExit"), btexExit = this._ResourceManager.GetString("btexExit");
 
             if (this.endingRip && this.userSettings.ShowCompletePopUp)
             {
-                trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                trayIcon.BalloonTipTitle = btleExit;
-                trayIcon.BalloonTipText = btexExit;
-                trayIcon.ShowBalloonTip(10);
+                this.trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                this.trayIcon.BalloonTipTitle = btleExit;
+                this.trayIcon.BalloonTipText = btexExit;
+                this.trayIcon.ShowBalloonTip(10);
             }
 #endif
-            stopCurrentThreads.Enabled = true;
-            this.stopingJob = false;
-            this.endingRip = false;
-            this.parseActive = false;
+            this.lvCurJob.Items.Clear();
 
-            lvCurJob.Items.Clear();
+            this.stopCurrentThreads.Enabled = true;
+            this.stopingJob = false;
+            
             if (this.InvokeRequired)
             {
                 this.Invoke(
@@ -2006,13 +2019,25 @@ namespace PGRipper
 
             progressBar1.Value = 0;
 
-            string ttlHeader = this._ResourceManager.GetString("ttlHeader");
+            if (this.endingRip && this.userSettings.AfterDownloads.Equals(1))
+            {
+                this.Close();
+            }
+            else
+            {
 
-            this.groupBox2.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
-            this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
-            StatusLabelInfo.ForeColor = Color.Gray;
 
-            lvCurJob.Columns[0].Text = "  ";
+
+                this.endingRip = false;
+                this.parseActive = false;
+
+                string ttlHeader = this._ResourceManager.GetString("ttlHeader");
+
+                this.groupBox2.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
+                this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
+                StatusLabelInfo.ForeColor = Color.Gray;
+
+                lvCurJob.Columns[0].Text = "  ";
 
 #if (PGRIPPER)
             this.Text = string.Format(
@@ -2032,50 +2057,55 @@ namespace PGRipper
                     Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
                     string.Format("{0}{1}\" @ {2} ]", ttlHeader, this.userSettings.CurrentUserName, this.userSettings.CurrentForumUrl));
 #else
-            this.Text = string.Format(
-                "PG-Ripper {0}.{1}.{2}{3}{4}",
-                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
-                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                string.Format("{0}{1}\" @ {2} ]", ttlHeader, this.userSettings.CurrentUserName, this.userSettings.CurrentForumUrl));
+                this.Text = string.Format(
+                    "PG-Ripper {0}.{1}.{2}{3}{4}",
+                    Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
+                    string.Format(
+                        "{0}{1}\" @ {2} ]",
+                        ttlHeader,
+                        this.userSettings.CurrentUserName,
+                        this.userSettings.CurrentForumUrl));
 
-            trayIcon.Text = "Right click for context menu";
+                trayIcon.Text = "Right click for context menu";
 #endif
-            // Since no picbox image will be visible until another job is queued,
-            // reclaim resources used by any previous image in the picturebox
-            // This prevents file locking of downloaded images until the process exits
-            /*if (pictureBox1.Image != null)
-            {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-            }*/
+                // Since no picbox image will be visible until another job is queued,
+                // reclaim resources used by any previous image in the picturebox
+                // This prevents file locking of downloaded images until the process exits
+                /*if (pictureBox1.Image != null)
+                {
+                    pictureBox1.Image.Dispose();
+                    pictureBox1.Image = null;
+                }*/
 
-            if (this.imgLastPic != null)
-            {
-                this.imgLastPic.Dispose();
-                this.imgLastPic = null;
+                if (this.imgLastPic != null)
+                {
+                    this.imgLastPic.Dispose();
+                    this.imgLastPic = null;
+                }
+
+                if (pictureBox1.Image != null)
+                {
+                    pictureBox1.Image.Dispose();
+                    pictureBox1.Image = null;
+                }
+
+                if (pictureBox1.BackgroundImage != null)
+                {
+                    pictureBox1.BackgroundImage.Dispose();
+                    pictureBox1.BackgroundImage = null;
+                }
+
+                // Hide any image last displayed in the picturebox
+                pictureBox1.Visible = false;
+
+                deleteJob.Enabled = false;
+                stopCurrentThreads.Enabled = false;
+
+                this.working = false;
             }
-
-            if (pictureBox1.Image != null)
-            {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-            }
-
-            if (pictureBox1.BackgroundImage != null)
-            {
-                pictureBox1.BackgroundImage.Dispose();
-                pictureBox1.BackgroundImage = null;
-            }
-
-            // Hide any image last displayed in the picturebox
-            pictureBox1.Visible = false;
-
-            deleteJob.Enabled = false;
-            stopCurrentThreads.Enabled = false;
-
-            this.working = false;
         }
 
         /// <summary>
@@ -2543,7 +2573,7 @@ namespace PGRipper
         }
 
         /// <summary>
-        /// Settingses the tool strip menu item1 click.
+        /// Open the Options Dialog
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -2554,7 +2584,7 @@ namespace PGRipper
                 this.SaveHistory();
             }
 
-            Options oForm = new Options();
+            var oForm = new Options();
             oForm.ShowDialog();
 
             this.LoadSettings();
@@ -3195,6 +3225,60 @@ namespace PGRipper
 
             this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse");
             StatusLabelInfo.ForeColor = Color.Green;
+        }
+
+        /// <summary>
+        /// Enable/Disable Show last image
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void ShowLastImageToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.userSettings.ShowLastDownloaded = this.showLastImageToolStripMenuItem.Checked;
+
+            this.groupBox4.Visible = this.showLastImageToolStripMenuItem.Checked;
+
+            Utility.SaveSettings(this.userSettings);
+        }
+
+        /// <summary>
+        /// Enable/Disable Clipboard Monitoring
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void UseCliboardMonitoringToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.userSettings.ClipBWatch = this.useCliboardMonitoringToolStripMenuItem.Checked;
+
+            Utility.SaveSettings(this.userSettings);
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the DoNothingToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void DoNothingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.closeRipperToolStripMenuItem.Checked = !this.doNothingToolStripMenuItem.Checked;
+
+            this.userSettings.AfterDownloads = 0;
+
+            Utility.SaveSettings(this.userSettings);
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the CloseRipperToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void CloseRipperToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.doNothingToolStripMenuItem.Checked = !this.closeRipperToolStripMenuItem.Checked;
+
+            this.userSettings.AfterDownloads = 1;
+
+            Utility.SaveSettings(this.userSettings);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgWoot.cs" company="The Watcher">
+// <copyright file="ImgServe.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -20,19 +20,19 @@ namespace PGRipper.ImageHosts
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us
+    /// Worker class to get images from ImgServe.net
     /// </summary>
-    public class ImgWoot : ServiceTemplate
+    public class ImgServe : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgWoot" /> class.
+        /// Initializes a new instance of the <see cref="ImgServe" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgWoot(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+        public ImgServe(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
@@ -89,9 +89,9 @@ namespace PGRipper.ImageHosts
 
                 EventTable.Add(imageURL, cacheObject);
             }
-            
+
             // Set the download Path
-            var imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
+            var imageDownloadURL = thumbURL.Replace(@"/images/small/", @"/images/big/");
 
             // Set Image Name instead of using random name
             filePath = this.GetImageName(this.PostTitle, imageDownloadURL);

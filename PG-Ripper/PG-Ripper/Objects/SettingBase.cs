@@ -24,6 +24,7 @@ namespace PGRipper.Objects
         /// </summary>
         public SettingBase()
         {
+            this.AfterDownloads = 0;
             this.ShowLastDownloaded = true;
             this.ClipBWatch = true;
             this.ShowPopUps = true;
@@ -131,7 +132,7 @@ namespace PGRipper.Objects
         public int ThreadLimit { get; set; }
 
         /// <summary>
-        ///  Gets or sets the The Downloadfolder Location
+        ///  Gets or sets the The Download folder Location
         /// </summary>
         public string DownloadFolder { get; set; }
 
@@ -169,5 +170,13 @@ namespace PGRipper.Objects
         /// Gets or sets a value indicating whether [currently pause threads].
         /// </summary>
         public bool CurrentlyPauseThreads { get; set; }
+
+        /// <summary>
+        /// Gets or sets the after downloads.
+        /// </summary>
+        /// <value>
+        /// The after downloads.
+        /// </value>
+        public int AfterDownloads { get; set; }
     }
 }

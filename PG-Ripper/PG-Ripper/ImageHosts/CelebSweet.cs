@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgWoot.cs" company="The Watcher">
+// <copyright file="CelebSweet.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -15,24 +15,25 @@ namespace PGRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
+    using System.Text.RegularExpressions;
     using System.Threading;
 
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us
+    /// Worker class to get images from CelebSweet.6te.net
     /// </summary>
-    public class ImgWoot : ServiceTemplate
+    public class CelebSweet : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgWoot" /> class.
+        /// Initializes a new instance of the <see cref="CelebSweet" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgWoot(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+        public CelebSweet(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
@@ -41,19 +42,17 @@ namespace PGRipper.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Return if Downloaded or not
+        /// Returns if the Image was downloaded
         /// </returns>
         protected override bool DoDownload()
         {
             var imageURL = ImageLinkURL;
-            var thumbURL = ThumbImageURL;
+            var filePath = string.Empty;
 
             if (EventTable.ContainsKey(imageURL))
             {
                 return true;
             }
-
-            var filePath = string.Empty;
 
             try
             {
@@ -89,37 +88,54 @@ namespace PGRipper.ImageHosts
 
                 EventTable.Add(imageURL, cacheObject);
             }
-            
-            // Set the download Path
-            var imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
 
-            // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            var page = GetImageHostPage(ref imageURL);
+
+            if (page.Length < 10)
+            {
+                return false;
+            }
+
+            string imageDownloadURL = imageURL.Replace("share.php", "image.php");
+            
+            var match = Regex.Match(page, @"title=(?<title>.*?) - ", RegexOptions.Compiled);
+
+            if (match.Success)
+            {
+                filePath = match.Groups["title"].Value;
+            }
+            else
+            {
+                return false;
+            }
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
+            if (!Directory.Exists(this.SavePath))
+            {
+                Directory.CreateDirectory(this.SavePath);
+            }
+
             //////////////////////////////////////////////////////////////////////////
 
-            var newAlteredPath = Utility.GetSuitableName(filePath, true);
-
+            string newAlteredPath = Utility.GetSuitableName(filePath);
             if (filePath != newAlteredPath)
             {
                 filePath = newAlteredPath;
-                ((CacheObject)EventTable[imageURL]).FilePath = filePath;
+                ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
             }
 
             try
             {
-                var client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", imageURL));
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(imageDownloadURL, filePath);
-                client.Dispose();
+                var webClient = new WebClient();
+                webClient.Headers.Add(string.Format("Referer: {0}", imageURL));
+                webClient.DownloadFile(imageDownloadURL, filePath);
+                webClient.Dispose();
             }
             catch (ThreadAbortException)
             {
                 ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
@@ -129,20 +145,20 @@ namespace PGRipper.ImageHosts
                 MainForm.Delete = true;
 
                 ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
                 ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[imageURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[imageURL]).FilePath = filePath;
+            ((CacheObject)EventTable[this.ImageLinkURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
 
             return true;
         }

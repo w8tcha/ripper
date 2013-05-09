@@ -319,12 +319,6 @@
   <data name="lblForums" xml:space="preserve">
     <value>Select Forum:</value>
   </data>
-  <data name="Sleep" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Sleep.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Download.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="btnClose" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -357,5 +351,20 @@
   </data>
   <data name="ShowLastDownloaded" xml:space="preserve">
     <value>Show last download image</value>
+  </data>
+  <data name="MenuOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="AfterDownload" xml:space="preserve">
+    <value>After Download(s) finished...</value>
+  </data>
+  <data name="clipboardWatch" xml:space="preserve">
+    <value>Clipboard Monitoring</value>
+  </data>
+  <data name="CloseRipper" xml:space="preserve">
+    <value>Close Ripper</value>
+  </data>
+  <data name="DoNothing" xml:space="preserve">
+    <value>Do Nothing</value>
   </data>
 </root>
