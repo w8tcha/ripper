@@ -182,12 +182,14 @@
     <Compile Include="About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageHosts\CelebSweet.cs" />
     <Compile Include="ImageHosts\FreeImagePic.cs" />
     <Compile Include="ImageHosts\ImageFolks.cs" />
     <Compile Include="ImageHosts\ImGah.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
+    <Compile Include="ImageHosts\ImgServe.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
     <Compile Include="ImageHosts\ImgWoot.cs" />
     <Compile Include="ImageHosts\PixRoute.cs" />
@@ -205,6 +207,11 @@
     <Compile Include="ImageHosts\TusPics.cs" />
     <Compile Include="ItemFinder.cs" />
     <Compile Include="AutoUpdater.cs" />
+    <Compile Include="Languages\english.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>english.resx</DependentUpon>
+    </Compile>
     <Compile Include="Objects\CacheObject.cs" />
     <Compile Include="Objects\CookiePair.cs" />
     <Compile Include="ImageDownloader.cs" />
@@ -298,11 +305,6 @@
     <Compile Include="ImageHosts\YourPix.cs" />
     <Compile Include="Objects\ForumAccount.cs" />
     <Compile Include="Objects\JobInfo.cs" />
-    <Compile Include="Languages\english.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>english.resx</DependentUpon>
-    </Compile>
     <Compile Include="Languages\french.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

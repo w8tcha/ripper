@@ -24,7 +24,7 @@ namespace PGRipper
         /// <summary>
         /// The Resource Manager Instance
         /// </summary>
-        private ResourceManager rm;
+        private ResourceManager resourceManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Options"/> class.
@@ -104,22 +104,22 @@ namespace PGRipper
                 switch (CacheController.Xform.userSettings.Language)
                 {
                     case "de-DE":
-                        this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
+                        this.resourceManager = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 0;
                         pictureBox2.Image = Languages.english.de;
                         break;
                     case "fr-FR":
-                        this.rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
+                        this.resourceManager = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 1;
                         pictureBox2.Image = Languages.english.fr;
                         break;
                     case "en-EN":
-                        this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this.resourceManager = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;
                     default:
-                        this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this.resourceManager = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;
@@ -139,20 +139,21 @@ namespace PGRipper
         /// </summary>
         private void AdjustCulture()
         {
-            this.groupBox1.Text = this.rm.GetString("downloadOptions");
-            this.label2.Text = this.rm.GetString("lblDownloadFolder");
-            this.button4.Text = this.rm.GetString("btnBrowse");
-            this.checkBox1.Text = this.rm.GetString("chbSubdirectories");
-            this.checkBox8.Text = this.rm.GetString("chbAutoTKButton");
-            this.showTrayPopups.Text = this.rm.GetString("chbShowPopUps");
-            this.checkBox5.Text = this.rm.GetString("chbAlwaysOnTop");
-            this.checkBox9.Text = this.rm.GetString("chbShowDCPopUps");
-            this.mDownInSepFolderChk.Text = this.rm.GetString("chbSubThreadRip");
-            this.saveHistoryChk.Text = this.rm.GetString("chbSaveHistory");
-            this.label6.Text = this.rm.GetString("lblThreadLimit");
-            this.label1.Text = this.rm.GetString("lblminImageCount");
-            this.groupBox3.Text = this.rm.GetString("gbMainOptions");
-            this.checkBox11.Text = this.rm.GetString("ShowLastDownloaded");
+            this.groupBox1.Text = this.resourceManager.GetString("downloadOptions");
+            this.label2.Text = this.resourceManager.GetString("lblDownloadFolder");
+            this.button4.Text = this.resourceManager.GetString("btnBrowse");
+            this.checkBox1.Text = this.resourceManager.GetString("chbSubdirectories");
+            this.checkBox8.Text = this.resourceManager.GetString("chbAutoTKButton");
+            this.showTrayPopups.Text = this.resourceManager.GetString("chbShowPopUps");
+            this.checkBox5.Text = this.resourceManager.GetString("chbAlwaysOnTop");
+            this.checkBox9.Text = this.resourceManager.GetString("chbShowDCPopUps");
+            this.mDownInSepFolderChk.Text = this.resourceManager.GetString("chbSubThreadRip");
+            this.saveHistoryChk.Text = this.resourceManager.GetString("chbSaveHistory");
+            this.label6.Text = this.resourceManager.GetString("lblThreadLimit");
+            this.label1.Text = this.resourceManager.GetString("lblminImageCount");
+            this.groupBox3.Text = this.resourceManager.GetString("gbMainOptions");
+            this.checkBox11.Text = this.resourceManager.GetString("ShowLastDownloaded");
+            this.checkBox10.Text = this.resourceManager.GetString("clipboardWatch");
         }
 
         /// <summary>
@@ -206,9 +207,9 @@ namespace PGRipper
         {
             try
             {
-                string mbThreadNum = this.rm.GetString("mbThreadNum"),
-                    mbThreadbetw = this.rm.GetString("mbThreadbetw"),
-                    mbNum = this.rm.GetString("mbNum");
+                string mbThreadNum = this.resourceManager.GetString("mbThreadNum"),
+                    mbThreadbetw = this.resourceManager.GetString("mbThreadbetw"),
+                    mbNum = this.resourceManager.GetString("mbNum");
 
                 if (!Utility.IsNumeric(numericUDThreads.Text))
                 {
@@ -302,7 +303,7 @@ namespace PGRipper
                 return;
             }
 
-            MessageBox.Show(this, this.rm.GetString("mbThreadbetw"));
+            MessageBox.Show(this, this.resourceManager.GetString("mbThreadbetw"));
                 
             numericUDThreads.Text = "3";
         }
