@@ -330,4 +330,22 @@
   <data name="guestLoginButton" xml:space="preserve">
     <value>Als Gast anmelden</value>
   </data>
+  <data name="ShowLastDownloaded" xml:space="preserve">
+    <value>Zuletzt heruntergeladenes Bild anzeigen</value>
+  </data>
+  <data name="MenuOptions" xml:space="preserve">
+    <value>Optionen</value>
+  </data>
+  <data name="AfterDownload" xml:space="preserve">
+    <value>Wenn alle Download(s) beendet sind...</value>
+  </data>
+  <data name="clipboardWatch" xml:space="preserve">
+    <value>Zwischenablage überwachen</value>
+  </data>
+  <data name="CloseRipper" xml:space="preserve">
+    <value>Ripper Schließen</value>
+  </data>
+  <data name="DoNothing" xml:space="preserve">
+    <value>nichts tun</value>
+  </data>
 </root>

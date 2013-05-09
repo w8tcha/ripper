@@ -61,7 +61,7 @@ namespace RiPRipper
         /// <summary>
         /// Indicates that Ripper is Finishing the last Threads
         /// </summary>
-        private bool bEndRip;
+        private bool endingRip;
 
         /// <summary>
         /// Indicates that users Stopping and Deleting Current Job
@@ -535,6 +535,44 @@ namespace RiPRipper
                 return;
             }
 
+            // Load "ShowLastDownloaded" Setting
+            try
+            {
+                this.cacheController.UserSettings.ShowLastDownloaded = bool.Parse(Utility.LoadSetting("ShowLastDownloaded"));
+            }
+            catch (Exception)
+            {
+                this.cacheController.UserSettings.ShowLastDownloaded = true;
+            }
+
+            // Load "ShowLastDownloaded" Setting
+            try
+            {
+                this.cacheController.UserSettings.AfterDownloads = Convert.ToInt32(Utility.LoadSetting("AfterDownloads"));
+            }
+            catch (Exception)
+            {
+                this.cacheController.UserSettings.AfterDownloads = 0;
+            }
+
+            switch (this.cacheController.UserSettings.AfterDownloads)
+            {
+                case 0:
+                    this.doNothingToolStripMenuItem.Checked = true;
+                    this.closeRipperToolStripMenuItem.Checked = false;
+                    break;
+                case 1:
+                    this.doNothingToolStripMenuItem.Checked = false;
+                    this.closeRipperToolStripMenuItem.Checked = true;
+                    break;
+            }
+
+            // Load Show Last Download Image
+            this.groupBox4.Visible = this.cacheController.UserSettings.ShowLastDownloaded;
+
+            this.showLastImageToolStripMenuItem.Checked = this.cacheController.UserSettings.ShowLastDownloaded;
+            this.useCliboardMonitoringToolStripMenuItem.Checked = this.cacheController.UserSettings.ClipBWatch;
+
             try
             {
                 this.cacheController.UserSettings.User = Utility.LoadSetting("User");
@@ -599,8 +637,15 @@ namespace RiPRipper
 
             // Menue
             this.fileToolStripMenuItem.Text = this._ResourceManager.GetString("MenuFile");
-            this.settingsToolStripMenuItem1.Text = this._ResourceManager.GetString("MenuSettings");
             this.exitToolStripMenuItem.Text = this._ResourceManager.GetString("MenuExit");
+
+            this.optionsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuOptions");
+            this.settingsToolStripMenuItem2.Text = this._ResourceManager.GetString("MenuSettings");
+            this.showLastImageToolStripMenuItem.Text = this._ResourceManager.GetString("ShowLastDownloaded");
+            this.useCliboardMonitoringToolStripMenuItem.Text = this._ResourceManager.GetString("clipboardWatch");
+            this.afterDownloadsFinishedToolStripMenuItem.Text = this._ResourceManager.GetString("AfterDownload");
+            this.doNothingToolStripMenuItem.Text = this._ResourceManager.GetString("DoNothing");
+            this.closeRipperToolStripMenuItem.Text = this._ResourceManager.GetString("CloseRipper"); 
 
             this.settingsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuHelp");
             this.helpToolStripMenuItem.Text = this._ResourceManager.GetString("MenuAbout");
@@ -964,7 +1009,6 @@ namespace RiPRipper
        Environment.OSVersion.Version.Minor >= 1)
             {
                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
             }
 #endif
 
@@ -982,8 +1026,7 @@ namespace RiPRipper
                Environment.OSVersion.Version.Minor >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        this.windowsTaskbar.SetProgressValue(10, 100);
-                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
+                        this.windowsTaskbar.SetProgressValue(10, 100);;
                     }
 #endif
 
@@ -1006,7 +1049,6 @@ namespace RiPRipper
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                         this.windowsTaskbar.SetProgressValue(10, 100);
-                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
 
@@ -1041,7 +1083,6 @@ namespace RiPRipper
        Environment.OSVersion.Version.Minor >= 1)
             {
                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
             }
 #endif
 
@@ -1058,7 +1099,6 @@ namespace RiPRipper
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                         this.windowsTaskbar.SetProgressValue(10, 100);
-                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
 
@@ -1081,7 +1121,6 @@ namespace RiPRipper
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                         this.windowsTaskbar.SetProgressValue(10, 100);
-                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
                     }
 #endif
 
@@ -1477,7 +1516,7 @@ namespace RiPRipper
                 // If Joblist empty and the last Threads of Current Job are parsed
                 if (currentJob == null && mJobsList.Count.Equals(0) && !bParseAct)
                 {
-                    bEndRip = true;
+                    endingRip = true;
 
                     StatusLabelInfo.Text = _ResourceManager.GetString("StatusLabelInfo");
                     StatusLabelInfo.ForeColor = Color.Red;
@@ -1486,7 +1525,7 @@ namespace RiPRipper
                 }
                 else
                 {
-                    bEndRip = false;
+                    endingRip = false;
                 }
             }
             else
@@ -1521,7 +1560,6 @@ namespace RiPRipper
                    Environment.OSVersion.Version.Minor >= 1)
                         {
                             this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                            this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
                         }
 #endif
                         // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
@@ -1778,7 +1816,6 @@ namespace RiPRipper
                Environment.OSVersion.Version.Minor >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
-                        this.windowsTaskbar.SetOverlayIcon(Languages.english.Download, "Download");
                     }
 #endif
                     // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
@@ -1812,6 +1849,11 @@ namespace RiPRipper
         /// </summary>
         public void ShowLastPic()
         {
+            if (!this.cacheController.UserSettings.ShowLastDownloaded)
+            {
+                return;
+            }
+
             if (this.pictureBox1.Image != null)
             {
                 this.pictureBox1.Image.Dispose();
@@ -1884,21 +1926,21 @@ namespace RiPRipper
             {
                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                 this.windowsTaskbar.SetProgressValue(10, 100);
-                this.windowsTaskbar.SetOverlayIcon(Languages.english.Sleep, "Sleep");
             }
 
             string btleExit = this._ResourceManager.GetString("btleExit"),
                    btexExit = this._ResourceManager.GetString("btexExit");
 
-            if (this.bEndRip && this.cacheController.UserSettings.ShowCompletePopUp)
+            if (this.endingRip && this.cacheController.UserSettings.ShowCompletePopUp)
             {
-                trayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                trayIcon.BalloonTipTitle = btleExit;
-                trayIcon.BalloonTipText = btexExit;
-                trayIcon.ShowBalloonTip(10);
+                this.trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                this.trayIcon.BalloonTipTitle = btleExit;
+                this.trayIcon.BalloonTipText = btexExit;
+                this.trayIcon.ShowBalloonTip(10);
             }
 #endif
-            lvCurJob.Items.Clear();
+
+            this.lvCurJob.Items.Clear();
 
             if (this.InvokeRequired)
             {
@@ -1917,17 +1959,27 @@ namespace RiPRipper
             progressBar1.Value = 0;
 
             stopCurrentThreads.Enabled = true;
-            this.bStopJob = false;
-            this.bEndRip = false;
 
-            var ttlHeader = this._ResourceManager.GetString("ttlHeader");
-            var guestModeText = this._ResourceManager.GetString("guestModeText");
+            if (this.endingRip && this.cacheController.UserSettings.AfterDownloads.Equals(1))
+            {
+                this.Close();
+            }
+            else
+            {
 
-            this.groupBox2.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
-            this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
-            StatusLabelInfo.ForeColor = Color.Gray;
 
-            lvCurJob.Columns[0].Text = "  ";
+
+                this.bStopJob = false;
+                this.endingRip = false;
+
+                var ttlHeader = this._ResourceManager.GetString("ttlHeader");
+                var guestModeText = this._ResourceManager.GetString("guestModeText");
+
+                this.groupBox2.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
+                this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
+                StatusLabelInfo.ForeColor = Color.Gray;
+
+                lvCurJob.Columns[0].Text = "  ";
 
 #if (RIPRIPPER)
             this.Text = string.Format(
@@ -1952,55 +2004,56 @@ namespace RiPRipper
                     ? guestModeText
                     : string.Format("{0}{1}\"]", ttlHeader, this.cacheController.UserSettings.User));
 #else
-            this.Text = string.Format(
-                "Viper Girls Ripper {0}.{1}.{2}{3}{4}",
-                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
-                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
-                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
-                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
-                this.cacheController.UserSettings.GuestMode
-                    ? guestModeText
-                    : string.Format("{0}{1}\"]", ttlHeader, this.cacheController.UserSettings.User));
+                this.Text = string.Format(
+                    "Viper Girls Ripper {0}.{1}.{2}{3}{4}",
+                    Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
+                    Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
+                    this.cacheController.UserSettings.GuestMode
+                        ? guestModeText
+                        : string.Format("{0}{1}\"]", ttlHeader, this.cacheController.UserSettings.User));
 
-            this.trayIcon.Text = "Right click for context menu";
+                this.trayIcon.Text = "Right click for context menu";
 #endif
 
-            // Since no picbox image will be visible until another job is queued,
-            // reclaim resources used by any previous image in the picturebox
-            // This prevents file locking of downloaded images until the process exits
-            /*if (pictureBox1.Image != null)
-            {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-            }*/
+                // Since no picbox image will be visible until another job is queued,
+                // reclaim resources used by any previous image in the picturebox
+                // This prevents file locking of downloaded images until the process exits
+                /*if (pictureBox1.Image != null)
+                {
+                    pictureBox1.Image.Dispose();
+                    pictureBox1.Image = null;
+                }*/
 
-            if (pictureBox1.BackgroundImage != null)
-            {
-                pictureBox1.BackgroundImage.Dispose();
-                pictureBox1.BackgroundImage = null;
+                if (pictureBox1.BackgroundImage != null)
+                {
+                    pictureBox1.BackgroundImage.Dispose();
+                    pictureBox1.BackgroundImage = null;
+                }
+
+                if (imgLastPic != null)
+                {
+                    imgLastPic.Dispose();
+                    imgLastPic = null;
+                }
+
+                if (pictureBox1.Image != null)
+                {
+                    pictureBox1.Image.Dispose();
+                    pictureBox1.Image = null;
+                }
+
+                // Hide any image last displayed in the picturebox
+                pictureBox1.Visible = false;
+
+                deleteJob.Enabled = false;
+                stopCurrentThreads.Enabled = false;
+
+                //ResetTimer();
+
+                bWorking = false;
             }
-
-            if (imgLastPic != null)
-            {
-                imgLastPic.Dispose();
-                imgLastPic = null;
-            }
-
-            if (pictureBox1.Image != null)
-            {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-            }
-
-            // Hide any image last displayed in the picturebox
-            pictureBox1.Visible = false;
-
-            deleteJob.Enabled = false;
-            stopCurrentThreads.Enabled = false;
-
-            //ResetTimer();
-
-            bWorking = false;
         }
         /// <summary>
         /// Adds new Job to JobList and ListView
@@ -2307,7 +2360,7 @@ namespace RiPRipper
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void ExitToolStripMenuItemClick(object sender, EventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         /// <summary>
@@ -2447,22 +2500,26 @@ namespace RiPRipper
             return bCheck;
         }
 
+        /// <summary>
+        /// Open the Options Dialog
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void SettingsToolStripMenuItem1Click(object sender, EventArgs e)
         {
-
             if (this.cacheController.UserSettings.SavePids)
             {
-                SaveHistory();
+                this.SaveHistory();
             }
 
-            Options oForm = new Options();
+            var oForm = new Options();
             oForm.ShowDialog();
 
-            LoadSettings();
+            this.LoadSettings();
 
             if (this.cacheController.UserSettings.SavePids)
             {
-                LoadHistory();
+                this.LoadHistory();
             }
         }
 
@@ -3144,6 +3201,60 @@ namespace RiPRipper
 
             this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse");
             StatusLabelInfo.ForeColor = Color.Green;
+        }
+
+        /// <summary>
+        /// Enable/Disable Show last image
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void ShowLastImageToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            Utility.SaveSetting("ShowLastDownloaded", this.showLastImageToolStripMenuItem.Checked.ToString());
+
+            this.groupBox4.Visible = this.showLastImageToolStripMenuItem.Checked;
+
+            this.cacheController.UserSettings.ShowLastDownloaded = this.showLastImageToolStripMenuItem.Checked;
+        }
+
+        /// <summary>
+        /// Enable/Disable Clipboard Monitoring
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void UseCliboardMonitoringToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            Utility.SaveSetting("clipBoardWatch", this.useCliboardMonitoringToolStripMenuItem.Checked.ToString());
+
+            this.cacheController.UserSettings.ClipBWatch = this.useCliboardMonitoringToolStripMenuItem.Checked;
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the DoNothingToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void DoNothingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.closeRipperToolStripMenuItem.Checked = !this.doNothingToolStripMenuItem.Checked;
+
+            this.cacheController.UserSettings.AfterDownloads = 0;
+
+            Utility.SaveSetting("AfterDownloads", this.cacheController.UserSettings.AfterDownloads.ToString());
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the CloseRipperToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void CloseRipperToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.doNothingToolStripMenuItem.Checked = !this.closeRipperToolStripMenuItem.Checked;
+
+            this.cacheController.UserSettings.AfterDownloads = 1;
+
+            Utility.SaveSetting("AfterDownloads", this.cacheController.UserSettings.AfterDownloads.ToString());
         }
     }
 }

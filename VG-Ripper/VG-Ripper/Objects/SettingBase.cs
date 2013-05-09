@@ -79,6 +79,14 @@ namespace RiPRipper.Objects
         public bool SavePids { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [show last downloaded].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [show last downloaded]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ShowLastDownloaded { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether Show Tray PopUps Setting
         /// </summary>
         public bool ShowPopUps { get; set; }
@@ -147,5 +155,13 @@ namespace RiPRipper.Objects
         /// Gets or sets the Window Height
         /// </summary>
         public int WindowHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the after downloads.
+        /// </summary>
+        /// <value>
+        /// The after downloads.
+        /// </value>
+        public int AfterDownloads { get; set; }
     }
 }

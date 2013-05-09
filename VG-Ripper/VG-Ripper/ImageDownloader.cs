@@ -802,6 +802,24 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get ImgServe Download
+        /// </summary>
+        public void GetImgServe()
+        {
+            this.xService = new ImgServe(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get Celeb Sweet Download
+        /// </summary>
+        public void GetCelebSweet()
+        {
+            this.xService = new CelebSweet(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()

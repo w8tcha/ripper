@@ -575,6 +575,14 @@ namespace RiPRipper
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"pixup.us/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgonion.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/") >= 0 || imageUrl.IndexOf(@"ImageFolks.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImageFolks;
@@ -598,6 +606,14 @@ namespace RiPRipper
             else if (imageUrl.IndexOf(@"freeimagepic.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetFreeImagePic;
+            }
+            else if (imageUrl.IndexOf(@"imgserve.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgServe;
+            }
+            else if (imageUrl.IndexOf(@"celebsweet.6te.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetCelebSweet;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

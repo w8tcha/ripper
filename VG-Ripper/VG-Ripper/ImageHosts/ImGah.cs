@@ -15,6 +15,7 @@ namespace RiPRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
+    using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
     using RiPRipper.Objects;
@@ -162,7 +163,5 @@ namespace RiPRipper.ImageHosts
 
             return true;
         }
-
-        //////////////////////////////////////////////////////////////////////////
     }
 }
