@@ -15,6 +15,7 @@ namespace PGRipper
     using System.Collections;
     using System.IO;
     using System.Net;
+    using System.Text.RegularExpressions;
     using System.Threading;
 
     /// <summary>
@@ -148,6 +149,53 @@ namespace PGRipper
             }
 
             return pageContent;
+        }
+
+        /// <summary>
+        /// Gets the cookie value.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="matchString">The match.</param>
+        /// <returns>
+        /// Returns the Cookie Value
+        /// </returns>
+        protected string GetCookieValue(string url, string matchString)
+        {
+            try
+            {
+                var req = (HttpWebRequest)WebRequest.Create(url);
+
+                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
+                req.Referer = url;
+                req.Timeout = 20000;
+
+                var res = (HttpWebResponse)req.GetResponse();
+
+                var stream = res.GetResponseStream();
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
+
+                    string page = reader.ReadToEnd();
+
+                    res.Close();
+                    reader.Close();
+
+                    var match = Regex.Match(page, matchString, RegexOptions.Singleline);
+
+                    return match.Success ? match.Groups["inner"].Value : string.Empty;
+                }
+            }
+            catch (ThreadAbortException)
+            {
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+
+            return string.Empty;
         }
 
         /// <summary>

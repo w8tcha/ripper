@@ -597,6 +597,18 @@ namespace PGRipper
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"imgcloud.co/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgirl.info/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"gatasexycity.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/") >= 0 || imageUrl.IndexOf(@"ImageFolks.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImageFolks;
@@ -628,6 +640,10 @@ namespace PGRipper
             else if (imageUrl.IndexOf(@"celebsweet.6te.net/") >= 0)
             {
                 lThreadStart = imageDownloader.GetCelebSweet;
+            }
+            else if (imageUrl.IndexOf(@"sexyimg.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetSexyImg;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

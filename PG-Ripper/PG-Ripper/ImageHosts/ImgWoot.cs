@@ -20,7 +20,7 @@ namespace PGRipper.ImageHosts
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us
+    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {
@@ -89,14 +89,30 @@ namespace PGRipper.ImageHosts
 
                 EventTable.Add(imageURL, cacheObject);
             }
-            
+
+            var imageDownloadURL = thumbURL;
+
             // Set the download Path
-            var imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
+            if (thumbURL.Contains("/upload/small/"))
+            {
+                imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
+            }
+            else if (thumbURL.Contains("/img/small/"))
+            {
+                imageDownloadURL = thumbURL.Replace(@"/img/small/", @"/img/big/");
+            }
 
             // Set Image Name instead of using random name
             filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
+
+            if (filePath.Length > 260)
+            {
+                filePath = thumbURL.Substring(thumbURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
+
+                filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
+            }
 
             //////////////////////////////////////////////////////////////////////////
 

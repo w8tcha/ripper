@@ -26,17 +26,13 @@ namespace PGRipper.ImageHosts
     public class PixHub : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PixHub"/> class.
+        /// Initializes a new instance of the <see cref="PixHub" /> class.
         /// </summary>
-        /// <param name="savePath">
-        /// The save Path.
-        /// </param>
-        /// <param name="imageUrl">
-        /// The image Url.
-        /// </param>
-        /// <param name="hashtable">
-        /// The hashtable.
-        /// </param>
+        /// <param name="savePath">The save Path.</param>
+        /// <param name="imageUrl">The image Url.</param>
+        /// <param name="thumbUrl">The thumb URL.</param>
+        /// <param name="imageName">Name of the image.</param>
+        /// <param name="hashtable">The hash table.</param>
         public PixHub(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
@@ -94,14 +90,14 @@ namespace PGRipper.ImageHosts
                 EventTable.Add(strImgURL, ccObj);
             }
 
-            var cookieValue = this.GetCookieValue(strImgURL);
+            var cookieValue = this.GetCookieValue(strImgURL, @"writeCookie\('ads_pixhub', '(?<inner>[^']*)', '1'\)");
 
             if (string.IsNullOrEmpty(cookieValue))
             {
                 return false;
             }
 
-            string sPage = this.GetImageHostsPage(ref strImgURL, cookieValue);
+            string sPage = this.GetImageHostPage(ref strImgURL, string.Format("ads_pixhub={0};", cookieValue));
 
             if (sPage.Length < 10)
             {
@@ -153,7 +149,7 @@ namespace PGRipper.ImageHosts
             catch (ThreadAbortException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
@@ -163,121 +159,22 @@ namespace PGRipper.ImageHosts
                 MainForm.Delete = true;
 
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
                 ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[this.ImageLinkURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = strFilePath;
 
             return true;
-        }
-
-        /// <summary>
-        /// a generic function to fetch urls.
-        /// </summary>
-        /// <param name="strURL">
-        /// The str URL.
-        /// </param>
-        /// <param name="cookieValue">
-        /// The cookie Value.
-        /// </param>
-        /// <returns>
-        /// Returns the Page as string.
-        /// </returns>
-        protected string GetImageHostsPage(ref string strURL, string cookieValue)
-        {
-            string strPageRead;
-
-            try
-            {
-                var req = (HttpWebRequest)WebRequest.Create(strURL);
-
-                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-                req.Headers["Cookie"] = string.Format("ads_pixhub={0};", cookieValue);
-                req.Timeout = 20000;
-                req.Referer = strURL;
-
-                var res = (HttpWebResponse)req.GetResponse();
-
-                var stream = res.GetResponseStream();
-                if (stream != null)
-                {
-                    var reader = new StreamReader(stream);
-
-                    strPageRead = reader.ReadToEnd();
-
-                    res.Close();
-                    reader.Close();
-                }
-                else
-                {
-                    res.Close();
-                    return string.Empty;
-                }
-            }
-            catch (ThreadAbortException)
-            {
-                return string.Empty;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-
-            return strPageRead;
-        }
-
-        /// <summary>
-        /// Gets the cookie value.
-        /// </summary>
-        /// <param name="url">The URL.</param>
-        /// <returns>Returns the Cookie Value</returns>
-        private string GetCookieValue(string url)
-        {
-            try
-            {
-                var req = (HttpWebRequest)WebRequest.Create(url);
-
-                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-                req.Referer = url;
-                req.Timeout = 20000;
-
-                var res = (HttpWebResponse)req.GetResponse();
-
-                var stream = res.GetResponseStream();
-                if (stream != null)
-                {
-                    var reader = new StreamReader(stream);
-
-                    string page = reader.ReadToEnd();
-
-                    res.Close();
-                    reader.Close();
-
-                    var m = Regex.Match(page, @"writeCookie\('ads_pixhub', '(?<inner>[^']*)', '1'\)", RegexOptions.Singleline);
-
-                    return m.Success ? m.Groups["inner"].Value : string.Empty;
-                }
-            }
-            catch (ThreadAbortException)
-            {
-                return string.Empty;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-
-            return string.Empty;
         }
 
         //////////////////////////////////////////////////////////////////////////
