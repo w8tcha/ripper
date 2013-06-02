@@ -820,6 +820,15 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get SexyImg Download
+        /// </summary>
+        public void GetSexyImg()
+        {
+            this.xService = new SexyImg(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()
