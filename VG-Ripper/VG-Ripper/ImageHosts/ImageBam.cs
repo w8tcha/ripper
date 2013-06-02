@@ -105,7 +105,14 @@ namespace RiPRipper.ImageHosts
                 this.EventTable.Add(imageURL, cacheObject);
             }
 
-            string pageContent = this.GetImageHostPage(ref imageURL);
+            var cookieValue = this.GetCookieValue(imageURL, @"setCookie\(\""ibpuc\"", \""(?<inner>[^\""]*)\"", 1\)");
+
+            if (string.IsNullOrEmpty(cookieValue))
+            {
+                return false;
+            }
+
+            string pageContent = this.GetImageHostPage(ref imageURL, string.Format("ibpuc={0};", cookieValue));
 
             if (pageContent.Length < 10)
             {
@@ -181,6 +188,7 @@ namespace RiPRipper.ImageHosts
 
             return true;
         }
+
 
         #endregion
 
