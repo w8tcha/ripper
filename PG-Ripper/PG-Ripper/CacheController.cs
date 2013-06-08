@@ -645,6 +645,10 @@ namespace PGRipper
             {
                 lThreadStart = imageDownloader.GetSexyImg;
             }
+            else if (imageUrl.IndexOf(@"imagejumbo.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImageJumbo;
+            }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {
                 return;
