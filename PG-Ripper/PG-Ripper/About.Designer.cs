@@ -164,6 +164,7 @@
             "ImageHost.org",
             "ImageHosting.gr",
             "ImageHyper.com",
+            "ImageJumbo.com",
             "ImagePad.us",
             "ImagePicasa.com",
             "ImagePorter.com",

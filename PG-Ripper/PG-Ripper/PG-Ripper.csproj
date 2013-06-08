@@ -187,6 +187,7 @@
     <Compile Include="ImageHosts\CelebSweet.cs" />
     <Compile Include="ImageHosts\FreeImagePic.cs" />
     <Compile Include="ImageHosts\ImageFolks.cs" />
+    <Compile Include="ImageHosts\ImageJumbo.cs" />
     <Compile Include="ImageHosts\ImGah.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />

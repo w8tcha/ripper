@@ -977,6 +977,15 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Get ImageJumbo Download
+        /// </summary>
+        public void GetImageJumbo()
+        {
+            this.xService = new ImageJumbo(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()

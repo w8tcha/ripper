@@ -14,6 +14,8 @@ namespace PGRipper
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Text.RegularExpressions;
+
     using PGRipper.Objects;
 
     /// <summary>
@@ -84,45 +86,47 @@ namespace PGRipper
         /// <returns>The Content of all Thread Pages</returns>
         public string GetThreadPagesNew(string sURL)
         {
-            string sPageContent = GetRipPage(sURL);
+            var pageContent = GetRipPage(sURL);
 
             int iStart;
-            int iThreadPages;
+            int threadPagesCount;
+
+            // <span><a href="javascript://" class="popupctrl">Page 1 of 3</a></span>
 
             try
             {
-                int iPagerStart = sPageContent.IndexOf("<span><a href=\"javascript://\" class=\"popupctrl\">Page ");
-                iStart = sPageContent.IndexOf("of ", iPagerStart);
+                int iPagerStart = pageContent.IndexOf("<span><a href=\"javascript://\" class=\"popupctrl\">Page ");
+                iStart = pageContent.IndexOf("of ", iPagerStart);
 
                 iStart += 3;
             }
             catch (Exception)
             {
-                return sPageContent;
+                return pageContent;
             }
 
             if (iStart >= 0)
             {
-                int iEnd = sPageContent.IndexOf("</a></span>", iStart);
+                int iEnd = pageContent.IndexOf("</a></span>", iStart);
 
-                iThreadPages = int.Parse(sPageContent.Substring(iStart, iEnd - iStart));
+                threadPagesCount = int.Parse(pageContent.Substring(iStart, iEnd - iStart));
             }
             else
             {
-                return sPageContent;
+                return pageContent;
             }
 
             string szThreadBaseURL = sURL;
 
-            for (int i = 1; i <= iThreadPages; i++)
+            for (int i = 1; i <= threadPagesCount; i++)
             {
                 // -2.html
                 string szComposed = szThreadBaseURL.Contains(".html") ? szThreadBaseURL.Replace(".html", string.Format("-{0}.html", i)) : string.Format("{0}&page={1}", szThreadBaseURL, i);
 
-                sPageContent += GetRipPage(szComposed);
+                pageContent += GetRipPage(szComposed);
             }
 
-            return sPageContent;
+            return pageContent;
         }
 
         /// <summary>

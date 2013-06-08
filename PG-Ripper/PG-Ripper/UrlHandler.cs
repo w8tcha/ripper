@@ -42,7 +42,7 @@ namespace PGRipper
                 case 1:
                     {
                         sHtmlUrl = string.Format(
-                            "{0}showpost.php?p={1}", CacheController.Xform.userSettings.CurrentForumUrl, Convert.ToInt64(inputUrl));
+                            "{0}showpost.php?p={1}#post{1}", CacheController.Xform.userSettings.CurrentForumUrl, Convert.ToInt64(inputUrl));
                         break;
                     }
 
@@ -68,7 +68,7 @@ namespace PGRipper
                                 // http://mydomain.com/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
                                 // Posts
                                 ////string sPostId = sHtmlUrl.Substring(sHtmlUrl.IndexOf("#post") + 5);
-
+                                
                                 return sHtmlUrl;
                             }
 

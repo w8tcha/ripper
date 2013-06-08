@@ -910,7 +910,10 @@ namespace PGRipper
         /// </summary>
         private void EnqueueJob()
         {
-            this.CheckUrlForumAccount(this.textBox1.Text);
+            if (this.comboBox1.SelectedIndex.Equals(2))
+            {
+                this.CheckUrlForumAccount(this.textBox1.Text);
+            }
 
             this.tmrPageUpdate.Enabled = true;
 
@@ -975,12 +978,9 @@ namespace PGRipper
             }
             else
             {
-                if (this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
-                    this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") ||
-                    this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com") ||
-                    this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/"))
+                if (Utility.IsV4Forum(this.userSettings))
                 {
-                    if (!sHtmlUrl.Contains(@"#post"))
+                    if (!sHtmlUrl.Contains(@"#post") && !sHtmlUrl.Contains(@"showpost"))
                     {
                         this.EnqueueThreadToPost(sHtmlUrl);
                     }
@@ -1157,7 +1157,7 @@ namespace PGRipper
                 Application.DoEvents();
             }
 
-            GetPostsWorker.RunWorkerAsync(sHtmlUrl);
+            this.GetPostsWorker.RunWorkerAsync(sHtmlUrl);
         }
 
         /// <summary>
@@ -1177,11 +1177,7 @@ namespace PGRipper
 
             job.Title = Utility.ReplaceHexWithAscii(Maintenance.GetInstance().GetRipPageTitle(job.HtmlPayLoad));
 
-            if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net/") ||
-                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
-                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
-                this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
+            if (this.userSettings.AutoThank & Utility.IsV4Forum(this.userSettings))
             {
                 job.SecurityToken = Maintenance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
             }
@@ -1192,7 +1188,7 @@ namespace PGRipper
                     Utility.ReplaceHexWithAscii(
                         Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sHtmlUrl));
 
-                if (this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
+                if (Utility.IsV4Forum(this.userSettings))
                 {
                     job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.URL, true);
                 }
@@ -1207,7 +1203,7 @@ namespace PGRipper
             }
             else
             {
-                if (this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
+                if (Utility.IsV4Forum(this.userSettings))
                 {
                     job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.URL, false);
                 }
@@ -1380,22 +1376,13 @@ namespace PGRipper
         {
             ThreadToPost threads = new ThreadToPost();
 
-            string sPagecontent;
+            string pagecontent = Utility.IsV4Forum(this.userSettings)
+                                      ? threads.GetThreadPagesNew(htmlUrl)
+                                      : threads.GetThreadPages(htmlUrl);
 
-            if (this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") 
-                || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") 
-                || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/"))
-            {
-                sPagecontent = threads.GetThreadPagesNew(htmlUrl);
-            }
-            else
-            {
-                sPagecontent = threads.GetThreadPages(htmlUrl);
-            }
-
-            string sForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(htmlUrl, false);
-
-            List<ImageInfo> arlst = threads.ParseHtml(sPagecontent);
+            string forumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(htmlUrl, false);
+           
+            List<ImageInfo> arlst = threads.ParseHtml(pagecontent);
 
             for (int po = 0; po < arlst.Count; po++)
             {
@@ -1409,57 +1396,55 @@ namespace PGRipper
                                 this.StatusLabelInfo.Text = string.Format(
                                     "{0}{1}/{2}", this._ResourceManager.GetString("gbParse"), po1, arlst.Count);
 
-                                StatusLabelInfo.ForeColor = Color.Green;
+                                this.StatusLabelInfo.ForeColor = Color.Green;
                             });
                 }
                 else
                 {
                     this.StatusLabelInfo.Text = string.Format(
                        "{0}{1}/{2}", this._ResourceManager.GetString("gbParse"), po, arlst.Count);
-                    StatusLabelInfo.ForeColor = Color.Green;
+                    this.StatusLabelInfo.ForeColor = Color.Green;
                 }
 
-                string sLpostId = arlst[po].ImageUrl;
+                string postId = arlst[po].ImageUrl;
 
                 //////////////////////////////////////////////////////////////////////////
 
-                if (this.userSettings.SavePids && this.IsPostAlreadyRipped(sLpostId))
+                if (this.userSettings.SavePids && this.IsPostAlreadyRipped(postId))
                 {
-                    goto SKIPIT;
+                    continue;
                 }
 
-                string sLComposedURL = this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
-                                       || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
-                                       || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
-                                       || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
-                                           ? string.Format("{0}#post{1}", htmlUrl, sLpostId)
-                                           : string.Format(
-                                               "{0}showpost.php?p={1}", this.userSettings.CurrentForumUrl, sLpostId);
+                string newPostUrl = string.Format(
+                    "{0}showpost.php?p={1}#post{1}", this.userSettings.CurrentForumUrl, postId);
 
-                JobInfo jobInfo = mJobsList.Find(doubleJob => doubleJob.URL.Equals(sLComposedURL));
+                JobInfo jobInfoDouble = this.mJobsList.Find(doubleJob => doubleJob.URL.Equals(newPostUrl));
 
-                if (jobInfo != null)
+                if (jobInfoDouble != null)
                 {
-                    goto SKIPIT;
+                    continue;
                 }
 
-                if (currentJob != null)
+                if (this.currentJob != null)
                 {
-                    if (currentJob.URL.Equals(sLComposedURL))
+                    if (this.currentJob.URL.Equals(newPostUrl))
                     {
-                        goto SKIPIT;
+                        continue;
                     }
                 }
 
-                JobInfo job = new JobInfo
-                    { URL = sLComposedURL, HtmlPayLoad = Maintenance.GetInstance().GetPostPages(sLComposedURL) };
+                var newJob = new JobInfo
+                                 {
+                                     URL = newPostUrl,
+                                     HtmlPayLoad = Maintenance.GetInstance().GetPostPages(newPostUrl)
+                                 };
 
-                if (string.IsNullOrEmpty(job.HtmlPayLoad))
+                if (string.IsNullOrEmpty(newJob.HtmlPayLoad))
                 {
-                    goto SKIPIT;
+                    continue;
                 }
 
-                job.Title = Maintenance.GetInstance().GetRipPageTitle(job.HtmlPayLoad);
+                newJob.Title = Maintenance.GetInstance().GetRipPageTitle(newJob.HtmlPayLoad);
 
                 if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") || 
                     this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
@@ -1467,39 +1452,34 @@ namespace PGRipper
                     this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
                     this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
                 {
-                    job.SecurityToken = Maintenance.GetInstance().GetSecurityToken(job.HtmlPayLoad);
+                    newJob.SecurityToken = Maintenance.GetInstance().GetSecurityToken(newJob.HtmlPayLoad);
                 }
 
-                job.ForumTitle = this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
-                                 || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
-                                 || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
-                                 || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
-                                     ? sForumTitle
-                                     : sForumTitle.Substring(
-                                         sForumTitle.IndexOf(string.Format("{0} ", job.Title)) + job.Title.Length + 1);
+                newJob.ForumTitle = Utility.IsV4Forum(this.userSettings)
+                                     ? forumTitle
+                                     : forumTitle.Substring(
+                                         forumTitle.IndexOf(string.Format("{0} ", newJob.Title)) + newJob.Title.Length + 1);
 
-                job.PostTitle = Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sLComposedURL);
-                job.Title = Utility.ReplaceHexWithAscii(job.Title);
+                newJob.PostTitle = Maintenance.GetInstance().ExtractPostTitleFromHtml(newJob.HtmlPayLoad, newPostUrl);
+                newJob.Title = Utility.ReplaceHexWithAscii(newJob.Title);
 
-                job.ImageList = Utility.ExtractImagesHtml(job.HtmlPayLoad, sLpostId);
-                job.ImageCount = job.ImageList.Count;
+                newJob.ImageList = Utility.ExtractImagesHtml(newJob.HtmlPayLoad, postId);
+                newJob.ImageCount = newJob.ImageList.Count;
 
-                if (job.ImageCount == 0)
+                if (newJob.ImageCount == 0)
                 {
-                    goto SKIPIT;
+                    continue;
                 }
 
-                job.StorePath = this.GenerateStorePath(job);
+                newJob.StorePath = this.GenerateStorePath(newJob);
 
-                JobListAddDelegate newJob = this.JobListAdd;
+                JobListAddDelegate newJobDelegate = this.JobListAdd;
 
-                Invoke(newJob, new object[] { job });
+                this.Invoke(newJobDelegate, new object[] { newJob });
 
                 //// JobListAdd(job);
 
                 //////////////////////////////////////////////////////////////////////////
-                SKIPIT:
-                continue;
             }
         }
 
@@ -3023,9 +3003,9 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void PictureBox1DoubleClick(object sender, EventArgs e)
         {
-            if (pictureBox1.Visible && pictureBox1.Image != null)
+            if (this.pictureBox1.Visible && this.pictureBox1.Image != null)
             {
-                System.Diagnostics.Process.Start(sLastPic);
+                System.Diagnostics.Process.Start(this.sLastPic);
             }
         }
 
