@@ -89,7 +89,10 @@ namespace PGRipper
 
             //imageUrl = imageUrl.ToLower();
 
-            thumbImageUrl = thumbImageUrl.ToLower();
+            if (!imageUrl.Contains("imgserve.net"))
+            {
+                thumbImageUrl = thumbImageUrl.ToLower();
+            }
 
             // ImageDownloader is the bridging class between this routine and the
             // ServiceTemplate base class (which is the parent to all hosting site's
@@ -577,6 +580,10 @@ namespace PGRipper
             {
                 lThreadStart = imageDownloader.GetImgDino;
             }
+            else if (imageUrl.IndexOf(@"imgtiger.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgDino;
+            }
             else if (imageUrl.IndexOf(@"imgwoot.com/") >= 0 || imageUrl.IndexOf(@"Imgwoot.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
@@ -606,6 +613,10 @@ namespace PGRipper
                 lThreadStart = imageDownloader.GetImgWoot;
             }
             else if (imageUrl.IndexOf(@"gatasexycity.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"hosterbin.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
@@ -648,6 +659,14 @@ namespace PGRipper
             else if (imageUrl.IndexOf(@"imagejumbo.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImageJumbo;
+            }
+            else if (imageUrl.IndexOf(@"imagedax.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImageDax;
+            }
+            else if (imageUrl.IndexOf(@"hosterbin.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetHosterBin;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

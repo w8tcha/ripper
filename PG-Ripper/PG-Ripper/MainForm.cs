@@ -1417,7 +1417,7 @@ namespace PGRipper
 
                 string newPostUrl = string.Format(
                     "{0}showpost.php?p={1}#post{1}", this.userSettings.CurrentForumUrl, postId);
-
+                
                 JobInfo jobInfoDouble = this.mJobsList.Find(doubleJob => doubleJob.URL.Equals(newPostUrl));
 
                 if (jobInfoDouble != null)

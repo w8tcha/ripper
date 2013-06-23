@@ -986,6 +986,24 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Get ImageDax Download
+        /// </summary>
+        public void GetImageDax()
+        {
+            this.xService = new ImageDax(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get HosterBin Download
+        /// </summary>
+        public void GetHosterBin()
+        {
+            this.xService = new HosterBin(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()
