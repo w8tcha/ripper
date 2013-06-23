@@ -20,7 +20,7 @@ namespace PGRipper.ImageHosts
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgDino.com
+    /// Worker class to get images from ImgDino.com/ImgTiger.com
     /// </summary>
     public class ImgDino : ServiceTemplate
     {
