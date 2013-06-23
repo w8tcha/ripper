@@ -19,7 +19,7 @@ namespace RiPRipper.ImageHosts
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com
+    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/HosterBin.com
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {
@@ -163,5 +163,6 @@ namespace RiPRipper.ImageHosts
         }
 
         //////////////////////////////////////////////////////////////////////////
+        
     }
 }

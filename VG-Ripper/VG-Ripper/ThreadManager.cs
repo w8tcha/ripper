@@ -12,12 +12,12 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of the RiP Ripper project base.
 
-using System.Collections;
-using System.Threading;
-using System;
-
 namespace RiPRipper
 {
+    using System;
+    using System.Collections;
+    using System.Threading;
+
     /// <summary>
     /// Custom thread controller.
     /// Bad architecture, poor design. But it works and it works better than the more
@@ -25,7 +25,6 @@ namespace RiPRipper
     /// </summary>
     public class ThreadManager
     {
-
         private int mThreshHold;
 
         private readonly Hashtable threadTable;
@@ -39,25 +38,36 @@ namespace RiPRipper
             return mInstance ?? (mInstance = new ThreadManager());
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ThreadManager"/> class.
+        /// </summary>
         public ThreadManager()
         {
-            threadTable = new Hashtable();
-            SetThreadThreshHold(3);
+            this.threadTable = new Hashtable();
+            this.SetThreadThreshHold(3);
         }
 
+        /// <summary>
+        /// Gets the thread count.
+        /// </summary>
+        /// <returns></returns>
         public int GetThreadCount()
         {
-            return threadTable.Count;
+            return this.threadTable.Count;
         }
 
+        /// <summary>
+        /// Gets the thread thresh hold.
+        /// </summary>
+        /// <returns></returns>
         public int GetThreadThreshHold()
         {
-            return mThreshHold;
+            return this.mThreshHold;
         }
 
         public void SetThreadThreshHold(int iTHold)
         {
-            mThreshHold = iTHold;
+            this.mThreshHold = iTHold;
         }
 
         public bool LaunchThread(string threadId, ThreadStart start)
@@ -84,11 +94,15 @@ namespace RiPRipper
             return true;
         }
 
+        /// <summary>
+        /// Removes the threadby id.
+        /// </summary>
+        /// <param name="threadId">The thread id.</param>
         public void RemoveThreadbyId(string threadId)
         {
-            if (threadTable.ContainsKey(threadId))
+            if (this.threadTable.ContainsKey(threadId))
             {
-                threadTable.Remove(threadId);
+                this.threadTable.Remove(threadId);
             }
         }
 

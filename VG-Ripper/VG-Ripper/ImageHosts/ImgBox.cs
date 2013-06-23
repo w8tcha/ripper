@@ -92,20 +92,25 @@ namespace RiPRipper.ImageHosts
 
             if (page.Length < 10)
             {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
             string imageDownloadURL;
 
-            var m = Regex.Match(page, @"id=\""img\"".*?src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""", RegexOptions.Compiled);
+            var match = Regex.Match(
+                page,
+                @"id=\""img\"" onclick=\""rs\(\)\"" src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""",
+                RegexOptions.Compiled);
 
-            if (m.Success)
+            if (match.Success)
             {
-                imageDownloadURL = m.Groups["inner"].Value.Replace("&amp;", "&");
-                filePath = m.Groups["title"].Value;
+                imageDownloadURL = match.Groups["inner"].Value.Replace("&amp;", "&");
+                filePath = match.Groups["title"].Value;
             }
             else
             {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
@@ -119,18 +124,21 @@ namespace RiPRipper.ImageHosts
             //////////////////////////////////////////////////////////////////////////
 
             string newAlteredPath = Utility.GetSuitableName(filePath);
+
             if (filePath != newAlteredPath)
             {
                 filePath = newAlteredPath;
-                ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
+               ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
             }
+            
+            /*((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
+            return this.DownloadImageAsync(imageDownloadURL, filePath);*/
 
             try
             {
                 var webClient = new WebClient();
                 webClient.Headers.Add(string.Format("Referer: {0}", imageURL));
                 webClient.DownloadFile(imageDownloadURL, filePath);
-                webClient.Dispose();
             }
             catch (ThreadAbortException)
             {
@@ -159,7 +167,7 @@ namespace RiPRipper.ImageHosts
 
             ((CacheObject)EventTable[this.ImageLinkURL]).IsDownloaded = true;
             CacheController.Instance().LastPic = ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
-
+            
             return true;
         }
 
