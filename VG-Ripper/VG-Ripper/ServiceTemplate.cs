@@ -17,6 +17,9 @@ namespace RiPRipper
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
+    using System.Windows.Forms;
+
+    using RiPRipper.Objects;
 
     /// <summary>
     /// Service Template Class
@@ -33,12 +36,24 @@ namespace RiPRipper
         /// <param name="hashTable">The url list.</param>
         protected ServiceTemplate(string savePath, string imageUrl, string thumbImageUrl, string postTitle, ref Hashtable hashTable)
         {
+            this.WebClient = new WebClient();
+            this.WebClient.DownloadFileCompleted += this.DownloadImageCompleted;
+            ////this.WebClient.DownloadProgressChanged += this.DownloadImageProgressChanged;
+
             this.ImageLinkURL = imageUrl;
             this.ThumbImageURL = thumbImageUrl;
             this.EventTable = hashTable;
             this.SavePath = savePath;
             this.PostTitle = postTitle;
         }
+
+        /// <summary>
+        /// Gets or sets the web client.
+        /// </summary>
+        /// <value>
+        /// The web client.
+        /// </value>
+        protected WebClient WebClient { get; set; }
 
         /// <summary>
         /// Gets or sets the hashTable with URLs.
@@ -75,15 +90,21 @@ namespace RiPRipper
         {
             this.DoDownload();
 
-            if (this.EventTable[this.ImageLinkURL] != null)
+            if (!this.EventTable.Contains(this.ImageLinkURL))
             {
-                if (this.EventTable.Contains(this.ImageLinkURL))
-                {
-                    this.EventTable.Remove(this.ImageLinkURL);
-                }
+                return;
             }
 
+            this.EventTable.Remove(this.ImageLinkURL);
             ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+        }
+
+        /// <summary>
+        /// Start Download Async.
+        /// </summary>
+        public void StartDownloadAsync()
+        {
+            this.DoDownload();
         }
 
         /// <summary>
@@ -209,5 +230,84 @@ namespace RiPRipper
             return string.Format(
                 "{0}{1}", postTitle, imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
         }
+
+        /// <summary>
+        /// Downloads the image.
+        /// </summary>
+        /// <param name="downloadPath">The download path.</param>
+        /// <param name="savePath">The save path.</param>
+        /// <returns>Returns if the Image was downloaded or not</returns>
+        protected bool DownloadImageAsync(string downloadPath, string savePath)
+        {
+            try
+            {
+                this.WebClient.Headers.Add(string.Format("Referer: {0}", downloadPath));
+                this.WebClient.DownloadFileAsync(new Uri(downloadPath), savePath);
+
+                return true;
+            }
+            catch (ThreadAbortException)
+            {
+                this.EventTable.Remove(this.ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+
+                return true;
+            }
+            catch (IOException ex)
+            {
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
+
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+
+                return true;
+            }
+            catch (WebException)
+            {
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Downloads the image completed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.AsyncCompletedEventArgs" /> instance containing the event data.</param>
+        private void DownloadImageCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
+
+                var cacheObject = (CacheObject)this.EventTable[this.ImageLinkURL];
+
+                Application.DoEvents();
+
+                while (!File.Exists(cacheObject.FilePath))
+                {
+                    Thread.SpinWait(100);
+                }
+
+               CacheController.Instance().LastPic = cacheObject.FilePath;
+
+               if (this.EventTable.Contains(this.ImageLinkURL))
+               {
+                   this.EventTable.Remove(this.ImageLinkURL);
+                   ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+               }
+            }
+            else
+            {
+                if (this.EventTable.Contains(this.ImageLinkURL))
+                {
+                    this.EventTable.Remove(this.ImageLinkURL);
+                    ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+                }
+            }
+        }        
     }
 }

@@ -81,7 +81,10 @@ namespace RiPRipper
             // TODO : Check which image host needs that check
             //imageUrl = imageUrl.ToLower();
 
-            thumbImageUrl = thumbImageUrl.ToLower();
+            if (!imageUrl.Contains("imgserve.net"))
+            {
+                thumbImageUrl = thumbImageUrl.ToLower();
+            }
 
             ThreadStart lThreadStart;
 
@@ -563,6 +566,10 @@ namespace RiPRipper
             {
                 lThreadStart = imageDownloader.GetImgDino;
             }
+            else if (imageUrl.IndexOf(@"imgtiger.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgDino;
+            }
             else if (imageUrl.IndexOf(@"imgwoot.com/") >= 0 || imageUrl.IndexOf(@"Imgwoot.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
@@ -592,6 +599,10 @@ namespace RiPRipper
                 lThreadStart = imageDownloader.GetImgWoot;
             }
             else if (imageUrl.IndexOf(@"gatasexycity.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"hosterbin.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
@@ -630,6 +641,18 @@ namespace RiPRipper
             else if (imageUrl.IndexOf(@"sexyimg.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetSexyImg;
+            }
+            else if (imageUrl.IndexOf(@"imagejumbo.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImageJumbo;
+            }
+            else if (imageUrl.IndexOf(@"imagedax.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImageDax;
+            }
+            else if (imageUrl.IndexOf(@"hosterbin.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetHosterBin;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

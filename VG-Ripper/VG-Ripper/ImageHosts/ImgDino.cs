@@ -19,7 +19,7 @@ namespace RiPRipper.ImageHosts
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgDino.com
+    /// Worker class to get images from ImgDino.com/ImgTiger.com
     /// </summary>
     public class ImgDino : ServiceTemplate
     {
@@ -147,5 +147,6 @@ namespace RiPRipper.ImageHosts
         }
 
         //////////////////////////////////////////////////////////////////////////
+        
     }
 }
