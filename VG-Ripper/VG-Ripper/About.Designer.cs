@@ -193,6 +193,7 @@
             "ImGah.com",
             "ImgBox.com",
             "ImgChili.com",
+            "ImgChili.net",
             "ImgCloud.co",
             "ImgDepot.org",
             "ImgDino.com",
