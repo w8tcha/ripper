@@ -96,7 +96,7 @@ namespace RiPRipper
                     {
                         // Replace Exe
                         File.Replace(
-                            Path.Combine(Application.StartupPath, "VG-Ripper.exe"), 
+                            Path.Combine(Application.StartupPath, string.Format("temp{0}VG-Ripper.exe", Path.DirectorySeparatorChar)), 
                             Assembly.GetExecutingAssembly().Location,
                             "VG-Ripper.bak");
 

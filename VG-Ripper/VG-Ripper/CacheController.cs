@@ -514,7 +514,7 @@ namespace RiPRipper
             {
                 lThreadStart = imageDownloader.GetImageUpper;
             }
-            else if (imageUrl.IndexOf(@"imgchili.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imgchili.") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgChili;
             }

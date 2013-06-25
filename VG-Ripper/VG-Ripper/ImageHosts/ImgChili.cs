@@ -15,27 +15,22 @@ namespace RiPRipper.ImageHosts
     using System.Collections;
     using System.IO;
     using System.Net;
-    using System.Text.RegularExpressions;
     using System.Threading;
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgChili.com
+    /// Worker class to get images from ImgChili.com/ImgChili.net
     /// </summary>
     public class ImgChili : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgChili"/> class.
+        /// Initializes a new instance of the <see cref="ImgChili" /> class.
         /// </summary>
-        /// <param name="savePath">
-        /// The save Path.
-        /// </param>
-        /// <param name="imageUrl">
-        /// The image Url.
-        /// </param>
-        /// <param name="hashtable">
-        /// The hashtable.
-        /// </param>
+        /// <param name="savePath">The save Path.</param>
+        /// <param name="imageUrl">The image Url.</param>
+        /// <param name="thumbUrl">The thumb URL.</param>
+        /// <param name="imageName">Name of the image.</param>
+        /// <param name="hashtable">The hash table.</param>
         public ImgChili(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
@@ -45,24 +40,23 @@ namespace RiPRipper.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Return if Downloaded or not
+        /// Returns if the Image was downloaded
         /// </returns>
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            var imageURL = ImageLinkURL;
+            var filePath = string.Empty;
 
-            if (EventTable.ContainsKey(strImgURL))
+            if (EventTable.ContainsKey(imageURL))
             {
                 return true;
             }
 
-            string strFilePath = string.Empty;
-
             try
             {
-                if (!Directory.Exists(SavePath))
+                if (!Directory.Exists(this.SavePath))
                 {
-                    Directory.CreateDirectory(SavePath);
+                    Directory.CreateDirectory(this.SavePath);
                 }
             }
             catch (IOException ex)
@@ -73,11 +67,11 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = imageURL };
 
             try
             {
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(imageURL, cacheObject);
             }
             catch (ThreadAbortException)
             {
@@ -85,63 +79,42 @@ namespace RiPRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (EventTable.ContainsKey(strImgURL))
+                if (EventTable.ContainsKey(imageURL))
                 {
                     return false;
                 }
 
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(imageURL, cacheObject);
             }
 
-            string sPage = this.GetImageHostsPage(ref strImgURL);
+            var imageDownloadURL = this.ThumbImageURL.Replace("http://t", "http://i");
 
-            if (sPage.Length < 10)
-            {
-                return false;
-            }
+            filePath = imageDownloadURL.Substring(imageDownloadURL.LastIndexOf("_", StringComparison.Ordinal) + 1);
 
-            string strNewURL;
-
-            var m = Regex.Match(sPage, @"    src=\""http://i(?<inner>[^\""]*)\""", RegexOptions.Singleline);
-
-            if (m.Success)
-            {
-                strNewURL = string.Format("http://i{0}", m.Groups["inner"].Value);
-            }
-            else
-            {
-                return false;
-            }
-
-            strFilePath = strNewURL.Substring(strNewURL.IndexOf("_") + 1);
-
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
             //////////////////////////////////////////////////////////////////////////
 
-            string newAlteredPath = Utility.GetSuitableName(strFilePath);
-            if (strFilePath != newAlteredPath)
+            string newAlteredPath = Utility.GetSuitableName(filePath);
+            if (filePath != newAlteredPath)
             {
-                strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+                filePath = newAlteredPath;
+                ((CacheObject)EventTable[ImageLinkURL]).FilePath = filePath;
             }
 
             try
             {
-                var random = new Random();
-
                 var client = new WebClient();
 
-                client.Headers.Add(string.Format("Referer: {0}", strImgURL));
+                client.Headers.Add(string.Format("Referer: {0}", imageURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.Headers["Cookie"] = string.Format("chililast=99999999999999999.{0};", random.Next(001, 999));
-                client.DownloadFile(strNewURL, strFilePath);
+                client.DownloadFile(imageDownloadURL, filePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
@@ -150,80 +123,24 @@ namespace RiPRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
             ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[ImageLinkURL]).FilePath = filePath;
 
             return true;
         }
-
-        /// <summary>
-        /// a generic function to fetch urls.
-        /// </summary>
-        /// <param name="strURL">
-        /// The str URL.
-        /// </param>
-        /// <returns>
-        /// Returns the Page as string.
-        /// </returns>
-        protected string GetImageHostsPage(ref string strURL)
-        {
-            string strPageRead;
-
-            var random = new Random();
-
-            try
-            {
-                var req = (HttpWebRequest)WebRequest.Create(strURL);
-
-                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
-
-                req.Headers["Cookie"] = string.Format("chililast=99999999999999999.{0};", random.Next(001, 999));
-                req.Referer = strURL;
-
-                var res = (HttpWebResponse)req.GetResponse();
-
-                var stream = res.GetResponseStream();
-                if (stream != null)
-                {
-                    var reader = new StreamReader(stream);
-
-                    strPageRead = reader.ReadToEnd();
-
-                    res.Close();
-                    reader.Close();
-                }
-                else
-                {
-                    res.Close();
-                    return string.Empty;
-                }
-            }
-            catch (ThreadAbortException)
-            {
-                return string.Empty;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-
-            return strPageRead;
-        }
-
         //////////////////////////////////////////////////////////////////////////
-        
     }
 }
