@@ -528,7 +528,7 @@ namespace PGRipper
             {
                 lThreadStart = imageDownloader.GetImageUpper;
             }
-            else if (imageUrl.IndexOf(@"imgchili.com/") >= 0)
+            else if (imageUrl.IndexOf(@"imgchili.") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgChili;
             }
@@ -667,6 +667,10 @@ namespace PGRipper
             else if (imageUrl.IndexOf(@"hosterbin.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetHosterBin;
+            }
+            else if (imageUrl.IndexOf(@"imgbabes.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgBabes;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {
