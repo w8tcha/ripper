@@ -191,6 +191,7 @@
     <Compile Include="ImageHosts\ImageFolks.cs" />
     <Compile Include="ImageHosts\ImageJumbo.cs" />
     <Compile Include="ImageHosts\ImGah.cs" />
+    <Compile Include="ImageHosts\ImgBabes.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
