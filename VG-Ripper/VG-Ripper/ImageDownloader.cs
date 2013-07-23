@@ -857,6 +857,24 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get ImgBabes Download
+        /// </summary>
+        public void GetImgBabes()
+        {
+            this.xService = new ImgBabes(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get ImagesIon Download
+        /// </summary>
+        public void GetImagesIon()
+        {
+            this.xService = new ImagesIon(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()
