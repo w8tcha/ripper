@@ -89,7 +89,7 @@ namespace PGRipper
 
             //imageUrl = imageUrl.ToLower();
 
-            if (!imageUrl.Contains("imgserve.net"))
+            if (!imageUrl.Contains("imgserve.net") && !imageUrl.Contains("imagesion.com"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -671,6 +671,10 @@ namespace PGRipper
             else if (imageUrl.IndexOf(@"imgbabes.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgBabes;
+            }
+            else if (imageUrl.IndexOf(@"imagesion.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImagesIon;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {
