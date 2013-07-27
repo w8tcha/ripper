@@ -165,7 +165,6 @@ namespace PGRipper
             {
                 var req = (HttpWebRequest)WebRequest.Create(url);
 
-                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
                 req.Referer = url;
                 req.Timeout = 20000;
 

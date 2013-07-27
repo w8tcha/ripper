@@ -1004,6 +1004,15 @@ namespace PGRipper
         }
 
         /// <summary>
+        /// Get ImagesIon Download
+        /// </summary>
+        public void GetImagesIon()
+        {
+            this.xService = new ImagesIon(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Get ImgBabes Download
         /// </summary>
         public void GetImgBabes()
@@ -1121,8 +1130,6 @@ namespace PGRipper
                     strImgURL.IndexOf("www.ripnetwork.net:82") >= 0
                         ? string.Format("Referer: {0}showthread.php", CacheController.Xform.userSettings.CurrentForumUrl)
                         : string.Format("Referer: {0}", strImgURL));
-                client.Headers.Add(
-                    "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strImgURL, strFilePath);
                 /*do
 				{
