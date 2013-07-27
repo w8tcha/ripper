@@ -1302,7 +1302,6 @@ namespace RiPRipper
 
 
             HttpWebRequest lHttpWebRequest = (HttpWebRequest)WebRequest.Create(aUrl);
-            lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
             lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
             lHttpWebRequest.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
             lHttpWebRequest.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));

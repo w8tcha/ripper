@@ -131,7 +131,6 @@ namespace RiPRipper
             {
                 var webRequest = (HttpWebRequest)WebRequest.Create(imageHostURL);
 
-                webRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
                 webRequest.Referer = imageHostURL;
                 webRequest.KeepAlive = true;
                 webRequest.Timeout = 20000;
@@ -184,7 +183,6 @@ namespace RiPRipper
             {
                 var req = (HttpWebRequest)WebRequest.Create(url);
 
-                req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
                 req.Referer = url;
                 req.Timeout = 20000;
 
