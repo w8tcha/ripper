@@ -199,6 +199,7 @@
     <Compile Include="ImageHosts\ImgServe.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
     <Compile Include="ImageHosts\ImgWoot.cs" />
+    <Compile Include="ImageHosts\PictureDip.cs" />
     <Compile Include="ImageHosts\PixRoute.cs" />
     <Compile Include="ImageHosts\ImagePicasa.cs" />
     <Compile Include="ImageHosts\DirectUpload.cs" />

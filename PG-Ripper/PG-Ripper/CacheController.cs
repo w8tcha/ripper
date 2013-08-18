@@ -620,6 +620,10 @@ namespace PGRipper
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"picslite.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/") >= 0 || imageUrl.IndexOf(@"ImageFolks.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImageFolks;
@@ -675,6 +679,10 @@ namespace PGRipper
             else if (imageUrl.IndexOf(@"imagesion.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImagesIon;
+            }
+            else if (imageUrl.IndexOf(@"picturedip.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetPictureDip;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {
