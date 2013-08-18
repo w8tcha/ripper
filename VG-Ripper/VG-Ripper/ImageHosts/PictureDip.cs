@@ -1,7 +1,7 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgWoot.cs" company="The Watcher">
+// <copyright file="PictureDip.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
-//  This software is licensed under the MIT license. See license.txt for details.
+//   //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
 // <summary>
 //   Code Named: VG-Ripper
@@ -19,19 +19,19 @@ namespace RiPRipper.ImageHosts
     using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/HosterBin.com/PicsLite.com
+    /// Worker class to get images from PictureDip.com
     /// </summary>
-    public class ImgWoot : ServiceTemplate
+    public class PictureDip : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgWoot" /> class.
+        /// Initializes a new instance of the <see cref="PictureDip" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgWoot(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+        public PictureDip(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
@@ -89,29 +89,12 @@ namespace RiPRipper.ImageHosts
                 EventTable.Add(imageURL, cacheObject);
             }
 
-            var imageDownloadURL = thumbURL;
-
             // Set the download Path
-            if (thumbURL.Contains("/upload/small/"))
-            {
-                imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
-            }
-            else if (thumbURL.Contains("/img/small/"))
-            {
-                imageDownloadURL = thumbURL.Replace(@"/img/small/", @"/img/big/");
-            }
+            var imageDownloadURL = thumbURL.Replace("_t", string.Empty);
 
-            // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            filePath = imageURL.Substring(imageURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
-
-            if (filePath.Length > 260)
-            {
-                filePath = thumbURL.Substring(thumbURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
-
-                filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
-            }
 
             //////////////////////////////////////////////////////////////////////////
 
@@ -126,7 +109,7 @@ namespace RiPRipper.ImageHosts
             try
             {
                 var client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", imageURL));
+                client.Headers.Add(string.Format("Referer: {0}", thumbURL));
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(imageDownloadURL, filePath);
                 client.Dispose();
@@ -163,6 +146,5 @@ namespace RiPRipper.ImageHosts
         }
 
         //////////////////////////////////////////////////////////////////////////
-        
     }
 }

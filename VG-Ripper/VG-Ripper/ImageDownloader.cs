@@ -875,6 +875,15 @@ namespace RiPRipper
         }
 
         /// <summary>
+        /// Get PictureDip Download
+        /// </summary>
+        public void GetPictureDip()
+        {
+            this.xService = new PictureDip(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownload();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()
