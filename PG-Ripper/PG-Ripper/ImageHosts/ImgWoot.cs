@@ -20,7 +20,7 @@ namespace PGRipper.ImageHosts
     using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/HosterBin.com
+    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/HosterBin.com/PicsLite.com
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {
