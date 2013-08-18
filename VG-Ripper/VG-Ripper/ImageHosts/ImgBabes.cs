@@ -96,7 +96,10 @@ namespace RiPRipper.ImageHosts
             }
 
             string imageDownloadURL;
-            var match = Regex.Match(page, @"img src=\""(?<inner>[^\""]*)\"" class=\""pic\"" alt=\""(?<title>[^\""]*)\""", RegexOptions.Compiled);
+            var match = Regex.Match(
+                page,
+                @"img src=\""(?<inner>[^\""]*)\"" class=\""pic\"" id=\""this_image\"" alt=\""(?<title>[^\""]*)\""",
+                RegexOptions.Compiled);
 
             if (match.Success)
             {
