@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgBox.cs" company="The Watcher">
+// <copyright file="PicturesIon.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //  This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -12,24 +12,21 @@
 namespace RiPRipper.ImageHosts
 {
     using System.Collections;
-    using System.Text.RegularExpressions;
-
-    using RiPRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgBox.com
+    /// Worker class to get images from PicturesIon.com
     /// </summary>
-    public class ImgBox : ServiceTemplate
+    public class PicturesIon : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgBox" /> class.
+        /// Initializes a new instance of the <see cref="PicturesIon" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgBox(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
+        public PicturesIon(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
         {
         }
@@ -42,35 +39,11 @@ namespace RiPRipper.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageURL = ImageLinkURL;
-            string filePath;
+            // Set the download Path
+            var imageDownloadURL = ThumbImageURL.Replace("/thumbs/", "/");
 
-            // Get Image Link
-            var page = GetImageHostPage(ref imageURL);
-
-            if (page.Length < 10)
-            {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                return false;
-            }
-
-            string imageDownloadURL;
-
-            var match = Regex.Match(
-                page,
-                @"id=\""img\"" onclick=\""rs\(\)\"" src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""",
-                RegexOptions.Compiled);
-
-            if (match.Success)
-            {
-                imageDownloadURL = match.Groups["inner"].Value.Replace("&amp;", "&");
-                filePath = match.Groups["title"].Value;
-            }
-            else
-            {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                return false;
-            }
+            // Set Image Name instead of using random name
+            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);

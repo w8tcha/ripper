@@ -1,25 +1,23 @@
-//////////////////////////////////////////////////////////////////////////
-// Code Named: VG-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
-
-using System;
-using System.Collections;
-using System.IO;
-using System.Net;
-using System.Threading;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FastPic.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//  This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: VG-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RiPRipper.ImageHosts
 {
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+
     using RiPRipper.Objects;
 
     /// <summary>
@@ -27,26 +25,41 @@ namespace RiPRipper.ImageHosts
     /// </summary>
     public class FastPic : ServiceTemplate
     {
-        public FastPic(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FastPic"/> class.
+        /// </summary>
+        /// <param name="savePath">The arguments save path.</param>
+        /// <param name="imageUrl">The string URL.</param>
+        /// <param name="thumbURL">The thumb URL.</param>
+        /// <param name="imageName">Name of the image.</param>
+        /// <param name="hashtable">The authentication table.</param>
+        public FastPic(ref string savePath, ref string imageUrl, ref string thumbURL, ref string imageName, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbURL, imageName, ref hashtable)
         {
         }
 
+        /// <summary>
+        /// Do the Download
+        /// </summary>
+        /// <returns>
+        /// Returns if the Image was downloaded
+        /// </returns>
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            var imageURL = ImageLinkURL;
+            var filePath = string.Empty;
 
-            if (EventTable.ContainsKey(strImgURL))
+            if (EventTable.ContainsKey(imageURL))
             {
                 return true;
             }
 
-            string strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("/") + 1).Replace(".html", "");
-
             try
             {
-                if (!Directory.Exists(SavePath))
-                    Directory.CreateDirectory(SavePath);
+                if (!Directory.Exists(this.SavePath))
+                {
+                    Directory.CreateDirectory(this.SavePath);
+                }
             }
             catch (IOException ex)
             {
@@ -56,13 +69,11 @@ namespace RiPRipper.ImageHosts
                 return false;
             }
 
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
-
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = imageURL };
 
             try
             {
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(imageURL, cacheObject);
             }
             catch (ThreadAbortException)
             {
@@ -70,70 +81,69 @@ namespace RiPRipper.ImageHosts
             }
             catch (Exception)
             {
-                if (EventTable.ContainsKey(strImgURL))
+                if (EventTable.ContainsKey(imageURL))
                 {
                     return false;
                 }
 
-                EventTable.Add(strImgURL, ccObj);
+                EventTable.Add(imageURL, cacheObject);
             }
 
-            const string sStartSrc = "loading_img = '";
+            var page = GetImageHostPage(ref imageURL);
 
-            string sPage = GetImageHostPage(ref strImgURL);
-
-            if (sPage.Length < 10)
+            if (page.Length < 10)
             {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
-            int iStartSrc = sPage.IndexOf(sStartSrc);
+            string imageDownloadURL;
+            
+            var match = Regex.Match(
+                page,
+                @"loading_img = '(?<inner>[^']*)';",
+                RegexOptions.Compiled);
 
-            if (iStartSrc < 0)
+            if (match.Success)
             {
+                imageDownloadURL = match.Groups["inner"].Value.Replace("&amp;", "&");
+            }
+            else
+            {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
-            iStartSrc += sStartSrc.Length;
+            // Set Image Name instead of using random name
+            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
-            int iEndSrc = sPage.IndexOf("';", iStartSrc);
+            filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
-            if (iEndSrc < 0)
+            if (!Directory.Exists(this.SavePath))
             {
-                return false;
+                Directory.CreateDirectory(this.SavePath);
             }
-
-            string strNewURL = sPage.Substring(iStartSrc, iEndSrc - iStartSrc);
-
-
 
             //////////////////////////////////////////////////////////////////////////
 
-            string newAlteredPath = Utility.GetSuitableName(strFilePath);
+            var newAlteredPath = Utility.GetSuitableName(filePath);
 
-            if (strFilePath != newAlteredPath)
+            if (filePath != newAlteredPath)
             {
-                strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+                filePath = newAlteredPath;
+                ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
             }
-
-            strFilePath = Utility.CheckPathLength(strFilePath);
-            ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
-
 
             try
             {
-                WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(strNewURL, strFilePath);
-                client.Dispose();
-
+                var webClient = new WebClient();
+                webClient.Headers.Add(string.Format("Referer: {0}", imageURL));
+                webClient.DownloadFile(imageDownloadURL, filePath);
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
@@ -142,27 +152,25 @@ namespace RiPRipper.ImageHosts
                 MainForm.DeleteMessage = ex.Message;
                 MainForm.Delete = true;
 
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic =((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            ((CacheObject)EventTable[this.ImageLinkURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic = ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
 
             return true;
         }
 
         //////////////////////////////////////////////////////////////////////////
-
-        
     }
 }

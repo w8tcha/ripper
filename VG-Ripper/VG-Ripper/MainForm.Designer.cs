@@ -36,7 +36,7 @@ namespace RiPRipper
             
             tmrPageUpdate.Enabled = false;
             ThreadManager.GetInstance().DismantleAllThreads();
-            mJobsList.Clear();
+            jobsList.Clear();
 
 
             base.Dispose(disposing);
@@ -581,7 +581,7 @@ namespace RiPRipper
         private Button mStartDownloadBtn;
         private PictureBox pictureBox1;
 
-        private List<JobInfo> mJobsList = null;
+        private List<JobInfo> jobsList = null;
         private System.Timers.Timer tmrPageUpdate;
         private JobInfo currentJob = null;
         private List<ImageInfo> mImagesList = null;

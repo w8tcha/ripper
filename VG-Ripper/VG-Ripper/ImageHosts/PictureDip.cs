@@ -98,13 +98,9 @@ namespace RiPRipper.ImageHosts
 
             //////////////////////////////////////////////////////////////////////////
 
-            var newAlteredPath = Utility.GetSuitableName(filePath, true);
+            filePath = Utility.GetSuitableName(filePath, true);
 
-            if (filePath != newAlteredPath)
-            {
-                filePath = newAlteredPath;
-                ((CacheObject)EventTable[imageURL]).FilePath = filePath;
-            }
+            ((CacheObject)EventTable[imageURL]).FilePath = filePath;
 
             try
             {

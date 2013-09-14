@@ -726,8 +726,7 @@ namespace RiPRipper
         public void GetImgBox()
         {
             this.xService = new ImgBox(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
-            ////this.xService.StartDownloadAsync();
-            this.xService.StartDownload();
+            this.xService.StartDownloadAsync();
         }
 
         /// <summary>
@@ -881,6 +880,24 @@ namespace RiPRipper
         {
             this.xService = new PictureDip(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
             this.xService.StartDownload();
+        }
+
+        /// <summary>
+        /// Get ImageZilla Download
+        /// </summary>
+        public void GetImageZilla()
+        {
+            this.xService = new ImageZilla(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get PicturesIon Download
+        /// </summary>
+        public void GetPicturesIon()
+        {
+            this.xService = new PicturesIon(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService.StartDownloadAsync();
         }
 
         /// <summary>
