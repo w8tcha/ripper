@@ -70,28 +70,40 @@ namespace RiPRipper
             this.mThreshHold = iTHold;
         }
 
+        /// <summary>
+        /// Launches the thread.
+        /// </summary>
+        /// <param name="threadId">The thread unique identifier.</param>
+        /// <param name="start">The start.</param>
+        /// <returns></returns>
         public bool LaunchThread(string threadId, ThreadStart start)
         {
-            if (threadTable.Count >= mThreshHold || threadTable.ContainsKey(threadId))
+            if (this.threadTable.Count >= this.mThreshHold || this.threadTable.ContainsKey(threadId))
             {
                 return false;
             }
 
             Thread threadGet = new Thread(start) { IsBackground = true };
 
-            threadTable.Add(threadId, threadGet);
+            this.threadTable.Add(threadId, threadGet);
 
             threadGet.Start();
+
             return true;
         }
 
+        /// <summary>
+        /// Determines whether [is system ready for new thread].
+        /// </summary>
+        /// <returns></returns>
         public bool IsSystemReadyForNewThread()
         {
-            if (threadTable.Count >= mThreshHold) return false;
+            if (this.threadTable.Count >= this.mThreshHold)
+            {
+                return false;
+            }
 
-            if (bSuspend) return false;
-
-            return true;
+            return !this.bSuspend;
         }
 
         /// <summary>

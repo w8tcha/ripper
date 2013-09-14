@@ -79,9 +79,10 @@ namespace RiPRipper
         public void DownloadImage(string imageUrl, string thumbImageUrl, string localPath, string imageName)
         {
             // TODO : Check which image host needs that check
-            //imageUrl = imageUrl.ToLower();
+            ////imageUrl = imageUrl.ToLower();
 
-            if (!imageUrl.Contains("imgserve.net") && !imageUrl.Contains("imagesion.com"))
+            if (!imageUrl.Contains("imgserve.net") && !imageUrl.Contains("imagesion.com")
+                && !imageUrl.Contains("picturesion.com") && !imageUrl.Contains("picsious.com"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -669,6 +670,18 @@ namespace RiPRipper
             else if (imageUrl.IndexOf(@"picturedip.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetPictureDip;
+            }
+            else if (imageUrl.IndexOf(@"imagezilla.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImageZilla;
+            }
+            else if (imageUrl.IndexOf(@"picturesion.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetPicturesIon;
+            }
+            else if (imageUrl.IndexOf(@"picsious.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetPicturesIon;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

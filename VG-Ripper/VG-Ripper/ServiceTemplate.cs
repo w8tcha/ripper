@@ -38,7 +38,6 @@ namespace RiPRipper
         {
             this.WebClient = new WebClient();
             this.WebClient.DownloadFileCompleted += this.DownloadImageCompleted;
-            ////this.WebClient.DownloadProgressChanged += this.DownloadImageProgressChanged;
 
             this.ImageLinkURL = imageUrl;
             this.ThumbImageURL = thumbImageUrl;
@@ -46,14 +45,6 @@ namespace RiPRipper
             this.SavePath = savePath;
             this.PostTitle = postTitle;
         }
-
-        /// <summary>
-        /// Gets or sets the web client.
-        /// </summary>
-        /// <value>
-        /// The web client.
-        /// </value>
-        protected WebClient WebClient { get; set; }
 
         /// <summary>
         /// Gets or sets the hashTable with URLs.
@@ -84,8 +75,17 @@ namespace RiPRipper
         protected string PostTitle { get; set; }
 
         /// <summary>
+        /// Gets or sets the web client.
+        /// </summary>
+        /// <value>
+        /// The web client.
+        /// </value>
+        protected WebClient WebClient { get; set; }
+
+        /// <summary>
         /// Start Download
         /// </summary>
+        [Obsolete("Please use StartDownloadAsync instead.")]
         public void StartDownload()
         {
             this.DoDownload();
@@ -104,6 +104,46 @@ namespace RiPRipper
         /// </summary>
         public void StartDownloadAsync()
         {
+            if (this.EventTable.ContainsKey(this.ImageLinkURL))
+            {
+                return;
+            }
+
+            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = string.Empty, Url = this.ImageLinkURL };
+
+            try
+            {
+                this.EventTable.Add(this.ImageLinkURL, cacheObject);
+            }
+            catch (ThreadAbortException)
+            {
+                return;
+            }
+            catch (Exception)
+            {
+                if (this.EventTable.ContainsKey(this.ImageLinkURL))
+                {
+                    return;
+                }
+
+                this.EventTable.Add(this.ImageLinkURL, cacheObject);
+            }
+
+            try
+            {
+                if (!Directory.Exists(this.SavePath))
+                {
+                    Directory.CreateDirectory(this.SavePath);
+                }
+            }
+            catch (IOException ex)
+            {
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
+
+                return;
+            }
+
             this.DoDownload();
         }
 
@@ -237,37 +277,21 @@ namespace RiPRipper
         /// <returns>Returns if the Image was downloaded or not</returns>
         protected bool DownloadImageAsync(string downloadPath, string savePath)
         {
-            try
+            savePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(savePath));
+
+            if (!Directory.Exists(this.SavePath))
             {
-                this.WebClient.Headers.Add(string.Format("Referer: {0}", downloadPath));
-                this.WebClient.DownloadFileAsync(new Uri(downloadPath), savePath);
-
-                return true;
+                Directory.CreateDirectory(this.SavePath);
             }
-            catch (ThreadAbortException)
-            {
-                this.EventTable.Remove(this.ImageLinkURL);
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
-                return true;
-            }
-            catch (IOException ex)
-            {
-                MainForm.DeleteMessage = ex.Message;
-                MainForm.Delete = true;
+            savePath = Utility.GetSuitableName(savePath);
 
-                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+            ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = savePath;
 
-                return true;
-            }
-            catch (WebException)
-            {
-                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+            this.WebClient.Headers.Add(string.Format("Referer: {0}", downloadPath));
+            this.WebClient.DownloadFileAsync(new Uri(downloadPath), savePath);
 
-                return false;
-            }
+            return true;
         }
 
         /// <summary>
@@ -285,26 +309,27 @@ namespace RiPRipper
 
                 Application.DoEvents();
 
-                while (!File.Exists(cacheObject.FilePath))
-                {
-                    Thread.SpinWait(100);
-                }
+                CacheController.Instance().LastPic = cacheObject.FilePath;
 
-               CacheController.Instance().LastPic = cacheObject.FilePath;
+                this.EventTable.Remove(this.ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
-               if (this.EventTable.Contains(this.ImageLinkURL))
-               {
-                   this.EventTable.Remove(this.ImageLinkURL);
-                   ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
-               }
+                Application.DoEvents();
             }
             else
             {
-                if (this.EventTable.Contains(this.ImageLinkURL))
+                var exception = e.Error;
+
+                if (exception is IOException)
                 {
-                    this.EventTable.Remove(this.ImageLinkURL);
-                    ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+                    MainForm.DeleteMessage = exception.Message;
+                    MainForm.Delete = true;
                 }
+
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+
+                Application.DoEvents();
             }
         }        
     }
