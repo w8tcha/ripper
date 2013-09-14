@@ -13,8 +13,6 @@
 // This file is part of the PG-Ripper project base.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Net;
 
 namespace PGRipper

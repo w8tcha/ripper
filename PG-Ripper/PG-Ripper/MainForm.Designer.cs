@@ -35,7 +35,7 @@ namespace PGRipper
             
             tmrPageUpdate.Enabled = false;
             ThreadManager.GetInstance().DismantleAllThreads();
-            mJobsList.Clear();
+            jobsList.Clear();
 
 
             base.Dispose(disposing);
@@ -582,7 +582,7 @@ namespace PGRipper
         private GroupBox groupBox2;
         private Button mStartDownloadBtn;
 
-        private List<JobInfo> mJobsList = null;
+        private List<JobInfo> jobsList = null;
         private System.Timers.Timer tmrPageUpdate;
         private JobInfo currentJob = null;
         private List<ImageInfo> mImagesList = null;
