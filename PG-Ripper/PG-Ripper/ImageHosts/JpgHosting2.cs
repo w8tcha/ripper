@@ -12,15 +12,10 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of the PG-Ripper project base.
 
-using System;
 using System.Collections;
-using System.Web;
 using System.Net;
 using System.IO;
-using System.Text;
 using System.Threading;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace PGRipper
 {

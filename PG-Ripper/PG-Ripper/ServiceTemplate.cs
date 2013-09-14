@@ -17,6 +17,9 @@ namespace PGRipper
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
+    using System.Windows.Forms;
+
+    using PGRipper.Objects;
 
     /// <summary>
     /// Service Template Class
@@ -33,6 +36,9 @@ namespace PGRipper
         /// <param name="hashTable">The url list.</param>
         protected ServiceTemplate(string savePath, string imageUrl, string thumbImageUrl, string postTitle, ref Hashtable hashTable)
         {
+            this.WebClient = new WebClient();
+            this.WebClient.DownloadFileCompleted += this.DownloadImageCompleted;
+
             this.ImageLinkURL = imageUrl;
             this.ThumbImageURL = thumbImageUrl;
             this.EventTable = hashTable;
@@ -69,8 +75,17 @@ namespace PGRipper
         protected string PostTitle { get; set; }
 
         /// <summary>
+        /// Gets or sets the web client.
+        /// </summary>
+        /// <value>
+        /// The web client.
+        /// </value>
+        protected WebClient WebClient { get; set; }
+
+        /// <summary>
         /// Start Download
         /// </summary>
+        [Obsolete("Please use StartDownloadAsync instead.")]
         public void StartDownload()
         {
             this.DoDownload();
@@ -84,6 +99,54 @@ namespace PGRipper
             }
 
             ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+        }
+
+        /// <summary>
+        /// Start Download Async.
+        /// </summary>
+        public void StartDownloadAsync()
+        {
+            if (this.EventTable.ContainsKey(this.ImageLinkURL))
+            {
+                return;
+            }
+
+            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = string.Empty, Url = this.ImageLinkURL };
+
+            try
+            {
+                this.EventTable.Add(this.ImageLinkURL, cacheObject);
+            }
+            catch (ThreadAbortException)
+            {
+                return;
+            }
+            catch (Exception)
+            {
+                if (this.EventTable.ContainsKey(this.ImageLinkURL))
+                {
+                    return;
+                }
+
+                this.EventTable.Add(this.ImageLinkURL, cacheObject);
+            }
+
+            try
+            {
+                if (!Directory.Exists(this.SavePath))
+                {
+                    Directory.CreateDirectory(this.SavePath);
+                }
+            }
+            catch (IOException ex)
+            {
+                MainForm.DeleteMessage = ex.Message;
+                MainForm.Delete = true;
+
+                return;
+            }
+
+            this.DoDownload();
         }
 
         /// <summary>
@@ -210,5 +273,69 @@ namespace PGRipper
             return string.Format(
                 "{0}{1}", postTitle, imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
         }
+
+        /// <summary>
+        /// Downloads the image.
+        /// </summary>
+        /// <param name="downloadPath">The download path.</param>
+        /// <param name="savePath">The save path.</param>
+        /// <returns>Returns if the Image was downloaded or not</returns>
+        protected bool DownloadImageAsync(string downloadPath, string savePath)
+        {
+            savePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(savePath));
+
+            if (!Directory.Exists(this.SavePath))
+            {
+                Directory.CreateDirectory(this.SavePath);
+            }
+
+            savePath = Utility.GetSuitableName(savePath);
+
+            ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = savePath;
+
+            this.WebClient.Headers.Add(string.Format("Referer: {0}", downloadPath));
+            this.WebClient.DownloadFileAsync(new Uri(downloadPath), savePath);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Downloads the image completed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.AsyncCompletedEventArgs" /> instance containing the event data.</param>
+        private void DownloadImageCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
+
+                var cacheObject = (CacheObject)this.EventTable[this.ImageLinkURL];
+
+                Application.DoEvents();
+
+                CacheController.Instance().LastPic = cacheObject.FilePath;
+
+                this.EventTable.Remove(this.ImageLinkURL);
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+
+                Application.DoEvents();
+            }
+            else
+            {
+                var exception = e.Error;
+
+                if (exception is IOException)
+                {
+                    MainForm.DeleteMessage = exception.Message;
+                    MainForm.Delete = true;
+                }
+
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+
+                Application.DoEvents();
+            }
+        } 
     }
 }

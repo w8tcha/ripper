@@ -14,13 +14,10 @@
 
 using System;
 using System.Collections;
-using System.Web;
 using System.Net;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace PGRipper
 {
