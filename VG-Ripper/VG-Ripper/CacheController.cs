@@ -611,6 +611,10 @@ namespace RiPRipper
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"imageteam.org/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/") >= 0 || imageUrl.IndexOf(@"ImageFolks.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImageFolks;

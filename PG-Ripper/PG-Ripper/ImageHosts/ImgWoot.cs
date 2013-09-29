@@ -11,16 +11,12 @@
 
 namespace PGRipper.ImageHosts
 {
-    using System;
     using System.Collections;
-    using System.IO;
-    using System.Net;
-    using System.Threading;
-
-    using PGRipper.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/HosterBin.com/PicsLite.com
+    /// Worker class to get images from 
+    /// ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/
+    /// HosterBin.com/PicsLite.com/ImageTeam.org
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {
@@ -45,124 +41,23 @@ namespace PGRipper.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageURL = ImageLinkURL;
-            var thumbURL = ThumbImageURL;
-
-            if (EventTable.ContainsKey(imageURL))
-            {
-                return true;
-            }
-
-            var filePath = string.Empty;
-
-            try
-            {
-                if (!Directory.Exists(this.SavePath))
-                {
-                    Directory.CreateDirectory(this.SavePath);
-                }
-            }
-            catch (IOException ex)
-            {
-                MainForm.DeleteMessage = ex.Message;
-                MainForm.Delete = true;
-
-                return false;
-            }
-
-            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = imageURL };
-
-            try
-            {
-                EventTable.Add(imageURL, cacheObject);
-            }
-            catch (ThreadAbortException)
-            {
-                return true;
-            }
-            catch (Exception)
-            {
-                if (EventTable.ContainsKey(imageURL))
-                {
-                    return false;
-                }
-
-                EventTable.Add(imageURL, cacheObject);
-            }
-
-            var imageDownloadURL = thumbURL;
+            var imageDownloadURL = ThumbImageURL;
 
             // Set the download Path
-            if (thumbURL.Contains("/upload/small/"))
+            if (ThumbImageURL.Contains("/upload/small/"))
             {
-                imageDownloadURL = thumbURL.Replace(@"/upload/small/", @"/upload/big/");
+                imageDownloadURL = ThumbImageURL.Replace(@"/upload/small/", @"/upload/big/");
             }
-            else if (thumbURL.Contains("/img/small/"))
+            else if (ThumbImageURL.Contains("/img/small/"))
             {
-                imageDownloadURL = thumbURL.Replace(@"/img/small/", @"/img/big/");
+                imageDownloadURL = ThumbImageURL.Replace(@"/img/small/", @"/img/big/");
             }
 
             // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
-            filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
-
-            if (filePath.Length > 260)
-            {
-                filePath = thumbURL.Substring(thumbURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
-
-                filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
-            }
-
-            //////////////////////////////////////////////////////////////////////////
-
-            var newAlteredPath = Utility.GetSuitableName(filePath, true);
-
-            if (filePath != newAlteredPath)
-            {
-                filePath = newAlteredPath;
-                ((CacheObject)EventTable[imageURL]).FilePath = filePath;
-            }
-
-            try
-            {
-                var client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", imageURL));
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(imageDownloadURL, filePath);
-                client.Dispose();
-            }
-            catch (ThreadAbortException)
-            {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
-
-                return true;
-            }
-            catch (IOException ex)
-            {
-                MainForm.DeleteMessage = ex.Message;
-                MainForm.Delete = true;
-
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
-
-                return true;
-            }
-            catch (WebException)
-            {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
-
-                return false;
-            }
-
-            ((CacheObject)EventTable[imageURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[imageURL]).FilePath = filePath;
-
-            return true;
+            // Finally Download the Image
+            return this.DownloadImageAsync(imageDownloadURL, filePath);
         }
-
-        //////////////////////////////////////////////////////////////////////////
     }
 }
