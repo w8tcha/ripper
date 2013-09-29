@@ -175,6 +175,7 @@
             "ImageSwitch.com",
             "ImageUpper.com",
             "ImagesGal.com",
+            "ImageTeam.org",
             "ImageThrust.com",
             "ImageTwist.com",
             "ImageVenue.com",

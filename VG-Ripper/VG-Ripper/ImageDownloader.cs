@@ -744,7 +744,7 @@ namespace RiPRipper
         public void GetImgWoot()
         {
             this.xService = new ImgWoot(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
-            this.xService.StartDownload();
+            this.xService.StartDownloadAsync();
         }
 
         /// <summary>
