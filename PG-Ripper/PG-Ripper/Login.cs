@@ -46,8 +46,8 @@ namespace PGRipper
             this.groupBox1.Text = this.rm.GetString("gbLoginHead");
             this.label1.Text = this.rm.GetString("lblUser");
             this.label2.Text = this.rm.GetString("lblPass");
-            this.checkBox1.Text = this.rm.GetString("chRememberCred");
-            this.LoginBtn.Text = this.rm.GetString("logintext");
+            this.RemberMe.Text = this.rm.GetString("chRememberCred");
+            this.LoginButton.Text = this.rm.GetString("logintext");
             this.label5.Text = this.rm.GetString("gbLanguage");
             this.label6.Text = this.rm.GetString("lblForums");
         }
@@ -60,7 +60,7 @@ namespace PGRipper
         private void LoginLoad(object sender, EventArgs e)
         {
             // Set Default Forum
-            this.cBForum.SelectedIndex = 0;
+            this.ForumList.SelectedIndex = 0;
 
             // Load Language Setting
             try
@@ -96,51 +96,88 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void LoginBtnClick(object sender, EventArgs e)
         {
-            if (this.textBox3.Text.StartsWith("http://"))
+            if (this.ForumUrl.Text.StartsWith("http://"))
             {
-                if (!this.textBox3.Text.EndsWith("/"))
+                if (!this.ForumUrl.Text.EndsWith("/"))
                 {
-                    this.textBox3.Text += "/";
+                    this.ForumUrl.Text += "/";
                 }
 
-                CacheController.Xform.userSettings.CurrentForumUrl = this.textBox3.Text;
+                CacheController.Xform.userSettings.CurrentForumUrl = this.ForumUrl.Text;
             }
 
-            // Encrypt Password
-            this.textBox2.Text = Utility.EncodePassword(this.textBox2.Text).Replace("-", string.Empty).ToLower();
+            string welcomeString = this.rm.GetString("lblWelcome"), lblFailed = this.rm.GetString("lblFailed");
 
-            LoginManager lgnMgr = new LoginManager(this.textBox1.Text, this.textBox2.Text);
-
-            string lblWelcome = this.rm.GetString("lblWelcome"), lblFailed = this.rm.GetString("lblFailed");
-
-            if (lgnMgr.DoLogin())
+            if (this.GuestLogin.Checked)
             {
-                this.label3.Text = string.Format("{0}{1}", lblWelcome, this.textBox1.Text);
-                this.label3.ForeColor = Color.Green;
-                this.LoginBtn.Enabled = false;
+                this.UserNameField.Text = "Guest";
+                this.PasswordField.Text = "Guest";
 
-                if (CacheController.Xform.userSettings.ForumsAccount.Any(item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl))
+                this.label3.Text = string.Format("{0}{1}", welcomeString, this.UserNameField.Text);
+                this.label3.ForeColor = Color.Green;
+                this.LoginButton.Enabled = false;
+
+                if (
+                    CacheController.Xform.userSettings.ForumsAccount.Any(
+                        item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl))
                 {
                     CacheController.Xform.userSettings.ForumsAccount.RemoveAll(
-                       item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl);
+                        item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl);
                 }
 
                 var forumsAccount = new ForumAccount
                 {
                     ForumURL = CacheController.Xform.userSettings.CurrentForumUrl,
-                    UserName = this.textBox1.Text,
-                    UserPassWord = this.textBox2.Text
+                    UserName = this.UserNameField.Text,
+                    UserPassWord = this.PasswordField.Text,
+                    GuestAccount = false
                 };
 
                 CacheController.Xform.userSettings.ForumsAccount.Add(forumsAccount);
-                CacheController.Xform.userSettings.CurrentUserName = this.textBox1.Text;
+                CacheController.Xform.userSettings.CurrentUserName = this.UserNameField.Text;
 
                 this.timer1.Enabled = true;
             }
             else
             {
-                this.label3.Text = lblFailed;
-                this.label3.ForeColor = Color.Red;
+                // Encrypt Password
+                this.PasswordField.Text =
+                    Utility.EncodePassword(this.PasswordField.Text).Replace("-", string.Empty).ToLower();
+
+                var loginManager = new LoginManager(this.UserNameField.Text, this.PasswordField.Text);
+
+                if (loginManager.DoLogin())
+                {
+                    this.label3.Text = string.Format("{0}{1}", welcomeString, this.UserNameField.Text);
+                    this.label3.ForeColor = Color.Green;
+                    this.LoginButton.Enabled = false;
+
+                    if (
+                        CacheController.Xform.userSettings.ForumsAccount.Any(
+                            item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl))
+                    {
+                        CacheController.Xform.userSettings.ForumsAccount.RemoveAll(
+                            item => item.ForumURL == CacheController.Xform.userSettings.CurrentForumUrl);
+                    }
+
+                    var forumsAccount = new ForumAccount
+                                            {
+                                                ForumURL = CacheController.Xform.userSettings.CurrentForumUrl,
+                                                UserName = this.UserNameField.Text,
+                                                UserPassWord = this.PasswordField.Text,
+                                                GuestAccount = false
+                                            };
+
+                    CacheController.Xform.userSettings.ForumsAccount.Add(forumsAccount);
+                    CacheController.Xform.userSettings.CurrentUserName = this.UserNameField.Text;
+
+                    this.timer1.Enabled = true;
+                }
+                else
+                {
+                    this.label3.Text = lblFailed;
+                    this.label3.ForeColor = Color.Red;
+                }
             }
         }
 
@@ -164,12 +201,13 @@ namespace PGRipper
             var forumsAccount = new ForumAccount
             {
                 ForumURL = CacheController.Xform.userSettings.CurrentForumUrl,
-                UserName = this.textBox1.Text,
-                UserPassWord = this.textBox2.Text
+                UserName = this.UserNameField.Text,
+                UserPassWord = this.PasswordField.Text,
+                GuestAccount = this.GuestLogin.Checked
             };
 
             CacheController.Xform.userSettings.ForumsAccount.Add(forumsAccount);
-            CacheController.Xform.userSettings.CurrentUserName = this.textBox1.Text;
+            CacheController.Xform.userSettings.CurrentUserName = this.UserNameField.Text;
 
             this.Close();
         }
@@ -211,33 +249,44 @@ namespace PGRipper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void CBForumSelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (this.cBForum.SelectedIndex)
+            switch (this.ForumList.SelectedIndex)
             {
                 case 1:
-                    this.textBox3.Text = "http://www.kitty-kats.net/";
+                    this.ForumUrl.Text = "http://www.kitty-kats.net/";
                     break;
                 case 2:
-                    this.textBox3.Text = "http://vipergirls.to/";
+                    this.ForumUrl.Text = "http://vipergirls.to/";
                     break;
                 case 3:
-                    this.textBox3.Text = "http://forums.sexyandfunny.com/";
+                    this.ForumUrl.Text = "http://forums.sexyandfunny.com/";
                     break;
                 case 4:
-                    this.textBox3.Text = "http://forum.scanlover.com/";
+                    this.ForumUrl.Text = "http://forum.scanlover.com/";
                     break;
                 case 5:
-                    this.textBox3.Text = "http://bignaturalsonly.com/";
+                    this.ForumUrl.Text = "http://bignaturalsonly.com/";
                     break;
                 case 6:
-                    this.textBox3.Text = "http://forum.phun.org/";
+                    this.ForumUrl.Text = "http://forum.phun.org/";
                     break;
                 case 7:
-                    this.textBox3.Text = "http://...";
+                    this.ForumUrl.Text = "http://...";
                     break;
                 default:
-                    this.textBox3.Text = "http://...";
+                    this.ForumUrl.Text = "http://...";
                     break;
             }
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the GuestLogin control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void GuestLogin_CheckedChanged(object sender, EventArgs e)
+        {
+            this.UserNameField.Enabled = !this.GuestLogin.Checked;
+            this.PasswordField.Enabled = !this.GuestLogin.Checked;
         }
     }
 }

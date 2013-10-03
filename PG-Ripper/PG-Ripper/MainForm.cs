@@ -260,10 +260,16 @@ namespace PGRipper
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
-            CacheController.Xform = new MainForm();
-            ProcessArgs(args, CacheController.Xform);
+            try
+            {
+                CacheController.Xform = new MainForm();
+                ProcessArgs(args, CacheController.Xform);
 
-            Application.Run(CacheController.Xform);
+                Application.Run(CacheController.Xform);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -738,21 +744,29 @@ namespace PGRipper
                 this.userSettings.CurrentForumUrl = currentAccount.ForumURL;
                 this.userSettings.CurrentUserName = currentAccount.UserName;
 
-                LoginManager lgnMgr = new LoginManager(currentAccount.UserName, currentAccount.UserPassWord);
-
-                if (lgnMgr.DoLogin())
+                if (currentAccount.GuestAccount)
                 {
-                    bCameThroughCorrectLogin = true;
+                    this.bCameThroughCorrectLogin = true;
                     this.CheckAccountMenu();
                 }
                 else
                 {
-                    this.Visible = false;
+                    var lgnMgr = new LoginManager(currentAccount.UserName, currentAccount.UserPassWord);
 
-                    Login frmLgn = new Login();
-                    frmLgn.ShowDialog(this);
+                    if (lgnMgr.DoLogin())
+                    {
+                        this.bCameThroughCorrectLogin = true;
+                        this.CheckAccountMenu();
+                    }
+                    else
+                    {
+                        this.Visible = false;
 
-                    this.Visible = true;
+                        Login frmLgn = new Login();
+                        frmLgn.ShowDialog(this);
+
+                        this.Visible = true;
+                    }
                 }
             }
             else
@@ -809,26 +823,33 @@ namespace PGRipper
 
             if (accountExists)
             {
-                LoginManager lgnMgr = new LoginManager(currentForumAccount.UserName, currentForumAccount.UserPassWord);
-
-                if (lgnMgr.DoLogin())
+                if (currentForumAccount.GuestAccount)
                 {
-                    bCameThroughCorrectLogin = true;
+                    this.bCameThroughCorrectLogin = true;
                 }
                 else
                 {
-                    Login frmLgn = new Login();
-                    frmLgn.ShowDialog(this);
+                    LoginManager lgnMgr = new LoginManager(currentForumAccount.UserName, currentForumAccount.UserPassWord);
 
-                    DialogResult result = TopMostMessageBox.Show(
-                        this._ResourceManager.GetString("mbExit"),
-                        this._ResourceManager.GetString("mbExitTtl"),
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
-
-                    if (result == DialogResult.Yes)
+                    if (lgnMgr.DoLogin())
                     {
-                        Application.Exit();
+                        this.bCameThroughCorrectLogin = true;
+                    }
+                    else
+                    {
+                        Login frmLgn = new Login();
+                        frmLgn.ShowDialog(this);
+
+                        DialogResult result = TopMostMessageBox.Show(
+                            this._ResourceManager.GetString("mbExit"),
+                            this._ResourceManager.GetString("mbExitTtl"),
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                        if (result == DialogResult.Yes)
+                        {
+                            Application.Exit();
+                        }
                     }
                 }
             }
