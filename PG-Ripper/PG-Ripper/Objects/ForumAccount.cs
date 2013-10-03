@@ -16,6 +16,14 @@ namespace PGRipper.Objects
     /// </summary>
     public class ForumAccount : object
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ForumAccount"/> class.
+        /// </summary>
+        public ForumAccount()
+        {
+            this.GuestAccount = false;
+        }
+
         #region Properties
 
         /// <summary>
@@ -41,6 +49,14 @@ namespace PGRipper.Objects
         /// The user pass word.
         /// </value>
         public string UserPassWord { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [guest account].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [guest account]; otherwise, <c>false</c>.
+        /// </value>
+        public bool GuestAccount { get; set; }
 
         #endregion
     }
