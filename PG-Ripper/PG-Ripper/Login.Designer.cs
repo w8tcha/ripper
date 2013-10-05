@@ -37,13 +37,13 @@ namespace PGRipper
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.GuestLogin = new System.Windows.Forms.CheckBox();
             this.ForumList = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.ForumUrl = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.RemberMe = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.LoginButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,7 +51,6 @@ namespace PGRipper
             this.label1 = new System.Windows.Forms.Label();
             this.UserNameField = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Timers.Timer();
-            this.GuestLogin = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timer1)).BeginInit();
             this.SuspendLayout();
@@ -65,7 +64,6 @@ namespace PGRipper
             this.groupBox1.Controls.Add(this.ForumUrl);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboBox2);
-            this.groupBox1.Controls.Add(this.RemberMe);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.LoginButton);
             this.groupBox1.Controls.Add(this.label2);
@@ -80,8 +78,20 @@ namespace PGRipper
             this.groupBox1.Text = "Provide Login Credentials for the Forums";
             this.groupBox1.UseCompatibleTextRendering = true;
             // 
+            // GuestLogin
+            // 
+            this.GuestLogin.AutoSize = true;
+            this.GuestLogin.Location = new System.Drawing.Point(102, 78);
+            this.GuestLogin.Name = "GuestLogin";
+            this.GuestLogin.Size = new System.Drawing.Size(92, 17);
+            this.GuestLogin.TabIndex = 17;
+            this.GuestLogin.Text = "Guest Access";
+            this.GuestLogin.UseVisualStyleBackColor = true;
+            this.GuestLogin.CheckedChanged += new System.EventHandler(this.GuestLogin_CheckedChanged);
+            // 
             // ForumList
             // 
+            this.ForumList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ForumList.IntegralHeight = false;
             this.ForumList.ItemHeight = 13;
             this.ForumList.Items.AddRange(new object[] {
@@ -149,19 +159,6 @@ namespace PGRipper
             this.comboBox2.TabIndex = 6;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2SelectedIndexChanged);
             // 
-            // RemberMe
-            // 
-            this.RemberMe.Checked = true;
-            this.RemberMe.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.RemberMe.Enabled = false;
-            this.RemberMe.Location = new System.Drawing.Point(102, 170);
-            this.RemberMe.MaximumSize = new System.Drawing.Size(144, 24);
-            this.RemberMe.Name = "RemberMe";
-            this.RemberMe.Size = new System.Drawing.Size(144, 24);
-            this.RemberMe.TabIndex = 4;
-            this.RemberMe.Text = "Remember Me";
-            this.RemberMe.UseCompatibleTextRendering = true;
-            // 
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -174,12 +171,12 @@ namespace PGRipper
             // 
             // LoginButton
             // 
+            this.LoginButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoginButton.Image = ((System.Drawing.Image)(resources.GetObject("LoginButton.Image")));
             this.LoginButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.LoginButton.Location = new System.Drawing.Point(252, 170);
-            this.LoginButton.MaximumSize = new System.Drawing.Size(96, 24);
+            this.LoginButton.Location = new System.Drawing.Point(102, 170);
             this.LoginButton.Name = "LoginButton";
-            this.LoginButton.Size = new System.Drawing.Size(96, 24);
+            this.LoginButton.Size = new System.Drawing.Size(246, 40);
             this.LoginButton.TabIndex = 5;
             this.LoginButton.Text = "Login";
             this.LoginButton.UseCompatibleTextRendering = true;
@@ -228,17 +225,6 @@ namespace PGRipper
             this.timer1.SynchronizingObject = this;
             this.timer1.Elapsed += new System.Timers.ElapsedEventHandler(this.Timer1Elapsed);
             // 
-            // GuestLogin
-            // 
-            this.GuestLogin.AutoSize = true;
-            this.GuestLogin.Location = new System.Drawing.Point(102, 78);
-            this.GuestLogin.Name = "GuestLogin";
-            this.GuestLogin.Size = new System.Drawing.Size(80, 17);
-            this.GuestLogin.TabIndex = 17;
-            this.GuestLogin.Text = "checkBox2";
-            this.GuestLogin.UseVisualStyleBackColor = true;
-            this.GuestLogin.CheckedChanged += new System.EventHandler(this.GuestLogin_CheckedChanged);
-            // 
             // Login
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -267,7 +253,6 @@ namespace PGRipper
         private Button LoginButton;
         private Label label3;
         private System.Timers.Timer timer1;
-        private CheckBox RemberMe;
         private ComboBox comboBox2;
         private Label label5;
         private Label label6;

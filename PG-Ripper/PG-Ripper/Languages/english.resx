@@ -367,4 +367,13 @@
   <data name="DoNothing" xml:space="preserve">
     <value>Do Nothing</value>
   </data>
+  <data name="GuestLogin" xml:space="preserve">
+    <value>Guest Access</value>
+  </data>
+  <data name="AddNewAccount" xml:space="preserve">
+    <value>Add New Forum Account</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Delete Forum Account</value>
+  </data>
 </root>

@@ -46,10 +46,10 @@ namespace PGRipper
             this.groupBox1.Text = this.rm.GetString("gbLoginHead");
             this.label1.Text = this.rm.GetString("lblUser");
             this.label2.Text = this.rm.GetString("lblPass");
-            this.RemberMe.Text = this.rm.GetString("chRememberCred");
             this.LoginButton.Text = this.rm.GetString("logintext");
             this.label5.Text = this.rm.GetString("gbLanguage");
             this.label6.Text = this.rm.GetString("lblForums");
+            this.GuestLogin.Text = this.rm.GetString("GuestLogin");
         }
 
         /// <summary>
