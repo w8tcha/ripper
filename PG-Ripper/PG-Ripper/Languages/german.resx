@@ -345,4 +345,13 @@
   <data name="DoNothing" xml:space="preserve">
     <value>nichts tun</value>
   </data>
+  <data name="GuestLogin" xml:space="preserve">
+    <value>Gastzugang</value>
+  </data>
+  <data name="AddNewAccount" xml:space="preserve">
+    <value>Neues Foren Konto hinzufügen</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Forum Konto löschen</value>
+  </data>
 </root>

@@ -77,10 +77,7 @@ namespace PGRipper
 
             string sTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains("vipergirls.to")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
+            if (Utility.IsV4Forum(CacheController.Xform.userSettings))
             {
                 return sTitle.Trim();
             }
@@ -162,9 +159,7 @@ namespace PGRipper
                 return iPageEnd < 0 ? string.Empty : sPage.Substring(iPageStart, iPageEnd - iPageStart);
             }
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") 
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/"))
+            if (Utility.IsV4Forum(CacheController.Xform.userSettings))
             {
                 sPage = GetRipPage(content);
 
@@ -259,10 +254,7 @@ namespace PGRipper
 
             string sPostTitle;
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
-                || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
+            if (Utility.IsV4Forum(CacheController.Xform.userSettings))
             {
                 ////////////////////////////////////
                 // Extract Current Post first
@@ -330,10 +322,7 @@ namespace PGRipper
 
             if (string.IsNullOrEmpty(sPostTitle))
             {
-                if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
-                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
-                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
-                    || CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
+                if (Utility.IsV4Forum(CacheController.Xform.userSettings))
                 {
                     sPostTitle = string.Format("post# {0}", url.Substring(url.IndexOf(@"#post") + 5));
                 }

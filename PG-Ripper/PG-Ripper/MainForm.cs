@@ -602,13 +602,17 @@ namespace PGRipper
 
             var newAccountMenuItem = new ToolStripMenuItem
             {
-                Text = "Add New Forum Account",
+                Text = this._ResourceManager.GetString("AddNewAccount"),
                 Checked = false
             };
 
             newAccountMenuItem.Click += this.AddNewAccount_Click;
 
             this.accountsToolStripMenuItem.DropDownItems.Add(newAccountMenuItem);
+
+            this.accountsToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+
+            var deleteForumString = this._ResourceManager.GetString("DeleteAccount");
 
             foreach (var accounts in this.userSettings.ForumsAccount)
             {
@@ -632,6 +636,16 @@ namespace PGRipper
                     };
 
                 forumMenuItem.Click += this.ForumMenuItem_Click;
+
+                var forumDeleteMenuItem = new ToolStripMenuItem
+                    {
+                        Tag = accounts.ForumURL,
+                        Text = deleteForumString
+                    };
+
+                forumDeleteMenuItem.Click += this.ForumMenuDeleteItem_Click;
+
+                forumMenuItem.DropDownItems.Add(forumDeleteMenuItem);
 
                 this.accountsToolStripMenuItem.DropDownItems.Add(forumMenuItem);
             }
@@ -664,6 +678,37 @@ namespace PGRipper
         private void ForumMenuItem_Click(object sender, EventArgs e)
         {
             this.SwitchAccount(sender);
+        }
+
+        /// <summary>
+        /// Delete the Forum Account
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void ForumMenuDeleteItem_Click(object sender, EventArgs e)
+        {
+            var menuItem = (ToolStripMenuItem)sender;
+
+            var deleteForumUrl = (string)menuItem.Tag;
+
+            if (CacheController.Xform.userSettings.ForumsAccount.Any(item => item.ForumURL.Equals(deleteForumUrl)))
+            {
+                CacheController.Xform.userSettings.ForumsAccount.RemoveAll(item => item.ForumURL.Equals(deleteForumUrl));
+            }
+
+            Utility.SaveSettings(this.userSettings);
+
+            this.CheckAccountMenu();
+
+            // if account is current account switch to the first available account
+            if (CacheController.Xform.userSettings.CurrentForumUrl.Equals(deleteForumUrl))
+            {
+                this.SwitchCurrentForumAccount(CacheController.Xform.userSettings.ForumsAccount.First().ForumURL);
+            }
+            else
+            {
+                this.SwitchAccount(null);
+            }
         }
 
         /// <summary>
@@ -1305,11 +1350,7 @@ namespace PGRipper
             {
                 tyURL = string.Format("{0}post_thanks.php?do=post_thanks_add&p={1}", this.userSettings.CurrentForumUrl, sPostId);
             }
-            else if (this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") || 
-                this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
-                     this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                     this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
-                    this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
+            else if (Utility.IsV4Forum(this.userSettings))
             {
                 tyURL = string.Format(
                     "{0}post_thanks.php?do=post_thanks_add&p={1}&securitytoken={2}",
@@ -1376,14 +1417,11 @@ namespace PGRipper
         {
             Indexes idxs = new Indexes();
 
-            string sPagecontent = this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to")
-                                  || this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net")
-                                  || this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com")
-                                  || this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") 
+            var pagecontent = Utility.IsV4Forum(this.userSettings)
                                       ? idxs.GetThreadPagesNew(sHtmlUrl)
                                       : idxs.GetThreadPages(sHtmlUrl);
 
-            this.indexedTopicsList = idxs.ParseHtml(sPagecontent, sHtmlUrl);
+            this.indexedTopicsList = idxs.ParseHtml(pagecontent, sHtmlUrl);
         }
 
         /// <summary>
@@ -1466,11 +1504,7 @@ namespace PGRipper
 
                 newJob.Title = Maintenance.GetInstance().GetRipPageTitle(newJob.HtmlPayLoad);
 
-                if (this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"kitty-kats.net") || 
-                    this.userSettings.CurrentForumUrl.Contains(@"forum.phun.org/") ||
-                    this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"passesforthemasses.com/") ||
-                    this.userSettings.AutoThank & this.userSettings.CurrentForumUrl.Contains(@"vipergirls.to") ||
-                    this.userSettings.CurrentForumUrl.Contains(@"bignaturalsonly.com"))
+                if (this.userSettings.AutoThank & Utility.IsV4Forum(this.userSettings))
                 {
                     newJob.SecurityToken = Maintenance.GetInstance().GetSecurityToken(newJob.HtmlPayLoad);
                 }
