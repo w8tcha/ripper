@@ -63,7 +63,7 @@ namespace PGRipper
 
             iTitleStart += 7;
 
-            if (CacheController.Xform.userSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
+            if (Utility.IsV4Forum(CacheController.Xform.userSettings))
             {
                 iTitleStart += 1;
             }
@@ -394,8 +394,12 @@ namespace PGRipper
                 var wc = new WebClient();
                
                 wc.Headers.Add(string.Format("Referer: {0}", url));
-                wc.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));
-                
+
+                if (!CacheController.Xform.userSettings.CurrentUserName.Equals("Guest"))
+                {
+                    wc.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));
+                }
+
                 sPageRead = wc.DownloadString(url);
             }
             catch (Exception)
