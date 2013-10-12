@@ -155,7 +155,12 @@ namespace PGRipper
             try
             {
                 WebClient wc = new WebClient();
-                wc.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));
+                
+                if (!CacheController.Xform.userSettings.CurrentUserName.Equals("Guest"))
+                {
+                    wc.Headers.Add(string.Format("Cookie: {0}", CookieManager.GetInstance().GetCookieString()));
+                }
+
                 sResult = wc.DownloadString(uURL);
 
                 while (wc.IsBusy)
