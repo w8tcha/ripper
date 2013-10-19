@@ -11,12 +11,8 @@
 
 namespace RiPRipper.ImageHosts
 {
-    using System;
     using System.Collections;
-    using System.IO;
-    using System.Net;
     using System.Text.RegularExpressions;
-    using System.Threading;
 
     using RiPRipper.Objects;
 
@@ -48,121 +44,37 @@ namespace RiPRipper.ImageHosts
         {
             var imageURL = ImageLinkURL;
 
-            if (EventTable.ContainsKey(imageURL))
-            {
-                return true;
-            }
+            // Get Image Link
+            var page = GetImageHostPage(ref imageURL);
 
-            var filePath = string.Empty;
-
-            try
+            if (page.Length < 10)
             {
-                if (!Directory.Exists(this.SavePath))
-                {
-                    Directory.CreateDirectory(this.SavePath);
-                }
-            }
-            catch (IOException ex)
-            {
-                MainForm.DeleteMessage = ex.Message;
-                MainForm.Delete = true;
-
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
-            var cacheObject = new CacheObject { IsDownloaded = false, FilePath = filePath, Url = imageURL };
+            string imageDownloadURL;
 
-            try
+            var match = Regex.Match(
+                page,
+                @"src=\""(?<inner>[^\""]*)\"" class=""pic""",
+                RegexOptions.Compiled);
+
+            if (match.Success)
             {
-                EventTable.Add(imageURL, cacheObject);
-            }
-            catch (ThreadAbortException)
-            {
-                return true;
-            }
-            catch (Exception)
-            {
-                if (EventTable.ContainsKey(imageURL))
-                {
-                    return false;
-                }
-
-                EventTable.Add(imageURL, cacheObject);
-            }
-
-            string sPage = GetImageHostPage(ref imageURL);
-
-            if (sPage.Length < 10)
-            {
-                return false;
-            }
-
-            string strNewURL;
-
-            var m = Regex.Match(sPage, @"src=\""(?<inner>[^\""]*)\"" class=""pic""", RegexOptions.Singleline);
-
-            if (m.Success)
-            {
-                strNewURL = m.Groups["inner"].Value;
+                imageDownloadURL = match.Groups["inner"].Value.Replace("&amp;", "&");
             }
             else
             {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
-            filePath = imageURL.Substring(imageURL.LastIndexOf("/", StringComparison.Ordinal) + 1).Replace(".html", string.Empty);
+            // Set Image Name instead of using random name
+            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
 
-            filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
-
-            //////////////////////////////////////////////////////////////////////////
-
-            string newAlteredPath = Utility.GetSuitableName(filePath);
-            if (filePath != newAlteredPath)
-            {
-                filePath = newAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = filePath;
-            }
-
-            try
-            {
-                WebClient client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", imageURL));
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
-                client.DownloadFile(strNewURL, filePath);
-                client.Dispose();
-            }
-            catch (ThreadAbortException)
-            {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
-
-                return true;
-            }
-            catch (IOException ex)
-            {
-                MainForm.DeleteMessage = ex.Message;
-                MainForm.Delete = true;
-
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
-
-                return true;
-            }
-            catch (WebException)
-            {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
-
-                return false;
-            }
-
-            ((CacheObject)EventTable[this.ImageLinkURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[this.ImageLinkURL]).FilePath = filePath;
-
-            return true;
+            // Finally Download the Image
+            return this.DownloadImageAsync(imageDownloadURL, filePath);
         }
-
-        //////////////////////////////////////////////////////////////////////////
-        
     }
 }

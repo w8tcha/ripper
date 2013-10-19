@@ -123,6 +123,7 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Items.AddRange(new object[] {
+            "3XVintage.com",
             "7Bucket.com",
             "10Pix.com",
             "Abload.de",
@@ -156,6 +157,7 @@
             "GlowFoto.com",
             "Hoooster.com",
             "HosterBin.com",
+            "HostUrImage.com",
             "HotLinkImage.com",
             "Image2Share.com",
             "ImageBam.com",
@@ -203,6 +205,7 @@
             "ImgDino.com",
             "ImGirl.info",
             "ImgMoney.com",
+            "ImgNext.com",
             "ImgOnion.com",
             "ImgPo.st",
             "ImgProof.net",

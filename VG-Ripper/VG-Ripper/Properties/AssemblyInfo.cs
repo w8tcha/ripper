@@ -25,7 +25,7 @@ using System.Reflection;
 
 [assembly: AssemblyDescription("Rips Images from ViperGirls Forums")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ripper.codeplex.com")]
+[assembly: AssemblyCompany("Ripper.CodePlex.com")]
 
 [assembly: AssemblyCopyright("(c) The Watcher")]
 [assembly: AssemblyTrademark("")]
