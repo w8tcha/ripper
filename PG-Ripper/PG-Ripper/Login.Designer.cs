@@ -43,7 +43,7 @@ namespace PGRipper
             this.label6 = new System.Windows.Forms.Label();
             this.ForumUrl = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.LanuageSelector = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.LoginButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -63,7 +63,7 @@ namespace PGRipper
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.ForumUrl);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.comboBox2);
+            this.groupBox1.Controls.Add(this.LanuageSelector);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.LoginButton);
             this.groupBox1.Controls.Add(this.label2);
@@ -107,7 +107,7 @@ namespace PGRipper
             this.ForumList.Name = "ForumList";
             this.ForumList.Size = new System.Drawing.Size(246, 21);
             this.ForumList.TabIndex = 2;
-            this.ForumList.SelectedIndexChanged += new System.EventHandler(this.CBForumSelectedIndexChanged);
+            this.ForumList.SelectedIndexChanged += new System.EventHandler(this.ForumSelectedIndexChanged);
             // 
             // label4
             // 
@@ -145,19 +145,19 @@ namespace PGRipper
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label5.UseCompatibleTextRendering = true;
             // 
-            // comboBox2
+            // LanuageSelector
             // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.LanuageSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.LanuageSelector.Items.AddRange(new object[] {
             "German",
             "French",
             "English"});
-            this.comboBox2.Location = new System.Drawing.Point(240, 270);
-            this.comboBox2.MaximumSize = new System.Drawing.Size(121, 0);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 21);
-            this.comboBox2.TabIndex = 6;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.ComboBox2SelectedIndexChanged);
+            this.LanuageSelector.Location = new System.Drawing.Point(240, 270);
+            this.LanuageSelector.MaximumSize = new System.Drawing.Size(121, 0);
+            this.LanuageSelector.Name = "LanuageSelector";
+            this.LanuageSelector.Size = new System.Drawing.Size(121, 21);
+            this.LanuageSelector.TabIndex = 6;
+            this.LanuageSelector.SelectedIndexChanged += new System.EventHandler(this.LanuageSelectorIndexChanged);
             // 
             // label3
             // 
@@ -253,7 +253,7 @@ namespace PGRipper
         private Button LoginButton;
         private Label label3;
         private System.Timers.Timer timer1;
-        private ComboBox comboBox2;
+        private ComboBox LanuageSelector;
         private Label label5;
         private Label label6;
         private TextBox ForumUrl;

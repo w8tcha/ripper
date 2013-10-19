@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "PG-Ripper 64Bit"
-#define MyAppVersion "1.4.2.0"
+#define MyAppVersion "1.4.2.1"
 #define MyAppPublisher "The Watcher"
 #define MyAppURL "http://ripper.codeplex.com"
 #define MyAppExeName "PGRipper.exe"

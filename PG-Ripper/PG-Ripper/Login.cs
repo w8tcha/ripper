@@ -70,22 +70,22 @@ namespace PGRipper
                 switch (sLanguage)
                 {
                     case "de-DE":
-                        this.comboBox2.SelectedIndex = 0;
+                        this.LanuageSelector.SelectedIndex = 0;
                         break;
                     case "fr-FR":
-                        this.comboBox2.SelectedIndex = 1;
+                        this.LanuageSelector.SelectedIndex = 1;
                         break;
                     case "en-EN":
-                        this.comboBox2.SelectedIndex = 2;
+                        this.LanuageSelector.SelectedIndex = 2;
                         break;
                     default:
-                        this.comboBox2.SelectedIndex = 2;
+                        this.LanuageSelector.SelectedIndex = 2;
                         break;
                 }
             }
             catch (Exception)
             {
-                this.comboBox2.SelectedIndex = 2;
+                this.LanuageSelector.SelectedIndex = 2;
             }
         }
 
@@ -217,9 +217,9 @@ namespace PGRipper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void ComboBox2SelectedIndexChanged(object sender, EventArgs e)
+        private void LanuageSelectorIndexChanged(object sender, EventArgs e)
         {
-            switch (this.comboBox2.SelectedIndex)
+            switch (this.LanuageSelector.SelectedIndex)
             {
                 case 0:
                     this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
@@ -247,7 +247,7 @@ namespace PGRipper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void CBForumSelectedIndexChanged(object sender, EventArgs e)
+        private void ForumSelectedIndexChanged(object sender, EventArgs e)
         {
             switch (this.ForumList.SelectedIndex)
             {

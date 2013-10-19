@@ -13,11 +13,6 @@ namespace PGRipper.ImageHosts
 {
     using System;
     using System.Collections;
-    using System.IO;
-    using System.Net;
-    using System.Threading;
-
-    using PGRipper.Objects;
 
     /// <summary>
     /// Worker class to get images from ImageZilla.net
