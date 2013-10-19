@@ -16,7 +16,7 @@ namespace PGRipper.ImageHosts
     /// <summary>
     /// Worker class to get images from 
     /// ImgWoot.com/ImgMoney.com/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/
-    /// HosterBin.com/PicsLite.com/ImageTeam.org
+    /// HosterBin.com/PicsLite.com/ImageTeam.org/ImgNext.com/HostUrImage.com/3XVintage.com
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {

@@ -622,10 +622,13 @@ namespace PGRipper
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the ImageTwist download
+        /// </summary>
         public void GetImageTwist()
         {
             this.xService = new ImageTwist(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
-            this.xService.StartDownload();
+            this.xService.StartDownloadAsync();
         }
 
         public void GetImageWaste()

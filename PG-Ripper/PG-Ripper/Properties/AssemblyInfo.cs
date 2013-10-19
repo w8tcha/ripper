@@ -25,14 +25,14 @@ using System.Reflection;
 
 [assembly: AssemblyDescription("Rips Images from VB Forums")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ripper.WatchersNET.de")]
+[assembly: AssemblyCompany("Ripper.CodePlex.com")]
 
 [assembly: AssemblyCopyright("(c) The Watcher")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("1.4.2.0")]
-[assembly: AssemblyFileVersionAttribute("1.4.2.0")]
+[assembly: AssemblyVersion("1.4.2.1")]
+[assembly: AssemblyFileVersionAttribute("1.4.2.1")]
 
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyName("")]
