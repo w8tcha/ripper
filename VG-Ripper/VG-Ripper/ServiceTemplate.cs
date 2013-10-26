@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper
+namespace Ripper
 {
     using System;
     using System.Collections;
@@ -19,7 +19,7 @@ namespace RiPRipper
     using System.Threading;
     using System.Windows.Forms;
 
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Service Template Class
@@ -33,8 +33,9 @@ namespace RiPRipper
         /// <param name="imageUrl">The image url.</param>
         /// <param name="thumbImageUrl">The thumb image URL.</param>
         /// <param name="postTitle">The post title</param>
+        /// <param name="imageNumber">The image number.</param>
         /// <param name="hashTable">The url list.</param>
-        protected ServiceTemplate(string savePath, string imageUrl, string thumbImageUrl, string postTitle, ref Hashtable hashTable)
+        protected ServiceTemplate(string savePath, string imageUrl, string thumbImageUrl, string postTitle, int imageNumber, ref Hashtable hashTable)
         {
             this.WebClient = new WebClient();
             this.WebClient.DownloadFileCompleted += this.DownloadImageCompleted;
@@ -44,6 +45,7 @@ namespace RiPRipper
             this.EventTable = hashTable;
             this.SavePath = savePath;
             this.PostTitle = postTitle;
+            this.ImageNumber = imageNumber;
         }
 
         /// <summary>
@@ -73,6 +75,14 @@ namespace RiPRipper
         /// The post title.
         /// </value>
         protected string PostTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the image number.
+        /// </summary>
+        /// <value>
+        /// The image number.
+        /// </value>
+        protected int ImageNumber { get; set; }
 
         /// <summary>
         /// Gets or sets the web client.
@@ -260,13 +270,19 @@ namespace RiPRipper
         /// </summary>
         /// <param name="postTitle">The post title.</param>
         /// <param name="imageUrl">The image URL.</param>
-        /// <returns>Returns the Image Name.</returns>
-        protected string GetImageName(string postTitle, string imageUrl)
+        /// <param name="imageNumber">The image number.</param>
+        /// <returns>
+        /// Returns the Image Name.
+        /// </returns>
+        protected string GetImageName(string postTitle, string imageUrl, int imageNumber)
         {
             postTitle = Utility.RemoveIllegalCharecters(postTitle).Replace(" ", "_");
 
             return string.Format(
-                "{0}{1}", postTitle, imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
+                "{0}_{1}{2}",
+                postTitle,
+                imageNumber,
+                imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
         }
 
         /// <summary>
@@ -274,7 +290,9 @@ namespace RiPRipper
         /// </summary>
         /// <param name="downloadPath">The download path.</param>
         /// <param name="savePath">The save path.</param>
-        /// <returns>Returns if the Image was downloaded or not</returns>
+        /// <returns>
+        /// Returns if the Image was downloaded or not
+        /// </returns>
         protected bool DownloadImageAsync(string downloadPath, string savePath)
         {
             savePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(savePath));
@@ -324,6 +342,10 @@ namespace RiPRipper
                 {
                     MainForm.DeleteMessage = exception.Message;
                     MainForm.Delete = true;
+                }
+                else
+                {
+                    Utility.SaveOnCrash(exception.Message, exception.StackTrace, null);
                 }
 
                 ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;

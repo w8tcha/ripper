@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -17,7 +17,7 @@ namespace RiPRipper.ImageHosts
     using System.Net;
     using System.Text.RegularExpressions;
     using System.Threading;
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from ImagePorter.com
@@ -36,8 +36,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="hashtable">
         /// The hashtable.
         /// </param>
-        public ImagePorter(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public ImagePorter(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
 

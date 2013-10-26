@@ -9,10 +9,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper
+namespace Ripper
 {
     using System.Collections.Generic;
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Ripper ONLY handles Level one indices (Index -> post or Index -> Thread)

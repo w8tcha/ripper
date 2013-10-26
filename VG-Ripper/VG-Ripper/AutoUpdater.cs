@@ -11,7 +11,7 @@
 
 #if (!RIPRIPPERX)
 
-namespace RiPRipper
+namespace Ripper
 {
     #region
 

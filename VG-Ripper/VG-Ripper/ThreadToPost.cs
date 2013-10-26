@@ -9,10 +9,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper
+namespace Ripper
 {
     using System.Collections.Generic;
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// This class gets all the thread pages of the Thread and parse every single post

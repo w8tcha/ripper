@@ -23,17 +23,17 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 
-namespace RiPRipper
+namespace Ripper
 {
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from ImageHosting.gr
     /// </summary>
     public class ImageHosting : ServiceTemplate
     {
-        public ImageHosting(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public ImageHosting(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashtable)
         {
         }
 

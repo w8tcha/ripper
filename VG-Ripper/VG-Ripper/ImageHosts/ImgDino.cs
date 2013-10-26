@@ -9,14 +9,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
     using System.IO;
     using System.Net;
     using System.Threading;
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from ImgDino.com/ImgTiger.com
@@ -31,8 +31,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgDino(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public ImgDino(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
 
@@ -94,7 +94,7 @@ namespace RiPRipper.ImageHosts
             strNewURL = strNewURL.Replace("_thumb", string.Empty);
 
             // Set Image Name instead of using random name
-            strFilePath = this.GetImageName(this.PostTitle, strNewURL);
+            strFilePath = this.GetImageName(this.PostTitle, strNewURL, this.ImageNumber);
 
             strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 

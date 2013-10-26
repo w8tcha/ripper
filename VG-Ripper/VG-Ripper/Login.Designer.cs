@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
 
-namespace RiPRipper
+namespace Ripper
 {
     partial class Login
     {

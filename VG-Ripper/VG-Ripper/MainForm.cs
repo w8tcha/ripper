@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper
+namespace Ripper
 {
     using System;
     using System.Collections;
@@ -23,10 +23,9 @@ namespace RiPRipper
     using System.Threading;
     using System.Windows.Forms;
     using System.Xml.Serialization;
-    using Microsoft.WindowsAPICodePack.Shell;
     using Microsoft.WindowsAPICodePack.Taskbar;
 
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// The Main Form.
@@ -92,7 +91,7 @@ namespace RiPRipper
         /// The Resource Manger that is used for Icons and Labels etc.
         /// </summary>
         private ResourceManager _ResourceManager = new ResourceManager(
-            "RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+            "Ripper.Languages.english", Assembly.GetExecutingAssembly());
 
         /// <summary>
         /// Indicator if the ripper is currently hidden in the tray
@@ -115,7 +114,6 @@ namespace RiPRipper
 #if (!RIPRIPPERX)
 
         private TaskbarManager windowsTaskbar;
-        private JumpList jumpList;
 
 #endif
 
@@ -489,16 +487,16 @@ namespace RiPRipper
                 switch (this.cacheController.UserSettings.Language)
                 {
                     case "de-DE":
-                        this._ResourceManager = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
+                        this._ResourceManager = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
                         break;
                     case "fr-FR":
-                        this._ResourceManager = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
+                        this._ResourceManager = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
                         break;
                     case "en-EN":
-                        this._ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
                     default:
-                        this._ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
                 }
 
@@ -506,7 +504,7 @@ namespace RiPRipper
             }
             catch (Exception)
             {
-                this._ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
             }
 
 
@@ -1746,13 +1744,14 @@ namespace RiPRipper
                             }
 
                             CacheController.Instance()
-                                           .DownloadImage(
-                                               this.mImagesList[i].ImageUrl,
-                                               this.mImagesList[i].ThumbnailUrl,
-                                               this.currentJob.StorePath,
-                                               !string.IsNullOrEmpty(this.currentJob.PostTitle)
-                                                   ? this.currentJob.PostTitle
-                                                   : this.currentJob.Title);
+                                .DownloadImage(
+                                    this.mImagesList[i].ImageUrl,
+                                    this.mImagesList[i].ThumbnailUrl,
+                                    this.currentJob.StorePath,
+                                    !string.IsNullOrEmpty(this.currentJob.PostTitle)
+                                        ? this.currentJob.PostTitle
+                                        : this.currentJob.Title,
+                                    i + 1);
                         }
 
                         if (i > this.lvCurJob.Items.Count)
@@ -2768,28 +2767,6 @@ namespace RiPRipper
                     Environment.OSVersion.Version.Minor >= 1)
                 {
                     this.windowsTaskbar = TaskbarManager.Instance;
-
-                    // create a new taskbar jump list for the main window
-                    this.jumpList = JumpList.CreateJumpList();
-
-                    if (!string.IsNullOrEmpty(this.cacheController.UserSettings.DownloadFolder))
-                    {
-                        // Add our user tasks
-                        this.jumpList.AddUserTasks(
-                            new JumpListLink(this.cacheController.UserSettings.DownloadFolder, "Open Download Folder")
-                                {
-                                    IconReference =
-                                        new IconReference(
-                                        Path.Combine(
-                                            Application.StartupPath,
-                                            string.Format("{0}.exe", Assembly.GetExecutingAssembly().GetName().Name)),
-                                        0)
-                                });
-
-                        this.jumpList.Refresh();
-                    }
-
-
                     // }
             }
 #endif

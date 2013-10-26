@@ -5,9 +5,9 @@ using System.Resources;
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace RiPRipper
+namespace Ripper
 {
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     partial class MainForm
     {

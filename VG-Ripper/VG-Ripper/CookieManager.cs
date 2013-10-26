@@ -9,13 +9,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper
+namespace Ripper
 {
     #region
 
     using System.Collections;
 
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     #endregion
 

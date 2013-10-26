@@ -9,12 +9,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System.Collections;
     using System.Text.RegularExpressions;
 
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from ImageTwist.com
@@ -29,8 +29,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="thumbURL">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashTable">The hash table.</param>
-        public ImageTwist(ref string savePath, ref string imageHostURL, ref string thumbURL, ref string imageName, ref Hashtable hashTable)
-            : base(savePath, imageHostURL, thumbURL, imageName, ref hashTable)
+        public ImageTwist(ref string savePath, ref string imageHostURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+            : base(savePath, imageHostURL, thumbURL, imageName, imageNumber, ref hashTable)
         {
         }
 
@@ -71,7 +71,7 @@ namespace RiPRipper.ImageHosts
             }
 
             // Set Image Name instead of using random name
-            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);
