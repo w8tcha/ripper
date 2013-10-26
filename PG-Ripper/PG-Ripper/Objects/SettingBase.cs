@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.Objects
+namespace Ripper.Objects
 {
     using System;
     using System.Collections.Generic;

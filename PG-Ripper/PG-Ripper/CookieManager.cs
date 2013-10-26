@@ -9,10 +9,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System.Collections;
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Class for handling Cookies

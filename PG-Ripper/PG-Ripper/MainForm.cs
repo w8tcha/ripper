@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System;
     using System.Collections;
@@ -26,10 +26,9 @@ namespace PGRipper
     using System.Xml.Serialization;
 
 #if (!PGRIPPERX)
-    using Microsoft.WindowsAPICodePack.Shell;
     using Microsoft.WindowsAPICodePack.Taskbar;
 #endif
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// The Main Form
@@ -56,11 +55,6 @@ namespace PGRipper
         /// TaskBar Manager Instance
         /// </summary>
         private TaskbarManager windowsTaskbar;
-
-        /// <summary>
-        /// The Jump List
-        /// </summary>
-        private JumpList jumpList;
 #endif
 
         /// <summary>
@@ -386,19 +380,19 @@ namespace PGRipper
                 {
                     case "de-DE":
                         this._ResourceManager = new ResourceManager(
-                            "PGRipper.Languages.german", Assembly.GetExecutingAssembly());
+                            "Ripper.Languages.german", Assembly.GetExecutingAssembly());
                         break;
                     case "fr-FR":
                         this._ResourceManager = new ResourceManager(
-                            "PGRipper.Languages.french", Assembly.GetExecutingAssembly());
+                            "Ripper.Languages.french", Assembly.GetExecutingAssembly());
                         break;
                     case "en-EN":
                         this._ResourceManager = new ResourceManager(
-                            "PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                            "Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
                     default:
                         this._ResourceManager = new ResourceManager(
-                            "PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                            "Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
                 }
 
@@ -407,7 +401,7 @@ namespace PGRipper
             catch (Exception)
             {
                 this._ResourceManager = new ResourceManager(
-                    "PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    "Ripper.Languages.english", Assembly.GetExecutingAssembly());
             }
 
             switch (this.userSettings.AfterDownloads)
@@ -1809,13 +1803,14 @@ namespace PGRipper
                             }
 
                             CacheController.Instance()
-                                           .DownloadImage(
-                                               this.mImagesList[i].ImageUrl,
-                                               this.mImagesList[i].ThumbnailUrl,
-                                               this.currentJob.StorePath,
-                                               !string.IsNullOrEmpty(this.currentJob.PostTitle)
-                                                   ? this.currentJob.PostTitle
-                                                   : this.currentJob.Title);
+                                .DownloadImage(
+                                    this.mImagesList[i].ImageUrl,
+                                    this.mImagesList[i].ThumbnailUrl,
+                                    this.currentJob.StorePath,
+                                    !string.IsNullOrEmpty(this.currentJob.PostTitle)
+                                        ? this.currentJob.PostTitle
+                                        : this.currentJob.Title,
+                                    i + 1);
                         }
                     }
                     catch (ArgumentOutOfRangeException)
@@ -2815,25 +2810,6 @@ namespace PGRipper
                 Environment.OSVersion.Version.Minor >= 1)
             {
                 this.windowsTaskbar = TaskbarManager.Instance;
-
-                // create a new taskbar jump list for the main window
-                this.jumpList = JumpList.CreateJumpList();
-
-                if (!string.IsNullOrEmpty(this.userSettings.DownloadFolder))
-                {
-                    // Add our user tasks
-                    this.jumpList.AddUserTasks(
-                        new JumpListLink(this.userSettings.DownloadFolder, "Open Download Folder")
-                            {
-                                IconReference =
-                                    new IconReference(
-                                    Path.Combine(
-                                        Application.StartupPath, string.Format("{0}.exe", Assembly.GetExecutingAssembly().GetName().Name)),
-                                    0)
-                            });
-
-                    this.jumpList.Refresh();
-                }
             }
 #endif
 

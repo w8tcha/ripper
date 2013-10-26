@@ -17,17 +17,17 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
-namespace PGRipper
+namespace Ripper
 {
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
 	/// Worker class for UploadImages.net
 	/// </summary>
 	public class uploadimages_net : ServiceTemplate
 	{
-		public uploadimages_net(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-			: base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+		public uploadimages_net(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+			: base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashTable)
 		{
 		}
 

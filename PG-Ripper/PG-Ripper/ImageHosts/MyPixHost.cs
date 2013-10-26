@@ -12,7 +12,7 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of the PG-Ripper project base.
 
-namespace PGRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -20,7 +20,7 @@ namespace PGRipper.ImageHosts
     using System.Net;
     using System.Threading;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from MyPixHost.com
@@ -39,8 +39,8 @@ namespace PGRipper.ImageHosts
         /// <param name="hTbl">
         /// The h tbl.
         /// </param>
-        public MyPixHost(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public MyPixHost(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashTable)
         {
         }
 

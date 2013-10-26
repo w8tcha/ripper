@@ -9,14 +9,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     #region
 
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     #endregion
 

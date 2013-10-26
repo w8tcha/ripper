@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System;
     using System.Net;
@@ -50,43 +50,30 @@ namespace PGRipper
         /// <returns>
         /// The get rip page title.
         /// </returns>
-        public string GetRipPageTitle(string url)
+        public string GetRipPageTitle(string page)
         {
-            string sPage = url;
+            var match = Regex.Match(
+                page,
+                @"<title>(?<inner>[^<]*)</title>",
+                RegexOptions.Compiled);
 
-            int iTitleStart = sPage.IndexOf("<title>");
-
-            if (iTitleStart < 0)
+            if (!match.Success)
             {
                 return string.Empty;
             }
 
-            iTitleStart += 7;
+            var title = match.Groups["inner"].Value;
 
             if (Utility.IsV4Forum(CacheController.Xform.userSettings))
             {
-                iTitleStart += 1;
+                return title.Trim();
             }
 
-            int iTitleEnd = sPage.IndexOf(@"</title>");
+            title = title.Contains(@"View Single Post")
+                        ? title.Substring(title.IndexOf("View Single Post - ") + 19)
+                        : Regex.Replace(title, title.Substring(title.IndexOf("- ")), string.Empty);
 
-            if (iTitleEnd < 0)
-            {
-                return string.Empty;
-            }
-
-            string sTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
-
-            if (Utility.IsV4Forum(CacheController.Xform.userSettings))
-            {
-                return sTitle.Trim();
-            }
-
-            sTitle = sTitle.Contains(@"View Single Post")
-                         ? sTitle.Substring(sTitle.IndexOf("View Single Post - ") + 19)
-                         : Regex.Replace(sTitle, sTitle.Substring(sTitle.IndexOf("- ")), string.Empty);
-
-            return sTitle.Trim();
+            return title.Trim();
         }
 
         /// <summary>

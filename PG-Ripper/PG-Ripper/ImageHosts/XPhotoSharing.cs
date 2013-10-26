@@ -17,17 +17,17 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
-namespace PGRipper
+namespace Ripper
 {
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from XXXPhotoSharing.com and MyAdultImage.com
     /// </summary>
     public class XPhotoSharing : ServiceTemplate
     {
-        public XPhotoSharing(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public XPhotoSharing(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashTable)
         {
         }
 

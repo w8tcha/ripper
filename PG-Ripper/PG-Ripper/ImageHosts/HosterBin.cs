@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -17,7 +17,7 @@ namespace PGRipper.ImageHosts
     using System.Net;
     using System.Threading;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from HosterBin.com
@@ -32,8 +32,8 @@ namespace PGRipper.ImageHosts
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public HosterBin(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public HosterBin(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
 
@@ -94,7 +94,7 @@ namespace PGRipper.ImageHosts
             var imageDownloadURL = thumbURL.Replace(@"/images/small/", @"/images/big/");
 
             // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 

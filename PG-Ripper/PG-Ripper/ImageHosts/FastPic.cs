@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -18,7 +18,7 @@ namespace PGRipper.ImageHosts
     using System.Text.RegularExpressions;
     using System.Threading;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from FastPic.ru
@@ -33,8 +33,8 @@ namespace PGRipper.ImageHosts
         /// <param name="thumbURL">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The authentication table.</param>
-        public FastPic(ref string savePath, ref string imageUrl, ref string thumbURL, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbURL, imageName, ref hashtable)
+        public FastPic(ref string savePath, ref string imageUrl, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbURL, imageName, imageNumber, ref hashtable)
         {
         }
 
@@ -115,7 +115,7 @@ namespace PGRipper.ImageHosts
             }
 
             // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 

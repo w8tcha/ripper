@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-namespace PGRipper
+namespace Ripper
 {
     partial class Options
     {

@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     #region
 
@@ -84,16 +84,16 @@ namespace PGRipper
             switch (CacheController.Xform.userSettings.Language)
             {
                 case "de-DE":
-                    this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
                     break;
                 case "fr-FR":
-                    this.rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
                     break;
                 case "en-EN":
-                    this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                     break;
                 default:
-                    this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                     break;
             }
 

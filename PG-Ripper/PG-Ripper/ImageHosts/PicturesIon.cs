@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System.Collections;
 
@@ -26,8 +26,8 @@ namespace PGRipper.ImageHosts
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public PicturesIon(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public PicturesIon(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
 
@@ -43,7 +43,7 @@ namespace PGRipper.ImageHosts
             var imageDownloadURL = ThumbImageURL.Replace("/thumbs/", "/");
 
             // Set Image Name instead of using random name
-            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);

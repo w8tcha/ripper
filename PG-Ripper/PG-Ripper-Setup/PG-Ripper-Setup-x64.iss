@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "PG-Ripper 64Bit"
-#define MyAppVersion "1.4.2.1"
+#define MyAppVersion "1.4.2.2"
 #define MyAppPublisher "The Watcher"
 #define MyAppURL "http://ripper.codeplex.com"
 #define MyAppExeName "PGRipper.exe"
@@ -23,10 +23,10 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\bin\license.txt
-InfoBeforeFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\bin\readme.txt
+LicenseFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\bin\license.txt
+InfoBeforeFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\bin\readme.txt
 OutputBaseFilename=RiP-Ripper-Setup
-SetupIconFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\App.ico
+SetupIconFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\App.ico
 Compression=lzma/ultra64
 SolidCompression=yes
 
@@ -38,12 +38,12 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\bin\x64\PG-Ripper64\PGRipper.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\bin\x64\PG-Ripper64\ICSharpCode.SharpZipLib.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\bin\x64\PG-Ripper64\Microsoft.WindowsAPICodePack.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\bin\x64\PG-Ripper64\Microsoft.WindowsAPICodePack.Shell.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\bin\license.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2012\Projects\rip-ripper\PG-Ripper\bin\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\bin\x64\PG-Ripper64\PGRipper.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\bin\x64\PG-Ripper64\ICSharpCode.SharpZipLib.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\bin\x64\PG-Ripper64\Microsoft.WindowsAPICodePack.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\bin\x64\PG-Ripper64\Microsoft.WindowsAPICodePack.Shell.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\bin\license.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\PG-Ripper\bin\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

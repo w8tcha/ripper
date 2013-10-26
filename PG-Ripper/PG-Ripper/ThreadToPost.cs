@@ -9,14 +9,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Text.RegularExpressions;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// This class gets all the thread pages of the Thread and parse every single post

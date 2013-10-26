@@ -18,17 +18,17 @@ using System.Net;
 using System.Threading;
 using System;
 
-namespace PGRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from PixHost.org
     /// </summary>
     public class PixHost : ServiceTemplate
     {
-        public PixHost(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public PixHost(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashTable)
         {
         }
 
