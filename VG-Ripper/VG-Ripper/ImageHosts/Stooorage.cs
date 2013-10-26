@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -17,7 +17,7 @@ namespace RiPRipper.ImageHosts
     using System.Net;
     using System.Threading;
 
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from Stooorage.com
@@ -32,8 +32,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="thumbURL">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashTable">The hash table.</param>
-        public Stooorage(ref string savePath, ref string imageHostURL, ref string thumbURL, ref string imageName, ref Hashtable hashTable)
-            : base(savePath, imageHostURL, thumbURL, imageName, ref hashTable)
+        public Stooorage(ref string savePath, ref string imageHostURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+            : base(savePath, imageHostURL, thumbURL, imageName, imageNumber, ref hashTable)
         {
         }
 

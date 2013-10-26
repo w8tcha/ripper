@@ -12,7 +12,7 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of the RiP Ripper project base.
 
-namespace RiPRipper
+namespace Ripper
 {
     using System;
     using System.Collections;

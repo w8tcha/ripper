@@ -12,7 +12,7 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of the RiP Ripper project base.
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     #region
 
@@ -24,7 +24,7 @@ namespace RiPRipper.ImageHosts
     using System.Threading;
     using System.Web;
 
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     #endregion
 
@@ -43,8 +43,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImageBam(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public ImageBam(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
             // Add constructor logic here
         }
@@ -138,7 +138,7 @@ namespace RiPRipper.ImageHosts
             }
 
             // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 

@@ -12,7 +12,7 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of the RiP Ripper project base.
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -20,7 +20,7 @@ namespace RiPRipper.ImageHosts
     using System.Net;
     using System.Threading;
 
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from ImageHyperImageSwitch.com
@@ -39,8 +39,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="hTbl">
         /// The h tbl.
         /// </param>
-        public ImageSwitch(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public ImageSwitch(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashtable)
         {
         }
 

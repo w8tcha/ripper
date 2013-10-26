@@ -22,17 +22,17 @@ using System.Threading;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace RiPRipper
+namespace Ripper
 {
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from ImageHigh.com
     /// </summary>
     public class ImageHigh : ServiceTemplate
     {
-        public ImageHigh(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public ImageHigh(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashtable)
         {
         }
 

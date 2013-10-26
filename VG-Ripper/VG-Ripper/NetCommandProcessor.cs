@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper
+namespace Ripper
 {
     using System;
     using System.Collections;

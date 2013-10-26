@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading;
-namespace RiPRipper
+namespace Ripper
 {
     partial class Options
     {

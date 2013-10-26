@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.Objects
+namespace Ripper.Objects
 {
     /// <summary>
     /// The Settings Base

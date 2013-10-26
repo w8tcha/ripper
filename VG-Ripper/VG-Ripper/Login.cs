@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper
+namespace Ripper
 {
     using System;
     using System.Diagnostics;
@@ -150,15 +150,15 @@ namespace RiPRipper
             switch (this.comboBox2.SelectedIndex)
             {
                 case 0:
-                    this._ResourceManager = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "de-DE");
                     break;
                 case 1:
-                    this._ResourceManager = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "fr-FR");
                     break;
                 case 2:
-                    this._ResourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                     Utility.SaveSetting("UserLanguage", "en-EN");
                     break;
             }

@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -18,7 +18,7 @@ namespace RiPRipper.ImageHosts
     using System.Text.RegularExpressions;
     using System.Threading;
 
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from ShareNxs.com
@@ -37,8 +37,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="hTbl">
         /// The h tbl.
         /// </param>
-        public ShareNxs(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public ShareNxs(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashtable)
         {
         }
 

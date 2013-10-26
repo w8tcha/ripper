@@ -1,4 +1,4 @@
-﻿namespace RiPRipper
+﻿namespace Ripper
 {
     partial class About
     {
@@ -294,7 +294,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::RiPRipper.Languages.english.App1;
+            this.pictureBox1.Image = global::Ripper.Languages.english.App1;
             this.pictureBox1.Location = new System.Drawing.Point(16, 20);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 32);

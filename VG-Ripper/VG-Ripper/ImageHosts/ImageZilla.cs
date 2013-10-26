@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -27,8 +27,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImageZilla(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public ImageZilla(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
 

@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.Objects
+namespace Ripper.Objects
 {
     using System.Collections.Generic;
 

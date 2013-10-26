@@ -9,14 +9,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
     using System.IO;
     using System.Net;
     using System.Threading;
-    using RiPRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from ImagesIon.com
@@ -31,8 +31,8 @@ namespace RiPRipper.ImageHosts
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImagesIon(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public ImagesIon(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
 
@@ -93,7 +93,7 @@ namespace RiPRipper.ImageHosts
             var imageDownloadURL = thumbURL.Replace(@"thumbs/", string.Empty);
 
             // Set Image Name instead of using random name
-            filePath = this.GetImageName(this.PostTitle, imageDownloadURL);
+            filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 

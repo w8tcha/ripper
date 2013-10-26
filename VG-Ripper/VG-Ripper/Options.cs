@@ -11,7 +11,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RiPRipper
+namespace Ripper
 {
     using System;
     using System.Reflection;
@@ -108,22 +108,22 @@ namespace RiPRipper
                 switch (cacheController.UserSettings.Language)
                 {
                     case "de-DE":
-                        resourceManager = new ResourceManager("RiPRipper.Languages.german", Assembly.GetExecutingAssembly());
+                        resourceManager = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 0;
                         pictureBox2.Image = Languages.english.de;
                         break;
                     case "fr-FR":
-                        resourceManager = new ResourceManager("RiPRipper.Languages.french", Assembly.GetExecutingAssembly());
+                        resourceManager = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 1;
                         pictureBox2.Image = Languages.english.fr;
                         break;
                     case "en-EN":
-                        resourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;
                     default:
-                        resourceManager = new ResourceManager("RiPRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;
