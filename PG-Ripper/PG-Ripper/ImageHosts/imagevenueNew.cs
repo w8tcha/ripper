@@ -19,17 +19,17 @@ using System.IO;
 using System.Threading;
 using System.Text.RegularExpressions;
 
-namespace PGRipper
+namespace Ripper
 {
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images hosted on ImageVenue.com
     /// </summary>
     public class imagevenueNew : ServiceTemplate
     {
-        public imagevenueNew(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public imagevenueNew(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashTable)
         {
             //
             // Add constructor logic here

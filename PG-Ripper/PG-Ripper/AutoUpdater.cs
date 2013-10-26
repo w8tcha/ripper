@@ -11,7 +11,7 @@
 
 #if (!PGRIPPERX)
 
-namespace PGRipper
+namespace Ripper
 {
     using System;
     using System.Diagnostics;

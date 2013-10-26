@@ -9,14 +9,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System.Collections;
     using System.IO;
     using System.Net;
     using System.Threading;
-    using PGRipper.ImageHosts;
-    using PGRipper.Objects;
+
+    using Ripper.ImageHosts;
+    using Ripper.Objects;
 
     /// <summary>
     /// Image Downloader Class
@@ -35,6 +36,8 @@ namespace PGRipper
 
         private string sImageName = string.Empty;
 
+        private int imageNumber;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageDownloader" /> class.
         /// </summary>
@@ -42,14 +45,22 @@ namespace PGRipper
         /// <param name="url">The URL.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
+        /// <param name="imageNumber">The image number.</param>
         /// <param name="hashTable">The hash table.</param>
-        public ImageDownloader(string savePath, string url, string thumbUrl, string imageName, ref Hashtable hashTable)
+        public ImageDownloader(
+            string savePath,
+            string url,
+            string thumbUrl,
+            string imageName,
+            int imageNumber,
+            ref Hashtable hashTable)
         {
             this.mstrURL = url;
             this.ThumbImageURL = thumbUrl;
             this.eventTable = hashTable;
             this.mSavePath = savePath;
             this.sImageName = imageName;
+            this.imageNumber = imageNumber;
         }
 
         /// <summary>
@@ -57,7 +68,13 @@ namespace PGRipper
         /// </summary>
         public void GeneralDownloader()
         {
-            this.xService = new uploadimages_net(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new uploadimages_net(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -66,7 +83,13 @@ namespace PGRipper
         /// </summary>
         public void GetUploadImage()
         {
-            this.xService = new uploadimages_net(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new uploadimages_net(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -75,7 +98,13 @@ namespace PGRipper
         /// </summary>
         public void GetFapomatic()
         {
-            this.xService = new fapomatic(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new fapomatic(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -84,7 +113,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageVenue()
         {
-            this.xService = new imagevenue(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new imagevenue(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -93,7 +128,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageVenueNew()
         {
-            this.xService = new imagevenueNew(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new imagevenueNew(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -102,523 +143,1045 @@ namespace PGRipper
         /// </summary>
         public void GetMoast()
         {
-            this.xService = new Moast(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Moast(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetwatermarkIt()
         {
-            this.xService = new watermarkIt(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new watermarkIt(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicBux()
         {
-            this.xService = new PicBux(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicBux(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicturesUpload()
         {
-            this.xService = new PicturesUpload(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicturesUpload(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageHigh()
         {
-            this.xService = new ImageHigh(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageHigh(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImage2Share()
         {
-            this.xService = new Image2Share(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Image2Share(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPaintedOver()
         {
-            this.xService = new PaintedOver(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PaintedOver(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetDumbARump()
         {
-            this.xService = new DumbARump(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new DumbARump(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageCrack()
         {
-            this.xService = new ImageCrack(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageCrack(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetTenPix()
         {
-            this.xService = new TenPix(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new TenPix(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetSupload()
         {
-            this.xService = new Supload(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Supload(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageThrust()
         {
-            this.xService = new ImageThrust(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageThrust(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetShareAPic()
         {
-            this.xService = new ShareAPic(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ShareAPic(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetFileDen()
         {
-            this.xService = new FileDen(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FileDen(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicTiger()
         {
-            this.xService = new PicTiger(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicTiger(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicTiger2()
         {
-            this.xService = new PicTiger2(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicTiger2(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetMyPhotos()
         {
-            this.xService = new MyPhotos(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new MyPhotos(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetTheImageHosting()
         {
-            this.xService = new TheImageHosting(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new TheImageHosting(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetZShare()
         {
-            this.xService = new ZShare(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ZShare(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetKeepMyFile()
         {
-            this.xService = new KeepMyFile(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new KeepMyFile(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageBeaver()
         {
-            this.xService = new ImageBeaver(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageBeaver(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetShareAvenue()
         {
-            this.xService = new ShareAvenue(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ShareAvenue(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetGlowFoto()
         {
-            this.xService = new GlowFoto(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new GlowFoto(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetJpgHosting()
         {
-            this.xService = new JpgHosting(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new JpgHosting(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetJpgHosting2()
         {
-            this.xService = new JpgHosting2(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new JpgHosting2(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageFling()
         {
-            this.xService = new ImageFling(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageFling(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetYourPix()
         {
-            this.xService = new YourPix(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new YourPix(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetFreeImageHost()
         {
-            this.xService = new FreeImageHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FreeImageHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetFreeShare()
         {
-            this.xService = new FreeShare(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FreeShare(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetSuprFile()
         {
-            this.xService = new SuprFile(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new SuprFile(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetLetMeHost()
         {
-            this.xService = new LetMeHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new LetMeHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetFileHost()
         {
-            this.xService = new FileHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FileHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetTheFreeImageHosting()
         {
-            this.xService = new TheFreeImageHosting(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new TheFreeImageHosting(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetYesAlbum()
         {
-            this.xService = new YesAlbum(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new YesAlbum(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicsPlace()
         {
-            this.xService = new PicsPlace(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicsPlace(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetXsHosting()
         {
-            this.xService = new XsHosting(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new XsHosting(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetCelebs()
         {
-            this.xService = new Celebs(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Celebs(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetRipHq()
         {
-            this.xService = new RipHq(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new RipHq(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetBenuri()
         {
-            this.xService = new Benuri(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Benuri(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageHaven()
         {
-            this.xService = new ImageHaven(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageHaven(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImagePundit()
         {
-            this.xService = new ImagePundit(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImagePundit(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetUploadEm()
         {
-            this.xService = new UploadEm(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new UploadEm(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetUpPix()
         {
-            this.xService = new UpPix(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new UpPix(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPixHosting()
         {
-            this.xService = new PixHosting(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PixHosting(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPussyUpload()
         {
-            this.xService = new PussyUpload(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PussyUpload(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetHotLinkImage()
         {
-            this.xService = new HotLinkImage(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new HotLinkImage(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageBam()
         {
-            this.xService = new ImageBam(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageBam(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageHosting()
         {
-            this.xService = new ImageHosting(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageHosting(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageFap()
         {
-            this.xService = new ImageFap(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageFap(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetAllYouCanUpload()
         {
-            this.xService = new AllYouCanUpload(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new AllYouCanUpload(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetLargeImageHost()
         {
-            this.xService = new LargeImageHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new LargeImageHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetRadikal()
         {
-            this.xService = new Radikal(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Radikal(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPixUp()
         {
-            this.xService = new PixUp(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PixUp(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetFreePornDumpster()
         {
-            this.xService = new FreePornDumpster(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FreePornDumpster(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageSocket()
         {
-            this.xService = new ImageSocket(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageSocket(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetStormFactory()
         {
-            this.xService = new StormFactory(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new StormFactory(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicHoarder()
         {
-            this.xService = new PicHoarder(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicHoarder(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetMultiPics()
         {
-            this.xService = new MultiPics(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new MultiPics(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetForumAttachment()
         {
-            this.xService = new ForumAttachment(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ForumAttachment(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageFoco()
         {
-            this.xService = new ImageFoco(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageFoco(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetSpeedImg()
         {
-            this.xService = new SpeedImg(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new SpeedImg(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetDollarLink()
         {
-            this.xService = new DollarLink(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new DollarLink(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicEasy()
         {
-            this.xService = new PicEasy(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicEasy(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicturesHoster()
         {
-            this.xService = new PicturesHoster(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicturesHoster(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicJackal()
         {
-            this.xService = new PicJackal(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicJackal(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetAmazingDickSSl()
         {
-            this.xService = new AmazingDickSSl(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new AmazingDickSSl(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImagesGal()
         {
-            this.xService = new ImagesGal(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImagesGal(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetBigPics()
         {
-            this.xService = new BigPics(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new BigPics(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetXPhotoSharing()
         {
-            this.xService = new XPhotoSharing(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new XPhotoSharing(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetBusyUpload()
         {
-            this.xService = new BusyUpload(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new BusyUpload(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetUpMyPhoto()
         {
-            this.xService = new UpMyPhoto(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new UpMyPhoto(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPicsLibraries()
         {
-            this.xService = new PicsLibraries(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicsLibraries(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetTurboImageHost()
         {
-            this.xService = new TurboImageHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new TurboImageHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetAbload()
         {
-            this.xService = new Abload(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Abload(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageDoza()
         {
-            this.xService = new ImageDoza(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageDoza(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageWam()
         {
-            this.xService = new ImageWam(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageWam(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageFlea()
         {
-            this.xService = new ImageFlea(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageFlea(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageCargo()
         {
-            this.xService = new ImageCargo(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageCargo(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPixSlam()
         {
-            this.xService = new PixSlam(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PixSlam(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImageHost()
         {
-            this.xService = new ImageHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetMyImageHost()
         {
-            this.xService = new MyImageHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new MyImageHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetShareNxs()
         {
-            this.xService = new ShareNxs(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ShareNxs(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetKemiPic()
         {
-            this.xService = new KemiPic(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new KemiPic(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetFotoTube()
         {
-            this.xService = new FotoTube(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FotoTube(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetImmage()
         {
-            this.xService = new Immage(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Immage(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetIpicture()
         {
-            this.xService = new Ipicture(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Ipicture(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
         public void GetPornImgHost()
         {
-            this.xService = new PornImgHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PornImgHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -627,13 +1190,25 @@ namespace PGRipper
         /// </summary>
         public void GetImageTwist()
         {
-            this.xService = new ImageTwist(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageTwist(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownloadAsync();
         }
 
         public void GetImageWaste()
         {
-            this.xService = new ImageWaste(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageWaste(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -642,7 +1217,13 @@ namespace PGRipper
         /// </summary>
         public void GetPixHost()
         {
-            this.xService = new PixHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PixHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -651,7 +1232,13 @@ namespace PGRipper
         /// </summary>
         public void GetFastPic()
         {
-            this.xService = new FastPic(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FastPic(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -660,7 +1247,13 @@ namespace PGRipper
         /// </summary>
         public void GetPicDir()
         {
-            this.xService = new PicDir(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicDir(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -669,7 +1262,13 @@ namespace PGRipper
         /// </summary>
         public void GetFotoSik()
         {
-            this.xService = new FotoSik(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FotoSik(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -678,7 +1277,13 @@ namespace PGRipper
         /// </summary>
         public void GetDailyPoa()
         {
-            this.xService = new DailyPoa(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new DailyPoa(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -687,7 +1292,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageHostLi()
         {
-            this.xService = new ImageHostLi(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageHostLi(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -696,7 +1307,13 @@ namespace PGRipper
         /// </summary>
         public void GetStooorage()
         {
-            this.xService = new Stooorage(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Stooorage(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -705,7 +1322,13 @@ namespace PGRipper
         /// </summary>
         public void GetImagePorter()
         {
-            this.xService = new ImagePorter(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImagePorter(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -714,7 +1337,13 @@ namespace PGRipper
         /// </summary>
         public void GetFileMad()
         {
-            this.xService = new FileMad(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FileMad(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -723,7 +1352,13 @@ namespace PGRipper
         /// </summary>
         public void GetMyPixHost()
         {
-            this.xService = new MyPixHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new MyPixHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -732,7 +1367,13 @@ namespace PGRipper
         /// </summary>
         public void GetSevenBucket()
         {
-            this.xService = new SevenBucket(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new SevenBucket(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -741,7 +1382,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageHyper()
         {
-            this.xService = new ImageHyper(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageHyper(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -750,7 +1397,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageGiga()
         {
-            this.xService = new ImageGiga(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageGiga(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -759,7 +1412,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageSwitch()
         {
-            this.xService = new ImageSwitch(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageSwitch(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -768,7 +1427,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageUpper()
         {
-            this.xService = new ImageUpper(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageUpper(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -777,7 +1442,13 @@ namespace PGRipper
         /// </summary>
         public void GetImgChili()
         {
-            this.xService = new ImgChili(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgChili(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -786,7 +1457,13 @@ namespace PGRipper
         /// </summary>
         public void GetImgDepot()
         {
-            this.xService = new ImgDepot(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgDepot(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -795,7 +1472,13 @@ namespace PGRipper
         /// </summary>
         public void GetImagePad()
         {
-            this.xService = new ImagePad(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImagePad(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -804,7 +1487,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageBunk()
         {
-            this.xService = new ImageBunk(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageBunk(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -813,7 +1502,13 @@ namespace PGRipper
         /// </summary>
         public void GetPimpAndHost()
         {
-            this.xService = new PimpAndHost(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PimpAndHost(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -822,7 +1517,13 @@ namespace PGRipper
         /// </summary>
         public void GetDumpPix()
         {
-            this.xService = new DumpPix(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new DumpPix(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -831,7 +1532,13 @@ namespace PGRipper
         /// </summary>
         public void GetHoooster()
         {
-            this.xService = new Hoooster(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new Hoooster(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -840,7 +1547,13 @@ namespace PGRipper
         /// </summary>
         public void GetPixHub()
         {
-            this.xService = new PixHub(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PixHub(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -849,7 +1562,13 @@ namespace PGRipper
         /// </summary>
         public void GetPixRoute()
         {
-            this.xService = new PixRoute(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PixRoute(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -858,7 +1577,13 @@ namespace PGRipper
         /// </summary>
         public void GetImagePicasa()
         {
-            this.xService = new ImagePicasa(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImagePicasa(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -867,7 +1592,13 @@ namespace PGRipper
         /// </summary>
         public void GetDirectUpload()
         {
-            this.xService = new DirectUpload(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new DirectUpload(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -876,7 +1607,13 @@ namespace PGRipper
         /// </summary>
         public void GetImgBox()
         {
-            this.xService = new ImgBox(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgBox(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownloadAsync();
         }
 
@@ -885,7 +1622,13 @@ namespace PGRipper
         /// </summary>
         public void GetImgDino()
         {
-            this.xService = new ImgDino(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgDino(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -894,17 +1637,14 @@ namespace PGRipper
         /// </summary>
         public void GetImgWoot()
         {
-            this.xService = new ImgWoot(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgWoot(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownloadAsync();
-        }
-
-        /// <summary>
-        /// Get ImageFolks Download
-        /// </summary>
-        public void GetImageFolks()
-        {
-            this.xService = new ImageFolks(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
-            this.xService.StartDownload();
         }
 
         /// <summary>
@@ -912,7 +1652,13 @@ namespace PGRipper
         /// </summary>
         public void GetImgPo()
         {
-            this.xService = new ImgPo(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgPo(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -921,7 +1667,13 @@ namespace PGRipper
         /// </summary>
         public void GetImGah()
         {
-            this.xService = new ImGah(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImGah(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -930,7 +1682,13 @@ namespace PGRipper
         /// </summary>
         public void GetImgUr()
         {
-            this.xService = new ImgUr(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgUr(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -939,7 +1697,13 @@ namespace PGRipper
         /// </summary>
         public void GetTusPics()
         {
-            this.xService = new TusPics(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new TusPics(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -948,7 +1712,13 @@ namespace PGRipper
         /// </summary>
         public void GetFreeImagePic()
         {
-            this.xService = new FreeImagePic(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new FreeImagePic(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -957,7 +1727,13 @@ namespace PGRipper
         /// </summary>
         public void GetImgServe()
         {
-            this.xService = new ImgServe(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgServe(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -966,7 +1742,13 @@ namespace PGRipper
         /// </summary>
         public void GetCelebSweet()
         {
-            this.xService = new CelebSweet(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new CelebSweet(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -975,7 +1757,13 @@ namespace PGRipper
         /// </summary>
         public void GetSexyImg()
         {
-            this.xService = new SexyImg(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new SexyImg(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -984,7 +1772,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageJumbo()
         {
-            this.xService = new ImageJumbo(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageJumbo(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -993,7 +1787,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageDax()
         {
-            this.xService = new ImageDax(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageDax(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -1002,7 +1802,13 @@ namespace PGRipper
         /// </summary>
         public void GetHosterBin()
         {
-            this.xService = new HosterBin(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new HosterBin(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -1011,7 +1817,13 @@ namespace PGRipper
         /// </summary>
         public void GetImagesIon()
         {
-            this.xService = new ImagesIon(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImagesIon(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -1020,7 +1832,13 @@ namespace PGRipper
         /// </summary>
         public void GetImgBabes()
         {
-            this.xService = new ImgBabes(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImgBabes(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -1029,7 +1847,13 @@ namespace PGRipper
         /// </summary>
         public void GetPictureDip()
         {
-            this.xService = new PictureDip(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PictureDip(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownload();
         }
 
@@ -1038,7 +1862,13 @@ namespace PGRipper
         /// </summary>
         public void GetImageZilla()
         {
-            this.xService = new ImageZilla(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new ImageZilla(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownloadAsync();
         }
 
@@ -1047,7 +1877,13 @@ namespace PGRipper
         /// </summary>
         public void GetPicturesIon()
         {
-            this.xService = new PicturesIon(ref this.mSavePath, ref this.mstrURL, ref this.ThumbImageURL, ref this.sImageName, ref this.eventTable);
+            this.xService = new PicturesIon(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
             this.xService.StartDownloadAsync();
         }
 
@@ -1124,7 +1960,8 @@ namespace PGRipper
                 lHttpWebRequest.KeepAlive = true;
                 lHttpWebRequest.Referer = strImgURL.IndexOf("www.ripnetwork.net:82") >= 0
                                               ? string.Format(
-                                                  "{0}showthread.php", CacheController.Xform.userSettings.CurrentForumUrl)
+                                                  "{0}showthread.php",
+                                                  CacheController.Xform.userSettings.CurrentForumUrl)
                                               : strImgURL;
 
                 var lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
@@ -1158,7 +1995,9 @@ namespace PGRipper
                 ////client.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
                 client.Headers.Add(
                     strImgURL.IndexOf("www.ripnetwork.net:82") >= 0
-                        ? string.Format("Referer: {0}showthread.php", CacheController.Xform.userSettings.CurrentForumUrl)
+                        ? string.Format(
+                            "Referer: {0}showthread.php",
+                            CacheController.Xform.userSettings.CurrentForumUrl)
                         : string.Format("Referer: {0}", strImgURL));
                 client.DownloadFile(strImgURL, strFilePath);
                 /*do
@@ -1185,8 +2024,7 @@ namespace PGRipper
 
             ((CacheObject)this.eventTable[strImgURL]).IsDownloaded = true;
             ThreadManager.GetInstance().RemoveThreadbyId(this.mstrURL);
-            CacheController.Instance().LastPic =
-                ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
+            CacheController.Instance().LastPic = ((CacheObject)this.eventTable[this.mstrURL]).FilePath = strFilePath;
             return;
         }
     }

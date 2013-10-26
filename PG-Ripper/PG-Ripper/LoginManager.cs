@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System;
     using System.IO;

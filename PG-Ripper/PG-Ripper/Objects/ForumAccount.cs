@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.Objects
+namespace Ripper.Objects
 {
     /// <summary>
     /// The Forum Account.

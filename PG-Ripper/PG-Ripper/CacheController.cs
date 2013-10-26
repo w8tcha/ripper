@@ -9,14 +9,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     #region
 
     using System.Collections;
     using System.Threading;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     #endregion
 
@@ -83,7 +83,8 @@ namespace PGRipper
         /// <param name="thumbImageUrl">The thumb image URL.</param>
         /// <param name="localPath">The Local Path.</param>
         /// <param name="imageName">Name of the image.</param>
-        public void DownloadImage(string imageUrl, string thumbImageUrl, string localPath, string imageName)
+        /// <param name="imageNumber">The image number.</param>
+        public void DownloadImage(string imageUrl, string thumbImageUrl, string localPath, string imageName, int imageNumber)
         {
             ThreadStart lThreadStart;
 
@@ -98,7 +99,7 @@ namespace PGRipper
             // ImageDownloader is the bridging class between this routine and the
             // ServiceTemplate base class (which is the parent to all hosting site's
             // fetch code).
-            var imageDownloader = new ImageDownloader(localPath, imageUrl, thumbImageUrl, imageName, ref this.mEventTable);
+            var imageDownloader = new ImageDownloader(localPath, imageUrl, thumbImageUrl, imageName, imageNumber, ref this.mEventTable);
 
             if (imageUrl.IndexOf(@"/img.php?loc=loc") >= 0)
             {
@@ -640,12 +641,12 @@ namespace PGRipper
             else if (imageUrl.IndexOf(@"3xvintage.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
-
-                ////
             }
             else if (imageUrl.IndexOf(@"imagefolks.com/") >= 0 || imageUrl.IndexOf(@"ImageFolks.com/") >= 0)
             {
-                lThreadStart = imageDownloader.GetImageFolks;
+                lThreadStart = imageDownloader.GetImgWoot;
+
+                ////
             }
             else if (imageUrl.IndexOf(@"imgpo.st/") >= 0)
             {

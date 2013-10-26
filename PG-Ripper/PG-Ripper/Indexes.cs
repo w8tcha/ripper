@@ -9,14 +9,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Net;
     using System.Text;
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Ripper ONLY handles Level one indices (Index -> post or Index -> Thread)

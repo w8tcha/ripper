@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System;
     using System.Reflection;
@@ -104,22 +104,22 @@ namespace PGRipper
                 switch (CacheController.Xform.userSettings.Language)
                 {
                     case "de-DE":
-                        this.resourceManager = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
+                        this.resourceManager = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 0;
                         pictureBox2.Image = Languages.english.de;
                         break;
                     case "fr-FR":
-                        this.resourceManager = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
+                        this.resourceManager = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 1;
                         pictureBox2.Image = Languages.english.fr;
                         break;
                     case "en-EN":
-                        this.resourceManager = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this.resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;
                     default:
-                        this.resourceManager = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                        this.resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;

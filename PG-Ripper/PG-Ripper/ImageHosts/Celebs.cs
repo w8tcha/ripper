@@ -18,17 +18,17 @@ using System.IO;
 using System.Threading;
 using System.Text.RegularExpressions;
 
-namespace PGRipper
+namespace Ripper
 {
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from celebs.sytes.net
     /// </summary>
     public class Celebs : ServiceTemplate
     {
-        public Celebs(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public Celebs(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashTable)
         {
         }
 

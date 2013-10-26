@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.Objects
+namespace Ripper.Objects
 {
     /// <summary>
     /// Originally intended to be a struct hence the _s suffix

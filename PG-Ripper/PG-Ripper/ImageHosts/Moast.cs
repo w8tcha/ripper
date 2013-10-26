@@ -17,17 +17,17 @@ using System.Net;
 using System.IO;
 using System.Threading;
 
-namespace PGRipper
+namespace Ripper
 {
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from Moast.com
     /// </summary>
     public class Moast : ServiceTemplate
     {
-        public Moast(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref Hashtable hTbl)
-            : base(sSavePath, strURL, thumbURL, imageName, ref hTbl)
+        public Moast(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
+            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashTable)
         {
         }
 

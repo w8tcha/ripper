@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper
+namespace Ripper
 {
     using System;
     using System.Drawing;
@@ -18,7 +18,7 @@ namespace PGRipper
     using System.Resources;
     using System.Windows.Forms;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// The Login Dialog
@@ -222,19 +222,19 @@ namespace PGRipper
             switch (this.LanuageSelector.SelectedIndex)
             {
                 case 0:
-                    this.rm = new ResourceManager("PGRipper.Languages.german", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
                     CacheController.Xform.userSettings.Language = "de-DE";
                     break;
                 case 1:
-                    this.rm = new ResourceManager("PGRipper.Languages.french", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
                     CacheController.Xform.userSettings.Language = "fr-FR";
                     break;
                 case 2:
-                    this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                     CacheController.Xform.userSettings.Language = "en-EN";
                     break;
                 default:
-                    this.rm = new ResourceManager("PGRipper.Languages.english", Assembly.GetExecutingAssembly());
+                    this.rm = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                     CacheController.Xform.userSettings.Language = "en-EN";
                     break;
             }

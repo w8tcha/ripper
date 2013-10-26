@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -18,7 +18,7 @@ namespace PGRipper.ImageHosts
     using System.Text.RegularExpressions;
     using System.Threading;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from Hooster.com
@@ -32,8 +32,8 @@ namespace PGRipper.ImageHosts
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="imageName">Name of the image.</param>
         /// <param name="hashtable">The hash table.</param>
-        public Hoooster(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public Hoooster(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
 

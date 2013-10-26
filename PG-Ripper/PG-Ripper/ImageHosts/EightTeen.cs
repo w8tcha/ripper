@@ -14,7 +14,7 @@
 
 using System.Net;
 
-namespace PGRipper
+namespace Ripper
 {
     /// <summary>
     /// Worker class to get Frame Image Links from *.EightTeen.com

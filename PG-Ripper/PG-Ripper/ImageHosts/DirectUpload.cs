@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace PGRipper.ImageHosts
+namespace Ripper.ImageHosts
 {
     using System;
     using System.Collections;
@@ -18,7 +18,7 @@ namespace PGRipper.ImageHosts
     using System.Text.RegularExpressions;
     using System.Threading;
 
-    using PGRipper.Objects;
+    using Ripper.Objects;
 
     /// <summary>
     /// Worker class to get images from DirectUpload.net
@@ -37,8 +37,8 @@ namespace PGRipper.ImageHosts
         /// <param name="hashtable">
         /// The hashtable.
         /// </param>
-        public DirectUpload(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref Hashtable hashtable)
-            : base(savePath, imageUrl, thumbUrl, imageName, ref hashtable)
+        public DirectUpload(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
 
