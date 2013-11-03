@@ -144,7 +144,7 @@ namespace Ripper
         public static string DeleteMessage { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether if the Browse Dialog is Already Opten
+        /// Gets or sets a value indicating whether if the Browse Dialog is Already Open
         /// </summary>
         public bool IsBrowserOpen { get; set; }
 
@@ -353,12 +353,12 @@ namespace Ripper
             {
                 this.userSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
-                this.textBox2.Text = this.userSettings.DownloadFolder;
+                this.DownloadFolder.Text = this.userSettings.DownloadFolder;
 
                 Utility.SaveSettings(this.userSettings);
             }
 
-            this.textBox2.Text = this.userSettings.DownloadFolder;
+            this.DownloadFolder.Text = this.userSettings.DownloadFolder;
 
             // Load "Download Options"
             try
@@ -2341,13 +2341,13 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void PauseCurrentThreadsClick(object sender, EventArgs e)
         {
-            switch (pauseCurrentThreads.Text)
+            switch (this.pauseCurrentThreads.Text)
             {
                 case "Pause Download(s)":
-                    pauseCurrentThreads.Text = "Resume Download(s)";
+                    this.pauseCurrentThreads.Text = "Resume Download(s)";
                     this.userSettings.CurrentlyPauseThreads = true;
                     ThreadManager.GetInstance().HoldAllThreads();
-                    pauseCurrentThreads.Image = Languages.english.play;
+                    this.pauseCurrentThreads.Image = Languages.english.play;
                     break;
                 case "(Re)Start Download(s)":
                     if (this.InvokeRequired)
@@ -2355,7 +2355,7 @@ namespace Ripper
                         this.Invoke(
                             (MethodInvoker)delegate
                             {
-                                StatusLabelImageC.Text = string.Empty;
+                                this.StatusLabelImageC.Text = string.Empty;
                             });
                     }
                     else
@@ -2364,10 +2364,10 @@ namespace Ripper
                     }
 
                     this.userSettings.CurrentlyPauseThreads = false;
-                    deleteJob.Enabled = true;
-                    stopCurrentThreads.Enabled = true;
-                    pauseCurrentThreads.Text = "Pause Download(s)";
-                    pauseCurrentThreads.Image = Languages.english.pause;
+                    this.deleteJob.Enabled = true;
+                    this.stopCurrentThreads.Enabled = true;
+                    this.pauseCurrentThreads.Text = "Pause Download(s)";
+                    this.pauseCurrentThreads.Image = Languages.english.pause;
                     break;
                 case "Resume Download(s)":
                     if (this.InvokeRequired)
@@ -2375,7 +2375,7 @@ namespace Ripper
                         this.Invoke(
                             (MethodInvoker)delegate
                             {
-                                StatusLabelImageC.Text = string.Empty;
+                                this.StatusLabelImageC.Text = string.Empty;
                             });
                     }
                     else
@@ -2384,11 +2384,21 @@ namespace Ripper
                     }
 
                     this.userSettings.CurrentlyPauseThreads = false;
-                    deleteJob.Enabled = true;
-                    stopCurrentThreads.Enabled = true;
-                    pauseCurrentThreads.Text = "Pause Download(s)";
-                    ThreadManager.GetInstance().ResumeAllThreads();
-                    pauseCurrentThreads.Image = Languages.english.pause;
+                    this.deleteJob.Enabled = true;
+                    this.stopCurrentThreads.Enabled = true;
+                    this.pauseCurrentThreads.Text = "Pause Download(s)";
+                    
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(
+                            (MethodInvoker)(() => ThreadManager.GetInstance().ResumeAllThreads()));
+                    }
+                    else
+                    {
+                        ThreadManager.GetInstance().ResumeAllThreads();
+                    }
+                    
+                    this.pauseCurrentThreads.Image = Languages.english.pause;
                     break;
             }
 
@@ -2656,9 +2666,9 @@ namespace Ripper
                 return;
             }
 
-            this.textBox2.Text = this.dfolderBrowserDialog.SelectedPath;
+            this.DownloadFolder.Text = this.dfolderBrowserDialog.SelectedPath;
 
-            this.userSettings.DownloadFolder = this.textBox2.Text;
+            this.userSettings.DownloadFolder = this.DownloadFolder.Text;
 
             Utility.SaveSettings(this.userSettings);
 
@@ -3283,6 +3293,18 @@ namespace Ripper
             this.userSettings.AfterDownloads = 1;
 
             Utility.SaveSettings(this.userSettings);
+        }
+
+        /// <summary>
+        /// Handles the event when the download folder is changed
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void DownloadFolder_TextChanged(object sender, EventArgs e)
+        {
+            /*this.userSettings.DownloadFolder = this.DownloadFolder.Text;
+
+            Utility.SaveSettings(this.userSettings);*/
         }
     }
 }

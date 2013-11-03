@@ -1629,7 +1629,7 @@ namespace Ripper
                 ref this.sImageName,
                 ref this.imageNumber,
                 ref this.eventTable);
-            this.xService.StartDownload();
+            this.xService.StartDownloadAsync();
         }
 
         /// <summary>
@@ -1839,7 +1839,7 @@ namespace Ripper
                 ref this.sImageName,
                 ref this.imageNumber,
                 ref this.eventTable);
-            this.xService.StartDownload();
+            this.xService.StartDownloadAsync();
         }
 
         /// <summary>
@@ -1878,6 +1878,36 @@ namespace Ripper
         public void GetPicturesIon()
         {
             this.xService = new PicturesIon(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get ImageHostHQ Download
+        /// </summary>
+        public void GetImageHostHq()
+        {
+            this.xService = new ImageHostHq(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get PixTreat Download
+        /// </summary>
+        public void GetPixTreat()
+        {
+            this.xService = new PixTreat(
                 ref this.mSavePath,
                 ref this.mstrURL,
                 ref this.ThumbImageURL,

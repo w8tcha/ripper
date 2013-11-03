@@ -28,6 +28,7 @@ namespace Ripper.ImageHosts
         /// <param name="imageHostURL">The image Host URL</param>
         /// <param name="thumbURL">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
+        /// <param name="imageNumber">The image number.</param>
         /// <param name="hashTable">The hash table.</param>
         public ImageTwist(ref string savePath, ref string imageHostURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashTable)
             : base(savePath, imageHostURL, thumbURL, imageName, imageNumber, ref hashTable)
