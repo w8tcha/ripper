@@ -100,13 +100,7 @@ namespace Ripper
         {
             this.DoDownload();
 
-            if (!this.EventTable.Contains(this.ImageLinkURL))
-            {
-                return;
-            }
-
-            this.EventTable.Remove(this.ImageLinkURL);
-            ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
+            this.RemoveThread();
         }
 
         /// <summary>
@@ -154,7 +148,10 @@ namespace Ripper
                 return;
             }
 
-            this.DoDownload();
+            if (!this.DoDownload())
+            {
+                this.RemoveThread();
+            }
         }
 
         /// <summary>
@@ -278,11 +275,24 @@ namespace Ripper
         {
             postTitle = Utility.RemoveIllegalCharecters(postTitle).Replace(" ", "_");
 
-            return string.Format(
+            var imageName = string.Format(
                 "{0}_{1}{2}",
                 postTitle,
                 imageNumber,
                 imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
+
+            // Check if folder path is too long
+            var savePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(imageName));
+            
+            if (savePath.Length > 250)
+            {
+                return string.Format(
+                "{0}{1}",
+                imageNumber,
+                imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
+            }
+
+            return imageName;
         }
 
         /// <summary>
@@ -306,10 +316,24 @@ namespace Ripper
 
             ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = savePath;
 
-            this.WebClient.Headers.Add(string.Format("Referer: {0}", downloadPath));
+           // this.WebClient.Headers.Add(string.Format("Referer: {0}", this.ThumbImageURL));
             this.WebClient.DownloadFileAsync(new Uri(downloadPath), savePath);
 
             return true;
+        }
+
+        /// <summary>
+        /// Removes the thread.
+        /// </summary>
+        protected void RemoveThread()
+        {
+            if (!this.EventTable.Contains(this.ImageLinkURL))
+            {
+                return;
+            }
+
+            this.EventTable.Remove(this.ImageLinkURL);
+            ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
         }
 
         /// <summary>
@@ -328,11 +352,6 @@ namespace Ripper
                 Application.DoEvents();
 
                 CacheController.Instance().LastPic = cacheObject.FilePath;
-
-                this.EventTable.Remove(this.ImageLinkURL);
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
-
-                Application.DoEvents();
             }
             else
             {
@@ -345,14 +364,15 @@ namespace Ripper
                 }
                 else
                 {
-                    Utility.SaveOnCrash(exception.Message, exception.StackTrace, null);
+                    //Utility.SaveOnCrash(exception.Message, exception.StackTrace, null);
                 }
 
                 ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
-
-                Application.DoEvents();
             }
-        }        
+
+            this.RemoveThread();
+
+            Application.DoEvents();
+        }
     }
 }

@@ -31,6 +31,7 @@ namespace Ripper
         private void InitializeComponent()
         {
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBox11 = new System.Windows.Forms.CheckBox();
             this.checkBox10 = new System.Windows.Forms.CheckBox();
             this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
@@ -57,7 +58,6 @@ namespace Ripper
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.FBD = new System.Windows.Forms.FolderBrowserDialog();
-            this.checkBox11 = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -82,6 +82,16 @@ namespace Ripper
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Main Options";
             this.groupBox3.UseCompatibleTextRendering = true;
+            // 
+            // checkBox11
+            // 
+            this.checkBox11.AutoSize = true;
+            this.checkBox11.Location = new System.Drawing.Point(8, 136);
+            this.checkBox11.Name = "checkBox11";
+            this.checkBox11.Size = new System.Drawing.Size(159, 17);
+            this.checkBox11.TabIndex = 25;
+            this.checkBox11.Text = "Show Last Download Image";
+            this.checkBox11.UseVisualStyleBackColor = true;
             // 
             // checkBox10
             // 
@@ -378,16 +388,6 @@ namespace Ripper
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseCompatibleTextRendering = true;
             this.cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // checkBox11
-            // 
-            this.checkBox11.AutoSize = true;
-            this.checkBox11.Location = new System.Drawing.Point(8, 136);
-            this.checkBox11.Name = "checkBox11";
-            this.checkBox11.Size = new System.Drawing.Size(159, 17);
-            this.checkBox11.TabIndex = 25;
-            this.checkBox11.Text = "Show Last Download Image";
-            this.checkBox11.UseVisualStyleBackColor = true;
             // 
             // Options
             // 

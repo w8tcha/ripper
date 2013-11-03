@@ -48,9 +48,9 @@ namespace Ripper
         private readonly List<string> ExtractUrls = new List<string>(); 
 
         /// <summary>
-        /// Indicates if the Browse Dialog is Already Opten
+        /// Gets or sets a value indicating whether if the Browse Dialog is Already Open
         /// </summary>
-        private bool bIsBrowserOpen;
+        private bool IsBrowserOpen { get; set; }
 
         /// <summary>
         /// Indicates if Ripper Currently Parsing Jobs
@@ -419,24 +419,24 @@ namespace Ripper
             try
             {
                 this.cacheController.UserSettings.DownloadFolder = Utility.LoadSetting("Download Folder");
-                this.textBox2.Text = this.cacheController.UserSettings.DownloadFolder;
+                this.DownloadFolder.Text = this.cacheController.UserSettings.DownloadFolder;
 
                 if (string.IsNullOrEmpty(this.cacheController.UserSettings.DownloadFolder))
                 {
                     this.cacheController.UserSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
-                    this.textBox2.Text = this.cacheController.UserSettings.DownloadFolder;
+                    this.DownloadFolder.Text = this.cacheController.UserSettings.DownloadFolder;
 
-                    Utility.SaveSetting("Download Folder", textBox2.Text);
+                    Utility.SaveSetting("Download Folder", DownloadFolder.Text);
                 }
             }
             catch (Exception)
             {
                 this.cacheController.UserSettings.DownloadFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-                textBox2.Text = this.cacheController.UserSettings.DownloadFolder;
+                DownloadFolder.Text = this.cacheController.UserSettings.DownloadFolder;
 
-                Utility.SaveSetting("Download Folder", textBox2.Text);
-                this.cacheController.UserSettings.DownloadFolder = textBox2.Text;
+                Utility.SaveSetting("Download Folder", DownloadFolder.Text);
+                this.cacheController.UserSettings.DownloadFolder = DownloadFolder.Text;
             }
 
             // Load "Download Options"
@@ -2511,38 +2511,51 @@ namespace Ripper
             }
         }
 
+        /// <summary>
+        /// Helps the tool strip menu item click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void HelpToolStripMenuItemClick(object sender, EventArgs e)
         {
             About aForm = new About();
             aForm.ShowDialog();
         }
 
+        /// <summary>
+        /// Browses the folder BTN click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void BrowsFolderBtnClick(object sender, EventArgs e)
         {
-            UpdateDownloadFolder();
+            this.UpdateDownloadFolder();
         }
+
         /// <summary>
         /// Changes the download Folder.
         /// </summary>
         public void UpdateDownloadFolder()
         {
-            //dfolderBrowserDialog.ShowDialog(this);
-            if (bIsBrowserOpen) return;
+            if (this.IsBrowserOpen)
+            {
+                return;
+            }
 
-            bIsBrowserOpen = true;
+            this.IsBrowserOpen = true;
 
             if (this.dfolderBrowserDialog.ShowDialog(this) != DialogResult.OK)
             {
                 return;
             }
 
-            this.textBox2.Text = this.dfolderBrowserDialog.SelectedPath;
+            this.DownloadFolder.Text = this.dfolderBrowserDialog.SelectedPath;
 
-            Utility.SaveSetting("Download Folder", this.textBox2.Text);
+            Utility.SaveSetting("Download Folder", this.DownloadFolder.Text);
 
-            this.cacheController.UserSettings.DownloadFolder = this.textBox2.Text;
+            this.cacheController.UserSettings.DownloadFolder = this.DownloadFolder.Text;
 
-            this.bIsBrowserOpen = false;
+            this.IsBrowserOpen = false;
         }
 
         /// <summary>
@@ -3221,6 +3234,18 @@ namespace Ripper
             this.cacheController.UserSettings.AfterDownloads = 1;
 
             Utility.SaveSetting("AfterDownloads", this.cacheController.UserSettings.AfterDownloads.ToString());
+        }
+
+        /// <summary>
+        /// Handles the event when the download folder is changed
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void DownloadFolder_TextChanged(object sender, EventArgs e)
+        {
+           /* Utility.SaveSetting("Download Folder", this.DownloadFolder.Text);
+
+            this.cacheController.UserSettings.DownloadFolder = this.DownloadFolder.Text;*/
         }
     }
 }

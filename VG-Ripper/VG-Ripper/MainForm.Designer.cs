@@ -54,7 +54,7 @@ namespace Ripper
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.browsFolderBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.DownloadFolder = new System.Windows.Forms.TextBox();
             this.mIsIndexChk = new System.Windows.Forms.CheckBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.mStartDownloadBtn = new System.Windows.Forms.Button();
@@ -108,7 +108,7 @@ namespace Ripper
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.browsFolderBtn);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.DownloadFolder);
             this.groupBox1.Controls.Add(this.mIsIndexChk);
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.mStartDownloadBtn);
@@ -143,14 +143,15 @@ namespace Ripper
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label2.UseCompatibleTextRendering = true;
             // 
-            // textBox2
+            // DownloadFolder
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.DownloadFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(120, 50);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(162, 20);
-            this.textBox2.TabIndex = 2;
+            this.DownloadFolder.Location = new System.Drawing.Point(120, 50);
+            this.DownloadFolder.Name = "DownloadFolder";
+            this.DownloadFolder.Size = new System.Drawing.Size(162, 20);
+            this.DownloadFolder.TabIndex = 2;
+            this.DownloadFolder.TextChanged += new System.EventHandler(this.DownloadFolder_TextChanged);
             // 
             // mIsIndexChk
             // 
@@ -396,7 +397,7 @@ namespace Ripper
             // 
             this.doNothingToolStripMenuItem.CheckOnClick = true;
             this.doNothingToolStripMenuItem.Name = "doNothingToolStripMenuItem";
-            this.doNothingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.doNothingToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.doNothingToolStripMenuItem.Text = "Do Nothing";
             this.doNothingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.DoNothingToolStripMenuItem_CheckedChanged);
             // 
@@ -404,7 +405,7 @@ namespace Ripper
             // 
             this.closeRipperToolStripMenuItem.CheckOnClick = true;
             this.closeRipperToolStripMenuItem.Name = "closeRipperToolStripMenuItem";
-            this.closeRipperToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeRipperToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.closeRipperToolStripMenuItem.Text = "Close Ripper";
             this.closeRipperToolStripMenuItem.CheckedChanged += new System.EventHandler(this.CloseRipperToolStripMenuItem_CheckedChanged);
             // 
@@ -609,7 +610,7 @@ namespace Ripper
         private ColumnHeader columnHeader1;
         private Button browsFolderBtn;
         private Label label2;
-        private TextBox textBox2;
+        private TextBox DownloadFolder;
         private FolderBrowserDialog dfolderBrowserDialog;
         private GroupBox groupBox4;
         private GroupBox groupBox5;
