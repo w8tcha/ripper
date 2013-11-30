@@ -92,7 +92,7 @@ namespace Ripper
 
             if (!imageUrl.Contains("imgserve.net") && !imageUrl.Contains("imagesion.com")
                 && !imageUrl.Contains("picturesion.com") && !imageUrl.Contains("picsious.com")
-                && !imageUrl.Contains("imagetwist.com"))
+                && !imageUrl.Contains("imagetwist.com") && !imageUrl.Contains("premiumpics.net"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -651,6 +651,18 @@ namespace Ripper
             {
                 lThreadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"imggoo.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgmaster.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"gogoimage.org/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/") >= 0 || imageUrl.IndexOf(@"ImageFolks.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgWoot;
@@ -732,6 +744,14 @@ namespace Ripper
             else if (imageUrl.IndexOf(@"pixtreat.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetPixTreat;
+            }
+            else if (imageUrl.IndexOf(@"premiumpics.net/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetPremiumPics;
+            }
+            else if (imageUrl.IndexOf(@"imgdollar.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgDollar;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

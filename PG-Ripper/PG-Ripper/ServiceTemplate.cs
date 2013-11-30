@@ -301,10 +301,11 @@ namespace Ripper
         /// </summary>
         /// <param name="downloadPath">The download path.</param>
         /// <param name="savePath">The save path.</param>
+        /// <param name="addReferer">if set to <c>true</c> [add Referer].</param>
         /// <returns>
         /// Returns if the Image was downloaded or not
         /// </returns>
-        protected bool DownloadImageAsync(string downloadPath, string savePath)
+        protected bool DownloadImageAsync(string downloadPath, string savePath, bool addReferer = false)
         {
             savePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(savePath));
 
@@ -317,7 +318,11 @@ namespace Ripper
 
             ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = savePath;
 
-            //this.WebClient.Headers.Add(string.Format("Referer: {0}", downloadPath));
+            if (addReferer)
+            {
+                this.WebClient.Headers.Add(string.Format("Referer: {0}", this.ThumbImageURL));
+            }
+
             this.WebClient.DownloadFileAsync(new Uri(downloadPath), savePath);
 
             return true;
