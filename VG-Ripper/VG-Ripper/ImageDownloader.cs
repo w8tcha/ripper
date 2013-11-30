@@ -1859,6 +1859,36 @@ namespace Ripper
         }
 
         /// <summary>
+        /// Get PremiumPics Download
+        /// </summary>
+        public void GetPremiumPics()
+        {
+            this.xService = new PremiumPics(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get ImgDollar Download
+        /// </summary>
+        public void GetImgDollar()
+        {
+            this.xService = new ImgDollar(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()
