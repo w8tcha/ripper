@@ -237,6 +237,7 @@
     <Compile Include="ImageHosts\ImgBabes.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
+    <Compile Include="ImageHosts\ImgDollar.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
     <Compile Include="ImageHosts\ImgServe.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="ImageHosts\ImgChili.cs" />
     <Compile Include="ImageHosts\ImgDepot.cs" />
     <Compile Include="ImageHosts\PixTreat.cs" />
+    <Compile Include="ImageHosts\PremiumPics.cs" />
     <Compile Include="ImageHosts\SexyImg.cs" />
     <Compile Include="ImageHosts\TusPics.cs" />
     <Compile Include="Objects\CacheObject.cs" />
