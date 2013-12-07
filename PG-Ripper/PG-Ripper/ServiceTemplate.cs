@@ -142,9 +142,6 @@ namespace Ripper
             }
             catch (IOException ex)
             {
-                MainForm.DeleteMessage = ex.Message;
-                MainForm.Delete = true;
-
                 return;
             }
 
@@ -363,15 +360,7 @@ namespace Ripper
             {
                 var exception = e.Error;
 
-                if (exception is IOException)
-                {
-                    MainForm.DeleteMessage = exception.Message;
-                    MainForm.Delete = true;
-                }
-                else
-                {
-                    //Utility.SaveOnCrash(exception.Message, exception.StackTrace, null);
-                }
+                //Utility.SaveOnCrash(exception.Message, exception.StackTrace, null);
 
                 ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
             }

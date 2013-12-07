@@ -196,6 +196,7 @@
             "ImgDino.com",
             "ImgDollar.com",
             "ImGirl.info",
+            "ImgFlare.com",
             "ImgGoo.com",
             "ImgMaster.com",
             "ImgMoney.com",
