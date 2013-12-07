@@ -3113,89 +3113,156 @@ namespace Ripper
         /// <summary>
         /// Genarates the Storage Folder for the Current Job
         /// </summary>
-        /// <param name="curJob">Curren Job</param>
+        /// <param name="currentJob">The Job</param>
         /// <returns>The Storage Folder</returns>
-        private string GenerateStorePath(JobInfo curJob)
+        private string GenerateStorePath(JobInfo currentJob)
         {
-            string sStorePath = this.userSettings.DownloadFolder;
+            var storePath = this.userSettings.DownloadFolder;
 
-            if (this.userSettings.SubDirs)
+            if (!this.userSettings.SubDirs)
             {
-                try
-                {
-                    if (curJob.ForumTitle != null)
-                    {
-                        if (this.userSettings.DownInSepFolder)
-                        {
-                            sStorePath = Path.Combine(
-                                this.userSettings.DownloadFolder,
-                                Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
-                                Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
-                                Utility.RemoveIllegalCharecters(curJob.PostTitle));
-                        }
-                        else
-                        {
-                            sStorePath = Path.Combine(
-                                this.userSettings.DownloadFolder,
-                                Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
-                                Utility.RemoveIllegalCharecters(curJob.Title));
-                        }
-                    }
-                    else
-                    {
-                        if (this.userSettings.DownInSepFolder)
-                        {
-                            sStorePath = Path.Combine(
-                                this.userSettings.DownloadFolder,
-                                Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
-                                Utility.RemoveIllegalCharecters(curJob.PostTitle));
-                        }
-                        else
-                        {
-                            sStorePath = Path.Combine(
-                                this.userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
-                        }
-                    }
-
-                    int iRenameCnt = 2;
-
-                    string sbegining = sStorePath;
-
-                    // Auto Rename if post titles are the same...
-                    if (jobsList.Count != 0)
-                    {
-                        string path = sStorePath;
-
-                        foreach (JobInfo t in
-                            this.jobsList.Where(
-                                t =>
-                                t.PostTitle.Equals(curJob.PostTitle) ||
-                                Directory.Exists(path) && t.Title.Equals(curJob.Title)))
-                        {
-                            while (t.StorePath.Equals(sStorePath) || Directory.Exists(sStorePath))
-                            {
-                                sStorePath = string.Format("{0} Set# {1}", sbegining, iRenameCnt);
-                                iRenameCnt++;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        while (Directory.Exists(sStorePath))
-                        {
-                            sStorePath = string.Format("{0} Set# {1}", sbegining, iRenameCnt);
-                            iRenameCnt++;
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    sStorePath = Path.Combine(
-                        this.userSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
-                }
+                return storePath;
             }
 
-            return sStorePath;
+            try
+            {
+                if (currentJob.ForumTitle != null)
+                {
+                    if (this.userSettings.DownInSepFolder)
+                    {
+                        storePath = this.CheckAndShortenPath(
+                            currentJob,
+                            Path.Combine(
+                                this.userSettings.DownloadFolder,
+                                string.Format(
+                                    "{0}{1}{2}{1}{3}",
+                                    Utility.RemoveIllegalCharecters(currentJob.ForumTitle),
+                                    Path.DirectorySeparatorChar,
+                                    Utility.RemoveIllegalCharecters(currentJob.Title),
+                                    Utility.RemoveIllegalCharecters(currentJob.PostTitle))),
+                            true,
+                            false);
+                    }
+                    else
+                    {
+                        storePath = this.CheckAndShortenPath(
+                            currentJob,
+                            Path.Combine(
+                                this.userSettings.DownloadFolder,
+                                string.Format(
+                                    "{0}{1}{2}",
+                                    Utility.RemoveIllegalCharecters(currentJob.ForumTitle),
+                                    Path.DirectorySeparatorChar,
+                                    Utility.RemoveIllegalCharecters(currentJob.Title))),
+                            false,
+                            false);
+                    }
+                }
+                else
+                {
+                    storePath = this.CheckAndShortenPath(
+                        currentJob,
+                        Path.Combine(
+                            this.userSettings.DownloadFolder,
+                            this.userSettings.DownInSepFolder
+                                ? string.Format(
+                                    "{0}{1}{2}",
+                                    Utility.RemoveIllegalCharecters(currentJob.Title),
+                                    Path.DirectorySeparatorChar,
+                                    Utility.RemoveIllegalCharecters(currentJob.PostTitle))
+                                : Utility.RemoveIllegalCharecters(currentJob.Title)),
+                        false,
+                        false);
+                }
+
+                var renameCount = 2;
+
+                var begining = storePath;
+
+                // Auto Rename if post titles are the same...
+                if (this.jobsList.Count != 0)
+                {
+                    var path = storePath;
+
+                    foreach (JobInfo t in
+                        this.jobsList.Where(
+                            t =>
+                            t.PostTitle.Equals(currentJob.PostTitle) ||
+                            Directory.Exists(path) && t.Title.Equals(currentJob.Title)))
+                    {
+                        while (t.StorePath.Equals(storePath) || Directory.Exists(storePath))
+                        {
+                            storePath = string.Format("{0} Set# {1}", begining, renameCount);
+                            renameCount++;
+                        }
+                    }
+                }
+                else
+                {
+                    while (Directory.Exists(storePath))
+                    {
+                        storePath = string.Format("{0} Set# {1}", begining, renameCount);
+                        renameCount++;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                storePath = Path.Combine(
+                    this.userSettings.DownloadFolder,
+                    Utility.RemoveIllegalCharecters(currentJob.Title));
+            }
+
+            return storePath;
+        }
+
+        /// <summary>
+        /// Checks the Path if its too long and shorten path.
+        /// </summary>
+        /// <param name="currentJob">The current job.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="forumTitle">if set to <c>true</c> [forum title].</param>
+        /// <param name="postTitle">if set to <c>true</c> [post title].</param>
+        /// <returns>Returns the Shortened Path</returns>
+        private string CheckAndShortenPath(JobInfo currentJob, string path, bool forumTitle, bool postTitle)
+        {
+            // check path length
+            if (path.Length > 248 && forumTitle && !postTitle)
+            {
+                path = Path.Combine(
+                            this.userSettings.DownloadFolder,
+                            string.Format(
+                                "{0}{1}{2}",
+                                Utility.RemoveIllegalCharecters(currentJob.ForumTitle),
+                                Path.DirectorySeparatorChar,
+                                Utility.RemoveIllegalCharecters(currentJob.Title)));
+
+                path = this.CheckAndShortenPath(currentJob, path, false, false);
+            }
+
+            if (path.Length > 248 && !forumTitle && !postTitle)
+            {
+                path = Path.Combine(
+                        this.userSettings.DownloadFolder,
+                        this.userSettings.DownInSepFolder
+                            ? string.Format(
+                                "{0}{1}{2}",
+                                Utility.RemoveIllegalCharecters(currentJob.Title),
+                                Path.DirectorySeparatorChar,
+                                Utility.RemoveIllegalCharecters(currentJob.PostTitle))
+                            : Utility.RemoveIllegalCharecters(currentJob.Title));
+
+                path = this.CheckAndShortenPath(currentJob, path, false, false);
+            }
+
+            // if Path is still to long simply put in download folder
+            if (path.Length > 248)
+            {
+                path = this.userSettings.DownloadFolder;
+            }
+
+
+            return path;
         }
 
         /// <summary>

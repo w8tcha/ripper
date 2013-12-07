@@ -92,7 +92,8 @@ namespace Ripper
 
             if (!imageUrl.Contains("imgserve.net") && !imageUrl.Contains("imagesion.com")
                 && !imageUrl.Contains("picturesion.com") && !imageUrl.Contains("picsious.com")
-                && !imageUrl.Contains("imagetwist.com") && !imageUrl.Contains("premiumpics.net"))
+                && !imageUrl.Contains("imagetwist.com") && !imageUrl.Contains("premiumpics.net")
+                && !imageUrl.Contains("imgmaster.net"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -752,6 +753,10 @@ namespace Ripper
             else if (imageUrl.IndexOf(@"imgdollar.com/") >= 0)
             {
                 lThreadStart = imageDownloader.GetImgDollar;
+            }
+            else if (imageUrl.IndexOf(@"imgflare.com/") >= 0)
+            {
+                lThreadStart = imageDownloader.GetImgFlare;
             }
             else if (imageUrl.IndexOf("ayhja.com/") >= 0)
             {

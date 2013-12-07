@@ -1948,6 +1948,21 @@ namespace Ripper
         }
 
         /// <summary>
+        /// Get ImgFlare Download
+        /// </summary>
+        public void GetImgFlare()
+        {
+            this.xService = new ImgFlare(
+                ref this.mSavePath,
+                ref this.mstrURL,
+                ref this.ThumbImageURL,
+                ref this.sImageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImage()
