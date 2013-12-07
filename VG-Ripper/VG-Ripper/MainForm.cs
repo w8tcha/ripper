@@ -1499,9 +1499,9 @@ namespace Ripper
         private void LogicCode()
         {
             // Full HDD solution
-            if (Delete && !bFullDisc)
+            if (Delete && !this.bFullDisc)
             {
-                FullDisc();
+                this.FullDisc();
             }
 
             if (mrefTM.GetThreadCount() > 0)
@@ -2082,6 +2082,7 @@ namespace Ripper
 
             groupBox5.Text = string.Format("{0} ({1}):", _ResourceManager.GetString("lblRippingQue"), jobsList.Count);
         }
+
         /// <summary>
         /// Full Disc Handling
         /// </summary>
@@ -2121,13 +2122,15 @@ namespace Ripper
 
                 if (this.cacheController.UserSettings.SubDirs)
                 {
-                    if (comboBox1.SelectedIndex == 0)
+                    switch (this.comboBox1.SelectedIndex)
                     {
-                        updatedJob.StorePath = Path.Combine(this.cacheController.UserSettings.DownloadFolder, jobsList[i].Title);
-                    }
-                    if (comboBox1.SelectedIndex == 1 || comboBox1.SelectedIndex == 2)
-                    {
-                        updatedJob.StorePath = Path.Combine(this.cacheController.UserSettings.DownloadFolder, jobsList[i].Title + Path.DirectorySeparatorChar + jobsList[i].PostTitle);
+                        case 0:
+                            updatedJob.StorePath = Path.Combine(this.cacheController.UserSettings.DownloadFolder, this.jobsList[i].Title);
+                            break;
+                        case 2:
+                        case 1:
+                            updatedJob.StorePath = Path.Combine(this.cacheController.UserSettings.DownloadFolder, this.jobsList[i].Title + Path.DirectorySeparatorChar + this.jobsList[i].PostTitle);
+                            break;
                     }
                 }
 
@@ -3057,86 +3060,152 @@ namespace Ripper
         /// <summary>
         /// Genarates the Storage Folder for the Current Job
         /// </summary>
-        /// <param name="curJob">Curren Job</param>
+        /// <param name="currentJob">The Job</param>
         /// <returns>The Storage Folder</returns>
-        private string GenerateStorePath(JobInfo curJob)
+        private string GenerateStorePath(JobInfo currentJob)
         {
-            string sStorePath = this.cacheController.UserSettings.DownloadFolder;
-            
-            if (this.cacheController.UserSettings.SubDirs)
+            var storePath = this.cacheController.UserSettings.DownloadFolder;
+
+            if (!this.cacheController.UserSettings.SubDirs)
             {
-                try
-                {
-                    if (curJob.ForumTitle != null)
-                    {
-                        if (this.cacheController.UserSettings.DownInSepFolder)
-                        {
-                            sStorePath = Path.Combine(
-                                this.cacheController.UserSettings.DownloadFolder,
-                                Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
-                                Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
-                                Utility.RemoveIllegalCharecters(curJob.PostTitle));
-                        }
-                        else
-                        {
-                            sStorePath = Path.Combine(
-                                this.cacheController.UserSettings.DownloadFolder,
-                                Utility.RemoveIllegalCharecters(curJob.ForumTitle) + Path.DirectorySeparatorChar +
-                                Utility.RemoveIllegalCharecters(curJob.Title));
-                        }
-                    }
-                    else
-                    {
-                        if (this.cacheController.UserSettings.DownInSepFolder)
-                        {
-                            sStorePath = Path.Combine(
-                                this.cacheController.UserSettings.DownloadFolder,
-                                Utility.RemoveIllegalCharecters(curJob.Title) + Path.DirectorySeparatorChar +
-                                Utility.RemoveIllegalCharecters(curJob.PostTitle));
-                        }
-                        else
-                        {
-                            sStorePath = Path.Combine(
-                                this.cacheController.UserSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
-                        }
-                    }
-
-                    int iRenameCnt = 2;
-
-                    string sbegining = sStorePath;
-
-                    // Auto Rename if post titles are the same...
-                    if (jobsList.Count != 0)
-                    {
-                        string path = sStorePath;
-
-                        foreach (JobInfo t in
-                            this.jobsList.Where(t => t.PostTitle.Equals(curJob.PostTitle) || (Directory.Exists(path) && t.Title.Equals(curJob.Title))))
-                        {
-                            while (t.StorePath.Equals(sStorePath) ||
-                                   Directory.Exists(sStorePath))
-                            {
-                                sStorePath = string.Format("{0} Set# {1}", sbegining, iRenameCnt);
-                                iRenameCnt++;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        while (Directory.Exists(sStorePath))
-                        {
-                            sStorePath = string.Format("{0} Set# {1}", sbegining, iRenameCnt);
-                            iRenameCnt++;
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    sStorePath = Path.Combine(this.cacheController.UserSettings.DownloadFolder, Utility.RemoveIllegalCharecters(curJob.Title));
-                }
+                return storePath;
             }
 
-            return sStorePath;
+            try
+            {
+                if (currentJob.ForumTitle != null)
+                {
+                    if (this.cacheController.UserSettings.DownInSepFolder)
+                    {
+                        storePath = this.CheckAndShortenPath(
+                            currentJob,
+                            Path.Combine(
+                                this.cacheController.UserSettings.DownloadFolder,
+                                string.Format(
+                                    "{0}{1}{2}{1}{3}",
+                                    Utility.RemoveIllegalCharecters(currentJob.ForumTitle),
+                                    Path.DirectorySeparatorChar,
+                                    Utility.RemoveIllegalCharecters(currentJob.Title),
+                                    Utility.RemoveIllegalCharecters(currentJob.PostTitle))),
+                            true,
+                            false);
+                    }
+                    else
+                    {
+                        storePath = this.CheckAndShortenPath(
+                            currentJob,
+                            Path.Combine(
+                                this.cacheController.UserSettings.DownloadFolder,
+                                string.Format(
+                                    "{0}{1}{2}",
+                                    Utility.RemoveIllegalCharecters(currentJob.ForumTitle),
+                                    Path.DirectorySeparatorChar,
+                                    Utility.RemoveIllegalCharecters(currentJob.Title))),
+                            false,
+                            false);
+                    }
+                }
+                else
+                {
+                    storePath = this.CheckAndShortenPath(
+                        currentJob,
+                        Path.Combine(
+                            this.cacheController.UserSettings.DownloadFolder,
+                            this.cacheController.UserSettings.DownInSepFolder
+                                ? string.Format(
+                                    "{0}{1}{2}",
+                                    Utility.RemoveIllegalCharecters(currentJob.Title),
+                                    Path.DirectorySeparatorChar,
+                                    Utility.RemoveIllegalCharecters(currentJob.PostTitle))
+                                : Utility.RemoveIllegalCharecters(currentJob.Title)),
+                        false,
+                        false);
+                }
+
+                var renameCount = 2;
+
+                var begining = storePath;
+
+                // Auto Rename if post titles are the same...
+                if (this.jobsList.Count != 0)
+                {
+                    var path = storePath;
+
+                    foreach (JobInfo t in
+                        this.jobsList.Where(t => t.PostTitle.Equals(currentJob.PostTitle) || (Directory.Exists(path) && t.Title.Equals(currentJob.Title))))
+                    {
+                        while (t.StorePath.Equals(storePath) ||
+                               Directory.Exists(storePath))
+                        {
+                            storePath = string.Format("{0} Set# {1}", begining, renameCount);
+                            renameCount++;
+                        }
+                    }
+                }
+                else
+                {
+                    while (Directory.Exists(storePath))
+                    {
+                        storePath = string.Format("{0} Set# {1}", begining, renameCount);
+                        renameCount++;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                storePath = Path.Combine(this.cacheController.UserSettings.DownloadFolder, Utility.RemoveIllegalCharecters(currentJob.Title));
+            }
+
+            return storePath;
+        }
+
+        /// <summary>
+        /// Checks the Path if its too long and shorten path.
+        /// </summary>
+        /// <param name="currentJob">The current job.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="forumTitle">if set to <c>true</c> [forum title].</param>
+        /// <param name="postTitle">if set to <c>true</c> [post title].</param>
+        /// <returns>Returns the Shortened Path</returns>
+        private string CheckAndShortenPath(JobInfo currentJob, string path, bool forumTitle, bool postTitle)
+        {
+            // check path length
+            if (path.Length > 248 && forumTitle && !postTitle)
+            {
+                path = Path.Combine(
+                            this.cacheController.UserSettings.DownloadFolder,
+                            string.Format(
+                                "{0}{1}{2}",
+                                Utility.RemoveIllegalCharecters(currentJob.ForumTitle),
+                                Path.DirectorySeparatorChar,
+                                Utility.RemoveIllegalCharecters(currentJob.Title)));
+
+                path = this.CheckAndShortenPath(currentJob, path, false, false);
+            }
+
+            if (path.Length > 248 && !forumTitle && !postTitle)
+            {
+                path = Path.Combine(
+                        this.cacheController.UserSettings.DownloadFolder,
+                        this.cacheController.UserSettings.DownInSepFolder
+                            ? string.Format(
+                                "{0}{1}{2}",
+                                Utility.RemoveIllegalCharecters(currentJob.Title),
+                                Path.DirectorySeparatorChar,
+                                Utility.RemoveIllegalCharecters(currentJob.PostTitle))
+                            : Utility.RemoveIllegalCharecters(currentJob.Title));
+
+                path = this.CheckAndShortenPath(currentJob, path, false, false);
+            }
+
+            // if Path is still to long simply put in download folder
+            if (path.Length > 248)
+            {
+                path = this.cacheController.UserSettings.DownloadFolder;
+            }
+
+
+            return path;
         }
 
         /// <summary>
