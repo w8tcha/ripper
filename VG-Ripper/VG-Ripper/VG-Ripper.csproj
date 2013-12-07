@@ -238,6 +238,7 @@
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
     <Compile Include="ImageHosts\ImgDollar.cs" />
+    <Compile Include="ImageHosts\ImgFlare.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
     <Compile Include="ImageHosts\ImgServe.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
