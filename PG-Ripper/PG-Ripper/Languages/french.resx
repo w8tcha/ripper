@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="bSystemExtr" xml:space="preserve">
+    <value>Extraction en cours...</value>
+  </data>
+  <data name="btexExit" xml:space="preserve">
+    <value>PG-Ripper a fini tout Télécharge</value>
+  </data>
+  <data name="btleExit" xml:space="preserve">
+    <value>Télécharge complet</value>
+  </data>
+  <data name="btleIdle" xml:space="preserve">
+    <value>En attente</value>
+  </data>
+  <data name="btnApply" xml:space="preserve">
+    <value>Appliquer</value>
+  </data>
+  <data name="btnBrowse" xml:space="preserve">
+    <value>Parcourir</value>
+  </data>
+  <data name="btnOpenFolder" xml:space="preserve">
+    <value>Ouvrez un classeur</value>
+  </data>
+  <data name="btnStartDownload" xml:space="preserve">
+    <value>Télécharger</value>
+  </data>
+  <data name="btnStop" xml:space="preserve">
+    <value>Arreter le téléchargement</value>
+  </data>
+  <data name="chbAlwaysOnTop" xml:space="preserve">
+    <value>Toujours en haut</value>
+  </data>
+  <data name="chbAskDownloadFolder" xml:space="preserve">
+    <value>Demandez Télécharger le Classeur avant Téléchargement</value>
+  </data>
+  <data name="chbAutoTKButton" xml:space="preserve">
+    <value>Remercier automatiquement</value>
+  </data>
+  <data name="chbSaveHistory" xml:space="preserve">
+    <value>L'économie a Déchiré des poteaux pour vérifier</value>
+  </data>
+  <data name="chbShowDCPopUps" xml:space="preserve">
+    <value>Est-ce que le spectacle télécharge PopUp complet?</value>
+  </data>
+  <data name="chbShowPopUps" xml:space="preserve">
+    <value>Voir Les PopUps</value>
+  </data>
+  <data name="chbSubdirectories" xml:space="preserve">
+    <value>Télécharger chaque fil dans son propre dossier</value>
+  </data>
+  <data name="chbSubThreadRip" xml:space="preserve">
+    <value>Télécharger chaque poste dans son propre dossier</value>
+  </data>
+  <data name="chRememberCred" xml:space="preserve">
+    <value>Se souvenir de moi</value>
+  </data>
+  <data name="CurrentlyExtract" xml:space="preserve">
+    <value>Extraction</value>
+  </data>
+  <data name="downloadOptions" xml:space="preserve">
+    <value>Options de Téléchargement</value>
+  </data>
+  <data name="gbCurrently" xml:space="preserve">
+    <value>En cours,</value>
+  </data>
+  <data name="gbCurrentlyExit" xml:space="preserve">
+    <value>Actuellement, le système de J'attends l'arrêt de threads</value>
+  </data>
+  <data name="gbCurrentlyExtract" xml:space="preserve">
+    <value>Actuellement, En train d'extraire</value>
+  </data>
+  <data name="gbCurrentlyIdle" xml:space="preserve">
+    <value>Actuellement, En attente...</value>
+  </data>
+  <data name="gbLanguage" xml:space="preserve">
+    <value>Choisir Langue</value>
+  </data>
+  <data name="gbLoginHead" xml:space="preserve">
+    <value>Entrez vos identifiants</value>
+  </data>
+  <data name="gbMainOptions" xml:space="preserve">
+    <value>Options Principales</value>
+  </data>
+  <data name="gbParse" xml:space="preserve">
+    <value>Analyse de la page...</value>
+  </data>
+  <data name="lblDownloadFolder" xml:space="preserve">
+    <value>Répertoire de téléchargement :</value>
+  </data>
+  <data name="lblDownloading" xml:space="preserve">
+    <value>Télécharge: 0 sur 0</value>
+  </data>
+  <data name="lblDownloadingof" xml:space="preserve">
+    <value>Télécharge: {0} sur {1}</value>
+  </data>
+  <data name="lblFailed" xml:space="preserve">
+    <value>Identification ECHOUEE!</value>
+  </data>
+  <data name="lblLastPicture" xml:space="preserve">
+    <value>Derniére image téléchargée:</value>
+  </data>
+  <data name="lblminImageCount" xml:space="preserve">
+    <value>Min. Compte de l'image donner Merci:</value>
+  </data>
+  <data name="lblPass" xml:space="preserve">
+    <value>Mot de passe :</value>
+  </data>
+  <data name="lblRippingQue" xml:space="preserve">
+    <value>File d'attente</value>
+  </data>
+  <data name="lblStatWait" xml:space="preserve">
+    <value>Attente de la réponse...</value>
+  </data>
+  <data name="lblThreadLimit" xml:space="preserve">
+    <value>Maximal simultanés downloads:</value>
+  </data>
+  <data name="lblThreads" xml:space="preserve">
+    <value>Processus: {0} sur {1}</value>
+  </data>
+  <data name="lblThreads2" xml:space="preserve">
+    <value>Processus: 0 sur </value>
+  </data>
+  <data name="lblUser" xml:space="preserve">
+    <value>Utilisateur :</value>
+  </data>
+  <data name="lblWarningLogin" xml:space="preserve">
+    <value>ATTENTION: Au bout de 3 tentatives infructueuse votre compte serra bloqué! Vous étes PREVENUS!</value>
+  </data>
+  <data name="lblWelcome" xml:space="preserve">
+    <value>Bienvenue, </value>
+  </data>
+  <data name="logintext" xml:space="preserve">
+    <value>Identification</value>
+  </data>
+  <data name="mbAlreadyQueued" xml:space="preserve">
+    <value>Déja dans la file d'attente</value>
+  </data>
+  <data name="mbIncorrectURL" xml:space="preserve">
+    <value>Lien Incorrect.</value>
+  </data>
+  <data name="mbInvalidDes" xml:space="preserve">
+    <value>Destination Invalide!</value>
+  </data>
+  <data name="mbNoPost" xml:space="preserve">
+    <value>N'existe pas!</value>
+  </data>
+  <data name="mbNoThread" xml:space="preserve">
+    <value>N'existe pas!</value>
+  </data>
+  <data name="mbThreadbetw" xml:space="preserve">
+    <value>La limite de processus doit étre entre 1 et 20!</value>
+  </data>
+  <data name="mbThreadNum" xml:space="preserve">
+    <value>La limite de processus doit étre numerique!</value>
+  </data>
+  <data name="mbTNumeric" xml:space="preserve">
+    <value>Doit étre numérique!</value>
+  </data>
+  <data name="mbUpdate" xml:space="preserve">
+    <value>Une nouvelle version d'Éventreur est disponible. Aimeriez-Vous améliorer?</value>
+  </data>
+  <data name="mbUpdate2" xml:space="preserve">
+    <value>Nouvelle Version disponible!</value>
+  </data>
+  <data name="tiImagesRemain" xml:space="preserve">
+    <value>{0} Images restantes (Total Téléchargé: {1}%)</value>
+  </data>
+  <data name="tthisText" xml:space="preserve">
+    <value>PG-Ripper Télécharge ...</value>
+  </data>
+  <data name="ttlHeader" xml:space="preserve">
+    <value> [Identifié comme: "</value>
+  </data>
+  <data name="mBAlready" xml:space="preserve">
+    <value>Post déjà déchirée, voulez-vous déchirer de nouveau?</value>
+  </data>
+  <data name="mbExit" xml:space="preserve">
+    <value>Voulez-vous fermer Ripper maintenant?</value>
+  </data>
+  <data name="mbExitTtl" xml:space="preserve">
+    <value>Fermer Ripper</value>
+  </data>
+  <data name="lblForums" xml:space="preserve">
+    <value>Forum:</value>
+  </data>
+  <data name="btnClose" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="StatusLabelInfo" xml:space="preserve">
+    <value>Attention! Attendre la fin des téléchargements ...</value>
+  </data>
+  <data name="MenuAbout" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="MenuExit" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="MenuFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="MenuHelp" xml:space="preserve">
+    <value>Aider</value>
+  </data>
+  <data name="MenuSettings" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="gbParse2" xml:space="preserve">
+    <value>Analyse de la jobs.xml...</value>
+  </data>
+  <data name="MenuAccounts" xml:space="preserve">
+    <value>Comptes</value>
+  </data>
+  <data name="ShowLastDownloaded" xml:space="preserve">
+    <value>Show last download image</value>
+  </data>
+  <data name="MenuOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="AfterDownload" xml:space="preserve">
+    <value>After Download(s) finished...</value>
+  </data>
+  <data name="clipboardWatch" xml:space="preserve">
+    <value>Clipboard Monitoring</value>
+  </data>
+  <data name="CloseRipper" xml:space="preserve">
+    <value>Close Ripper</value>
+  </data>
+  <data name="DoNothing" xml:space="preserve">
+    <value>Do Nothing</value>
+  </data>
+  <data name="GuestLogin" xml:space="preserve">
+    <value>l'accès des clients</value>
+  </data>
+  <data name="AddNewAccount" xml:space="preserve">
+    <value>Add New Forum Account</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Supprimer compte sur le forum</value>
+  </data>
+</root>
