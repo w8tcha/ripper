@@ -30,3 +30,6 @@ VG-Ripper/VG-Ripper-Setup/VG-Ripper-Setup-x64.exe
 VG-Ripper/VG-Ripper-Setup/VG-Ripper-Setup.exe
 VG-Ripper/VG-Ripper/bin/rippedPostHistory.txt
 PG-Ripper/PG-Ripper/PG-Ripper.v11.suo
+PG-Ripper/_ReSharper.PG-Ripper/
+VG-Ripper-Setup/VG-Ripper-Setup.exe
+PG-Ripper/bin/PG-Ripper/Settings.xml
