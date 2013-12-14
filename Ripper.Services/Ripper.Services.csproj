@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8233EB04-64CA-499B-8A45-052C0DB5B7E2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ripper.Services</RootNamespace>
+    <AssemblyName>Ripper.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Downloader.cs" />
+    <Compile Include="ImageDownloader.cs" />
+    <Compile Include="ImageHosts\Abload.cs" />
+    <Compile Include="ImageHosts\AllYouCanUpload.cs" />
+    <Compile Include="ImageHosts\AmazingDickSSl.cs" />
+    <Compile Include="ImageHosts\Benuri.cs" />
+    <Compile Include="ImageHosts\BigPics.cs" />
+    <Compile Include="ImageHosts\BusyUpload.cs" />
+    <Compile Include="ImageHosts\Celebs.cs" />
+    <Compile Include="ImageHosts\CelebSweet.cs" />
+    <Compile Include="ImageHosts\DailyPoa.cs" />
+    <Compile Include="ImageHosts\DirectUpload.cs" />
+    <Compile Include="ImageHosts\DollarLink.cs" />
+    <Compile Include="ImageHosts\DumbARump.cs" />
+    <Compile Include="ImageHosts\DumpPix.cs" />
+    <Compile Include="ImageHosts\fapomatic.cs" />
+    <Compile Include="ImageHosts\FastPic.cs" />
+    <Compile Include="ImageHosts\FileDen.cs" />
+    <Compile Include="ImageHosts\FileHost.cs" />
+    <Compile Include="ImageHosts\FileMad.cs" />
+    <Compile Include="ImageHosts\FotoSik.cs" />
+    <Compile Include="ImageHosts\FotoTube.cs" />
+    <Compile Include="ImageHosts\FreeImageHost.cs" />
+    <Compile Include="ImageHosts\FreeImagePic.cs" />
+    <Compile Include="ImageHosts\FreePornDumpster.cs" />
+    <Compile Include="ImageHosts\FreeShare.cs" />
+    <Compile Include="ImageHosts\GlowFoto.cs" />
+    <Compile Include="ImageHosts\Hoooster.cs" />
+    <Compile Include="ImageHosts\HosterBin.cs" />
+    <Compile Include="ImageHosts\HotLinkedImage.cs" />
+    <Compile Include="ImageHosts\HotLinkImage.cs" />
+    <Compile Include="ImageHosts\Image2Share.cs" />
+    <Compile Include="ImageHosts\ImageBam.cs" />
+    <Compile Include="ImageHosts\ImageBeaver.cs" />
+    <Compile Include="ImageHosts\ImageBunk.cs" />
+    <Compile Include="ImageHosts\ImageCargo.cs" />
+    <Compile Include="ImageHosts\ImageCrack.cs" />
+    <Compile Include="ImageHosts\ImageDax.cs" />
+    <Compile Include="ImageHosts\ImageDoza.cs" />
+    <Compile Include="ImageHosts\ImageDunk.cs" />
+    <Compile Include="ImageHosts\ImageFap.cs" />
+    <Compile Include="ImageHosts\ImageFlea.cs" />
+    <Compile Include="ImageHosts\ImageFling.cs" />
+    <Compile Include="ImageHosts\ImageFoco.cs" />
+    <Compile Include="ImageHosts\ImageGiga.cs" />
+    <Compile Include="ImageHosts\ImageHaven.cs" />
+    <Compile Include="ImageHosts\ImageHigh.cs" />
+    <Compile Include="ImageHosts\ImageHost.cs" />
+    <Compile Include="ImageHosts\ImageHostHq.cs" />
+    <Compile Include="ImageHosts\ImageHosting.cs" />
+    <Compile Include="ImageHosts\ImageHostLi.cs" />
+    <Compile Include="ImageHosts\ImageHyper.cs" />
+    <Compile Include="ImageHosts\ImageJumbo.cs" />
+    <Compile Include="ImageHosts\ImagePad.cs" />
+    <Compile Include="ImageHosts\ImagePicasa.cs" />
+    <Compile Include="ImageHosts\ImagePorter.cs" />
+    <Compile Include="ImageHosts\ImagePundit.cs" />
+    <Compile Include="ImageHosts\ImagesGal.cs" />
+    <Compile Include="ImageHosts\ImagesIon.cs" />
+    <Compile Include="ImageHosts\ImageSocket.cs" />
+    <Compile Include="ImageHosts\ImageSwitch.cs" />
+    <Compile Include="ImageHosts\ImageThrust.cs" />
+    <Compile Include="ImageHosts\ImageTwist.cs" />
+    <Compile Include="ImageHosts\ImageUpper.cs" />
+    <Compile Include="ImageHosts\imagevenue.cs" />
+    <Compile Include="ImageHosts\imagevenueNew.cs" />
+    <Compile Include="ImageHosts\ImageWam.cs" />
+    <Compile Include="ImageHosts\ImageWaste.cs" />
+    <Compile Include="ImageHosts\ImageZilla.cs" />
+    <Compile Include="ImageHosts\ImGah.cs" />
+    <Compile Include="ImageHosts\ImgBabes.cs" />
+    <Compile Include="ImageHosts\ImgBox.cs" />
+    <Compile Include="ImageHosts\ImgChili.cs" />
+    <Compile Include="ImageHosts\ImgDepot.cs" />
+    <Compile Include="ImageHosts\ImgDino.cs" />
+    <Compile Include="ImageHosts\ImgDollar.cs" />
+    <Compile Include="ImageHosts\ImgFlare.cs" />
+    <Compile Include="ImageHosts\ImgPo.cs" />
+    <Compile Include="ImageHosts\ImgServe.cs" />
+    <Compile Include="ImageHosts\ImgUr.cs" />
+    <Compile Include="ImageHosts\ImgWoot.cs" />
+    <Compile Include="ImageHosts\Immage.cs" />
+    <Compile Include="ImageHosts\Ipicture.cs" />
+    <Compile Include="ImageHosts\JpgHosting.cs" />
+    <Compile Include="ImageHosts\JpgHosting2.cs" />
+    <Compile Include="ImageHosts\KeepMyFile.cs" />
+    <Compile Include="ImageHosts\KemiPic.cs" />
+    <Compile Include="ImageHosts\LargeImageHost.cs" />
+    <Compile Include="ImageHosts\LetMeHost.cs" />
+    <Compile Include="ImageHosts\Moast.cs" />
+    <Compile Include="ImageHosts\MultiPics.cs" />
+    <Compile Include="ImageHosts\MyImageHost.cs" />
+    <Compile Include="ImageHosts\MyPhotos.cs" />
+    <Compile Include="ImageHosts\MyPixHost.cs" />
+    <Compile Include="ImageHosts\PaintedOver.cs" />
+    <Compile Include="ImageHosts\Perverzia.cs" />
+    <Compile Include="ImageHosts\PicBux.cs" />
+    <Compile Include="ImageHosts\PicDir.cs" />
+    <Compile Include="ImageHosts\PicEasy.cs" />
+    <Compile Include="ImageHosts\PicHoarder.cs" />
+    <Compile Include="ImageHosts\PicJackal.cs" />
+    <Compile Include="ImageHosts\PicsPlace.cs" />
+    <Compile Include="ImageHosts\PicTiger.cs" />
+    <Compile Include="ImageHosts\PicTiger2.cs" />
+    <Compile Include="ImageHosts\PictureDip.cs" />
+    <Compile Include="ImageHosts\PicturesHoster.cs" />
+    <Compile Include="ImageHosts\PicturesIon.cs" />
+    <Compile Include="ImageHosts\PicturesUpload.cs" />
+    <Compile Include="ImageHosts\PimpAndHost.cs" />
+    <Compile Include="ImageHosts\PixHost.cs" />
+    <Compile Include="ImageHosts\PixHosting.cs" />
+    <Compile Include="ImageHosts\PixHub.cs" />
+    <Compile Include="ImageHosts\PixRoute.cs" />
+    <Compile Include="ImageHosts\PixSlam.cs" />
+    <Compile Include="ImageHosts\PixTreat.cs" />
+    <Compile Include="ImageHosts\PixUp.cs" />
+    <Compile Include="ImageHosts\PornImgHost.cs" />
+    <Compile Include="ImageHosts\PremiumPics.cs" />
+    <Compile Include="ImageHosts\PussyUpload.cs" />
+    <Compile Include="ImageHosts\Radikal.cs" />
+    <Compile Include="ImageHosts\RipHq.cs" />
+    <Compile Include="ImageHosts\SevenBucket.cs" />
+    <Compile Include="ImageHosts\SexyImg.cs" />
+    <Compile Include="ImageHosts\ShareAPic.cs" />
+    <Compile Include="ImageHosts\ShareAvenue.cs" />
+    <Compile Include="ImageHosts\ShareNxs.cs" />
+    <Compile Include="ImageHosts\SpeedImg.cs" />
+    <Compile Include="ImageHosts\Stooorage.cs" />
+    <Compile Include="ImageHosts\StormFactory.cs" />
+    <Compile Include="ImageHosts\Supload.cs" />
+    <Compile Include="ImageHosts\SuprFile.cs" />
+    <Compile Include="ImageHosts\TenPix.cs" />
+    <Compile Include="ImageHosts\TheFreeImageHosting.cs" />
+    <Compile Include="ImageHosts\TheImageHosting.cs" />
+    <Compile Include="ImageHosts\TurboImageHost.cs" />
+    <Compile Include="ImageHosts\TusPics.cs" />
+    <Compile Include="ImageHosts\UploadEm.cs" />
+    <Compile Include="ImageHosts\uploadimages_net.cs" />
+    <Compile Include="ImageHosts\UpMyPhoto.cs" />
+    <Compile Include="ImageHosts\UpPix.cs" />
+    <Compile Include="ImageHosts\watermarkIt.cs" />
+    <Compile Include="ImageHosts\XLocker.cs" />
+    <Compile Include="ImageHosts\XPhotoSharing.cs" />
+    <Compile Include="ImageHosts\XsHosting.cs" />
+    <Compile Include="ImageHosts\YesAlbum.cs" />
+    <Compile Include="ImageHosts\YourPix.cs" />
+    <Compile Include="ImageHosts\ZShare.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ripper.Core\Ripper.Core.csproj">
+      <Project>{4ae38478-faa4-4eca-bd06-30d5cb87df68}</Project>
+      <Name>Ripper.Types</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
