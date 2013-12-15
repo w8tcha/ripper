@@ -33,3 +33,8 @@ PG-Ripper/PG-Ripper/PG-Ripper.v11.suo
 PG-Ripper/_ReSharper.PG-Ripper/
 VG-Ripper-Setup/VG-Ripper-Setup.exe
 PG-Ripper/bin/PG-Ripper/Settings.xml
+PG-Ripper/PG-Ripper.csproj.user
+VG-Ripper/VG-Ripper.csproj.user
+PG-Ripper/PG-Ripper.v11.suo
+*.exe
+*.dll
