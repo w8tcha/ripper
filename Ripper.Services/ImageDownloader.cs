@@ -19,7 +19,7 @@ namespace Ripper.Services
     /// <summary>
     /// ImageDownloader is the bridging class between this routine and the
     /// ServiceTemplate base class (which is the parent to all hosting site's
-    /// fetch code).      
+    /// fetch code).
     /// </summary>
     public class ImageDownloader
     {
@@ -713,6 +713,9 @@ namespace Ripper.Services
             this.xService.StartDownload();
         }
 
+        /// <summary>
+        /// Gets the Image Bam downloader.
+        /// </summary>
         public void GetImageBam()
         {
             this.xService = new ImageBam(
@@ -722,7 +725,7 @@ namespace Ripper.Services
                 ref this.imageName,
                 ref this.imageNumber,
                 ref this.eventTable);
-            this.xService.StartDownload();
+            this.xService.StartDownloadAsync();
         }
 
         public void GetImageHosting()
@@ -1959,6 +1962,21 @@ namespace Ripper.Services
         public void GetPerverzia()
         {
             this.xService = new Perverzia(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get ViewCube Download
+        /// </summary>
+        public void GetViewCube()
+        {
+            this.xService = new ViewCube(
                 ref this.savePath,
                 ref this.imageURL,
                 ref this.thumbImageURL,

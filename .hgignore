@@ -38,3 +38,11 @@ VG-Ripper/VG-Ripper.csproj.user
 PG-Ripper/PG-Ripper.v11.suo
 *.exe
 *.dll
+*.pdb
+PG-Ripper/bin/PG-Ripper/PGRipper.config
+PG-Ripper/bin/PG-Ripper/PGRipper.exe.config
+PG-Ripper/bin/PG-Ripper/Rip-Pro/PGRipper.config
+PG-Ripper/bin/PG-Ripper/rippedPostHistory.txt
+PG-Ripper/bin/PG-RipperX/PGRipper.config
+PG-Ripper/bin/PG-RipperX/PGRipper.exe.config
+PG-Ripper/bin/PG-RipperX/rippedPostHistory.txt
