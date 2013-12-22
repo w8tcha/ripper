@@ -599,7 +599,7 @@ namespace Ripper
                 Login frmLgn = new Login();
                 frmLgn.ShowDialog(this);
 
-                if (!this.bCameThroughCorrectLogin)
+                if (!this.cameThroughCorrectLogin)
                 {
                     DialogResult result = TopMostMessageBox.Show(
                         this._ResourceManager.GetString("mbExit"),
@@ -726,13 +726,19 @@ namespace Ripper
 
 #if (!RIPRIPPERX)
 
-            if (VersionCheck.UpdateAvailable(Assembly.GetExecutingAssembly(), "VG-Ripper") && File.Exists(Path.Combine(Application.StartupPath, "ICSharpCode.SharpZipLib.dll")))
+            var updateNotes = string.Empty;
+
+            if (VersionCheck.UpdateAvailable(Assembly.GetExecutingAssembly(), "VG-Ripper", out updateNotes)
+                && File.Exists(Path.Combine(Application.StartupPath, "ICSharpCode.SharpZipLib.dll")))
             {
                 var mbUpdate = this._ResourceManager.GetString("mbUpdate");
                 var mbUpdate2 = this._ResourceManager.GetString("mbUpdate2");
 
                 DialogResult result = TopMostMessageBox.Show(
-                    mbUpdate, mbUpdate2, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    string.Format("{0}{1}", mbUpdate, updateNotes),
+                    mbUpdate2,
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
 
                 if (result.Equals(DialogResult.Yes))
                 {
@@ -750,14 +756,26 @@ namespace Ripper
                 }
             }
 
+            updateNotes = string.Empty;
+
+#endif
+
+#if (RIPRIPPERX)
+            var updateNotes = string.Empty;
+#endif
+
             // Auto Check for Ripper.Services.dll Update
-            if (VersionCheck.UpdateAvailable(typeof(Downloader).Assembly, "Ripper.Services") | !File.Exists(Path.Combine(Application.StartupPath, "Ripper.Services.dll")))
+            if (VersionCheck.UpdateAvailable(typeof(Downloader).Assembly, "Ripper.Services", out updateNotes)
+                | !File.Exists(Path.Combine(Application.StartupPath, "Ripper.Services.dll")))
             {
-                TopMostMessageBox.Show(this._ResourceManager.GetString("ServicesUpdate"));
+                TopMostMessageBox.Show(
+                    string.Format(
+                        "{0}{1}",
+                        this._ResourceManager.GetString("ServicesUpdate"),
+                        updateNotes));
 
                 AutoUpdater.TryUpdate("Ripper.Services", Assembly.GetExecutingAssembly());
             }
-#endif
 
             this.LoadSettings();
 
@@ -765,13 +783,11 @@ namespace Ripper
             {
                 this.AutoLogin();
 
-                if (!this.bCameThroughCorrectLogin)
+                if (!this.cameThroughCorrectLogin)
                 {
                     Application.Exit();
                 }
             }
-
-            //LoadSettings();
 
             if (CacheController.Instance().UserSettings.SavePids)
             {
@@ -2580,7 +2596,7 @@ namespace Ripper
 
                 if (lgnMgr.DoLogin(CacheController.Instance().UserSettings.ForumURL))
                 {
-                    this.bCameThroughCorrectLogin = true;
+                    this.cameThroughCorrectLogin = true;
                 }
                 else
                 {
@@ -2604,7 +2620,7 @@ namespace Ripper
                 Login frmLgn = new Login();
                 frmLgn.ShowDialog(this);
 
-                this.bCameThroughCorrectLogin = false;
+                this.cameThroughCorrectLogin = false;
             }
         }
 

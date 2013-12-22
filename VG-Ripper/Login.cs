@@ -132,7 +132,7 @@ namespace Ripper
         private void Timer1Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             this.timer1.Enabled = false;
-            ((MainForm)Owner).bCameThroughCorrectLogin = true;
+            ((MainForm)Owner).cameThroughCorrectLogin = true;
 
             var cacheController = CacheController.Instance();
 
@@ -175,7 +175,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void GuestLoginButton_Click(object sender, EventArgs e)
         {
-            ((MainForm)Owner).bCameThroughCorrectLogin = true;
+            ((MainForm)Owner).cameThroughCorrectLogin = true;
 
             var cacheController = CacheController.Instance();
 

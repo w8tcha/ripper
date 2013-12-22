@@ -191,7 +191,7 @@ namespace Ripper
         {
             this.timer1.Enabled = false;
 
-            ((MainForm)Owner).bCameThroughCorrectLogin = true;
+            ((MainForm)Owner).cameThroughCorrectLogin = true;
 
             if (CacheController.Instance().UserSettings.ForumsAccount.Any(item => item.ForumURL == CacheController.Instance().UserSettings.CurrentForumUrl))
             {
