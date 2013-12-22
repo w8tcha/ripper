@@ -22,8 +22,8 @@
     
     <!-- Create the Windows Package package -->    
     <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)%(AssemblyIdentities.Version).$(Extension)" />
-    <!-- Copy the Install package to the Packages folder -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../packages" />
+    <!-- Copy the Install package to the Output folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../Output" />
     
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
     

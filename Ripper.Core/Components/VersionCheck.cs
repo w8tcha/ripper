@@ -31,11 +31,14 @@ namespace Ripper.Core.Components
         /// </summary>
         /// <param name="ripperAssembly">The ripper assembly.</param>
         /// <param name="name">The program name.</param>
+        /// <param name="releaseNotes">The release notes.</param>
         /// <returns>
         /// Returns if Update is available
         /// </returns>
-        public static bool UpdateAvailable(Assembly ripperAssembly, string name)
+        public static bool UpdateAvailable(Assembly ripperAssembly, string name, out string releaseNotes)
         {
+            releaseNotes = string.Empty;
+
             // Proper Format: (MAJOR).(MINOR).(BUILD).(REVISION) Decimal makes it easier to judge versions
             try
             {
@@ -52,13 +55,13 @@ namespace Ripper.Core.Components
 
                 ds.ReadXml("http://www.watchersnet.de/rip-ripper/ripperUpdates.xml");
 
-                foreach (
-                    DataRow row in
-                        from DataRow row in ds.Tables["ripper"].Rows
-                        let nameRow = row["name"].ToString()
-                        where nameRow.Equals(name)
-                        select row)
+                foreach (DataRow row in
+                    from DataRow row in ds.Tables["ripper"].Rows
+                    let nameRow = row["name"].ToString()
+                    where nameRow.Equals(name)
+                    select row)
                 {
+                    releaseNotes = string.Format("\n\nChange log:\n{0}", row["notes"]);
                     OnlineVersion = row["version"].ToString();
                 }
 

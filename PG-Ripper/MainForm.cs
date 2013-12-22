@@ -381,7 +381,7 @@ namespace Ripper
                 var frmLgn = new Login();
                 frmLgn.ShowDialog(this);
 
-                if (this.bCameThroughCorrectLogin)
+                if (this.cameThroughCorrectLogin)
                 {
                     return;
                 }
@@ -402,7 +402,7 @@ namespace Ripper
                 Login frmLgn = new Login();
                 frmLgn.ShowDialog(this);
 
-                if (this.bCameThroughCorrectLogin)
+                if (this.cameThroughCorrectLogin)
                 {
                     this.CheckAccountMenu();
 
@@ -478,13 +478,18 @@ namespace Ripper
             this.SetWindow();
 
 #if (!PGRIPPERX)
-            if (VersionCheck.UpdateAvailable(Assembly.GetExecutingAssembly(), "PG-Ripper") && File.Exists(Path.Combine(Application.StartupPath, "ICSharpCode.SharpZipLib.dll")))
+            var updateNotes = string.Empty;
+
+            if (VersionCheck.UpdateAvailable(Assembly.GetExecutingAssembly(), "PG-Ripper", out updateNotes) && File.Exists(Path.Combine(Application.StartupPath, "ICSharpCode.SharpZipLib.dll")))
             {
                 var mbUpdate = this._ResourceManager.GetString("mbUpdate");
                 var mbUpdate2 = this._ResourceManager.GetString("mbUpdate2");
 
                 DialogResult result = TopMostMessageBox.Show(
-                    mbUpdate, mbUpdate2, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    string.Format("{0}{1}", mbUpdate, updateNotes),
+                    mbUpdate2,
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
@@ -502,18 +507,29 @@ namespace Ripper
                 }
             }
 
+            updateNotes = string.Empty;
+
+#endif
+
+#if (RIPRIPPERX)
+            var updateNotes = string.Empty;
+#endif
+
             // Auto Check for Ripper.Services.dll Update
-            if (VersionCheck.UpdateAvailable(typeof(Downloader).Assembly, "Ripper.Services") | !File.Exists(Path.Combine(Application.StartupPath, "Ripper.Services.dll")))
+            if (VersionCheck.UpdateAvailable(typeof(Downloader).Assembly, "Ripper.Services", out updateNotes) | !File.Exists(Path.Combine(Application.StartupPath, "Ripper.Services.dll")))
             {
-                TopMostMessageBox.Show(this._ResourceManager.GetString("ServicesUpdate"));
+                TopMostMessageBox.Show(
+                    string.Format(
+                        "{0}{1}",
+                        this._ResourceManager.GetString("ServicesUpdate"),
+                        updateNotes));
 
                 AutoUpdater.TryUpdate("Ripper.Services", Assembly.GetExecutingAssembly());
             }
-#endif
 
             this.AutoLogin();
 
-            if (!bCameThroughCorrectLogin)
+            if (!this.cameThroughCorrectLogin)
             {
                 Application.Exit();
             }
@@ -530,11 +546,11 @@ namespace Ripper
             // Hide Index Thread Checkbox if not RiP Forums
             if (!CacheController.Instance().UserSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
             {
-                mIsIndexChk.Visible = false;
+                this.mIsIndexChk.Visible = false;
             }
 
 #if (!PGRIPPERX)
-            trayIcon.Visible = true;
+            this.trayIcon.Visible = true;
 #endif
         }
 
@@ -736,7 +752,7 @@ namespace Ripper
 
                 if (currentAccount.GuestAccount)
                 {
-                    this.bCameThroughCorrectLogin = true;
+                    this.cameThroughCorrectLogin = true;
                     this.CheckAccountMenu();
                 }
                 else
@@ -745,7 +761,7 @@ namespace Ripper
 
                     if (lgnMgr.DoLogin(CacheController.Instance().UserSettings.CurrentForumUrl))
                     {
-                        this.bCameThroughCorrectLogin = true;
+                        this.cameThroughCorrectLogin = true;
                         this.CheckAccountMenu();
                     }
                     else
@@ -815,7 +831,7 @@ namespace Ripper
             {
                 if (currentForumAccount.GuestAccount)
                 {
-                    this.bCameThroughCorrectLogin = true;
+                    this.cameThroughCorrectLogin = true;
                 }
                 else
                 {
@@ -823,7 +839,7 @@ namespace Ripper
 
                     if (lgnMgr.DoLogin(CacheController.Instance().UserSettings.CurrentForumUrl))
                     {
-                        this.bCameThroughCorrectLogin = true;
+                        this.cameThroughCorrectLogin = true;
                     }
                     else
                     {

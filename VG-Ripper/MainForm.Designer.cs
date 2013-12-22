@@ -584,7 +584,10 @@ namespace Ripper
         private JobInfo currentJob = null;
         private List<ImageInfo> mImagesList = null;
         private ThreadManager mrefTM = null;
-        public bool bCameThroughCorrectLogin = false;
+        /// <summary>
+        /// The came through correct login
+        /// </summary>
+        public bool cameThroughCorrectLogin = false;
         private ComboBox comboBox1;
         private Button stopCurrentThreads;
 

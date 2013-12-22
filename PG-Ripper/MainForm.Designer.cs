@@ -591,7 +591,7 @@ namespace Ripper
         private string sLastPic = string.Empty;
         private CacheController mrefCC = null;
         private ThreadManager mrefTM = null;
-        public bool bCameThroughCorrectLogin = false;
+        public bool cameThroughCorrectLogin = false;
         private ComboBox comboBox1;
         private Button stopCurrentThreads;       
         //private string g_sComposedURI = string.Empty;
