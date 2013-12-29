@@ -41,7 +41,8 @@ namespace Ripper.Services
             if (!imageUrl.Contains("imgserve.net") && !imageUrl.Contains("imagesion.com")
                 && !imageUrl.Contains("picturesion.com") && !imageUrl.Contains("picsious.com")
                 && !imageUrl.Contains("imagetwist.com") && !imageUrl.Contains("premiumpics.net")
-                && !imageUrl.Contains("imgmaster.net") && !imageUrl.Contains("perverzia.com"))
+                && !imageUrl.Contains("imgmaster.net") && !imageUrl.Contains("perverzia.com")
+                && !imageUrl.Contains("imagesaholic.com") && !imageUrl.Contains("jovoimage.com"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -722,6 +723,14 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"viewcube.org/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetViewCube;
+            }
+            else if (imageUrl.IndexOf(@"imgspice.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgSpice;
+            }
+            else if (imageUrl.IndexOf(@"imagesaholic.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImagesAholic;
             }
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {

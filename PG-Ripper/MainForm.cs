@@ -511,7 +511,7 @@ namespace Ripper
 
 #endif
 
-#if (RIPRIPPERX)
+#if (PGRIPPERX)
             var updateNotes = string.Empty;
 #endif
 

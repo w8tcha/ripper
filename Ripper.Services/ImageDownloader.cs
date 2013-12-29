@@ -1987,6 +1987,36 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ImgSpice Download
+        /// </summary>
+        public void GetImgSpice()
+        {
+            this.xService = new ImgSpice(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get ImagesAholic Download
+        /// </summary>
+        public void GetImagesAholic()
+        {
+            this.xService = new ImagesAholic(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImageHotLinked()
