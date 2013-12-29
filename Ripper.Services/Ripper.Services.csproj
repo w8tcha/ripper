@@ -101,6 +101,7 @@
     <Compile Include="ImageHosts\ImagePicasa.cs" />
     <Compile Include="ImageHosts\ImagePorter.cs" />
     <Compile Include="ImageHosts\ImagePundit.cs" />
+    <Compile Include="ImageHosts\ImagesAholic.cs" />
     <Compile Include="ImageHosts\ImagesGal.cs" />
     <Compile Include="ImageHosts\ImagesIon.cs" />
     <Compile Include="ImageHosts\ImageSocket.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="ImageHosts\ImgFlare.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
     <Compile Include="ImageHosts\ImgServe.cs" />
+    <Compile Include="ImageHosts\ImgSpice.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
     <Compile Include="ImageHosts\ImgWoot.cs" />
     <Compile Include="ImageHosts\Immage.cs" />

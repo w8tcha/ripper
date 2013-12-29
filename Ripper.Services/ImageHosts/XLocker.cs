@@ -72,8 +72,8 @@ namespace Ripper.Services.ImageHosts
                 return false;
             }
 
-            // Set Image Name instead of using random name
-            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
+            // Set Image Name
+            var filePath = imageDownloadURL.Substring(imageDownloadURL.LastIndexOf("/", System.StringComparison.Ordinal) + 1);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);
