@@ -42,16 +42,23 @@ namespace Ripper
 
             // fix old urls
             if (!settings.CurrentForumUrl.Equals("http://kitty-kats.com/")
-                && !settings.ForumsAccount.Any(account => account.ForumURL.Equals("http://kitty-kats.com/")))
+                && !settings.ForumsAccount.Any(account => account.ForumURL.Equals("http://kitty-kats.com/")) &&
+                !settings.CurrentForumUrl.Equals("http://www.kitty-kats.net/")
+                && !settings.ForumsAccount.Any(account => account.ForumURL.Equals("http://www.kitty-kats.net/")))
             {
                 return settings;
             }
 
-            settings.CurrentForumUrl = "http://www.kitty-kats.net/";
+            settings.CurrentForumUrl = "http://kitty-kats.net/";
 
             foreach (var account in settings.ForumsAccount.Where(account => account.ForumURL.Equals("http://kitty-kats.com/")))
             {
-                account.ForumURL = "http://www.kitty-kats.net/";
+                account.ForumURL = "http://kitty-kats.net/";
+            }
+
+            foreach (var account in settings.ForumsAccount.Where(account => account.ForumURL.Equals("http://www.kitty-kats.net/")))
+            {
+                account.ForumURL = "http://kitty-kats.net/";
             }
 
             SaveSettings(settings);
