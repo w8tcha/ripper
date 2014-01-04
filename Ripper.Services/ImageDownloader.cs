@@ -2017,6 +2017,21 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ImgErotic Download
+        /// </summary>
+        public void GetImgErotic()
+        {
+            this.xService = new ImgErotic(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImageHotLinked()
