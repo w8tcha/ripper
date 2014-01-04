@@ -732,6 +732,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImagesAholic;
             }
+            else if (imageUrl.IndexOf(@"imgerotic.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgErotic;
+            }
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {
                 return;
