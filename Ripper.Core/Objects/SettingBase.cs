@@ -25,6 +25,7 @@ namespace Ripper.Core.Objects
         public SettingBase()
         {
             this.ForumURL = "http://vipergirls.to/";
+            this.GuestMode = false;
             this.AfterDownloads = 0;
             this.ShowLastDownloaded = true;
             this.ClipBWatch = true;
@@ -40,7 +41,7 @@ namespace Ripper.Core.Objects
             this.DownloadOptions = "0";
             this.TopMost = false;
             this.Language = "en-EN";
-            this.CurrentForumUrl = "http://www.kitty-kats.net/";
+            this.CurrentForumUrl = "http://kitty-kats.net/";
             this.WindowWidth = 863;
             this.WindowHeight = 611;
 
