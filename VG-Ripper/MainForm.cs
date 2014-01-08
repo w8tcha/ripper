@@ -1137,7 +1137,7 @@ namespace Ripper
 
             if (CacheController.Instance().UserSettings.AutoThank)
             {
-                var token = Utility.GetSecurityToken(CacheController.Instance().UserSettings.ForumURL);
+                var token = Utility.GetSecurityToken(new Uri(CacheController.Instance().UserSettings.ForumURL));
 
                 foreach (string postId in job.PostIds)
                 {
@@ -1181,7 +1181,7 @@ namespace Ripper
             // Complete Thread
             if (postId != null)
             {
-                //string sToken = Utility.GetSecurityToken(CacheController.Instance().UserSettings.ForumURL + "showpost.php?p=" + sPostId);
+                //string sToken = Utility.GetSecurityToken(new Uri(CacheController.Instance().UserSettings.ForumURL + "showpost.php?p=" + sPostId));
 
                 if (string.IsNullOrEmpty(token))
                 {
@@ -1204,7 +1204,7 @@ namespace Ripper
                 {
                     case 1:
                         {
-                            token = Utility.GetSecurityToken(url);
+                            token = Utility.GetSecurityToken(new Uri(url));
 
                             tyURL =
                                 string.Format(
@@ -1229,7 +1229,7 @@ namespace Ripper
                             sUrlNew = url.Replace("showpost.php?p=", "post_thanks.php?do=post_thanks_add&p=");
                         }
 
-                        tyURL = string.Format("{0}&securitytoken={1}", sUrlNew, Utility.GetSecurityToken(url));
+                        tyURL = string.Format("{0}&securitytoken={1}", sUrlNew, Utility.GetSecurityToken(new Uri(url));
                         
                         this.Invoke(lSendThankYouDel, new object[] { tyURL });
 
@@ -1303,7 +1303,7 @@ namespace Ripper
 
             var arlst = ExtractHelper.ExtractThreadtoPosts(sPagecontent);
 
-            string sToken = Utility.GetSecurityToken(CacheController.Instance().UserSettings.ForumURL);
+            string sToken = Utility.GetSecurityToken(new Uri(CacheController.Instance().UserSettings.ForumURL));
 
             for (int po = 0; po < arlst.Count; po++)
             {
