@@ -614,6 +614,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"imagedecode.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }    
             else if (imageUrl.IndexOf(@"imagefolks.com/", System.StringComparison.Ordinal) >= 0 || imageUrl.IndexOf(@"ImageFolks.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
@@ -735,6 +739,10 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"imgerotic.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgErotic;
+            }
+            else if (imageUrl.IndexOf(@"imageshack.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImageShack;
             }
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {

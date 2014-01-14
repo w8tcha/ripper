@@ -103,6 +103,7 @@
     <Compile Include="ImageHosts\ImagePundit.cs" />
     <Compile Include="ImageHosts\ImagesAholic.cs" />
     <Compile Include="ImageHosts\ImagesGal.cs" />
+    <Compile Include="ImageHosts\ImageShack.cs" />
     <Compile Include="ImageHosts\ImagesIon.cs" />
     <Compile Include="ImageHosts\ImageSocket.cs" />
     <Compile Include="ImageHosts\ImageSwitch.cs" />
