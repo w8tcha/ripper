@@ -52,10 +52,12 @@ namespace Ripper.Core.Components
 
                 var thumbNailMatch = Regex.Match(value, @"src=\""(.*?)\""", RegexOptions.IgnoreCase);
 
-                if (thumbNailMatch.Success)
+                if (!thumbNailMatch.Success)
                 {
-                    item.Text = thumbNailMatch.Groups[1].Value;
+                    continue;
                 }
+
+                item.Text = thumbNailMatch.Groups[1].Value;
 
                 linkList.Add(item);
             }

@@ -15,6 +15,7 @@ namespace Ripper.Core.Components
     using System.Collections;
     using System.IO;
     using System.Net;
+    using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Windows.Forms;
@@ -163,6 +164,49 @@ namespace Ripper.Core.Components
         /// a generic function to fetch URLs.
         /// </summary>
         /// <param name="imageHostURL">The image host URL.</param>
+        /// <param name="method">The method.</param>
+        /// <param name="postData">The post data.</param>
+        /// <returns>
+        /// Returns the Page as string.
+        /// </returns>
+        protected string GetImageHostPage(ref string imageHostURL, string method, string postData)
+        {
+            string pageContent;
+
+            try
+            {
+                var webRequest = (HttpWebRequest)WebRequest.Create(imageHostURL);
+
+                webRequest.Method = method;
+                webRequest.ContentType = "application/x-www-form-urlencoded";
+                webRequest.Referer = imageHostURL;
+                webRequest.KeepAlive = true;
+                webRequest.Timeout = 20000;
+
+                using (var stream = webRequest.GetRequestStream())
+                {
+                    var buffer = Encoding.UTF8.GetBytes(postData);
+                    stream.Write(buffer, 0, buffer.Length);
+                }
+
+                return this.GetResponseStream(webRequest);
+            }
+            catch (ThreadAbortException)
+            {
+                pageContent = string.Empty;
+            }
+            catch (Exception)
+            {
+                pageContent = string.Empty;
+            }
+
+            return pageContent;
+        }
+
+        /// <summary>
+        /// a generic function to fetch URLs.
+        /// </summary>
+        /// <param name="imageHostURL">The image host URL.</param>
         /// <param name="cookieValue">The cookie.</param>
         /// <returns>
         /// Returns the Page as string.
@@ -184,22 +228,7 @@ namespace Ripper.Core.Components
                     webRequest.Headers["Cookie"] = cookieValue;
                 }
 
-                var responseStream = webRequest.GetResponse().GetResponseStream();
-
-                if (responseStream != null)
-                {
-                    var reader = new StreamReader(responseStream);
-
-                    pageContent = reader.ReadToEnd();
-
-                    responseStream.Close();
-                    reader.Close();
-                }
-                else
-                {
-                    responseStream.Close();
-                    return string.Empty;
-                }
+                return this.GetResponseStream(webRequest);
             }
             catch (ThreadAbortException)
             {
@@ -208,6 +237,35 @@ namespace Ripper.Core.Components
             catch (Exception)
             {
                 pageContent = string.Empty;
+            }
+
+            return pageContent;
+        }
+
+        /// <summary>
+        /// Gets the response stream.
+        /// </summary>
+        /// <param name="webRequest">The web request.</param>
+        /// <returns>Returns the Response Stream</returns>
+        private string GetResponseStream(HttpWebRequest webRequest)
+        {
+            var pageContent = string.Empty;
+
+            var responseStream = webRequest.GetResponse().GetResponseStream();
+
+            if (responseStream != null)
+            {
+                var reader = new StreamReader(responseStream);
+
+                pageContent = reader.ReadToEnd();
+
+                responseStream.Close();
+                reader.Close();
+            }
+            else
+            {
+                responseStream.Close();
+                return string.Empty;
             }
 
             return pageContent;
