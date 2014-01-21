@@ -744,6 +744,18 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImageShack;
             }
+            else if (imageUrl.IndexOf(@"postimage.org/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetPostImage;
+            }
+            else if (imageUrl.IndexOf(@"postimg.org/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetPostImg;
+            }
+            else if (imageUrl.IndexOf(@"imgpaying.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgPaying;
+            }
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {
                 return;

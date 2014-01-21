@@ -124,6 +124,7 @@
     <Compile Include="ImageHosts\ImgDollar.cs" />
     <Compile Include="ImageHosts\ImgErotic.cs" />
     <Compile Include="ImageHosts\ImgFlare.cs" />
+    <Compile Include="ImageHosts\ImgPaying.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
     <Compile Include="ImageHosts\ImgServe.cs" />
     <Compile Include="ImageHosts\ImgSpice.cs" />
@@ -165,6 +166,8 @@
     <Compile Include="ImageHosts\PixTreat.cs" />
     <Compile Include="ImageHosts\PixUp.cs" />
     <Compile Include="ImageHosts\PornImgHost.cs" />
+    <Compile Include="ImageHosts\PostImage.cs" />
+    <Compile Include="ImageHosts\PostImg.cs" />
     <Compile Include="ImageHosts\PremiumPics.cs" />
     <Compile Include="ImageHosts\PussyUpload.cs" />
     <Compile Include="ImageHosts\Radikal.cs" />

@@ -2047,6 +2047,51 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get PostImage Download
+        /// </summary>
+        public void GetPostImage()
+        {
+            this.xService = new PostImage(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get PostImg Download
+        /// </summary>
+        public void GetPostImg()
+        {
+            this.xService = new PostImg(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get ImgPaying Download
+        /// </summary>
+        public void GetImgPaying()
+        {
+            this.xService = new ImgPaying(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+        
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImageHotLinked()
