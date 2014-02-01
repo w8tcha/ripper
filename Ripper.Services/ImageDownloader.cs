@@ -2090,7 +2090,22 @@ namespace Ripper.Services
                 ref this.eventTable);
             this.xService.StartDownloadAsync();
         }
-        
+
+        /// <summary>
+        /// Get TruePic Download
+        /// </summary>
+        public void GetTruePic()
+        {
+            this.xService = new TruePic(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
         /// <summary>
         /// Hot linked image fetcher...
         /// </summary>

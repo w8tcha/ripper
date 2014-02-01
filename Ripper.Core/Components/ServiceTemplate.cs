@@ -189,7 +189,7 @@ namespace Ripper.Core.Components
                     stream.Write(buffer, 0, buffer.Length);
                 }
 
-                return this.GetResponseStream(webRequest);
+                return GetResponseStream(webRequest);
             }
             catch (ThreadAbortException)
             {
@@ -228,7 +228,7 @@ namespace Ripper.Core.Components
                     webRequest.Headers["Cookie"] = cookieValue;
                 }
 
-                return this.GetResponseStream(webRequest);
+                return GetResponseStream(webRequest);
             }
             catch (ThreadAbortException)
             {
@@ -237,35 +237,6 @@ namespace Ripper.Core.Components
             catch (Exception)
             {
                 pageContent = string.Empty;
-            }
-
-            return pageContent;
-        }
-
-        /// <summary>
-        /// Gets the response stream.
-        /// </summary>
-        /// <param name="webRequest">The web request.</param>
-        /// <returns>Returns the Response Stream</returns>
-        private string GetResponseStream(HttpWebRequest webRequest)
-        {
-            var pageContent = string.Empty;
-
-            var responseStream = webRequest.GetResponse().GetResponseStream();
-
-            if (responseStream != null)
-            {
-                var reader = new StreamReader(responseStream);
-
-                pageContent = reader.ReadToEnd();
-
-                responseStream.Close();
-                reader.Close();
-            }
-            else
-            {
-                responseStream.Close();
-                return string.Empty;
             }
 
             return pageContent;
@@ -397,6 +368,35 @@ namespace Ripper.Core.Components
         }
 
         /// <summary>
+        /// Gets the response stream.
+        /// </summary>
+        /// <param name="webRequest">The web request.</param>
+        /// <returns>Returns the Response Stream</returns>
+        private static string GetResponseStream(WebRequest webRequest)
+        {
+            string pageContent;
+
+            var responseStream = webRequest.GetResponse().GetResponseStream();
+
+            if (responseStream != null)
+            {
+                var reader = new StreamReader(responseStream);
+
+                pageContent = reader.ReadToEnd();
+
+                responseStream.Close();
+                reader.Close();
+            }
+            else
+            {
+                responseStream.Close();
+                return string.Empty;
+            }
+
+            return pageContent;
+        } 
+        
+        /// <summary>
         /// Downloads the image completed.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -421,6 +421,8 @@ namespace Ripper.Core.Components
             this.RemoveThread();
 
             Application.DoEvents();
-        }
+
+            this.WebClient.Dispose();
+        }       
     }
 }

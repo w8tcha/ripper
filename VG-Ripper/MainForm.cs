@@ -193,13 +193,13 @@ namespace Ripper
         }
 
         /// <summary>
-        /// Exits the click.
+        /// Closes the Ripper
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         protected void ExitClick(Object sender, EventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         /// <summary>
@@ -212,19 +212,22 @@ namespace Ripper
             this.Hide();
             this.isHiddenInTray = true;
 
-            trayMenu.MenuItems.RemoveAt(0);
+            this.trayMenu.MenuItems.RemoveAt(0);
             MenuItem show = new MenuItem("Show VG-Ripper", this.ShowClick);
-            trayMenu.MenuItems.Add(0, show);
+            this.trayMenu.MenuItems.Add(0, show);
 
             this.trayIcon.MouseDoubleClick -= this.HideClick;
             this.trayIcon.MouseDoubleClick += this.ShowClick;
 
-            if (!CacheController.Instance().UserSettings.ShowPopUps) return;
+            if (!CacheController.Instance().UserSettings.ShowPopUps)
+            {
+                return;
+            }
 
-            trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
-            trayIcon.BalloonTipTitle = "Hidden in Tray";
-            trayIcon.BalloonTipText = "VG-Ripper is hidden in the Tray";
-            trayIcon.ShowBalloonTip(10);
+            this.trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
+            this.trayIcon.BalloonTipTitle = "Hidden in Tray";
+            this.trayIcon.BalloonTipText = "VG-Ripper is hidden in the Tray";
+            this.trayIcon.ShowBalloonTip(10);
         }
 
         /// <summary>

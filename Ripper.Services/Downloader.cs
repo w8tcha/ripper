@@ -42,7 +42,8 @@ namespace Ripper.Services
                 && !imageUrl.Contains("picturesion.com") && !imageUrl.Contains("picsious.com")
                 && !imageUrl.Contains("imagetwist.com") && !imageUrl.Contains("premiumpics.net")
                 && !imageUrl.Contains("imgmaster.net") && !imageUrl.Contains("perverzia.com")
-                && !imageUrl.Contains("imagesaholic.com") && !imageUrl.Contains("jovoimage.com"))
+                && !imageUrl.Contains("imagesaholic.com") && !imageUrl.Contains("jovoimage.com")
+                && !imageUrl.Contains("truepic.org"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -617,7 +618,19 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"imagedecode.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
-            }    
+            }
+            else if (imageUrl.IndexOf(@"imgearn.net/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgfap.net/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"damimage.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/", System.StringComparison.Ordinal) >= 0 || imageUrl.IndexOf(@"ImageFolks.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
@@ -755,6 +768,10 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"imgpaying.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgPaying;
+            }
+            else if (imageUrl.IndexOf(@"truepic.org/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetTruePic;
             }
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {
