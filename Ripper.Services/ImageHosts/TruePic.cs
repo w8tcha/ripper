@@ -1,7 +1,7 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgWoot.cs" company="The Watcher">
+// <copyright file="TruePic.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
-//  This software is licensed under the MIT license. See license.txt for details.
+//   This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
 // <summary>
 //   Code Named: VG-Ripper
@@ -11,20 +11,18 @@
 
 namespace Ripper.Services.ImageHosts
 {
+    using System;
     using System.Collections;
 
     using Ripper.Core.Components;
 
     /// <summary>
-    /// Worker class to get images from 
-    /// ImgWoot.com/ImgMoney.com/ImgMoney.net/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/
-    /// HosterBin.com/PicsLite.com/ImageTeam.org/ImgNext.com/HostUrImage.com/3XVintage.com/ImgGoo.com/ImgMaster.com/
-    /// GoGoImage.org/JovoImage.com/ImageDecode.com/ImgEarn.net/ImgFap.net/DamImage.com
+    /// Worker class to get images from TruePic.org
     /// </summary>
-    public class ImgWoot : ServiceTemplate
+    public class TruePic : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgWoot" /> class.
+        /// Initializes a new instance of the <see cref="TruePic" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
@@ -32,7 +30,7 @@ namespace Ripper.Services.ImageHosts
         /// <param name="imageName">Name of the image.</param>
         /// <param name="imageNumber">The image number.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgWoot(
+        public TruePic(
             ref string savePath,
             ref string imageUrl,
             ref string thumbUrl,
@@ -47,25 +45,12 @@ namespace Ripper.Services.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Return if Downloaded or not
+        /// Returns if the Image was downloaded
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageDownloadURL = ThumbImageURL;
-
             // Set the download Path
-            if (ThumbImageURL.Contains("/upload/small/"))
-            {
-                imageDownloadURL = ThumbImageURL.Replace(@"/upload/small/", @"/upload/big/");
-            }
-            else if (ThumbImageURL.Contains("/uploads/small/"))
-            {
-                imageDownloadURL = ThumbImageURL.Replace(@"/uploads/small/", @"/uploads/big/");
-            }
-            else if (ThumbImageURL.Contains("/img/small/"))
-            {
-                imageDownloadURL = ThumbImageURL.Replace(@"/img/small/", @"/img/big/");
-            }
+            var imageDownloadURL = this.ThumbImageURL.Replace("u/s/", "u/b1/");
 
             // Set Image Name instead of using random name
             var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);

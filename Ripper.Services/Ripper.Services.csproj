@@ -34,7 +34,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Reference Include="System.Core">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -185,6 +187,7 @@
     <Compile Include="ImageHosts\TenPix.cs" />
     <Compile Include="ImageHosts\TheFreeImageHosting.cs" />
     <Compile Include="ImageHosts\TheImageHosting.cs" />
+    <Compile Include="ImageHosts\TruePic.cs" />
     <Compile Include="ImageHosts\TurboImageHost.cs" />
     <Compile Include="ImageHosts\TusPics.cs" />
     <Compile Include="ImageHosts\UploadEm.cs" />
@@ -204,7 +207,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ripper.Core\Ripper.Core.csproj">
       <Project>{4ae38478-faa4-4eca-bd06-30d5cb87df68}</Project>
-      <Name>Ripper.Types</Name>
+      <Name>Ripper.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
