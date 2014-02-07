@@ -93,6 +93,7 @@ namespace Ripper
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.GetPostsWorker = new System.ComponentModel.BackgroundWorker();
             this.GetIdxsWorker = new System.ComponentModel.BackgroundWorker();
+            this.saveRippingQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -352,6 +353,7 @@ namespace Ripper
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveRippingQueueToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -361,7 +363,7 @@ namespace Ripper
             // 
             this.exitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.exitToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -512,6 +514,13 @@ namespace Ripper
             this.GetIdxsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.GetIdxsWorkerDoWork);
             this.GetIdxsWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.GetIdxsWorkerCompleted);
             // 
+            // saveRippingQueueToolStripMenuItem
+            // 
+            this.saveRippingQueueToolStripMenuItem.Name = "saveRippingQueueToolStripMenuItem";
+            this.saveRippingQueueToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveRippingQueueToolStripMenuItem.Text = "Save Ripping Queue";
+            this.saveRippingQueueToolStripMenuItem.Click += new System.EventHandler(this.SaveRippingQueueToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AccessibleDescription = "i";
@@ -624,5 +633,6 @@ namespace Ripper
         private ToolStripMenuItem afterDownloadsFinishedToolStripMenuItem;
         private ToolStripMenuItem doNothingToolStripMenuItem;
         private ToolStripMenuItem closeRipperToolStripMenuItem;
+        private ToolStripMenuItem saveRippingQueueToolStripMenuItem;
     }
 }

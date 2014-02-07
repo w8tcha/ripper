@@ -673,6 +673,15 @@ namespace Ripper.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Ripping Queue.
+        /// </summary>
+        internal static string MenuExport {
+            get {
+                return ResourceManager.GetString("MenuExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         internal static string MenuFile {
