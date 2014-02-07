@@ -351,4 +351,7 @@
   <data name="ServicesUpdate" xml:space="preserve">
     <value>Image Hosts Plugin will be automatically updated now and Ripper will restart!</value>
   </data>
+  <data name="MenuExport" xml:space="preserve">
+    <value>Save Ripping Queue</value>
+  </data>
 </root>

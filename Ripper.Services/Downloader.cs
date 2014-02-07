@@ -43,7 +43,7 @@ namespace Ripper.Services
                 && !imageUrl.Contains("imagetwist.com") && !imageUrl.Contains("premiumpics.net")
                 && !imageUrl.Contains("imgmaster.net") && !imageUrl.Contains("perverzia.com")
                 && !imageUrl.Contains("imagesaholic.com") && !imageUrl.Contains("jovoimage.com")
-                && !imageUrl.Contains("truepic.org"))
+                && !imageUrl.Contains("truepic.org") && !imageUrl.Contains("imgearn.net"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }

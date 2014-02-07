@@ -31,8 +31,6 @@ namespace Ripper
 
 #if (!PGRIPPERX)
     using Microsoft.WindowsAPICodePack.Taskbar;
-    using Ripper.Services;
-    using Ripper.Core.Components;
 #endif
 
     /// <summary>
@@ -442,6 +440,7 @@ namespace Ripper
 
             // Menue
             this.fileToolStripMenuItem.Text = this._ResourceManager.GetString("MenuFile");
+            this.saveRippingQueueToolStripMenuItem.Text = this._ResourceManager.GetString("MenuExport");
             this.exitToolStripMenuItem.Text = this._ResourceManager.GetString("MenuExit");
 
             this.accountsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuAccounts");
@@ -2458,11 +2457,7 @@ namespace Ripper
                 this.currentJob = null;
             }
 
-            var serializer = new XmlSerializer(typeof(List<JobInfo>));
-            var textWriter = new StreamWriter(Path.Combine(Application.StartupPath, "jobs.xml"));
-
-            serializer.Serialize(textWriter, this.jobsList);
-            textWriter.Close();
+            Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
 
             // If Pause
             if (this.pauseCurrentThreads.Text != "Resume Download")
@@ -2941,14 +2936,11 @@ namespace Ripper
         {
             Exception ex = (Exception)e.ExceptionObject;
 
-            Utility.SaveOnCrash(ex.Message, ex.StackTrace, currentJob);
+            Utility.SaveOnCrash(ex.Message, ex.StackTrace, this.currentJob);
 
-            if (jobsList.Count > 0)
+            if (this.jobsList.Count > 0)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<JobInfo>));
-                TextWriter tr = new StreamWriter(Path.Combine(Application.StartupPath, "jobs.xml"));
-                serializer.Serialize(tr, jobsList);
-                tr.Close();
+                Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
 
                 // If Pause
                 CacheController.Instance().UserSettings.CurrentlyPauseThreads = true;
@@ -2970,14 +2962,11 @@ namespace Ripper
         {
             Exception ex = e.Exception;
 
-            Utility.SaveOnCrash(ex.Message, ex.StackTrace, currentJob);
+            Utility.SaveOnCrash(ex.Message, ex.StackTrace, this.currentJob);
 
-            if (jobsList.Count > 0)
+            if (this.jobsList.Count > 0)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<JobInfo>));
-                TextWriter tr = new StreamWriter(Path.Combine(Application.StartupPath, "jobs.xml"));
-                serializer.Serialize(tr, jobsList);
-                tr.Close();
+                Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
 
                 // If Pause
                 if (CacheController.Instance().UserSettings.CurrentlyPauseThreads)
@@ -3333,6 +3322,19 @@ namespace Ripper
             /*CacheController.Instance().UserSettings.DownloadFolder = this.DownloadFolder.Text;
 
             SettingsHelper.SaveSettings(CacheController.Instance().UserSettings);*/
+        }
+
+        /// <summary>
+        /// Exports the Current Jobs Queue to the jobs.xml file
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void SaveRippingQueueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.jobsList.Count > 0)
+            {
+                Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
+            }
         }
     }
 }
