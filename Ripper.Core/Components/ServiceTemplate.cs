@@ -301,11 +301,15 @@ namespace Ripper.Core.Components
         {
             postTitle = Utility.RemoveIllegalCharecters(postTitle).Replace(" ", "_");
 
+            var imageExtension = imageUrl.Contains("attachment.php")
+                                     ? ".jpg"
+                                     : imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal));
+
             var imageName = string.Format(
                 "{0}_{1}{2}",
                 postTitle,
                 imageNumber,
-                imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
+                imageExtension);
 
             // Check if folder path is too long
             var savePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(imageName));
@@ -315,7 +319,7 @@ namespace Ripper.Core.Components
                 return string.Format(
                 "{0}{1}",
                 imageNumber,
-                imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal)));
+                imageExtension);
             }
 
             return imageName;
@@ -327,10 +331,11 @@ namespace Ripper.Core.Components
         /// <param name="downloadPath">The download path.</param>
         /// <param name="savePath">The save path.</param>
         /// <param name="addReferer">if set to <c>true</c> [add Referrer].</param>
+        /// <param name="addForumCookie">if set to <c>true</c> [add forum cookie].</param>
         /// <returns>
         /// Returns if the Image was downloaded or not
         /// </returns>
-        protected bool DownloadImageAsync(string downloadPath, string savePath, bool addReferer = false)
+        protected bool DownloadImageAsync(string downloadPath, string savePath, bool addReferer = false, bool addForumCookie = false)
         {
             savePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(savePath));
 
@@ -345,7 +350,12 @@ namespace Ripper.Core.Components
 
             if (addReferer)
             {
-                this.WebClient.Headers.Add(string.Format("Referer: {0}", this.ThumbImageURL));
+                this.WebClient.Headers.Add(string.Format("Referer: {0}", this.ThumbImageURL)); 
+            }
+
+            if (addForumCookie)
+            {
+                this.WebClient.Headers.Add(HttpRequestHeader.Cookie, CookieManager.GetInstance().GetCookieString());
             }
 
             this.WebClient.DownloadFileAsync(new Uri(downloadPath), savePath);

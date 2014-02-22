@@ -54,7 +54,11 @@ namespace Ripper.Services.ImageHosts
             var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
             // Finally Download the Image
-            return this.DownloadImageAsync(imageDownloadURL, filePath);
+            return this.DownloadImageAsync(
+                imageDownloadURL,
+                filePath,
+                false,
+                imageDownloadURL.Contains(CacheController.Instance().UserSettings.CurrentForumUrl));
         }
     }
 }

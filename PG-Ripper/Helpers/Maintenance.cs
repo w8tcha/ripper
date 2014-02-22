@@ -13,6 +13,7 @@ namespace Ripper
 {
     using System;
     using System.Net;
+    using System.Text;
     using System.Text.RegularExpressions;
 
     using Ripper.Core.Components;
@@ -50,7 +51,7 @@ namespace Ripper
         /// <returns>
         /// The get rip page title.
         /// </returns>
-        public string GetRipPageTitle(string page)
+        public string ExtractTopicTitleFromHtml(string page)
         {
             var match = Regex.Match(
                 page,
@@ -63,15 +64,6 @@ namespace Ripper
             }
 
             var title = match.Groups["inner"].Value;
-
-            if (Utility.IsV4Forum(CacheController.Instance().UserSettings))
-            {
-                return title.Trim();
-            }
-
-            title = title.Contains(@"View Single Post")
-                        ? title.Substring(title.IndexOf("View Single Post - ") + 19)
-                        : Regex.Replace(title, title.Substring(title.IndexOf("- ")), string.Empty);
 
             return title.Trim();
         }
@@ -90,15 +82,15 @@ namespace Ripper
         /// </returns>
         public string ExtractForumTitleFromHtml(string content, bool isPost)
         {
-            string sPage;
+            string pageContent;
 
             if (CacheController.Instance().UserSettings.CurrentForumUrl.Contains(@"vipergirls.to"))
             {
-                sPage = GetForumPageAsString(content);
+                pageContent = GetForumPageAsString(content);
 
                 const string Start = "<span class=\"ctrlcontainer\">";
 
-                int iPageStart = sPage.IndexOf(Start);
+                int iPageStart = pageContent.IndexOf(Start, StringComparison.Ordinal);
 
                 if (iPageStart < 0)
                 {
@@ -107,85 +99,33 @@ namespace Ripper
 
                 iPageStart += Start.Length;
 
-                int iPageEnd = sPage.IndexOf("</span></a>", iPageStart);
+                int iPageEnd = pageContent.IndexOf("</span></a>", iPageStart, StringComparison.Ordinal);
 
-                return iPageEnd < 0 ? string.Empty : sPage.Substring(iPageStart, iPageEnd - iPageStart);
-            }
-
-            if (Utility.IsV4Forum(CacheController.Instance().UserSettings))
-            {
-                sPage = GetForumPageAsString(content);
-
-                const string Start = "<li class=\"navbit\">";
-
-                int iPageStart = sPage.LastIndexOf(Start, StringComparison.Ordinal);
-
-                if (iPageStart < 0)
-                {
-                    return string.Empty;
-                }
-
-                iPageStart += Start.Length;
-
-                iPageStart = sPage.IndexOf(">", iPageStart);
-
-                iPageStart += 1;
-
-                int iPageEnd = sPage.IndexOf("</a></li>", iPageStart);
-
-                return iPageEnd < 0 ? string.Empty : sPage.Substring(iPageStart, iPageEnd - iPageStart);
-            }
-
-            if (isPost)
-            {
-                // First get Thread Url of Current Post
-                int iPageStart = content.IndexOf("href=\"showthread.php");
-
-                if (iPageStart < 0)
-                {
-                    return string.Empty;
-                }
-
-                iPageStart += 6;
-
-                int iPageEnd = content.IndexOf("\">", iPageStart);
-
-                if (iPageEnd < 0)
-                {
-                    return string.Empty;
-                }
-
-                string sFTitleUrl = content.Substring(iPageStart, iPageEnd - iPageStart);
-
-                sPage = GetForumPageAsString(CacheController.Instance().UserSettings.CurrentForumUrl + sFTitleUrl);
+                return iPageEnd < 0 ? string.Empty : pageContent.Substring(iPageStart, iPageEnd - iPageStart);
             }
             else
             {
-                sPage = GetForumPageAsString(content);
+                pageContent = GetForumPageAsString(content);
+
+                const string Start = "<li class=\"navbit\">";
+
+                int iPageStart = pageContent.LastIndexOf(Start, StringComparison.Ordinal);
+
+                if (iPageStart < 0)
+                {
+                    return string.Empty;
+                }
+
+                iPageStart += Start.Length;
+
+                iPageStart = pageContent.IndexOf(">", iPageStart, StringComparison.Ordinal);
+
+                iPageStart += 1;
+
+                int iPageEnd = pageContent.IndexOf("</a></li>", iPageStart, StringComparison.Ordinal);
+
+                return iPageEnd < 0 ? string.Empty : pageContent.Substring(iPageStart, iPageEnd - iPageStart);
             }
-
-            // Now Parse Sub Forum Title
-            const string MetaStart = "<meta name=\"description\" content=\"";
-
-            int iTitleStart = sPage.IndexOf(MetaStart);
-
-            if (iTitleStart < 0)
-            {
-                return string.Empty;
-            }
-
-            iTitleStart += MetaStart.Length;
-
-            int iTitleEnd = sPage.IndexOf("\" />", iTitleStart);
-
-            if (iTitleEnd < 0)
-            {
-                return string.Empty;
-            }
-
-            string sForumTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
-
-            return Utility.ReplaceHexWithAscii(sForumTitle);
         }
 
         /// <summary>
@@ -203,116 +143,65 @@ namespace Ripper
         /// </returns>
         public string ExtractPostTitleFromHtml(string content, string url)
         {
-            string sPage = content;
+            string postTitle;
 
-            string sPostTitle;
+            ////////////////////////////////////
+            // Extract Current Post first
+            string sPostId = url.Substring(url.IndexOf("#post") + 5);
 
-            if (Utility.IsV4Forum(CacheController.Instance().UserSettings))
+            // use only message content
+            string sMessageStart = string.Format(
+                "<li class=\"postbitlegacy postbitim postcontainer\" id=\"post_{0}\">",
+                sPostId);
+            const string MessageEnd = "</blockquote>";
+
+            int iStart = content.IndexOf(sMessageStart);
+
+            iStart += sMessageStart.Length;
+
+            int iEnd = content.IndexOf(MessageEnd, iStart);
+
+            var pageContent = content.Substring(iStart, iEnd - iStart);
+
+            /////////////////////////////////
+
+            const string TitleStart = "<h2 class=\"title icon\">";
+
+            int iTitleStart = pageContent.IndexOf(TitleStart);
+
+            iTitleStart += TitleStart.Length;
+
+            int iTitleEnd = pageContent.IndexOf("</h2>", iTitleStart);
+
+            try
             {
-                ////////////////////////////////////
-                // Extract Current Post first
-                string sPostId = url.Substring(url.IndexOf("#post") + 5);
+                postTitle =
+                    pageContent.Substring(iTitleStart, iTitleEnd - iTitleStart)
+                        .Replace("\r", string.Empty)
+                        .Replace("\t", string.Empty)
+                        .Replace("\n", string.Empty);
 
-                // use only message content
-                string sMessageStart =
-                    string.Format("<li class=\"postbitlegacy postbitim postcontainer\" id=\"post_{0}\">", sPostId);
-                const string MessageEnd = "</blockquote>";
-
-                int iStart = content.IndexOf(sMessageStart);
-
-                iStart += sMessageStart.Length;
-
-                int iEnd = content.IndexOf(MessageEnd, iStart);
-
-                sPage = content.Substring(iStart, iEnd - iStart);
-
-                /////////////////////////////////
-
-                const string TitleStart = "<h2 class=\"title icon\">";
-
-                int iTitleStart = sPage.IndexOf(TitleStart);
-
-                iTitleStart += TitleStart.Length;
-
-                int iTitleEnd = sPage.IndexOf("</h2>", iTitleStart);
-
-                try
+                // Remove Post Icon
+                if (postTitle.StartsWith("<img src="))
                 {
-                    sPostTitle =
-                        sPage.Substring(iTitleStart, iTitleEnd - iTitleStart).Replace("\r", string.Empty).Replace(
-                            "\t", string.Empty).Replace("\n", string.Empty);
+                    postTitle = postTitle.Substring(postTitle.IndexOf("/>") + 3);
+                }
+            }
+            catch (Exception)
+            {
+                postTitle = string.Empty;
+            }
 
-                    // Remove Post Icon
-                    if (sPostTitle.StartsWith("<img src="))
-                    {
-                        sPostTitle = sPostTitle.Substring(sPostTitle.IndexOf("/>") + 3);
-                    }
-                }
-                catch (Exception)
-                {
-                    sPostTitle = string.Empty;
-                }
+            if (string.IsNullOrEmpty(postTitle))
+            {
+                postTitle = string.Format("post# {0}", url.Substring(url.IndexOf(@"#post") + 5));
             }
             else
             {
-                try
-                {
-                    int iTitleStart =
-                        sPage.IndexOf(
-                            "<td width=\"100%\" valign=\"middle\"><div class=\"smallfont\" align=\"center\"> <strong>");
-
-                    iTitleStart += 80;
-
-                    int iTitleEnd = sPage.IndexOf("</strong></div></td>");
-
-                    sPostTitle = sPage.Substring(iTitleStart, iTitleEnd - iTitleStart);
-                }
-                catch (Exception)
-                {
-                    sPostTitle = string.Empty;
-                }
+                return Utility.ReplaceHexWithAscii(postTitle);
             }
 
-            if (string.IsNullOrEmpty(sPostTitle))
-            {
-                if (Utility.IsV4Forum(CacheController.Instance().UserSettings))
-                {
-                    sPostTitle = string.Format("post# {0}", url.Substring(url.IndexOf(@"#post") + 5));
-                }
-                else
-                {
-                    if (url.Contains(@"&postcount="))
-                    {
-                        int iTitleStart = url.IndexOf("showpost.php?p=");
-
-                        if (iTitleStart < 0)
-                        {
-                            return string.Empty;
-                        }
-
-                        iTitleStart += 16;
-
-                        int iTitleEnd = url.IndexOf("&postcount=");
-
-                        if (iTitleEnd < 0)
-                        {
-                            return string.Empty;
-                        }
-
-                        sPostTitle = string.Format("post# {0}", url.Substring(iTitleStart, iTitleEnd - iTitleStart));
-                    }
-                    else
-                    {
-                        sPostTitle = string.Format("post# {0}", url.Substring(url.IndexOf(@"showpost.php?p=") + 15));
-                    }
-                }
-            }
-            else
-            {
-                return Utility.ReplaceHexWithAscii(sPostTitle);
-            }
-
-            return Utility.ReplaceHexWithAscii(sPostTitle);
+            return Utility.ReplaceHexWithAscii(postTitle);
         }
 
         /// <summary>
@@ -345,6 +234,7 @@ namespace Ripper
                 var webClient = new WebClient();
                
                 webClient.Headers.Add(string.Format("Referer: {0}", url));
+                webClient.Encoding = Encoding.UTF8;
 
                 if (!CacheController.Instance().UserSettings.CurrentUserName.Equals("Guest"))
                 {
@@ -352,6 +242,8 @@ namespace Ripper
                 }
 
                 pageContent = webClient.DownloadString(url);
+
+                webClient.Dispose();
             }
             catch (Exception)
             {

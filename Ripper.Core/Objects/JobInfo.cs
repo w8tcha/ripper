@@ -54,14 +54,19 @@ namespace Ripper.Core.Objects
         public string StorePath { get; set; }
 
         /// <summary>
-        /// Gets or sets Title.
+        /// Gets or sets Topic Title.
         /// </summary>
-        public string Title { get; set; }
+        public string TopicTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets URL.
+        /// Gets or sets XML URL.
         /// </summary>
-        public string URL { get; set; }
+        public string XMLUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets XML URL.
+        /// </summary>
+        public string HtmlUrl { get; set; }
 
         /// <summary>
         /// Gets or sets Html PayLoad.

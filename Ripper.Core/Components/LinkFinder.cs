@@ -12,6 +12,7 @@
 namespace Ripper.Core.Components
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     using Ripper.Core.Objects;
@@ -36,31 +37,41 @@ namespace Ripper.Core.Components
         {
             var linkList = new List<LinkItem>();
 
-            var linkMatch = Regex.Matches(page, @"(<a.*?>.*?</a>)", RegexOptions.Multiline);
-
-            foreach (Match match in linkMatch)
+            if (CacheController.Instance().UserSettings.CurrentForumUrl.Contains(@"halohul.com"))
             {
-                var value = match.Groups[1].Value;
-                var item = new LinkItem();
+                var hrefMatchNew = Regex.Matches(page, @"src=\""(.*?)\""", RegexOptions.IgnoreCase);
 
-                var hrefMatch = Regex.Match(value, @"href=\""(.*?)\""", RegexOptions.IgnoreCase);
-
-                if (hrefMatch.Success)
-                {
-                    item.Href = hrefMatch.Groups[1].Value;
-                }
-
-                var thumbNailMatch = Regex.Match(value, @"src=\""(.*?)\""", RegexOptions.IgnoreCase);
-
-                if (!thumbNailMatch.Success)
-                {
-                    continue;
-                }
-
-                item.Text = thumbNailMatch.Groups[1].Value;
-
-                linkList.Add(item);
+                linkList.AddRange(
+                    hrefMatchNew.Cast<Match>().Select(match => new LinkItem { Href = match.Groups[1].Value }));
             }
+            else
+            {
+                var linkMatch = Regex.Matches(page, @"(<a.*?>.*?</a>)", RegexOptions.Multiline);
+
+                foreach (Match match in linkMatch)
+                {
+                    var value = match.Groups[1].Value;
+                    var item = new LinkItem();
+
+                    var hrefMatch = Regex.Match(value, @"href=\""(.*?)\""", RegexOptions.IgnoreCase);
+
+                    if (hrefMatch.Success)
+                    {
+                        item.Href = hrefMatch.Groups[1].Value;
+                    }
+
+                    var thumbNailMatch = Regex.Match(value, @"src=\""(.*?)\""", RegexOptions.IgnoreCase);
+
+                    if (!thumbNailMatch.Success)
+                    {
+                        continue;
+                    }
+
+                    item.Text = thumbNailMatch.Groups[1].Value;
+
+                    linkList.Add(item);
+                }
+           }
 
             return linkList;
         }
