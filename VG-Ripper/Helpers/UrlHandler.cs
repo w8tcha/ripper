@@ -21,6 +21,22 @@ namespace Ripper
     public class UrlHandler
     {
         /// <summary>
+        /// Parse Xml Job Url back to html url
+        /// </summary>
+        /// <param name="inputUrl">
+        /// The Input Url.
+        /// </param>
+        /// <returns>
+        /// Returns the Html URL
+        /// </returns>
+        public static string GetHtmlUrl(string inputUrl)
+        {
+            return inputUrl.Contains("getSTDpost-imgXML.php?dpver=2&threadid")
+                       ? inputUrl.Replace("getSTDpost-imgXML.php?dpver=2&threadid=", "showthread.php?t=")
+                       : inputUrl.Replace("getSTDpost-imgXML.php?dpver=2&postid=", "showpost.php?p=");
+        }
+
+        /// <summary>
         /// Parse Job Url or ID to Xml Url
         /// </summary>
         /// <param name="inputUrl">

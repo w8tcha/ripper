@@ -883,18 +883,20 @@ namespace Ripper
             }
 
             // Format Url
-            var sXmlUrl = UrlHandler.GetXmlUrl(textBox1.Text, comboBox1.SelectedIndex);
+            var xmlUrl = UrlHandler.GetXmlUrl(textBox1.Text, comboBox1.SelectedIndex);
+            var htmlUrl = UrlHandler.GetHtmlUrl(xmlUrl);
+            
 
-            if (string.IsNullOrEmpty(sXmlUrl))
+            if (string.IsNullOrEmpty(xmlUrl))
             {
                 this.UnlockControls();
                 return;
             }
 
             // Check Post is Ripped?!
-            if (sXmlUrl.Contains("dpver=2&postid=") && CacheController.Instance().UserSettings.SavePids)
+            if (xmlUrl.Contains("dpver=2&postid=") && CacheController.Instance().UserSettings.SavePids)
             {
-                if (this.IsPostAlreadyRipped(sXmlUrl.Substring(sXmlUrl.IndexOf("&postid=") + 8)))
+                if (this.IsPostAlreadyRipped(xmlUrl.Substring(xmlUrl.IndexOf("&postid=", StringComparison.Ordinal) + 8)))
                 {
                     DialogResult result = TopMostMessageBox.Show(this._ResourceManager.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -913,17 +915,17 @@ namespace Ripper
             if (mIsIndexChk.Checked)
             {
                 // Parse Job as Index Thread
-                this.EnqueueIndexThread(sXmlUrl);
+                this.EnqueueIndexThread(xmlUrl, htmlUrl);
             }
             else
             {
-                if (CacheController.Instance().UserSettings.DownInSepFolder && sXmlUrl.Contains("threadid"))
+                if (CacheController.Instance().UserSettings.DownInSepFolder && xmlUrl.Contains("threadid"))
                 {
-                    this.EnqueueThreadToPost(sXmlUrl);
+                    this.EnqueueThreadToPost(xmlUrl, htmlUrl);
                 }
                 else
                 {
-                    this.EnqueueThreadOrPost(sXmlUrl);
+                    this.EnqueueThreadOrPost(xmlUrl, htmlUrl);
                 }
             }
         }
@@ -957,8 +959,9 @@ namespace Ripper
         /// <summary>
         /// Parse all Threads/Posts in the Index
         /// </summary>
-        /// <param name="sXmlUrl">The Url to the Thread/Post</param>
-        private void EnqueueIndexThread(string sXmlUrl)
+        /// <param name="xmlURL">The Url to the Thread/Post</param>
+        /// <param name="htmlURL">The HTML URL.</param>
+        private void EnqueueIndexThread(string xmlURL, string htmlURL)
         {
 #if (!RIPRIPPERX)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -973,9 +976,9 @@ namespace Ripper
 
             try
             {
-                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTitleFromXML(Utility.GetForumPageAsString(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTopicTitleFromHtml(Utility.GetForumPageAsString(htmlURL))))
                 {
-                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(xmlURL.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
 #if (!RIPRIPPERX)
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -995,9 +998,9 @@ namespace Ripper
             }
             catch (Exception)
             {
-                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTitleFromXML(Utility.GetForumPageAsString(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTopicTitleFromHtml(Utility.GetForumPageAsString(htmlURL))))
                 {
-                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(xmlURL.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
 #if (!RIPRIPPERX)
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -1020,7 +1023,7 @@ namespace Ripper
 
             mIsIndexChk.Checked = false;
 
-            GetIdxsWorker.RunWorkerAsync(sXmlUrl);
+            GetIdxsWorker.RunWorkerAsync(xmlURL);
 
             while (GetIdxsWorker.IsBusy)
             {
@@ -1031,8 +1034,9 @@ namespace Ripper
         /// <summary>
         /// Parse all Posts of a Thread
         /// </summary>
-        /// <param name="sXmlUrl">The Thread Url</param>
-        private void EnqueueThreadToPost(string sXmlUrl)
+        /// <param name="xmlURL">The Thread Url</param>
+        /// <param name="htmlURL">The HTML URL.</param>
+        private void EnqueueThreadToPost(string xmlURL, string htmlURL)
         {
 #if (!RIPRIPPERX)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -1045,9 +1049,9 @@ namespace Ripper
 
             try
             {
-                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTitleFromXML(Utility.GetForumPageAsString(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTopicTitleFromHtml(Utility.GetForumPageAsString(htmlURL))))
                 {
-                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(xmlURL.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
 #if (!RIPRIPPERX)
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -1067,9 +1071,9 @@ namespace Ripper
             }
             catch (Exception)
             {
-                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTitleFromXML(Utility.GetForumPageAsString(sXmlUrl))))
+                if (string.IsNullOrEmpty(Maintenance.GetInstance().ExtractTopicTitleFromHtml(Utility.GetForumPageAsString(htmlURL))))
                 {
-                    TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(xmlURL.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
 #if (!RIPRIPPERX)
                     if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
@@ -1093,25 +1097,31 @@ namespace Ripper
                 Application.DoEvents();
             }
 
-            GetPostsWorker.RunWorkerAsync(sXmlUrl);
+            GetPostsWorker.RunWorkerAsync(xmlURL);
         }
 
         /// <summary>
         /// Parse a Thread or Post as Single Job
         /// </summary>
-        /// <param name="sXmlUrl">The Thread/Post Url</param>
-        private void EnqueueThreadOrPost(string sXmlUrl)
+        /// <param name="xmlURL">The Thread/Post Url</param>
+        private void EnqueueThreadOrPost(string xmlURL, string htmlURL)
         {
-            if (jobsList.Any(t => t.URL == sXmlUrl))
+            if (this.jobsList.Any(t => t.XMLUrl == xmlURL))
             {
-                TopMostMessageBox.Show(mAlreadyQueuedMsg, "Info");
+                TopMostMessageBox.Show(this.mAlreadyQueuedMsg, "Info");
 
                 this.UnlockControls();
 
                 return;
             }
 
-            JobInfo job = new JobInfo { URL = sXmlUrl, XMLPayLoad = Utility.GetForumPageAsString(sXmlUrl) };
+            JobInfo job = new JobInfo
+                              {
+                                  XMLUrl = xmlURL,
+                                  HtmlUrl = htmlURL,
+                                  XMLPayLoad = Utility.GetForumPageAsString(xmlURL),
+                                  HtmlPayLoad = Utility.GetForumPageAsString(htmlURL)
+                              };
 
             job.ImageCount = Maintenance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
 
@@ -1120,19 +1130,19 @@ namespace Ripper
                 this.UnlockControls();
             }
 
-            job.PostTitle = Maintenance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
+            job.PostTitle = Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, job.HtmlUrl);
             job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
-            job.Title = Maintenance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
-            job.Title = Utility.ReplaceHexWithAscii(job.Title);
+            job.TopicTitle = Maintenance.GetInstance().ExtractTopicTitleFromHtml(job.HtmlPayLoad);
+            job.TopicTitle = Utility.ReplaceHexWithAscii(job.TopicTitle);
             job.PostTitle = Utility.ReplaceHexWithAscii(job.PostTitle);
 
             job.PostIds = Maintenance.GetInstance().GetAllPostIds(job.XMLPayLoad);
 
             job.StorePath = this.GenerateStorePath(job);
 
-            if (string.IsNullOrEmpty(job.Title))
+            if (string.IsNullOrEmpty(job.TopicTitle))
             {
-                TopMostMessageBox.Show(sXmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
+                TopMostMessageBox.Show(xmlURL.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
                 this.UnlockControls();
 
@@ -1145,7 +1155,7 @@ namespace Ripper
 
                 foreach (string postId in job.PostIds)
                 {
-                    this.ProcessAutoThankYou(postId, job.ImageCount, job.URL, token);
+                    this.ProcessAutoThankYou(postId, job.ImageCount, job.XMLUrl, token);
                 }
             }
 
@@ -1287,10 +1297,10 @@ namespace Ripper
         /// Parses an index and places all linked images in mDownloadsList.
         /// TODO : Change to Html Output Xml doesn't include ShowLinks anymore
         /// </summary>
-        /// <param name="xmlUrl">The XML URL.</param>
-        private void ThreadGetIndexes(string xmlUrl)
+        /// <param name="XMLUrl">The XML URL.</param>
+        private void ThreadGetIndexes(string XMLUrl)
         {
-            var pagecontent = Utility.GetForumPageAsString(string.Format("{0}&showlinks=1", xmlUrl));
+            var pagecontent = Utility.GetForumPageAsString(string.Format("{0}&showlinks=1", XMLUrl));
 
             this.indexedTopicsList = ExtractHelper.ExtractRiPUrls(pagecontent);
         }
@@ -1298,12 +1308,12 @@ namespace Ripper
         /// <summary>
         /// Get All Post of a Thread and Parse them as new Job
         /// </summary>
-        /// <param name="sXmlUrl">
+        /// <param name="sXMLUrl">
         /// The s Xml Url.
         /// </param>
-        private void ThrdGetPosts(string sXmlUrl)
+        private void ThrdGetPosts(string sXMLUrl)
         {
-            string sPagecontent = Utility.GetForumPageAsString(sXmlUrl);
+            string sPagecontent = Utility.GetForumPageAsString(sXMLUrl);
 
             var arlst = ExtractHelper.ExtractThreadtoPosts(sPagecontent);
 
@@ -1331,28 +1341,31 @@ namespace Ripper
                     StatusLabelInfo.ForeColor = Color.Green;
                 }
 
-                string sLpostId = arlst[po].ImageUrl;
+                string currentPostId = arlst[po].ImageUrl;
 
                 //////////////////////////////////////////////////////////////////////////
 
-                if (CacheController.Instance().UserSettings.SavePids && this.IsPostAlreadyRipped(sLpostId))
+                if (CacheController.Instance().UserSettings.SavePids && this.IsPostAlreadyRipped(currentPostId))
                 {
                     continue;
                 }
 
-                var composedURL = string.Format("{0}getSTDpost-imgXML.php?dpver=2&postid={1}", CacheController.Instance().UserSettings.ForumURL, sLpostId);
+                var composedXMLUrl = string.Format(
+                    "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
+                    CacheController.Instance().UserSettings.ForumURL,
+                    currentPostId);
+                var composedHtmlUrl = string.Format("http://vipergirls.to/showpost.php?p={0}", currentPostId);
 
-
-                var jobInfo = this.jobsList.Find(doubleJob => doubleJob.URL.Equals(composedURL));
+                var jobInfo = this.jobsList.Find(doubleJob => doubleJob.XMLUrl.Equals(composedXMLUrl));
 
                 if (jobInfo != null)
                 {
                     continue;
                 }
 
-                if (currentJob != null)
+                if (this.currentJob != null)
                 {
-                    if (currentJob.URL.Equals(composedURL))
+                    if (this.currentJob.XMLUrl.Equals(composedXMLUrl))
                     {
                         continue;
                     }
@@ -1360,8 +1373,10 @@ namespace Ripper
 
                 JobInfo job = new JobInfo
                                   {
-                                      URL = composedURL,
-                                      XMLPayLoad = Utility.GetForumPageAsString(composedURL)
+                                      XMLUrl = composedXMLUrl,
+                                      HtmlUrl = composedHtmlUrl,
+                                      XMLPayLoad = Utility.GetForumPageAsString(composedXMLUrl),
+                                      HtmlPayLoad = Utility.GetForumPageAsString(composedHtmlUrl)
                                   };
 
                 job.ImageCount = Maintenance.GetInstance().CountImagesFromXML(job.XMLPayLoad);
@@ -1371,17 +1386,15 @@ namespace Ripper
                     continue;
                 }
 
-                job.PostTitle = Maintenance.GetInstance().ExtractPostTitleFromXML(job.XMLPayLoad);
+                job.PostTitle =
+                    Utility.ReplaceHexWithAscii(Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, job.HtmlUrl));
                 job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromXML(job.XMLPayLoad);
-                job.Title = Maintenance.GetInstance().ExtractTitleFromXML(job.XMLPayLoad);
-                
-
-                job.Title = Utility.ReplaceHexWithAscii(job.Title);
-                job.PostTitle = Utility.ReplaceHexWithAscii(job.PostTitle);
+                job.TopicTitle =
+                    Utility.ReplaceHexWithAscii(Maintenance.GetInstance().ExtractTopicTitleFromHtml(job.HtmlPayLoad));
 
                 job.StorePath = this.GenerateStorePath(job);
 
-                ProcessAutoThankYou(sLpostId, job.ImageCount, job.URL, sToken);
+                ProcessAutoThankYou(currentPostId, job.ImageCount, job.XMLUrl, sToken);
 
                 //JobListAdd(job);
                 JobListAddDelegate newJob = JobListAdd;
@@ -1565,15 +1578,15 @@ namespace Ripper
 
             groupBox2.Text = string.Format("{0}...", _ResourceManager.GetString("gbCurrentlyExtract"));
 
-            if (currentJob.Title.Equals(currentJob.PostTitle))
+            if (currentJob.TopicTitle.Equals(currentJob.PostTitle))
             {
-                Text = string.Format("{0}: {1} - x{2}", _ResourceManager.GetString("gbCurrentlyExtract"), currentJob.Title,
+                Text = string.Format("{0}: {1} - x{2}", _ResourceManager.GetString("gbCurrentlyExtract"), currentJob.TopicTitle,
                                                 mImagesList.Count);
             }
             else
             {
                 Text = string.Format("{0}: {1} - {2} - x{3}", _ResourceManager.GetString("gbCurrentlyExtract"),
-                                               currentJob.Title, currentJob.PostTitle, mImagesList.Count);
+                                               currentJob.TopicTitle, currentJob.PostTitle, mImagesList.Count);
             }
 
             lvCurJob.Columns[0].Text = string.Format("{0} - x{1}", currentJob.PostTitle, mImagesList.Count);
@@ -1583,10 +1596,10 @@ namespace Ripper
             {
                 if (CacheController.Instance().UserSettings.ShowPopUps)
                 {
-                    trayIcon.Text = _ResourceManager.GetString("gbCurrentlyExtract") + currentJob.Title;
+                    trayIcon.Text = _ResourceManager.GetString("gbCurrentlyExtract") + currentJob.TopicTitle;
                     trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                     trayIcon.BalloonTipTitle = _ResourceManager.GetString("gbCurrentlyExtract");
-                    trayIcon.BalloonTipText = currentJob.Title;
+                    trayIcon.BalloonTipText = currentJob.TopicTitle;
                     trayIcon.ShowBalloonTip(10);
                 }
             }
@@ -1722,7 +1735,7 @@ namespace Ripper
                                     this.currentJob.StorePath,
                                     !string.IsNullOrEmpty(this.currentJob.PostTitle)
                                         ? this.currentJob.PostTitle
-                                        : this.currentJob.Title,
+                                        : this.currentJob.TopicTitle,
                                     i + 1);
                         }
 
@@ -2031,7 +2044,7 @@ namespace Ripper
 
             jobsList.Add(job);
 
-            ListViewItem ijobJob = new ListViewItem(job.Title, 0);
+            ListViewItem ijobJob = new ListViewItem(job.TopicTitle, 0);
 
             ijobJob.SubItems.Add(job.PostTitle);
             ijobJob.SubItems.Add(job.ImageCount.ToString());
@@ -2097,18 +2110,18 @@ namespace Ripper
                     switch (this.comboBox1.SelectedIndex)
                     {
                         case 0:
-                            updatedJob.StorePath = Path.Combine(CacheController.Instance().UserSettings.DownloadFolder, this.jobsList[i].Title);
+                            updatedJob.StorePath = Path.Combine(CacheController.Instance().UserSettings.DownloadFolder, this.jobsList[i].TopicTitle);
                             break;
                         case 2:
                         case 1:
-                            updatedJob.StorePath = Path.Combine(CacheController.Instance().UserSettings.DownloadFolder, this.jobsList[i].Title + Path.DirectorySeparatorChar + this.jobsList[i].PostTitle);
+                            updatedJob.StorePath = Path.Combine(CacheController.Instance().UserSettings.DownloadFolder, this.jobsList[i].TopicTitle + Path.DirectorySeparatorChar + this.jobsList[i].PostTitle);
                             break;
                     }
                 }
 
 
-                updatedJob.Title = jobsList[i].Title;
-                updatedJob.URL = jobsList[i].URL;
+                updatedJob.TopicTitle = jobsList[i].TopicTitle;
+                updatedJob.XMLUrl = jobsList[i].XMLUrl;
                 updatedJob.XMLPayLoad = jobsList[i].XMLPayLoad;
 
                 JobListRemove(jobsList[i], i);
@@ -2149,7 +2162,7 @@ namespace Ripper
                     this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this._ResourceManager.GetString("gbParse2"), i, this.jobsList.Count);
                     this.StatusLabelInfo.ForeColor = Color.Green;
 
-                    var jobItem = new ListViewItem(this.jobsList[i].Title, 0);
+                    var jobItem = new ListViewItem(this.jobsList[i].TopicTitle, 0);
 
                     jobItem.SubItems.Add(this.jobsList[i].PostTitle);
                     jobItem.SubItems.Add(this.jobsList[i].ImageCount.ToString());
@@ -2787,7 +2800,7 @@ namespace Ripper
                     this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this._ResourceManager.GetString("gbParse2"), i, this.jobsList.Count);
                     this.StatusLabelInfo.ForeColor = Color.Green;
 
-                    ListViewItem ijobJob = new ListViewItem(this.jobsList[i].Title, 0);
+                    ListViewItem ijobJob = new ListViewItem(this.jobsList[i].TopicTitle, 0);
                     ijobJob.SubItems.Add(this.jobsList[i].PostTitle);
                     ijobJob.SubItems.Add(this.jobsList[i].ImageCount.ToString());
                     this.listViewJobList.Items.AddRange(new[] { ijobJob });
@@ -3050,7 +3063,7 @@ namespace Ripper
                                     "{0}{1}{2}{1}{3}",
                                     Utility.RemoveIllegalCharecters(job.ForumTitle),
                                     Path.DirectorySeparatorChar,
-                                    Utility.RemoveIllegalCharecters(job.Title),
+                                    Utility.RemoveIllegalCharecters(job.TopicTitle),
                                     Utility.RemoveIllegalCharecters(job.PostTitle))),
                             true,
                             false);
@@ -3065,7 +3078,7 @@ namespace Ripper
                                     "{0}{1}{2}",
                                     Utility.RemoveIllegalCharecters(job.ForumTitle),
                                     Path.DirectorySeparatorChar,
-                                    Utility.RemoveIllegalCharecters(job.Title))),
+                                    Utility.RemoveIllegalCharecters(job.TopicTitle))),
                             false,
                             false);
                     }
@@ -3079,10 +3092,10 @@ namespace Ripper
                             CacheController.Instance().UserSettings.DownInSepFolder
                                 ? string.Format(
                                     "{0}{1}{2}",
-                                    Utility.RemoveIllegalCharecters(job.Title),
+                                    Utility.RemoveIllegalCharecters(job.TopicTitle),
                                     Path.DirectorySeparatorChar,
                                     Utility.RemoveIllegalCharecters(job.PostTitle))
-                                : Utility.RemoveIllegalCharecters(job.Title)),
+                                : Utility.RemoveIllegalCharecters(job.TopicTitle)),
                         false,
                         false);
                 }
@@ -3099,7 +3112,7 @@ namespace Ripper
                     foreach (JobInfo t in
                         this.jobsList.Where(
                             t =>
-                            t.PostTitle.Equals(job.PostTitle) || (Directory.Exists(path) && t.Title.Equals(job.Title))))
+                            t.PostTitle.Equals(job.PostTitle) || (Directory.Exists(path) && t.TopicTitle.Equals(job.TopicTitle))))
                     {
                         while (t.StorePath.Equals(storePath) || Directory.Exists(storePath))
                         {
@@ -3121,7 +3134,7 @@ namespace Ripper
             {
                 storePath = Path.Combine(
                     CacheController.Instance().UserSettings.DownloadFolder,
-                    Utility.RemoveIllegalCharecters(job.Title));
+                    Utility.RemoveIllegalCharecters(job.TopicTitle));
             }
 
             return storePath;
@@ -3146,7 +3159,7 @@ namespace Ripper
                                 "{0}{1}{2}",
                                 Utility.RemoveIllegalCharecters(job.ForumTitle),
                                 Path.DirectorySeparatorChar,
-                                Utility.RemoveIllegalCharecters(job.Title)));
+                                Utility.RemoveIllegalCharecters(job.TopicTitle)));
 
                 path = this.CheckAndShortenPath(job, path, false, false);
             }
@@ -3158,10 +3171,10 @@ namespace Ripper
                         CacheController.Instance().UserSettings.DownInSepFolder
                             ? string.Format(
                                 "{0}{1}{2}",
-                                Utility.RemoveIllegalCharecters(job.Title),
+                                Utility.RemoveIllegalCharecters(job.TopicTitle),
                                 Path.DirectorySeparatorChar,
                                 Utility.RemoveIllegalCharecters(job.PostTitle))
-                            : Utility.RemoveIllegalCharecters(job.Title));
+                            : Utility.RemoveIllegalCharecters(job.TopicTitle));
 
                 path = this.CheckAndShortenPath(job, path, false, false);
             }
@@ -3285,9 +3298,17 @@ namespace Ripper
              CacheController.Instance().UserSettings.DownloadFolder = this.DownloadFolder.Text;*/
         }
 
+        /// <summary>
+        /// Exports the Current Jobs Queue to the jobs.xml file
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void SaveRippingQueueToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (this.jobsList.Count > 0)
+            {
+                Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
+            }
         }
     }
 }

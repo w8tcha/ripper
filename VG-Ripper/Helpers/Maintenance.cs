@@ -18,6 +18,7 @@ namespace Ripper
     using System.Data;
     using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using Ripper.Core.Components;
 
@@ -120,17 +121,17 @@ namespace Ripper
         /// </returns>
         public string ExtractForumTitleFromXML(string xmlPayload)
         {
-            string sForumTitle = string.Empty;
+            string forumTitle = string.Empty;
 
             try
             {
-                DataSet ds = new DataSet();
+                var dataSet = new DataSet();
 
-                ds.ReadXml(new StringReader(xmlPayload));
+                dataSet.ReadXml(new StringReader(xmlPayload));
 
-                foreach (DataRow row in ds.Tables["forum"].Rows)
+                foreach (DataRow row in dataSet.Tables["forum"].Rows)
                 {
-                    sForumTitle = row["title"].ToString();
+                    forumTitle = row["title"].ToString();
                 }
             }
             catch (Exception)
@@ -138,9 +139,9 @@ namespace Ripper
                 return string.Empty;
             }
 
-            Utility.RemoveIllegalCharecters(sForumTitle);
+            Utility.RemoveIllegalCharecters(forumTitle);
 
-            return sForumTitle;
+            return forumTitle;
         }
 
         /// <summary>
@@ -154,25 +155,25 @@ namespace Ripper
         /// </returns>
         public string ExtractPostTitleFromXML(string xmlPayload)
         {
-            string sPostTitle = string.Empty;
+            var postTitle = string.Empty;
 
             try
             {
-                DataSet ds = new DataSet();
+                var dataSet = new DataSet();
 
-                ds.ReadXml(new StringReader(xmlPayload));
+                dataSet.ReadXml(new StringReader(xmlPayload));
 
-                foreach (DataRow row in ds.Tables["post"].Rows)
+                foreach (DataRow row in dataSet.Tables["post"].Rows)
                 {
-                    sPostTitle = row["title"].ToString();
+                    postTitle = row["title"].ToString();
 
-                    if (sPostTitle == string.Empty)
+                    if (postTitle == string.Empty)
                     {
-                        sPostTitle = string.Format("post# {0}", row["id"]);
+                        postTitle = string.Format("post# {0}", row["id"]);
                     }
-                    else if (sPostTitle == string.Format("Re: {0}", this.ExtractTitleFromXML(xmlPayload)))
+                    else if (postTitle == string.Format("Re: {0}", this.ExtractTopicTitleFromXML(xmlPayload)))
                     {
-                        sPostTitle = string.Format("post# {0}", row["id"]);
+                        postTitle = string.Format("post# {0}", row["id"]);
                     }
                 }
             }
@@ -181,33 +182,86 @@ namespace Ripper
                 return string.Empty;
             }
 
-            Utility.RemoveIllegalCharecters(sPostTitle);
+            Utility.RemoveIllegalCharecters(postTitle);
 
-            return sPostTitle;
+            return postTitle;
         }
 
         /// <summary>
-        /// The extract title from xml.
+        /// Extract the Current Post Title if there is any
+        /// if not use PostId As Title
         /// </summary>
-        /// <param name="xmlPayload">
-        /// The xml payload.
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <param name="url">
+        /// The url.
         /// </param>
         /// <returns>
-        /// Returns the Title
+        /// The extract post title from html.
         /// </returns>
-        public string ExtractTitleFromXML(string xmlPayload)
+        public string ExtractPostTitleFromHtml(string content, string url)
         {
-            string sTitle = string.Empty;
+            var postId = url.Substring(url.IndexOf("p=", StringComparison.Ordinal) + 2);
+
+            var check =
+                string.Format(
+                    @"<h2 class=\""title icon\"">\r\n\t\t\t\t\t(?<inner>[^\r]*)\r\n\t\t\t\t</h2>\r\n\t\t\t\t\r\n\r\n\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t<div class=\""content\"">\r\n\t\t\t\t\t<div id=\""post_message_{0}\"">",
+                    postId);
+
+            var check2 =
+                string.Format(
+                    @"<h2 class=\""title icon\"">\r\n\t\t\t\t\t(?<inner>[^\r]*)\r\n\t\t\t\t</h2>\r\n\t\t\t\t\r\n\r\n\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t<div class=\""content\"">\r\n\t\t\t\t\t<div id=\""post_message_{0}\"">",
+                    postId);
+
+            var match = Regex.Match(content, check, RegexOptions.Compiled);
+
+            var postTitle = string.Empty;
+
+            if (!match.Success)
+            {
+                match = Regex.Match(content, check2, RegexOptions.Compiled);
+
+                if (!match.Success)
+                {
+                    return postTitle;
+                }
+            }
+
+            postTitle = match.Groups["inner"].Value.Trim();
+
+            if (postTitle == string.Empty)
+            {
+                postTitle = string.Format("post# {0}", postId);
+            }
+            else if (postTitle == string.Format("Re: {0}", this.ExtractTopicTitleFromHtml(content)))
+            {
+                postTitle = string.Format("post# {0}", postId);
+            }
+
+            return Utility.ReplaceHexWithAscii(postTitle);
+        }
+
+        /// <summary>
+        /// Extracts the topic title from XML.
+        /// </summary>
+        /// <param name="xmlPayload">The xml payload.</param>
+        /// <returns>
+        /// Returns the topic Title
+        /// </returns>
+        public string ExtractTopicTitleFromXML(string xmlPayload)
+        {
+            var title = string.Empty;
 
             try
             {
-                DataSet ds = new DataSet();
+                var dataSet = new DataSet();
 
-                ds.ReadXml(new StringReader(xmlPayload));
+                dataSet.ReadXml(new StringReader(xmlPayload));
 
-                foreach (DataRow row in ds.Tables["thread"].Rows)
+                foreach (DataRow row in dataSet.Tables["thread"].Rows)
                 {
-                    sTitle = row["title"].ToString();
+                    title = row["title"].ToString();
                 }
             }
             catch (Exception)
@@ -215,7 +269,36 @@ namespace Ripper
                 return string.Empty;
             }
 
-            return Utility.RemoveIllegalCharecters(sTitle);
+            return Utility.RemoveIllegalCharecters(title);
+        }
+
+        /// <summary>
+        /// Extract Current Page Title
+        /// </summary>
+        /// <param name="page">The page.</param>
+        /// <returns>
+        /// The get rip page title.
+        /// </returns>
+        public string ExtractTopicTitleFromHtml(string page)
+        {
+            var match = Regex.Match(
+                page,
+                @"<title>(?<inner>[^<]*)</title>",
+                RegexOptions.Compiled);
+
+            if (!match.Success)
+            {
+                return string.Empty;
+            }
+
+            var title = match.Groups["inner"].Value;
+
+            if (title.Contains(" - Page"))
+            {
+                title = title.Remove(title.IndexOf(" - Page", StringComparison.Ordinal));
+            }
+
+            return title.Trim();
         }
 
         #endregion

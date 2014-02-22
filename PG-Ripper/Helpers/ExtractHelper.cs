@@ -12,6 +12,7 @@
 namespace Ripper
 {
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Linq;
     using System.Web;
 
@@ -26,46 +27,81 @@ namespace Ripper
         /// <summary>
         /// Attempts to extract hot linked and thumb-&gt;FullScale images.
         /// </summary>
-        /// <param name="htmlDump">
-        /// The html Dump.
-        /// </param>
+        /// <param name="htmlDump">The html Dump.</param>
+        /// <param name="postId">The post identifier.</param>
         /// <returns>
         /// The extract attachment images html.
         /// </returns>
-        public static List<ImageInfo> ExtractAttachmentImagesHtml(string htmlDump)
+        public static List<ImageInfo> ExtractAttachmentImagesHtml(string htmlDump, string postId)
         {
             List<ImageInfo> rtnList = new List<ImageInfo>();
 
             htmlDump = htmlDump.Replace("&amp;", "&");
 
+            var start = "<div class=\"attachments\">";
+            var end = "<!-- / attachments -->";
+
             // use only message content
-            var iStart = htmlDump.IndexOf("<!-- attachments -->");
+            var iStart = htmlDump.IndexOf(start, System.StringComparison.Ordinal);
 
             if (iStart < 0)
             {
-                // Return Empty List
-                return rtnList;
+                // fix post id
+                if (postId.Contains("#post"))
+                {
+                    postId = postId.Substring(postId.IndexOf("#post", System.StringComparison.Ordinal) + 5);
+                }
+
+
+                start = string.Format("<div id=\"post_message_{0}\">", postId);
+                end = "</blockquote>";
+
+                iStart = htmlDump.IndexOf(start, System.StringComparison.Ordinal);
+
+                if (iStart < 0)
+                {
+                    // Return Empty List
+                    return rtnList;
+                }
+
+                iStart += start.Length;
+
+                var startDump = htmlDump.Substring(iStart);
+
+                var iEnd = startDump.IndexOf(end, System.StringComparison.Ordinal);
+
+                if (iEnd > 0)
+                {
+                    htmlDump = startDump.Remove(iEnd);
+                }
             }
-
-            iStart += 21;
-
-            var iEnd = htmlDump.IndexOf("<!-- / attachments -->");
-
-            if (iEnd > 0)
+            else
             {
-                htmlDump = htmlDump.Substring(iStart, iEnd - iStart);
+                iStart += start.Length;
+
+                var iEnd = htmlDump.IndexOf(end, System.StringComparison.Ordinal);
+
+                if (iEnd > 0)
+                {
+                    htmlDump = htmlDump.Substring(iStart, iEnd - iStart);
+                }
             }
 
             ///////////////////////////////////////////////
             rtnList.AddRange(
-                LinkFinder.ListAllLinks(htmlDump).Select(
-                    link =>
-                    new ImageInfo
-                    {
-                        ImageUrl = CacheController.Instance().UserSettings.CurrentForumUrl + Utility.ReplaceHexWithAscii(link.Href),
-                        ThumbnailUrl = string.Empty
-                    }).Where(
-                            newPicPoolItem => !Utility.IsImageNoneSense(newPicPoolItem.ImageUrl)));
+                LinkFinder.ListAllLinks(htmlDump)
+                    .Select(
+                        link =>
+                        new ImageInfo
+                            {
+                                ImageUrl =
+                                    link.Href.StartsWith("http://")
+                                        ? link.Href
+                                        : CacheController.Instance().UserSettings.CurrentForumUrl
+                                          + Utility.ReplaceHexWithAscii(link.Href),
+                                ThumbnailUrl = string.Empty
+                            })
+                    .Where(newPicPoolItem => !Utility.IsImageNoneSense(newPicPoolItem.ImageUrl)));
 
             return rtnList;
         }
@@ -88,7 +124,11 @@ namespace Ripper
 
             if (CacheController.Instance().UserSettings.CurrentForumUrl.Contains(@"scanlover.com"))
             {
-                rtnList = ExtractAttachmentImagesHtml(htmlDump);
+                rtnList = ExtractAttachmentImagesHtml(htmlDump, postId);
+            }
+            else if (CacheController.Instance().UserSettings.CurrentForumUrl.Contains(@"halohul.com"))
+            {
+                rtnList = ExtractAttachmentImagesHtml(htmlDump, postId);
             }
             else if (CacheController.Instance().UserSettings.CurrentForumUrl.Contains(@"sexyandfunny.com"))
             {
@@ -96,16 +136,12 @@ namespace Ripper
 
                 if (rtnList.Count.Equals(0))
                 {
-                    rtnList = ExtractAttachmentImagesHtml(htmlDump);
+                    rtnList = ExtractAttachmentImagesHtml(htmlDump, postId);
                 }
-            }
-            else if (Utility.IsV4Forum(CacheController.Instance().UserSettings))
-            {
-                rtnList = ExtractImagesLinksHtml(htmlDump, postId);
             }
             else
             {
-                rtnList = ExtractImagesLinksHtml(htmlDump, null);
+                rtnList = ExtractImagesLinksHtml(htmlDump, postId);
             }
 
             return rtnList;
@@ -133,15 +169,8 @@ namespace Ripper
             htmlDump = htmlDump.Replace("&amp;", "&");
 
             // use only message content
-            var sMessageStart = "<!-- message -->";
-            var sMessageEnd = "<!-- / message -->";
-
-            // If Forum uses VB 4.x or higher
-            if (Utility.IsV4Forum(CacheController.Instance().UserSettings))
-            {
-                sMessageStart = string.Format("<div id=\"post_message_{0}\">", postId);
-                sMessageEnd = "</blockquote>";
-            }
+            var sMessageStart = string.Format("<div id=\"post_message_{0}\">", postId);
+            var sMessageEnd = "</blockquote>";
 
             var iStart = htmlDump.IndexOf(sMessageStart);
 
@@ -161,7 +190,7 @@ namespace Ripper
                     {
                         ImageUrl = RemoveRedirectLink(Utility.ReplaceHexWithAscii(link.Href)),
                         ThumbnailUrl = Utility.ReplaceHexWithAscii(link.Text)
-                    }).Where(newPicPoolItem => !Utility.IsImageNoneSense(newPicPoolItem.ImageUrl)).ToList();
+                    }).Where(newPicPoolItem => !Utility.IsImageNoneSense(newPicPoolItem.ImageUrl) && !Utility.IsImageNoneSense(newPicPoolItem.ThumbnailUrl)).ToList();
 
             // Parse all Image <a>
             rtnList.AddRange(
@@ -323,12 +352,7 @@ namespace Ripper
 
             const string Start = "<a name=\"post";
 
-            string sEnd = "\">";
-
-            if (Utility.IsV4Forum(CacheController.Instance().UserSettings))
-            {
-                sEnd = "\" href";
-            }
+            string sEnd = "\" href";
 
             string sCopy = htmlDump;
 

@@ -29,32 +29,6 @@ namespace Ripper
     public class Indexes
     {
         /// <summary>
-        /// Gets the Content of all Thread Pages
-        /// </summary>
-        /// <param name="sURL">Original URL of the Forum Thread</param>
-        /// <returns>The Content of all Thread Pages</returns>
-        public string GetThreadPages(string sURL)
-        {
-            string sPageContent = GetRipPage(sURL);
-
-            int iOccurIdx = 0;
-            iOccurIdx = sPageContent.IndexOf("Page 1 of ", iOccurIdx);
-
-            int iOpe1 = sPageContent.IndexOf("</td>", iOccurIdx);
-            int iThreadPages = int.Parse(sPageContent.Substring(iOccurIdx + 10, iOpe1 - (iOccurIdx + 10)));
-
-            string szThreadBaseURL = sURL;
-
-            for (int i = 1; i <= iThreadPages; i++)
-            {
-                string szComposed = string.Format("{0}&page={1}", szThreadBaseURL, i);
-                sPageContent += GetRipPage(szComposed);
-            }
-
-            return sPageContent;
-        }
-
-        /// <summary>
         /// Gets the Content of all Thread Pages (VB Forums 4.x)
         /// </summary>
         /// <param name="sURL">Original URL of the Forum Thread</param>

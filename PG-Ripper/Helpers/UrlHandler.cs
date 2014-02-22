@@ -58,68 +58,67 @@ namespace Ripper
                             return string.Empty;
                         }
 
-                        if (Utility.IsV4Forum(CacheController.Instance().UserSettings))
+
+                        if (sHtmlUrl.Contains(".html") && !sHtmlUrl.Contains(".php"))
                         {
-                            if (sHtmlUrl.Contains(".html") && !sHtmlUrl.Contains(".php"))
-                            {
-                                // http://mydomain.com/subforumname/01234-threadtitle.html
-                                // Threads
-                                // http://mydomain.com/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
-                                // Posts
-                                ////string sPostId = sHtmlUrl.Substring(sHtmlUrl.IndexOf("#post") + 5);
-                                
-                                return sHtmlUrl;
-                            }
+                            // http://mydomain.com/subforumname/01234-threadtitle.html
+                            // Threads
+                            // http://mydomain.com/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
+                            // Posts
+                            ////string sPostId = sHtmlUrl.Substring(sHtmlUrl.IndexOf("#post") + 5);
 
-                            if (!sHtmlUrl.Contains("#post") && sHtmlUrl.Contains("showthread.php?t="))
-                            {
-                                // http://mydomain.com/showthread.php?t=0123456
-                                // Threats
-                                return sHtmlUrl;
-                            }
-
-                            if (!sHtmlUrl.Contains("#post") && sHtmlUrl.Contains("showthread.php?"))
-                            {
-                                // New VB Forums 4.x
-                                // http://mydomain.com/showthread.php?0123456-Thread-Title
-                                // Threads
-                                string sThreadId = sHtmlUrl.Substring(sHtmlUrl.IndexOf(".php?") + 5);
-
-                                if (sHtmlUrl.Contains("-"))
-                                {
-                                    sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
-                                }
-
-                                sHtmlUrl = string.Format(
-                                    "{0}showthread.php?t={1}",
-                                    CacheController.Instance().UserSettings.CurrentForumUrl,
-                                    Convert.ToInt64(sThreadId));
-                            }
-                            else if (sHtmlUrl.Contains("goto=newpost") && sHtmlUrl.Contains("showthread.php?"))
-                            {
-                                // http://mydomain.com/showthread.php?0123456-Thread-Title&goto=newpost#post12345
-                                // Threads
-                                string sThreadId = sHtmlUrl.Substring(sHtmlUrl.IndexOf(".php?") + 5);
-
-                                if (sHtmlUrl.Contains("-"))
-                                {
-                                    sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
-                                }
-
-                                sHtmlUrl = string.Format(
-                                    "{0}showthread.php?t={1}",
-                                    CacheController.Instance().UserSettings.CurrentForumUrl,
-                                    Convert.ToInt64(sThreadId));
-                            }
-                            else if (sHtmlUrl.Contains("&p=") && sHtmlUrl.Contains("#post"))
-                            {
-                                // http://mydomain.com/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
-                                // Posts
-                                ////string sPostId = sHtmlUrl.Substring(sHtmlUrl.IndexOf("#post") + 5);
-
-                                return sHtmlUrl;
-                            }
+                            return sHtmlUrl;
                         }
+
+                        if (!sHtmlUrl.Contains("#post") && sHtmlUrl.Contains("showthread.php?t="))
+                        {
+                            // http://mydomain.com/showthread.php?t=0123456
+                            // Threats
+                            return sHtmlUrl;
+                        }
+
+                        if (!sHtmlUrl.Contains("#post") && sHtmlUrl.Contains("showthread.php?"))
+                        {
+                            // New VB Forums 4.x
+                            // http://mydomain.com/showthread.php?0123456-Thread-Title
+                            // Threads
+                            string sThreadId = sHtmlUrl.Substring(sHtmlUrl.IndexOf(".php?") + 5);
+
+                            if (sHtmlUrl.Contains("-"))
+                            {
+                                sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
+                            }
+
+                            sHtmlUrl = string.Format(
+                                "{0}showthread.php?t={1}",
+                                CacheController.Instance().UserSettings.CurrentForumUrl,
+                                Convert.ToInt64(sThreadId));
+                        }
+                        else if (sHtmlUrl.Contains("goto=newpost") && sHtmlUrl.Contains("showthread.php?"))
+                        {
+                            // http://mydomain.com/showthread.php?0123456-Thread-Title&goto=newpost#post12345
+                            // Threads
+                            string sThreadId = sHtmlUrl.Substring(sHtmlUrl.IndexOf(".php?") + 5);
+
+                            if (sHtmlUrl.Contains("-"))
+                            {
+                                sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
+                            }
+
+                            sHtmlUrl = string.Format(
+                                "{0}showthread.php?t={1}",
+                                CacheController.Instance().UserSettings.CurrentForumUrl,
+                                Convert.ToInt64(sThreadId));
+                        }
+                        else if (sHtmlUrl.Contains("&p=") && sHtmlUrl.Contains("#post"))
+                        {
+                            // http://mydomain.com/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
+                            // Posts
+                            ////string sPostId = sHtmlUrl.Substring(sHtmlUrl.IndexOf("#post") + 5);
+
+                            return sHtmlUrl;
+                        }
+
 
                         break;
                     }

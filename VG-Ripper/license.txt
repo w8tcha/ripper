@@ -3,10 +3,10 @@ If you have any questions or concerns, please visit the forums at
 
 http://vipergirls.to/threads/462670-VG-Ripper-Official-Support-Download-Thread
 
-http://ripper.watchersnet.de/Forum.aspx
+https://ripper.codeplex.com/workitem/list/basic
 
 
-Copyright (c) The Watcher - ripper.WatchersNET.de
+Copyright (c) The Watcher - Ripper.CodePlex.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this 
 software and associated documentation files (the "Software"), 
