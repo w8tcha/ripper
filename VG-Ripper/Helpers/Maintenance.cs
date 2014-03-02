@@ -239,6 +239,12 @@ namespace Ripper
                 postTitle = string.Format("post# {0}", postId);
             }
 
+            // Remove Topic Icons if found
+            if (postTitle.Contains("<img"))
+            {
+                postTitle = postTitle.Substring(postTitle.IndexOf(" /> ", StringComparison.Ordinal) + 4);
+            }
+
             return Utility.ReplaceHexWithAscii(postTitle);
         }
 
