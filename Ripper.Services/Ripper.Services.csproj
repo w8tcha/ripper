@@ -86,7 +86,6 @@
     <Compile Include="ImageHosts\ImageDax.cs" />
     <Compile Include="ImageHosts\ImageDoza.cs" />
     <Compile Include="ImageHosts\ImageDunk.cs" />
-    <Compile Include="ImageHosts\ImageFap.cs" />
     <Compile Include="ImageHosts\ImageFlea.cs" />
     <Compile Include="ImageHosts\ImageFling.cs" />
     <Compile Include="ImageHosts\ImageFoco.cs" />

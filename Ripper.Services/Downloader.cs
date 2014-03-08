@@ -44,7 +44,7 @@ namespace Ripper.Services
                 && !imageUrl.Contains("imgmaster.net") && !imageUrl.Contains("perverzia.com")
                 && !imageUrl.Contains("imagesaholic.com") && !imageUrl.Contains("jovoimage.com")
                 && !imageUrl.Contains("truepic.org") && !imageUrl.Contains("imgearn.net")
-                && !imageUrl.Contains("damimage.com"))
+                && !imageUrl.Contains("damimage.com") && !imageUrl.Contains("imgfap.net/"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -262,10 +262,6 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"imagehosting.gr/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImageHosting;
-            }
-            else if (imageUrl.IndexOf(@"imagefap.com/image.php", System.StringComparison.Ordinal) >= 0)
-            {
-                threadStart = imageDownloader.GetImageFap;
             }
             else if (imageUrl.IndexOf(@"allyoucanupload.webshots.com/v/", System.StringComparison.Ordinal) >= 0)
             {
@@ -633,6 +629,10 @@ namespace Ripper.Services
                 threadStart = imageDownloader.GetImgWoot;
             }
             else if (imageUrl.IndexOf(@"storeimgs.net/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgfap.net/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
             }

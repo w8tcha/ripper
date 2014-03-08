@@ -730,7 +730,7 @@ namespace Ripper
 
 #if (!RIPRIPPERX)
 
-            var updateNotes = string.Empty;
+            string updateNotes;
 
             if (VersionCheck.UpdateAvailable(Assembly.GetExecutingAssembly(), "VG-Ripper", out updateNotes)
                 && File.Exists(Path.Combine(Application.StartupPath, "ICSharpCode.SharpZipLib.dll")))
@@ -760,14 +760,6 @@ namespace Ripper
                 }
             }
 
-            updateNotes = string.Empty;
-
-#endif
-
-#if (RIPRIPPERX)
-            var updateNotes = string.Empty;
-#endif
-
             // Auto Check for Ripper.Services.dll Update
             if (VersionCheck.UpdateAvailable(typeof(Downloader).Assembly, "Ripper.Services", out updateNotes)
                 | !File.Exists(Path.Combine(Application.StartupPath, "Ripper.Services.dll")))
@@ -781,6 +773,7 @@ namespace Ripper
                 AutoUpdater.TryUpdate("Ripper.Services", Assembly.GetExecutingAssembly());
             }
 
+#endif
             this.LoadSettings();
 
             if (!CacheController.Instance().UserSettings.OfflMode && !CacheController.Instance().UserSettings.GuestMode)
@@ -808,11 +801,6 @@ namespace Ripper
 #if (!RIPRIPPERX)
             ProtocolHelper.RegisterRipUrlProtocol();
 #endif
-            if (!CacheController.Instance().UserSettings.Extension)
-            {
-                return;
-            }
-
         }
 
         /// <summary>
@@ -2827,7 +2815,7 @@ namespace Ripper
         }
 
         /// <summary>
-        /// Extract The Cached Urls and Rip them.
+        /// Extract The Cached URL's and Rip them.
         /// </summary>
         private void GetExtractUrls()
         {
@@ -2849,7 +2837,10 @@ namespace Ripper
                 this.EnqueueJob();
             }
 
-            this.ExtractUrls.RemoveAt(0);
+            if (this.ExtractUrls.Count > 0)
+            {
+                this.ExtractUrls.RemoveAt(0);
+            }
 
             if (this.ExtractUrls.Count > 0)
             {
