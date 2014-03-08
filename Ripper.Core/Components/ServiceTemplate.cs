@@ -358,6 +358,8 @@ namespace Ripper.Core.Components
                 this.WebClient.Headers.Add(HttpRequestHeader.Cookie, CookieManager.GetInstance().GetCookieString());
             }
 
+            Application.DoEvents();
+
             this.WebClient.DownloadFileAsync(new Uri(downloadPath), savePath);
 
             return true;

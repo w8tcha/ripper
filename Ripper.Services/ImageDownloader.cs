@@ -740,18 +740,6 @@ namespace Ripper.Services
             this.xService.StartDownload();
         }
 
-        public void GetImageFap()
-        {
-            this.xService = new ImageFap(
-                ref this.savePath,
-                ref this.imageURL,
-                ref this.thumbImageURL,
-                ref this.imageName,
-                ref this.imageNumber,
-                ref this.eventTable);
-            this.xService.StartDownload();
-        }
-
         public void GetAllYouCanUpload()
         {
             this.xService = new AllYouCanUpload(

@@ -19,7 +19,7 @@ namespace Ripper.Services.ImageHosts
     /// Worker class to get images from 
     /// ImgWoot.com/ImgMoney.com/ImgMoney.net/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/
     /// HosterBin.com/PicsLite.com/ImageTeam.org/ImgNext.com/HostUrImage.com/3XVintage.com/ImgGoo.com/ImgMaster.com/
-    /// GoGoImage.org/JovoImage.com/ImageDecode.com/ImgEarn.net/ImgFap.net/DamImage.com/StoreImgs.net
+    /// GoGoImage.org/JovoImage.com/ImageDecode.com/ImgEarn.net/ImgFap.net/DamImage.com/StoreImgs.net/ImageFap.net
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {
