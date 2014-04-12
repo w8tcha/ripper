@@ -636,6 +636,18 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"imgstudio.org/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"dimtus.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imageeer.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/", System.StringComparison.Ordinal) >= 0 || imageUrl.IndexOf(@"ImageFolks.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
@@ -664,7 +676,7 @@ namespace Ripper.Services
             }
             else if (imageUrl.IndexOf(@"imgserve.net/", System.StringComparison.Ordinal) >= 0)
             {
-                threadStart = imageDownloader.GetImgServe;
+                threadStart = imageDownloader.GetImgWoot;
             }
             else if (imageUrl.IndexOf(@"celebsweet.6te.net/", System.StringComparison.Ordinal) >= 0)
             {
@@ -777,6 +789,10 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"truepic.org/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetTruePic;
+            }
+            else if (imageUrl.IndexOf(@"pixpal.net/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetPixPal;
             }
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {

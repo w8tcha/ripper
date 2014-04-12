@@ -1,5 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PixRoute.cs" company="The Watcher">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PixPal.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //   This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -13,16 +13,18 @@ namespace Ripper.Services.ImageHosts
 {
     using System;
     using System.Collections;
+    using System.Text.RegularExpressions;
 
     using Ripper.Core.Components;
+    using Ripper.Core.Objects;
 
     /// <summary>
-    /// Worker class to get images from PixRoute.com
+    /// Worker class to get images from PixPal.net
     /// </summary>
-    public class PixRoute : ServiceTemplate
+    public class PixPal : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PixRoute" /> class.
+        /// Initializes a new instance of the <see cref="PixPal" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
@@ -30,7 +32,7 @@ namespace Ripper.Services.ImageHosts
         /// <param name="imageName">Name of the image.</param>
         /// <param name="imageNumber">The image number.</param>
         /// <param name="hashtable">The hash table.</param>
-        public PixRoute(
+        public PixPal(
             ref string savePath,
             ref string imageUrl,
             ref string thumbUrl,
@@ -49,11 +51,33 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            // Set the download Path
-            var imageDownloadURL = this.ThumbImageURL.Replace("_t.", ".");
+            string imageDownloadURL;
 
-            // Set Image Name instead of using random name
-            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
+            var imageURL = ImageLinkURL;
+
+            // Get Image Link
+            var page = GetImageHostPage(ref imageURL);
+
+            if (page.Length < 10)
+            {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                return false;
+            }
+
+            var match = Regex.Match(page, @"img src=\""(?<inner>[^\""]*)\"" class=\""pic\""", RegexOptions.Compiled);
+
+            if (match.Success)
+            {
+                imageDownloadURL = match.Groups["inner"].Value;
+            }
+            else
+            {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                return false;
+            }
+
+            // Set Image Name
+            string filePath = imageDownloadURL.Substring(imageDownloadURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);

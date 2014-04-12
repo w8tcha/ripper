@@ -61,7 +61,9 @@ namespace Ripper.Core.Components
                     where nameRow.Equals(name)
                     select row)
                 {
-                    releaseNotes = string.Format("\n\nChange log:\n{0}", row["notes"]);
+                    var notes = row["notes"].ToString().Replace("\\n", "\n");
+
+                    releaseNotes = string.Format("\n\nChange log:\n{0}", notes);
                     OnlineVersion = row["version"].ToString();
                 }
 
