@@ -1521,7 +1521,7 @@ namespace Ripper.Services
                 ref this.imageName,
                 ref this.imageNumber,
                 ref this.eventTable);
-            this.xService.StartDownload();
+            this.xService.StartDownloadAsync();
         }
 
         /// <summary>
@@ -1665,21 +1665,6 @@ namespace Ripper.Services
         public void GetFreeImagePic()
         {
             this.xService = new FreeImagePic(
-                ref this.savePath,
-                ref this.imageURL,
-                ref this.thumbImageURL,
-                ref this.imageName,
-                ref this.imageNumber,
-                ref this.eventTable);
-            this.xService.StartDownload();
-        }
-
-        /// <summary>
-        /// Get ImgServe Download
-        /// </summary>
-        public void GetImgServe()
-        {
-            this.xService = new ImgServe(
                 ref this.savePath,
                 ref this.imageURL,
                 ref this.thumbImageURL,
@@ -2085,6 +2070,21 @@ namespace Ripper.Services
         public void GetTruePic()
         {
             this.xService = new TruePic(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get PixPal Download
+        /// </summary>
+        public void GetPixPal()
+        {
+            this.xService = new PixPal(
                 ref this.savePath,
                 ref this.imageURL,
                 ref this.thumbImageURL,

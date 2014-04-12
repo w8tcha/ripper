@@ -19,7 +19,8 @@ namespace Ripper.Services.ImageHosts
     /// Worker class to get images from 
     /// ImgWoot.com/ImgMoney.com/ImgMoney.net/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/
     /// HosterBin.com/PicsLite.com/ImageTeam.org/ImgNext.com/HostUrImage.com/3XVintage.com/ImgGoo.com/ImgMaster.com/
-    /// GoGoImage.org/JovoImage.com/ImageDecode.com/ImgEarn.net/ImgFap.net/DamImage.com/StoreImgs.net/ImageFap.net
+    /// GoGoImage.org/JovoImage.com/ImageDecode.com/ImgEarn.net/ImgFap.net/DamImage.com/StoreImgs.net/ImageFap.net/
+    /// ImgStudio.org/Dimtus.com/ImageEer.com
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {
@@ -65,6 +66,15 @@ namespace Ripper.Services.ImageHosts
             else if (ThumbImageURL.Contains("/img/small/"))
             {
                 imageDownloadURL = ThumbImageURL.Replace(@"/img/small/", @"/img/big/");
+            }
+            else if (ThumbImageURL.Contains("/images/small/"))
+            {
+                imageDownloadURL = ThumbImageURL.Replace(@"/images/small/", @"/images/big/");
+            }
+
+            if (string.IsNullOrEmpty(imageDownloadURL) && this.ImageLinkURL.Contains("images/small"))
+            {
+                imageDownloadURL = this.ImageLinkURL.Replace(@"/images/small/", @"/images/big/");
             }
 
             // Set Image Name instead of using random name

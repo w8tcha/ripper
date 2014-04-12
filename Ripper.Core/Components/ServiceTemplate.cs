@@ -271,7 +271,7 @@ namespace Ripper.Core.Components
                     res.Close();
                     reader.Close();
 
-                    var match = Regex.Match(page, matchString, RegexOptions.Singleline);
+                    var match = Regex.Match(page, matchString, RegexOptions.Compiled);
 
                     return match.Success ? match.Groups["inner"].Value : string.Empty;
                 }
@@ -415,11 +415,11 @@ namespace Ripper.Core.Components
         /// <param name="e">The <see cref="System.ComponentModel.AsyncCompletedEventArgs" /> instance containing the event data.</param>
         private void DownloadImageCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
+            var cacheObject = (CacheObject)this.EventTable[this.ImageLinkURL];
+
             if (e.Error == null)
             {
                 ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
-
-                var cacheObject = (CacheObject)this.EventTable[this.ImageLinkURL];
 
                 Application.DoEvents();
 
@@ -427,6 +427,12 @@ namespace Ripper.Core.Components
             }
             else
             {
+                // Delete empty files
+                if (File.Exists(cacheObject.FilePath))
+                {
+                    File.Delete(cacheObject.FilePath);
+                }
+
                 ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
             }
 

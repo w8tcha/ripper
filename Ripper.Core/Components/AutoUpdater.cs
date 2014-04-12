@@ -115,6 +115,11 @@ namespace Ripper.Core.Components
 
                 File.Delete(tempZIP);
 
+                if (programName.Equals("PG-Ripper"))
+                {
+                    programName = "PGRipper";
+                }
+
                 if (!File.Exists(Path.Combine(tempFolder, string.Format("{0}.exe", programName))))
                 {
                     return;
