@@ -194,6 +194,7 @@
     <Compile Include="ImageHosts\UpMyPhoto.cs" />
     <Compile Include="ImageHosts\UpPix.cs" />
     <Compile Include="ImageHosts\ViewCube.cs" />
+    <Compile Include="ImageHosts\ViperII.cs" />
     <Compile Include="ImageHosts\watermarkIt.cs" />
     <Compile Include="ImageHosts\XLocker.cs" />
     <Compile Include="ImageHosts\XPhotoSharing.cs" />

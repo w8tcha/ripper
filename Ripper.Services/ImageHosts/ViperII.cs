@@ -1,7 +1,7 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgBox.cs" company="The Watcher">
+// <copyright file="ViperII.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
-//  This software is licensed under the MIT license. See license.txt for details.
+//   This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
 // <summary>
 //   Code Named: VG-Ripper
@@ -11,6 +11,7 @@
 
 namespace Ripper.Services.ImageHosts
 {
+    using System;
     using System.Collections;
     using System.Text.RegularExpressions;
 
@@ -18,19 +19,26 @@ namespace Ripper.Services.ImageHosts
     using Ripper.Core.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgBox.com
+    /// Worker class to get images from ViperII.net
     /// </summary>
-    public class ImgBox : ServiceTemplate
+    public class ViperII : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgBox" /> class.
+        /// Initializes a new instance of the <see cref="ViperII" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
         /// <param name="thumbUrl">The thumb URL.</param>
         /// <param name="imageName">Name of the image.</param>
+        /// <param name="imageNumber">The image number.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgBox(ref string savePath, ref string imageUrl, ref string thumbUrl, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
+        public ViperII(
+            ref string savePath,
+            ref string imageUrl,
+            ref string thumbUrl,
+            ref string imageName,
+            ref int imageNumber,
+            ref Hashtable hashtable)
             : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
         }
@@ -43,8 +51,9 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
+            string imageDownloadURL;
+
             var imageURL = ImageLinkURL;
-            string filePath;
 
             // Get Image Link
             var page = GetImageHostPage(ref imageURL);
@@ -55,17 +64,11 @@ namespace Ripper.Services.ImageHosts
                 return false;
             }
 
-            string imageDownloadURL;
-
-            var match = Regex.Match(
-                page,
-                @"id=\""img\"" onclick=\""rs\(\)\"" src=\""(?<inner>[^\""]*)\"" title=\""(?<title>[^\""]*)\""",
-                RegexOptions.Compiled);
+            var match = Regex.Match(page, @"img src=\""(?<inner>[^\""]*)\"" class=\""pic\""", RegexOptions.Compiled);
 
             if (match.Success)
             {
-                imageDownloadURL = match.Groups["inner"].Value.Replace("&amp;", "&");
-                filePath = match.Groups["title"].Value;
+                imageDownloadURL = match.Groups["inner"].Value;
             }
             else
             {
@@ -73,8 +76,11 @@ namespace Ripper.Services.ImageHosts
                 return false;
             }
 
+            // Set Image Name
+            string filePath = imageDownloadURL.Substring(imageDownloadURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
+
             // Finally Download the Image
-            return this.DownloadImageAsync(imageDownloadURL, filePath, true);
+            return this.DownloadImageAsync(imageDownloadURL, filePath);
         }
     }
 }

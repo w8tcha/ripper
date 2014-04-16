@@ -2095,6 +2095,21 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ViperII Download
+        /// </summary>
+        public void GetViperII()
+        {
+            this.xService = new ViperII(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImageHotLinked()
