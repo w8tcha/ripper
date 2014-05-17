@@ -653,6 +653,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"pixxxview.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/", System.StringComparison.Ordinal) >= 0 || imageUrl.IndexOf(@"ImageFolks.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
