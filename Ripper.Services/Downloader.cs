@@ -45,7 +45,7 @@ namespace Ripper.Services
                 && !imageUrl.Contains("imagesaholic.com") && !imageUrl.Contains("jovoimage.com")
                 && !imageUrl.Contains("truepic.org") && !imageUrl.Contains("imgearn.net")
                 && !imageUrl.Contains("damimage.com") && !imageUrl.Contains("imgfap.net/")
-                && !imageUrl.Contains("imgbox.com"))
+                && !imageUrl.Contains("imgbox.com") && !imageUrl.Contains("pixliv.com"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -657,6 +657,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"imgs.it/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/", System.StringComparison.Ordinal) >= 0 || imageUrl.IndexOf(@"ImageFolks.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
@@ -806,6 +810,18 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"viperii.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetViperII;
+            }
+            else if (imageUrl.IndexOf(@"imgsee.me/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgSee;
+            }
+            else if (imageUrl.IndexOf(@"imgrex.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgRex;
+            }
+            else if (imageUrl.IndexOf(@"pixliv.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetPixLiv;
             }
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {

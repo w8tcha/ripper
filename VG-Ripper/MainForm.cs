@@ -28,6 +28,7 @@ namespace Ripper
     using Ripper.Core.Components;
     using Ripper.Core.Objects;
     using Ripper.Services;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// The Main Form.
@@ -267,7 +268,15 @@ namespace Ripper
 #if (!RIPRIPPERX)
             var controller = new SingleInstanceController();
 
-            controller.Run(args);
+            try
+            {
+                controller.Run(args);
+            }
+            catch (Exception)
+            {
+              
+            }
+            
 #else
 
             Application.Run(new MainForm());
@@ -1706,25 +1715,14 @@ namespace Ripper
                                 this.lvCurJob.EnsureVisible(i);
                             }
 
-                           /*CacheController.Instance()
-                                .DownloadImage(
-                                    this.mImagesList[i].ImageUrl,
-                                    this.mImagesList[i].ThumbnailUrl,
-                                    this.currentJob.StorePath,
-                                    !string.IsNullOrEmpty(this.currentJob.PostTitle)
-                                        ? this.currentJob.PostTitle
-                                        : this.currentJob.Title,
-                                    i + 1);*/
-
-                           Downloader
-                                .DownloadImage(
-                                    this.mImagesList[i].ImageUrl,
-                                    this.mImagesList[i].ThumbnailUrl,
-                                    this.currentJob.StorePath,
-                                    !string.IsNullOrEmpty(this.currentJob.PostTitle)
-                                        ? this.currentJob.PostTitle
-                                        : this.currentJob.TopicTitle,
-                                    i + 1);
+                            Downloader.DownloadImage(
+                                this.mImagesList[i].ImageUrl,
+                                this.mImagesList[i].ThumbnailUrl,
+                                this.currentJob.StorePath,
+                                !string.IsNullOrEmpty(this.currentJob.PostTitle)
+                                    ? this.currentJob.PostTitle
+                                    : this.currentJob.TopicTitle,
+                                i + 1);
                         }
 
                         if (i > this.lvCurJob.Items.Count)

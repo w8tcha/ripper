@@ -127,6 +127,8 @@
     <Compile Include="ImageHosts\ImgFlare.cs" />
     <Compile Include="ImageHosts\ImgPaying.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
+    <Compile Include="ImageHosts\ImgRex.cs" />
+    <Compile Include="ImageHosts\ImgSee.cs" />
     <Compile Include="ImageHosts\ImgSpice.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
     <Compile Include="ImageHosts\ImgWoot.cs" />
@@ -161,6 +163,7 @@
     <Compile Include="ImageHosts\PixHost.cs" />
     <Compile Include="ImageHosts\PixHosting.cs" />
     <Compile Include="ImageHosts\PixHub.cs" />
+    <Compile Include="ImageHosts\PixLiv.cs" />
     <Compile Include="ImageHosts\PixPal.cs" />
     <Compile Include="ImageHosts\PixRoute.cs" />
     <Compile Include="ImageHosts\PixSlam.cs" />

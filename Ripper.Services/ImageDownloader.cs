@@ -2110,6 +2110,51 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ImgSee Download
+        /// </summary>
+        public void GetImgSee()
+        {
+            this.xService = new ImgSee(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get ImgRex Download
+        /// </summary>
+        public void GetImgRex()
+        {
+            this.xService = new ImgRex(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get PixLiv Download
+        /// </summary>
+        public void GetPixLiv()
+        {
+            this.xService = new PixLiv(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Hot linked image fetcher...
         /// </summary>
         public void GetImageHotLinked()
