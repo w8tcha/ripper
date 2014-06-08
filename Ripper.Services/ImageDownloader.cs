@@ -773,7 +773,7 @@ namespace Ripper.Services
                 ref this.imageName,
                 ref this.imageNumber,
                 ref this.eventTable);
-            this.xService.StartDownload();
+            this.xService.StartDownloadAsync();
         }
 
         public void GetPixUp()
