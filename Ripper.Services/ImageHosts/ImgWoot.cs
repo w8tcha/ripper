@@ -20,7 +20,7 @@ namespace Ripper.Services.ImageHosts
     /// ImgWoot.com/ImgMoney.com/ImgMoney.net/ImgProof.net/PixUp.us/ImgCloud.co/ImGirl.info/GatASexyCity.com/
     /// HosterBin.com/PicsLite.com/ImageTeam.org/ImgNext.com/HostUrImage.com/3XVintage.com/ImgGoo.com/ImgMaster.com/
     /// GoGoImage.org/JovoImage.com/ImageDecode.com/ImgEarn.net/ImgFap.net/DamImage.com/StoreImgs.net/ImageFap.net/
-    /// ImgStudio.org/Dimtus.com/ImageEer.com/GokoImage.com/PixxxView.com/ImgS.it
+    /// ImgStudio.org/Dimtus.com/ImageEer.com/GokoImage.com/PixxxView.com/ImgS.it/ImgPit.com
     /// </summary>
     public class ImgWoot : ServiceTemplate
     {

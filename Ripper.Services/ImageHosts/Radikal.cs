@@ -1,151 +1,61 @@
-﻿//////////////////////////////////////////////////////////////////////////
-// Code Named: VG-Ripper
-// Function  : Extracts Images posted on RiP forums and attempts to fetch
-//			   them to disk.
-//
-// This software is licensed under the MIT license. See license.txt for
-// details.
-// 
-// Copyright (c) The Watcher
-// Partial Rights Reserved.
-// 
-//////////////////////////////////////////////////////////////////////////
-// This file is part of the RiP Ripper project base.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Radikal.cs" company="The Watcher">
+//   Copyright (c) The Watcher Partial Rights Reserved.
+//   This software is licensed under the MIT license. See license.txt for details.
+// </copyright>
+// <summary>
+//   Code Named: VG-Ripper
+//   Function  : Extracts Images posted on RiP forums and attempts to fetch them to disk.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.Web;
-using System.Net;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-
-namespace Ripper
+namespace Ripper.Services.ImageHosts
 {
+    using System.Collections;
+
     using Ripper.Core.Components;
-    using Ripper.Core.Objects;
 
     /// <summary>
-    /// Worker class to get images hosted on Radikal.ru
+    /// Worker class to get images from Radikal.ru
     /// </summary>
     public class Radikal : ServiceTemplate
     {
-        public Radikal(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
-            : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashtable)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Radikal" /> class.
+        /// </summary>
+        /// <param name="savePath">The save Path.</param>
+        /// <param name="imageUrl">The image Url.</param>
+        /// <param name="thumbUrl">The thumb URL.</param>
+        /// <param name="imageName">Name of the image.</param>
+        /// <param name="imageNumber">The image number.</param>
+        /// <param name="hashtable">The hash table.</param>
+        public Radikal(
+            ref string savePath,
+            ref string imageUrl,
+            ref string thumbUrl,
+            ref string imageName,
+            ref int imageNumber,
+            ref Hashtable hashtable)
+            : base(savePath, imageUrl, thumbUrl, imageName, imageNumber, ref hashtable)
         {
-            //
-            // Add constructor logic here
-            //
         }
 
-
+        /// <summary>
+        /// Do the Download
+        /// </summary>
+        /// <returns>
+        /// Returns if the Image was downloaded
+        /// </returns>
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            // Set the download Path
+            var imageDownloadURL = this.ThumbImageURL.Remove(this.ThumbImageURL.IndexOf("t."), 1);
 
-            if (EventTable.ContainsKey(strImgURL))
-            {
-                return true;
-            }
+            // Set Image Name instead of using random name
+            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
-            try
-            {
-                if (!Directory.Exists(SavePath))
-                    Directory.CreateDirectory(SavePath);
-            }
-            catch (IOException ex)
-            {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
-                return false;
-            }
-
-            string strFilePath = string.Empty;
-
-            CacheObject CCObj = new CacheObject();
-            CCObj.IsDownloaded = false;
-            CCObj.FilePath = strFilePath;
-            CCObj.Url = strImgURL;
-            try
-            {
-                EventTable.Add(strImgURL, CCObj);
-            }
-            catch (ThreadAbortException)
-            {
-                return true;
-            }
-            catch (Exception)
-            {
-                if (EventTable.ContainsKey(strImgURL))
-                {
-                    return false;
-                }
-                else
-                {
-                    EventTable.Add(strImgURL, CCObj);
-                }
-            }
-
-            string strNewURL = "http://" + strImgURL.Substring(strImgURL.IndexOf("F/") + 2).Replace(".html", "");
-            
-            strFilePath = strNewURL.Substring(strNewURL.LastIndexOf("/") + 1);
-
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
-
-            //////////////////////////////////////////////////////////////////////////
-
-            string NewAlteredPath = Utility.GetSuitableName(strFilePath);
-            if (strFilePath != NewAlteredPath)
-            {
-                strFilePath = NewAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
-            }
-
-            try
-            {
-                WebClient client = new WebClient();
-                client.Headers.Add("Referer: " + strImgURL);
-                client.DownloadFile(strNewURL, strFilePath);
-                client.Dispose();
-
-            }
-            catch (ThreadAbortException)
-            {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
-
-                return true;
-            }
-            catch (IOException ex)
-            {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
-
-                return true;
-            }
-            catch (WebException)
-            {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
-
-                return false;
-            }
-
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.Instance().LastPic =((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
-
-            return true;
+            // Finally Download the Image
+            return this.DownloadImageAsync(imageDownloadURL, filePath);
         }
-
-        //////////////////////////////////////////////////////////////////////////
-
-        
     }
 }
