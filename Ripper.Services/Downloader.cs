@@ -666,6 +666,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"img.yt/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/", System.StringComparison.Ordinal) >= 0 || imageUrl.IndexOf(@"ImageFolks.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
@@ -824,10 +828,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgRex;
             }
-            else if (imageUrl.IndexOf(@"pixliv.com/", System.StringComparison.Ordinal) >= 0)
+            /*else if (imageUrl.IndexOf(@"pixliv.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetPixLiv;
-            }
+            }*/
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {
                 return;

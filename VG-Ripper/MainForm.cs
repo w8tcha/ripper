@@ -553,7 +553,7 @@ namespace Ripper
             }
             catch (Exception)
             {
-                CacheController.Instance().UserSettings.ShowLastDownloaded = true;
+                CacheController.Instance().UserSettings.ShowLastDownloaded = false;
             }
 
             // Load "ShowLastDownloaded" Setting
@@ -1816,6 +1816,8 @@ namespace Ripper
                 return;
             }
 
+            this.imgLastPic = null;
+
             if (this.pictureBox1.Image != null)
             {
                 this.pictureBox1.Image.Dispose();
@@ -1845,6 +1847,8 @@ namespace Ripper
                 {
                     return;
                 }
+
+                fileInfo = null;
 
                 this.pictureBox1.Visible = true;
 

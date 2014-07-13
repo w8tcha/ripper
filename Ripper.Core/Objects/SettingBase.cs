@@ -27,7 +27,7 @@ namespace Ripper.Core.Objects
             this.ForumURL = "http://vipergirls.to/";
             this.GuestMode = false;
             this.AfterDownloads = 0;
-            this.ShowLastDownloaded = true;
+            this.ShowLastDownloaded = false;
             this.ClipBWatch = true;
             this.ShowPopUps = true;
             this.SubDirs = true;
