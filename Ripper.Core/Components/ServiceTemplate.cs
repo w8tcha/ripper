@@ -18,7 +18,6 @@ namespace Ripper.Core.Components
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
-    using System.Threading.Tasks;
     using System.Windows.Forms;
 
     using Ripper.Core.Objects;
@@ -429,10 +428,10 @@ namespace Ripper.Core.Components
             else
             {
                 // Delete empty files
-                if (File.Exists(cacheObject.FilePath))
+                /*if (File.Exists(cacheObject.FilePath))
                 {
                     File.Delete(cacheObject.FilePath);
-                }
+                }*/
 
                 ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
             }
