@@ -828,6 +828,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgRex;
             }
+            else if (imageUrl.IndexOf(@"imgmega.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgMega;
+            }
             /*else if (imageUrl.IndexOf(@"pixliv.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetPixLiv;

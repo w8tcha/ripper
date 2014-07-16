@@ -2140,6 +2140,21 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ImgMega Download
+        /// </summary>
+        public void GetImgMega()
+        {
+            this.xService = new ImgMega(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Get PixLiv Download
         /// </summary>
         public void GetPixLiv()
