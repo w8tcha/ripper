@@ -88,7 +88,7 @@ namespace Ripper
             this.checkBox11.AutoSize = true;
             this.checkBox11.Location = new System.Drawing.Point(8, 136);
             this.checkBox11.Name = "checkBox11";
-            this.checkBox11.Size = new System.Drawing.Size(159, 17);
+            this.checkBox11.Size = new System.Drawing.Size(168, 16);
             this.checkBox11.TabIndex = 25;
             this.checkBox11.Text = "Show Last Download Image";
             this.checkBox11.UseVisualStyleBackColor = true;
@@ -98,7 +98,7 @@ namespace Ripper
             this.checkBox10.AutoSize = true;
             this.checkBox10.Location = new System.Drawing.Point(8, 112);
             this.checkBox10.Name = "checkBox10";
-            this.checkBox10.Size = new System.Drawing.Size(128, 18);
+            this.checkBox10.Size = new System.Drawing.Size(147, 18);
             this.checkBox10.TabIndex = 5;
             this.checkBox10.Text = "Clipboard Monitoring";
             this.checkBox10.UseCompatibleTextRendering = true;
@@ -109,7 +109,7 @@ namespace Ripper
             this.checkBox9.AutoSize = true;
             this.checkBox9.Location = new System.Drawing.Point(8, 67);
             this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(214, 18);
+            this.checkBox9.Size = new System.Drawing.Size(221, 18);
             this.checkBox9.TabIndex = 3;
             this.checkBox9.Text = "Show \"Downloads Complete\" PopUp?";
             this.checkBox9.UseCompatibleTextRendering = true;
@@ -135,7 +135,7 @@ namespace Ripper
             this.checkBox5.Location = new System.Drawing.Point(8, 89);
             this.checkBox5.MaximumSize = new System.Drawing.Size(0, 17);
             this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(97, 17);
+            this.checkBox5.Size = new System.Drawing.Size(104, 17);
             this.checkBox5.TabIndex = 4;
             this.checkBox5.Text = "Always on Top";
             this.checkBox5.UseCompatibleTextRendering = true;
@@ -149,7 +149,7 @@ namespace Ripper
             this.showTrayPopups.Location = new System.Drawing.Point(8, 46);
             this.showTrayPopups.MaximumSize = new System.Drawing.Size(0, 17);
             this.showTrayPopups.Name = "showTrayPopups";
-            this.showTrayPopups.Size = new System.Drawing.Size(120, 17);
+            this.showTrayPopups.Size = new System.Drawing.Size(122, 17);
             this.showTrayPopups.TabIndex = 2;
             this.showTrayPopups.Text = "Show Tray PopUps";
             this.showTrayPopups.UseCompatibleTextRendering = true;
@@ -170,11 +170,12 @@ namespace Ripper
             this.languageSelector.Items.AddRange(new object[] {
             "German",
             "French",
-            "English"});
+            "English",
+            "Chinese[zh-CN]"});
             this.languageSelector.Location = new System.Drawing.Point(53, 19);
             this.languageSelector.MaximumSize = new System.Drawing.Size(121, 0);
             this.languageSelector.Name = "languageSelector";
-            this.languageSelector.Size = new System.Drawing.Size(121, 21);
+            this.languageSelector.Size = new System.Drawing.Size(121, 20);
             this.languageSelector.TabIndex = 1;
             this.languageSelector.SelectedIndexChanged += new System.EventHandler(this.LanguageSelectorSelectedIndexChanged);
             // 
@@ -207,7 +208,7 @@ namespace Ripper
             // 
             this.numericUDThreads.Location = new System.Drawing.Point(25, 222);
             this.numericUDThreads.Name = "numericUDThreads";
-            this.numericUDThreads.Size = new System.Drawing.Size(50, 20);
+            this.numericUDThreads.Size = new System.Drawing.Size(50, 21);
             this.numericUDThreads.TabIndex = 14;
             this.numericUDThreads.ValueChanged += new System.EventHandler(this.NumericUdThreadsValueChanged);
             // 
@@ -215,7 +216,7 @@ namespace Ripper
             // 
             this.numericUDThanks.Location = new System.Drawing.Point(181, 149);
             this.numericUDThanks.Name = "numericUDThanks";
-            this.numericUDThanks.Size = new System.Drawing.Size(49, 20);
+            this.numericUDThanks.Size = new System.Drawing.Size(49, 21);
             this.numericUDThanks.TabIndex = 12;
             // 
             // label1
@@ -223,7 +224,7 @@ namespace Ripper
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(4, 152);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(167, 13);
+            this.label1.Size = new System.Drawing.Size(197, 12);
             this.label1.TabIndex = 40;
             this.label1.Text = "Min. Image Count to give Thanks:";
             // 
@@ -232,7 +233,7 @@ namespace Ripper
             this.saveHistoryChk.AutoSize = true;
             this.saveHistoryChk.Location = new System.Drawing.Point(7, 175);
             this.saveHistoryChk.Name = "saveHistoryChk";
-            this.saveHistoryChk.Size = new System.Drawing.Size(182, 18);
+            this.saveHistoryChk.Size = new System.Drawing.Size(209, 18);
             this.saveHistoryChk.TabIndex = 13;
             this.saveHistoryChk.Text = "Save Ripped posts for checking";
             this.saveHistoryChk.UseCompatibleTextRendering = true;
@@ -244,7 +245,7 @@ namespace Ripper
             this.mDownInSepFolderChk.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.mDownInSepFolderChk.Location = new System.Drawing.Point(25, 105);
             this.mDownInSepFolderChk.Name = "mDownInSepFolderChk";
-            this.mDownInSepFolderChk.Size = new System.Drawing.Size(206, 18);
+            this.mDownInSepFolderChk.Size = new System.Drawing.Size(246, 17);
             this.mDownInSepFolderChk.TabIndex = 9;
             this.mDownInSepFolderChk.Text = "Download each post in its own folder";
             this.mDownInSepFolderChk.UseCompatibleTextRendering = true;
@@ -256,7 +257,7 @@ namespace Ripper
             this.checkBox8.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.checkBox8.Location = new System.Drawing.Point(7, 127);
             this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(240, 18);
+            this.checkBox8.Size = new System.Drawing.Size(282, 17);
             this.checkBox8.TabIndex = 11;
             this.checkBox8.Text = "Automatically press the \"Thank You\" Button";
             this.checkBox8.UseCompatibleTextRendering = true;
@@ -289,7 +290,7 @@ namespace Ripper
             // 
             this.textBox2.Location = new System.Drawing.Point(8, 43);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(336, 20);
+            this.textBox2.Size = new System.Drawing.Size(336, 21);
             this.textBox2.TabIndex = 7;
             // 
             // checkBox4
@@ -349,7 +350,7 @@ namespace Ripper
             this.checkBox1.Location = new System.Drawing.Point(8, 85);
             this.checkBox1.MaximumSize = new System.Drawing.Size(232, 16);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(220, 16);
+            this.checkBox1.Size = new System.Drawing.Size(232, 16);
             this.checkBox1.TabIndex = 10;
             this.checkBox1.Text = "Download each Thread in its own folder";
             this.checkBox1.UseCompatibleTextRendering = true;
