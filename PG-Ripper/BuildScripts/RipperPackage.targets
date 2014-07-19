@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="MSBuild.Community.Tasks.Targets" />
+  <Target Name="PackageModule" Condition=" '$(Configuration)|$(Platform)' == 'PG-Ripper|AnyCPU' ">
+    <GetAssemblyIdentity AssemblyFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\$(AssemblyName).exe">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyIdentities"/>
+    </GetAssemblyIdentity>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\$(AssemblyName).exe" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\ICSharpCode.SharpZipLib.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\Microsoft.WindowsAPICodePack.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\Microsoft.WindowsAPICodePack.Shell.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\Ripper.Core.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-Ripper\Ripper.Services.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+   
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContent" />
+    </CreateItem>
+    
+    <!-- Create the Windows Package package -->    
+    <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)%(AssemblyIdentities.Version).$(Extension)" />
+    <!-- Copy the Install package to the Output folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../Output" />
+    
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+    
+    <!-- Copy the Mono Version-->
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-RipperX\$(AssemblyName).exe" DestinationFiles="$(MSBuildProjectDirectory)\Package\$(AssemblyName)X.exe"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-RipperX\ICSharpCode.SharpZipLib.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-RipperX\Ripper.Core.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-RipperX\Ripper.Services.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentMono" />
+    </CreateItem>
+
+    <!-- Create the Linux (MONO) Package package -->
+    <Zip Files="@(OutputContentMono)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X%(AssemblyIdentities.Version).$(Extension)" />
+    <!-- Copy the Install package to the Output folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X%(AssemblyIdentities.Version).$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../Output" />
+
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+
+    <!-- Copy the Mac Version-->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PGRipperX.app\Contents\Info.plist" DestinationFolder="$(MSBuildProjectDirectory)\Package\PGRipperX.app\Contents"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PGRipperX.app\Contents\MacOS\PGRipperX" DestinationFolder="$(MSBuildProjectDirectory)\Package\PGRipperX.app\Contents\MacOS\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PGRipperX.app\Contents\Resources\App.icns" DestinationFolder="$(MSBuildProjectDirectory)\Package\PGRipperX.app\Contents\Resources"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PGRipperX.app\Contents\Resources\bin\PGRipperX" DestinationFolder="$(MSBuildProjectDirectory)\Package\PGRipperX.app\Contents\Resources\bin"/>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-RipperX\$(AssemblyName).exe" DestinationFiles="$(MSBuildProjectDirectory)\Package\PGRipperX.app\Contents\Resources\$(AssemblyName)X.exe"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-RipperX\ICSharpCode.SharpZipLib.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\PGRipperX.app\Contents\Resources"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-RipperX\Ripper.Core.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\PGRipperX.app\Contents\Resources"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\PG-RipperX\Ripper.Services.dll" DestinationFolder="$(MSBuildProjectDirectory)\Package\PGRipperX.app\Contents\Resources"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\PGRipperX.app\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentMac" />
+    </CreateItem>
+
+    <!-- Create the Mac Package -->
+    <Zip Files="@(OutputContentMac)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X.$(Extension)" />
+    
+    <Move SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)\Package\" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentMacFinal" />
+    </CreateItem>
+
+    <!-- Create the Mac Package package -->
+    <Zip Files="@(OutputContentMacFinal)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)X%(AssemblyIdentities.Version)_mac.$(Extension)" />
+    <!-- Copy the Install package to the Output folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)X%(AssemblyIdentities.Version)_mac.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../Output" />
+
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+
+    <!-- Create the x86 Install Version-->
+    <InnoSetup
+             ScriptFile="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\PG-Ripper-Setup.iss"
+             OutputFileName="PG-Ripper-Setup"
+             OutputPath="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\"
+             Quiet="True" />
+
+    <!-- Copy the x86 Install Version-->
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\PG-Ripper-Setup\PG-Ripper-Setup.exe" DestinationFolder="$(MSBuildProjectDirectory)\Package"/>
+
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\license.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\bin\readme.txt" DestinationFolder="$(MSBuildProjectDirectory)\Package\"/>
+
+    <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
+      <Output TaskParameter="Include" ItemName="OutputContentInstallX86" />
+    </CreateItem>
+
+    <!-- Create the x86 Install Version package -->
+    <Zip Files="@(OutputContentInstallX86)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)%(AssemblyIdentities.Version)-Install.$(Extension)" />
+    <!-- Copy the Install package to the Output folder -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version)-Install.$(Extension)" DestinationFolder="$(MSBuildProjectDirectory)/../Output" />
+
+    <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
+
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version).$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X%(AssemblyIdentities.Version).$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)X%(AssemblyIdentities.Version)_mac.$(Extension)" />
+    <Delete Files="$(MSBuildProjectDirectory)\$(PackageName)%(AssemblyIdentities.Version)-Install.$(Extension)" />
+
+  </Target>
+</Project>
