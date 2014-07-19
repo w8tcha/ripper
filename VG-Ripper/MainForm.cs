@@ -1690,6 +1690,7 @@ namespace Ripper
                     while (!lTdm.IsSystemReadyForNewThread())
                     {
                         Application.DoEvents();
+                        Thread.Sleep(100);
                     }
 
                     if (!this.bRipperClosing)

@@ -10,12 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setups", "Setups", "{8F2120
 		VG-Ripper-Setup\VG-Ripper-Setup.iss = VG-Ripper-Setup\VG-Ripper-Setup.iss
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CD7B910C-7C51-4B36-89BC-3B15F5B35F7E}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripper.Services", "Ripper.Services\Ripper.Services.csproj", "{8233EB04-64CA-499B-8A45-052C0DB5B7E2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ripper.Core", "Ripper.Core\Ripper.Core.csproj", "{4AE38478-FAA4-4ECA-BD06-30D5CB87DF68}"
