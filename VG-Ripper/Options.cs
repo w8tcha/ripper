@@ -124,6 +124,11 @@ namespace Ripper
                         languageSelector.SelectedIndex = 2;
                         pictureBox2.Image = Languages.english.us;
                         break;
+                    case "zh-CN":
+                        resourceManager = new ResourceManager("Ripper.Languages.chinese-cn", Assembly.GetExecutingAssembly());
+                        languageSelector.SelectedIndex = 3;
+                        pictureBox2.Image = Languages.english.cn;
+                        break;
                     default:
                         resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         languageSelector.SelectedIndex = 2;
@@ -179,6 +184,9 @@ namespace Ripper
                     break;
                 case 2:
                     this.pictureBox2.Image = Languages.english.us;
+                    break;
+                case 3:
+                    this.pictureBox2.Image = Languages.english.cn;
                     break;
             }
         }
@@ -259,6 +267,9 @@ namespace Ripper
                     break;
                 case 2:
                     SettingsHelper.SaveSetting("UserLanguage", "en-EN");
+                    break;
+                case 3:
+                    SettingsHelper.SaveSetting("UserLanguage", "zh-CN");
                     break;
             }
               

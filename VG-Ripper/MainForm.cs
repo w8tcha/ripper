@@ -35,6 +35,7 @@ namespace Ripper
     /// </summary>
     public partial class MainForm : Form
     {
+        #region Vars and Properties
         /// <summary>
         /// 
         /// </summary>
@@ -124,6 +125,7 @@ namespace Ripper
         private TaskbarManager windowsTaskbar;
 
 #endif
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainForm"/> class.
@@ -190,7 +192,7 @@ namespace Ripper
             else
             {
                 this.EnqueueJob();
-            } 
+            }
         }
 
         /// <summary>
@@ -274,9 +276,9 @@ namespace Ripper
             }
             catch (Exception)
             {
-              
+
             }
-            
+
 #else
 
             Application.Run(new MainForm());
@@ -513,6 +515,9 @@ namespace Ripper
                     case "en-EN":
                         this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
+                    case "zh-CN":
+                        this._ResourceManager = new ResourceManager("Ripper.Languages.chinese-cn", Assembly.GetExecutingAssembly());
+                        break;
                     default:
                         this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
@@ -657,7 +662,7 @@ namespace Ripper
             this.useCliboardMonitoringToolStripMenuItem.Text = this._ResourceManager.GetString("clipboardWatch");
             this.afterDownloadsFinishedToolStripMenuItem.Text = this._ResourceManager.GetString("AfterDownload");
             this.doNothingToolStripMenuItem.Text = this._ResourceManager.GetString("DoNothing");
-            this.closeRipperToolStripMenuItem.Text = this._ResourceManager.GetString("CloseRipper"); 
+            this.closeRipperToolStripMenuItem.Text = this._ResourceManager.GetString("CloseRipper");
 
             this.settingsToolStripMenuItem.Text = this._ResourceManager.GetString("MenuHelp");
             this.helpToolStripMenuItem.Text = this._ResourceManager.GetString("MenuAbout");
@@ -864,7 +869,7 @@ namespace Ripper
             else
             {
                 this.EnqueueJob();
-            } 
+            }
         }
 
 
@@ -882,7 +887,7 @@ namespace Ripper
             // Format Url
             var xmlUrl = UrlHandler.GetXmlUrl(textBox1.Text, comboBox1.SelectedIndex);
             var htmlUrl = UrlHandler.GetHtmlUrl(xmlUrl);
-            
+
 
             if (string.IsNullOrEmpty(xmlUrl))
             {
@@ -983,7 +988,7 @@ namespace Ripper
                Environment.OSVersion.Version.Minor >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                        this.windowsTaskbar.SetProgressValue(10, 100);;
+                        this.windowsTaskbar.SetProgressValue(10, 100); ;
                     }
 #endif
 
@@ -1015,7 +1020,7 @@ namespace Ripper
                     return;
                 }
             }
-          
+
             //////////////////////////////////////////////////////////////////////////
 
             mIsIndexChk.Checked = false;
@@ -1160,7 +1165,7 @@ namespace Ripper
             this.Invoke(newJob, new object[] { job });
 
             ///////////////////////////////////////////////
-           this.UnlockControls();
+            this.UnlockControls();
             ///////////////////////////////////////////////
         }
 
@@ -1513,7 +1518,7 @@ namespace Ripper
                     {
                         if (this.jobsList.Count.Equals(0))
                         {
-                           this.IdleRipper(true);
+                            this.IdleRipper(true);
                         }
                         else
                         {
@@ -1817,8 +1822,6 @@ namespace Ripper
                 return;
             }
 
-            this.imgLastPic = null;
-
             if (this.pictureBox1.Image != null)
             {
                 this.pictureBox1.Image.Dispose();
@@ -1848,8 +1851,6 @@ namespace Ripper
                 {
                     return;
                 }
-
-                fileInfo = null;
 
                 this.pictureBox1.Visible = true;
 
@@ -2719,7 +2720,7 @@ namespace Ripper
             {
                 // Throws when exiting
             }
-            
+
 
             Application.Idle += this.OnLoaded;
         }
@@ -2739,14 +2740,14 @@ namespace Ripper
 
             // TODO : Check if Windows 7 API dlls exists
             //if (File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.dll")) && 
-             //   File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.Shell.dll")))
+            //   File.Exists(Path.Combine(Application.StartupPath, "Microsoft.WindowsAPICodePack.Shell.dll")))
             //{
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
-                    Environment.OSVersion.Version.Major >= 6 &&
-                    Environment.OSVersion.Version.Minor >= 1)
-                {
-                    this.windowsTaskbar = TaskbarManager.Instance;
-                    // }
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
+                Environment.OSVersion.Version.Major >= 6 &&
+                Environment.OSVersion.Version.Minor >= 1)
+            {
+                this.windowsTaskbar = TaskbarManager.Instance;
+                // }
             }
 #endif
             this.IdleRipper();
@@ -2880,7 +2881,7 @@ namespace Ripper
                         sRipUrl.StartsWith(CacheController.Instance().UserSettings.ForumURL) ||
                         sRipUrl.StartsWith(CacheController.Instance().UserSettings.ForumURL)))
                 {
-                   this.ExtractUrls.Add(sRipUrl);
+                    this.ExtractUrls.Add(sRipUrl);
                 }
             }
             finally
@@ -2990,7 +2991,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.ComponentModel.DoWorkEventArgs"/> instance containing the event data.</param>
         private void GetIdxsWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            this.ThreadGetIndexes(Convert.ToString(e.Argument)); 
+            this.ThreadGetIndexes(Convert.ToString(e.Argument));
         }
 
         /// <summary>
@@ -3023,7 +3024,7 @@ namespace Ripper
                 else
                 {
                     this.EnqueueJob();
-                } 
+                }
             }
 
             this.indexedTopicsList = null;
@@ -3197,7 +3198,7 @@ namespace Ripper
             else
             {
                 this.UnlockControlsElements();
-            }  
+            }
         }
 
         /// <summary>
