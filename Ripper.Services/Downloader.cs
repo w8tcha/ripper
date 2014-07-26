@@ -46,7 +46,7 @@ namespace Ripper.Services
                 && !imageUrl.Contains("truepic.org") && !imageUrl.Contains("imgearn.net")
                 && !imageUrl.Contains("damimage.com") && !imageUrl.Contains("imgfap.net/")
                 && !imageUrl.Contains("imgbox.com") && !imageUrl.Contains("pixliv.com")
-                && !imageUrl.Contains("imageteam.org"))
+                && !imageUrl.Contains("imageteam.org") && !imageUrl.Contains("img.yt"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -667,6 +667,10 @@ namespace Ripper.Services
                 threadStart = imageDownloader.GetImgWoot;
             }
             else if (imageUrl.IndexOf(@"img.yt/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgcandy.net/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
             }

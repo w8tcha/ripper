@@ -233,7 +233,11 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ExtractHelper.cs" />
-    <Compile Include="Languages\chinese-cn.Designer.cs" />
+    <Compile Include="Languages\chinese.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>chinese.resx</DependentUpon>
+    </Compile>
     <Compile Include="Languages\english.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -282,7 +286,7 @@
     <Compile Include="Helpers\Maintenance.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Languages\chinese-cn.resx" />
+    <EmbeddedResource Include="Languages\chinese.resx" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>

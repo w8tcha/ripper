@@ -74,7 +74,6 @@ namespace Ripper
             this.tmrPageUpdate = new System.Timers.Timer();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveRippingQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,6 +93,7 @@ namespace Ripper
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.GetPostsWorker = new System.ComponentModel.BackgroundWorker();
             this.GetIdxsWorker = new System.ComponentModel.BackgroundWorker();
+            this.saveRippingQueueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -115,9 +115,9 @@ namespace Ripper
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.mStartDownloadBtn);
             this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Location = new System.Drawing.Point(14, 34);
+            this.groupBox1.Location = new System.Drawing.Point(12, 32);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(424, 156);
+            this.groupBox1.Size = new System.Drawing.Size(360, 144);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Download Options";
@@ -127,9 +127,9 @@ namespace Ripper
             // 
             this.browsFolderBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.browsFolderBtn.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.browsFolderBtn.Location = new System.Drawing.Point(335, 54);
+            this.browsFolderBtn.Location = new System.Drawing.Point(291, 50);
             this.browsFolderBtn.Name = "browsFolderBtn";
-            this.browsFolderBtn.Size = new System.Drawing.Size(67, 21);
+            this.browsFolderBtn.Size = new System.Drawing.Size(56, 20);
             this.browsFolderBtn.TabIndex = 3;
             this.browsFolderBtn.Text = "Browse";
             this.browsFolderBtn.UseCompatibleTextRendering = true;
@@ -137,9 +137,9 @@ namespace Ripper
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(11, 51);
+            this.label2.Location = new System.Drawing.Point(9, 47);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(127, 25);
+            this.label2.Size = new System.Drawing.Size(106, 24);
             this.label2.TabIndex = 45;
             this.label2.Text = "Download Folder :";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -149,9 +149,9 @@ namespace Ripper
             // 
             this.DownloadFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.DownloadFolder.Location = new System.Drawing.Point(138, 54);
+            this.DownloadFolder.Location = new System.Drawing.Point(120, 50);
             this.DownloadFolder.Name = "DownloadFolder";
-            this.DownloadFolder.Size = new System.Drawing.Size(186, 21);
+            this.DownloadFolder.Size = new System.Drawing.Size(162, 20);
             this.DownloadFolder.TabIndex = 2;
             this.DownloadFolder.TextChanged += new System.EventHandler(this.DownloadFolder_TextChanged);
             // 
@@ -159,7 +159,7 @@ namespace Ripper
             // 
             this.mIsIndexChk.Enabled = false;
             this.mIsIndexChk.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.mIsIndexChk.Location = new System.Drawing.Point(138, 82);
+            this.mIsIndexChk.Location = new System.Drawing.Point(120, 76);
             this.mIsIndexChk.MaximumSize = new System.Drawing.Size(200, 16);
             this.mIsIndexChk.Name = "mIsIndexChk";
             this.mIsIndexChk.Size = new System.Drawing.Size(200, 16);
@@ -171,15 +171,15 @@ namespace Ripper
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.IntegralHeight = false;
-            this.comboBox1.ItemHeight = 12;
+            this.comboBox1.ItemHeight = 13;
             this.comboBox1.Items.AddRange(new object[] {
             "Thread ID:",
             "Post ID:",
             "URL:"});
-            this.comboBox1.Location = new System.Drawing.Point(16, 25);
+            this.comboBox1.Location = new System.Drawing.Point(13, 23);
             this.comboBox1.MaximumSize = new System.Drawing.Size(88, 0);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(88, 20);
+            this.comboBox1.Size = new System.Drawing.Size(88, 21);
             this.comboBox1.TabIndex = 0;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1SelectedIndexChanged);
             // 
@@ -187,10 +187,10 @@ namespace Ripper
             // 
             this.mStartDownloadBtn.Image = ((System.Drawing.Image)(resources.GetObject("mStartDownloadBtn.Image")));
             this.mStartDownloadBtn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.mStartDownloadBtn.Location = new System.Drawing.Point(138, 104);
+            this.mStartDownloadBtn.Location = new System.Drawing.Point(123, 98);
             this.mStartDownloadBtn.MaximumSize = new System.Drawing.Size(224, 34);
             this.mStartDownloadBtn.Name = "mStartDownloadBtn";
-            this.mStartDownloadBtn.Size = new System.Drawing.Size(184, 34);
+            this.mStartDownloadBtn.Size = new System.Drawing.Size(224, 34);
             this.mStartDownloadBtn.TabIndex = 5;
             this.mStartDownloadBtn.Text = "Start Download";
             this.mStartDownloadBtn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -201,9 +201,9 @@ namespace Ripper
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(138, 26);
+            this.textBox1.Location = new System.Drawing.Point(120, 24);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(263, 21);
+            this.textBox1.Size = new System.Drawing.Size(226, 20);
             this.textBox1.TabIndex = 1;
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox1KeyPress);
             // 
@@ -217,9 +217,9 @@ namespace Ripper
             this.columnHeader9,
             this.columnHeader1});
             this.listViewJobList.FullRowSelect = true;
-            this.listViewJobList.Location = new System.Drawing.Point(7, 25);
+            this.listViewJobList.Location = new System.Drawing.Point(6, 23);
             this.listViewJobList.Name = "listViewJobList";
-            this.listViewJobList.Size = new System.Drawing.Size(423, 517);
+            this.listViewJobList.Size = new System.Drawing.Size(428, 507);
             this.listViewJobList.TabIndex = 6;
             this.listViewJobList.UseCompatibleStateImageBehavior = false;
             this.listViewJobList.View = System.Windows.Forms.View.Details;
@@ -242,7 +242,7 @@ namespace Ripper
             // 
             this.deleteJob.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.deleteJob.Image = ((System.Drawing.Image)(resources.GetObject("deleteJob.Image")));
-            this.deleteJob.Location = new System.Drawing.Point(436, 23);
+            this.deleteJob.Location = new System.Drawing.Point(440, 23);
             this.deleteJob.MaximumSize = new System.Drawing.Size(24, 24);
             this.deleteJob.MinimumSize = new System.Drawing.Size(24, 24);
             this.deleteJob.Name = "deleteJob";
@@ -257,9 +257,9 @@ namespace Ripper
             this.groupBox2.Controls.Add(this.lvCurJob);
             this.groupBox2.Controls.Add(this.pauseCurrentThreads);
             this.groupBox2.Controls.Add(this.stopCurrentThreads);
-            this.groupBox2.Location = new System.Drawing.Point(16, 193);
+            this.groupBox2.Location = new System.Drawing.Point(13, 179);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(422, 170);
+            this.groupBox2.Size = new System.Drawing.Size(360, 158);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Currently,";
@@ -273,11 +273,11 @@ namespace Ripper
             this.columnHeader2});
             this.lvCurJob.FullRowSelect = true;
             this.lvCurJob.HideSelection = false;
-            this.lvCurJob.Location = new System.Drawing.Point(9, 20);
+            this.lvCurJob.Location = new System.Drawing.Point(12, 20);
             this.lvCurJob.MultiSelect = false;
             this.lvCurJob.Name = "lvCurJob";
             this.lvCurJob.ShowGroups = false;
-            this.lvCurJob.Size = new System.Drawing.Size(406, 104);
+            this.lvCurJob.Size = new System.Drawing.Size(333, 97);
             this.lvCurJob.TabIndex = 10;
             this.lvCurJob.UseCompatibleStateImageBehavior = false;
             this.lvCurJob.View = System.Windows.Forms.View.Details;
@@ -291,7 +291,7 @@ namespace Ripper
             // 
             this.pauseCurrentThreads.Image = ((System.Drawing.Image)(resources.GetObject("pauseCurrentThreads.Image")));
             this.pauseCurrentThreads.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.pauseCurrentThreads.Location = new System.Drawing.Point(32, 130);
+            this.pauseCurrentThreads.Location = new System.Drawing.Point(61, 128);
             this.pauseCurrentThreads.MaximumSize = new System.Drawing.Size(129, 24);
             this.pauseCurrentThreads.Name = "pauseCurrentThreads";
             this.pauseCurrentThreads.Size = new System.Drawing.Size(129, 24);
@@ -306,7 +306,7 @@ namespace Ripper
             // 
             this.stopCurrentThreads.Image = ((System.Drawing.Image)(resources.GetObject("stopCurrentThreads.Image")));
             this.stopCurrentThreads.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.stopCurrentThreads.Location = new System.Drawing.Point(199, 130);
+            this.stopCurrentThreads.Location = new System.Drawing.Point(197, 128);
             this.stopCurrentThreads.MaximumSize = new System.Drawing.Size(149, 24);
             this.stopCurrentThreads.Name = "stopCurrentThreads";
             this.stopCurrentThreads.Size = new System.Drawing.Size(149, 24);
@@ -318,11 +318,14 @@ namespace Ripper
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(3, 17);
+            this.pictureBox1.Location = new System.Drawing.Point(6, 19);
+            this.pictureBox1.MinimumSize = new System.Drawing.Size(345, 189);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(416, 187);
+            this.pictureBox1.Size = new System.Drawing.Size(348, 200);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
@@ -330,7 +333,7 @@ namespace Ripper
             // 
             // tmrPageUpdate
             // 
-            this.tmrPageUpdate.Interval = 400D;
+            this.tmrPageUpdate.Interval = 200D;
             this.tmrPageUpdate.SynchronizingObject = this;
             this.tmrPageUpdate.Elapsed += new System.Timers.ElapsedEventHandler(this.TmrPageUpdateElapsed);
             // 
@@ -344,7 +347,7 @@ namespace Ripper
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menuStrip.Size = new System.Drawing.Size(922, 25);
+            this.menuStrip.Size = new System.Drawing.Size(857, 24);
             this.menuStrip.TabIndex = 7;
             // 
             // fileToolStripMenuItem
@@ -353,21 +356,14 @@ namespace Ripper
             this.saveRippingQueueToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(39, 21);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
-            // 
-            // saveRippingQueueToolStripMenuItem
-            // 
-            this.saveRippingQueueToolStripMenuItem.Name = "saveRippingQueueToolStripMenuItem";
-            this.saveRippingQueueToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.saveRippingQueueToolStripMenuItem.Text = "Save Ripping Queue";
-            this.saveRippingQueueToolStripMenuItem.Click += new System.EventHandler(this.SaveRippingQueueToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.exitToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -381,13 +377,13 @@ namespace Ripper
             this.showLastImageToolStripMenuItem,
             this.useCliboardMonitoringToolStripMenuItem});
             this.settingsToolStripMenuItem2.Name = "settingsToolStripMenuItem2";
-            this.settingsToolStripMenuItem2.Size = new System.Drawing.Size(66, 21);
+            this.settingsToolStripMenuItem2.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem2.Text = "Settings";
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItem1Click);
             // 
@@ -397,14 +393,14 @@ namespace Ripper
             this.doNothingToolStripMenuItem,
             this.closeRipperToolStripMenuItem});
             this.afterDownloadsFinishedToolStripMenuItem.Name = "afterDownloadsFinishedToolStripMenuItem";
-            this.afterDownloadsFinishedToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.afterDownloadsFinishedToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.afterDownloadsFinishedToolStripMenuItem.Text = "After Download(s) finished...";
             // 
             // doNothingToolStripMenuItem
             // 
             this.doNothingToolStripMenuItem.CheckOnClick = true;
             this.doNothingToolStripMenuItem.Name = "doNothingToolStripMenuItem";
-            this.doNothingToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.doNothingToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.doNothingToolStripMenuItem.Text = "Do Nothing";
             this.doNothingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.DoNothingToolStripMenuItem_CheckedChanged);
             // 
@@ -412,7 +408,7 @@ namespace Ripper
             // 
             this.closeRipperToolStripMenuItem.CheckOnClick = true;
             this.closeRipperToolStripMenuItem.Name = "closeRipperToolStripMenuItem";
-            this.closeRipperToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.closeRipperToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.closeRipperToolStripMenuItem.Text = "Close Ripper";
             this.closeRipperToolStripMenuItem.CheckedChanged += new System.EventHandler(this.CloseRipperToolStripMenuItem_CheckedChanged);
             // 
@@ -420,7 +416,7 @@ namespace Ripper
             // 
             this.showLastImageToolStripMenuItem.CheckOnClick = true;
             this.showLastImageToolStripMenuItem.Name = "showLastImageToolStripMenuItem";
-            this.showLastImageToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.showLastImageToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.showLastImageToolStripMenuItem.Text = "Show Last Image";
             this.showLastImageToolStripMenuItem.CheckedChanged += new System.EventHandler(this.ShowLastImageToolStripMenuItem_CheckedChanged);
             // 
@@ -428,7 +424,7 @@ namespace Ripper
             // 
             this.useCliboardMonitoringToolStripMenuItem.CheckOnClick = true;
             this.useCliboardMonitoringToolStripMenuItem.Name = "useCliboardMonitoringToolStripMenuItem";
-            this.useCliboardMonitoringToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.useCliboardMonitoringToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.useCliboardMonitoringToolStripMenuItem.Text = "Use Cliboard Monitoring";
             this.useCliboardMonitoringToolStripMenuItem.CheckedChanged += new System.EventHandler(this.UseCliboardMonitoringToolStripMenuItem_CheckedChanged);
             // 
@@ -437,13 +433,13 @@ namespace Ripper
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.helpToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(47, 21);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.settingsToolStripMenuItem.Text = "&Help";
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.helpToolStripMenuItem.Text = "&About";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.HelpToolStripMenuItemClick);
             // 
@@ -454,16 +450,16 @@ namespace Ripper
             this.progressBar1,
             this.StatusLabelInfo,
             this.StatusLabelImageC});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 593);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 571);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(922, 25);
+            this.statusStrip1.Size = new System.Drawing.Size(857, 23);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // progressBar1
             // 
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(437, 19);
+            this.progressBar1.Size = new System.Drawing.Size(364, 17);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // StatusLabelInfo
@@ -471,13 +467,13 @@ namespace Ripper
             this.StatusLabelInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.StatusLabelInfo.ForeColor = System.Drawing.Color.Red;
             this.StatusLabelInfo.Name = "StatusLabelInfo";
-            this.StatusLabelInfo.Size = new System.Drawing.Size(13, 20);
+            this.StatusLabelInfo.Size = new System.Drawing.Size(13, 18);
             this.StatusLabelInfo.Text = "  ";
             // 
             // StatusLabelImageC
             // 
             this.StatusLabelImageC.Name = "StatusLabelImageC";
-            this.StatusLabelImageC.Size = new System.Drawing.Size(16, 20);
+            this.StatusLabelImageC.Size = new System.Drawing.Size(13, 18);
             this.StatusLabelImageC.Text = "  ";
             this.StatusLabelImageC.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -487,10 +483,10 @@ namespace Ripper
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.pictureBox1);
-            this.groupBox4.Location = new System.Drawing.Point(16, 369);
-            this.groupBox4.MinimumSize = new System.Drawing.Size(300, 100);
+            this.groupBox4.Location = new System.Drawing.Point(13, 343);
+            this.groupBox4.MinimumSize = new System.Drawing.Size(358, 214);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(422, 207);
+            this.groupBox4.Size = new System.Drawing.Size(360, 225);
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Last Picture Downloaded...";
@@ -501,9 +497,9 @@ namespace Ripper
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.listViewJobList);
             this.groupBox5.Controls.Add(this.deleteJob);
-            this.groupBox5.Location = new System.Drawing.Point(444, 34);
+            this.groupBox5.Location = new System.Drawing.Point(378, 32);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(466, 549);
+            this.groupBox5.Size = new System.Drawing.Size(471, 536);
             this.groupBox5.TabIndex = 11;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Ripping Queue:";
@@ -518,11 +514,18 @@ namespace Ripper
             this.GetIdxsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.GetIdxsWorkerDoWork);
             this.GetIdxsWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.GetIdxsWorkerCompleted);
             // 
+            // saveRippingQueueToolStripMenuItem
+            // 
+            this.saveRippingQueueToolStripMenuItem.Name = "saveRippingQueueToolStripMenuItem";
+            this.saveRippingQueueToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveRippingQueueToolStripMenuItem.Text = "Save Ripping Queue";
+            this.saveRippingQueueToolStripMenuItem.Click += new System.EventHandler(this.SaveRippingQueueToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AccessibleDescription = "i";
-            this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
-            this.ClientSize = new System.Drawing.Size(922, 618);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(857, 594);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.statusStrip1);
@@ -532,7 +535,7 @@ namespace Ripper
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(700, 500);
+            this.MinimumSize = new System.Drawing.Size(865, 622);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ViperGirls Ripper 2.0.0  [Logged in as: \"\"]";

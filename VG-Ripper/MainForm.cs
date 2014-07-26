@@ -515,9 +515,9 @@ namespace Ripper
                     case "en-EN":
                         this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         break;
-                    case "zh-CN":
+                    /*case "zh-CN":
                         this._ResourceManager = new ResourceManager("Ripper.Languages.chinese-cn", Assembly.GetExecutingAssembly());
-                        break;
+                        break;*/
                     default:
                         this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                         break;

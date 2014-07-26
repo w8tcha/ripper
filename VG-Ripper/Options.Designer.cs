@@ -167,11 +167,7 @@ namespace Ripper
             // languageSelector
             // 
             this.languageSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.languageSelector.Items.AddRange(new object[] {
-            "German",
-            "French",
-            "English",
-            "Chinese[zh-CN]"});
+            this.languageSelector.Items.AddRange(new object[] { "German", "French", "English" });
             this.languageSelector.Location = new System.Drawing.Point(53, 19);
             this.languageSelector.MaximumSize = new System.Drawing.Size(121, 0);
             this.languageSelector.Name = "languageSelector";

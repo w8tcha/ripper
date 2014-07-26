@@ -79,9 +79,9 @@ namespace Ripper
                     case "en-EN":
                         this.comboBox2.SelectedIndex = 2;
                         break;
-                    case "zh-CN":
+                    /*case "zh-CN":
                         this.comboBox2.SelectedIndex = 3;
-                        break;
+                        break;*/
                     default:
                         this.comboBox2.SelectedIndex = 2;
                         break;
@@ -166,10 +166,10 @@ namespace Ripper
                     this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
                     SettingsHelper.SaveSetting("UserLanguage", "en-EN");
                     break;
-                case 3:
+                /*case 3:
                     this._ResourceManager = new ResourceManager("Ripper.Languages.chinese-cn", Assembly.GetExecutingAssembly());
                     SettingsHelper.SaveSetting("UserLanguage", "zh-CN");
-                    break;
+                    break;*/
             }
 
             this.AdjustCulture();
