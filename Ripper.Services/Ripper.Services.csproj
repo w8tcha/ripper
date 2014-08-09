@@ -77,6 +77,7 @@
     <Compile Include="ImageHosts\HosterBin.cs" />
     <Compile Include="ImageHosts\HotLinkedImage.cs" />
     <Compile Include="ImageHosts\HotLinkImage.cs" />
+    <Compile Include="ImageHosts\Imaaage.cs" />
     <Compile Include="ImageHosts\Image2Share.cs" />
     <Compile Include="ImageHosts\ImageBam.cs" />
     <Compile Include="ImageHosts\ImageBeaver.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="ImageHosts\ImgBabes.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgChili.cs" />
+    <Compile Include="ImageHosts\ImgClick.cs" />
     <Compile Include="ImageHosts\ImgDepot.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
     <Compile Include="ImageHosts\ImgDollar.cs" />

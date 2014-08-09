@@ -2155,6 +2155,36 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ImgClick Download
+        /// </summary>
+        public void GetImgClick()
+        {
+            this.xService = new ImgClick(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get Imaaage Download
+        /// </summary>
+        public void GetImaaage()
+        {
+            this.xService = new Imaaage(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Get PixLiv Download
         /// </summary>
         public void GetPixLiv()
