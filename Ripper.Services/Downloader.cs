@@ -674,6 +674,14 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgWoot;
             }
+            else if (imageUrl.IndexOf(@"madimage.org/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
+            else if (imageUrl.IndexOf(@"imgspot.org/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf(@"imagefolks.com/", System.StringComparison.Ordinal) >= 0 || imageUrl.IndexOf(@"ImageFolks.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgWoot;
@@ -835,6 +843,14 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"imgmega.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgMega;
+            }
+            else if (imageUrl.IndexOf(@"imgclick.net/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgClick;
+            }
+            else if (imageUrl.IndexOf(@"imaaage.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImaaage;
             }
             /*else if (imageUrl.IndexOf(@"pixliv.com/", System.StringComparison.Ordinal) >= 0)
             {
