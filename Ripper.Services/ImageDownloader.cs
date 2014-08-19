@@ -2185,6 +2185,66 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ImageBugs Download
+        /// </summary>
+        public void GetImageBugs()
+        {
+            this.xService = new ImageBugs(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get Pictomania Download
+        /// </summary>
+        public void GetPictomania()
+        {
+            this.xService = new Pictomania(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+        
+        /// <summary>
+        /// Get ImgDap Download
+        /// </summary>
+        public void GetImgDap()
+        {
+            this.xService = new ImgDap(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
+        /// Get FileSpit Download
+        /// </summary>
+        public void GetFileSpit()
+        {
+            this.xService = new FileSpit(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Get PixLiv Download
         /// </summary>
         public void GetPixLiv()

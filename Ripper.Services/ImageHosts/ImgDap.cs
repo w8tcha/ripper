@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgSee.cs" company="The Watcher">
+// <copyright file="ImgDap.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //   This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -11,17 +11,21 @@
 
 namespace Ripper.Services.ImageHosts
 {
+    using System;
     using System.Collections;
+    using System.Net;
+    using System.Text.RegularExpressions;
 
     using Ripper.Core.Components;
+    using Ripper.Core.Objects;
 
     /// <summary>
-    /// Worker class to get images from ImgSee.me
+    /// Worker class to get images from ImgDap.com
     /// </summary>
-    public class ImgSee : ServiceTemplate
+    public class ImgDap : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgSee" /> class.
+        /// Initializes a new instance of the <see cref="ImgDap" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
@@ -29,7 +33,7 @@ namespace Ripper.Services.ImageHosts
         /// <param name="imageName">Name of the image.</param>
         /// <param name="imageNumber">The image number.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgSee(
+        public ImgDap(
             ref string savePath,
             ref string imageUrl,
             ref string thumbUrl,
@@ -48,11 +52,41 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            // Set the download Path
-            var imageDownloadURL = this.ThumbImageURL.Replace("_t.", ".");
+            var imageURL = ImageLinkURL;
 
-            // Set Image Name instead of using random name
-            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
+            var cookieValue =
+                imageURL.Remove(imageURL.LastIndexOf("/", StringComparison.Ordinal))
+                    .Replace("http://imgdap.com/", string.Empty);
+
+            // Get Image Link
+            var page = GetImageHostPage(
+                ref imageURL,
+                WebRequestMethods.Http.Post,
+                string.Format("op=view&id={0}&pre=3&btn=next", cookieValue));
+
+            if (page.Length < 10)
+            {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                return false;
+            }
+
+            string imageDownloadURL;
+
+            var match = Regex.Match(page, @"src=\""(?<inner>[^\""]*)\"" class=""pic""", RegexOptions.Compiled);
+
+            if (match.Success)
+            {
+                imageDownloadURL = match.Groups["inner"].Value.Replace("&amp;", "&");
+            }
+            else
+            {
+                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                return false;
+            }
+
+            // Set Image Name 
+            var filePath = imageURL.Substring(imageURL.LastIndexOf("/", StringComparison.Ordinal) + 1)
+                .Replace(".html", string.Empty);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);

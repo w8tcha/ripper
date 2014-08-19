@@ -66,6 +66,7 @@
     <Compile Include="ImageHosts\FileDen.cs" />
     <Compile Include="ImageHosts\FileHost.cs" />
     <Compile Include="ImageHosts\FileMad.cs" />
+    <Compile Include="ImageHosts\FileSpit.cs" />
     <Compile Include="ImageHosts\FotoSik.cs" />
     <Compile Include="ImageHosts\FotoTube.cs" />
     <Compile Include="ImageHosts\FreeImageHost.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="ImageHosts\Image2Share.cs" />
     <Compile Include="ImageHosts\ImageBam.cs" />
     <Compile Include="ImageHosts\ImageBeaver.cs" />
+    <Compile Include="ImageHosts\ImageBugs.cs" />
     <Compile Include="ImageHosts\ImageBunk.cs" />
     <Compile Include="ImageHosts\ImageCargo.cs" />
     <Compile Include="ImageHosts\ImageCrack.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgChili.cs" />
     <Compile Include="ImageHosts\ImgClick.cs" />
+    <Compile Include="ImageHosts\ImgDap.cs" />
     <Compile Include="ImageHosts\ImgDepot.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
     <Compile Include="ImageHosts\ImgDollar.cs" />
@@ -158,6 +161,7 @@
     <Compile Include="ImageHosts\PicsPlace.cs" />
     <Compile Include="ImageHosts\PicTiger.cs" />
     <Compile Include="ImageHosts\PicTiger2.cs" />
+    <Compile Include="ImageHosts\Pictomania.cs" />
     <Compile Include="ImageHosts\PictureDip.cs" />
     <Compile Include="ImageHosts\PicturesHoster.cs" />
     <Compile Include="ImageHosts\PicturesIon.cs" />
