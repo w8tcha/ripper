@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgSee.cs" company="The Watcher">
+// <copyright file="ImageBugs.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
 //   This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
@@ -16,12 +16,12 @@ namespace Ripper.Services.ImageHosts
     using Ripper.Core.Components;
 
     /// <summary>
-    /// Worker class to get images from ImgSee.me
+    /// Worker class to get images from Image-Bugs.com
     /// </summary>
-    public class ImgSee : ServiceTemplate
+    public class ImageBugs : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgSee" /> class.
+        /// Initializes a new instance of the <see cref="ImageBugs" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
@@ -29,7 +29,7 @@ namespace Ripper.Services.ImageHosts
         /// <param name="imageName">Name of the image.</param>
         /// <param name="imageNumber">The image number.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgSee(
+        public ImageBugs(
             ref string savePath,
             ref string imageUrl,
             ref string thumbUrl,
@@ -49,7 +49,7 @@ namespace Ripper.Services.ImageHosts
         protected override bool DoDownload()
         {
             // Set the download Path
-            var imageDownloadURL = this.ThumbImageURL.Replace("_t.", ".");
+            var imageDownloadURL = this.ThumbImageURL.Replace(".th.", ".");
 
             // Set Image Name instead of using random name
             var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);

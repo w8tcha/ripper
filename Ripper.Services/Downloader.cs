@@ -46,7 +46,8 @@ namespace Ripper.Services
                 && !imageUrl.Contains("truepic.org") && !imageUrl.Contains("imgearn.net")
                 && !imageUrl.Contains("damimage.com") && !imageUrl.Contains("imgfap.net/")
                 && !imageUrl.Contains("imgbox.com") && !imageUrl.Contains("pixliv.com")
-                && !imageUrl.Contains("imageteam.org") && !imageUrl.Contains("img.yt"))
+                && !imageUrl.Contains("imageteam.org") && !imageUrl.Contains("img.yt")
+                && !imageUrl.Contains("filespit.com"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -851,6 +852,22 @@ namespace Ripper.Services
             else if (imageUrl.IndexOf(@"imaaage.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImaaage;
+            }
+            else if (imageUrl.IndexOf(@"image-bugs.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImageBugs;
+            }
+            else if (imageUrl.IndexOf(@"pictomania.org/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetPictomania;
+            }
+            else if (imageUrl.IndexOf(@"imgdap.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgDap;
+            }
+            else if (imageUrl.IndexOf(@"filespit.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetFileSpit;
             }
             /*else if (imageUrl.IndexOf(@"pixliv.com/", System.StringComparison.Ordinal) >= 0)
             {
