@@ -14,6 +14,7 @@ namespace Ripper.Services
     #region
 
     using System.Threading;
+    using System.Windows.Forms.VisualStyles;
 
     using Ripper.Core.Components;
 
@@ -47,7 +48,7 @@ namespace Ripper.Services
                 && !imageUrl.Contains("damimage.com") && !imageUrl.Contains("imgfap.net/")
                 && !imageUrl.Contains("imgbox.com") && !imageUrl.Contains("pixliv.com")
                 && !imageUrl.Contains("imageteam.org") && !imageUrl.Contains("img.yt")
-                && !imageUrl.Contains("filespit.com"))
+                && !imageUrl.Contains("filespit.com") && !thumbImageUrl.Contains("/upload/small/"))
             {
                 thumbImageUrl = thumbImageUrl.ToLower();
             }
@@ -873,6 +874,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetPixLiv;
             }*/
+            else if (thumbImageUrl.Contains("/upload/small/"))
+            {
+                threadStart = imageDownloader.GetImgWoot;
+            }
             else if (imageUrl.IndexOf("ayhja.com/", System.StringComparison.Ordinal) >= 0)
             {
                 return;
