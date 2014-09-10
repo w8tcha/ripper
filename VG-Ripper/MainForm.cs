@@ -729,8 +729,8 @@ namespace Ripper
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void MainFormLoad(object sender, EventArgs e)
         {
-            AppDomain.CurrentDomain.UnhandledException += (UnhandledExceptionFunction);
-            Application.ThreadException += (ThreadExceptionFunction);
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionFunction;
+            Application.ThreadException += ThreadExceptionFunction;
 
             LastWorkingTime = DateTime.Now;
 
