@@ -1600,6 +1600,21 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ImageEer Download
+        /// </summary>
+        public void GetImageEer()
+        {
+            this.xService = new ImageEer(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Get ImgPo Download
         /// </summary>
         public void GetImgPo()

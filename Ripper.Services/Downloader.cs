@@ -650,7 +650,7 @@ namespace Ripper.Services
             }
             else if (imageUrl.IndexOf(@"imageeer.com/", System.StringComparison.Ordinal) >= 0)
             {
-                threadStart = imageDownloader.GetImgWoot;
+                threadStart = imageDownloader.GetImageEer;
             }
             else if (imageUrl.IndexOf(@"gokoimage.com/", System.StringComparison.Ordinal) >= 0)
             {
