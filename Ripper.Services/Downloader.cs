@@ -39,6 +39,11 @@ namespace Ripper.Services
             // TODO : Check which image host needs that check
             ////imageUrl = imageUrl.ToLower();
 
+            if (string.IsNullOrEmpty(thumbImageUrl))
+            {
+                thumbImageUrl = imageUrl;
+            }
+
             if (!imageUrl.Contains("imgserve.net") && !imageUrl.Contains("imagesion.com")
                 && !imageUrl.Contains("picturesion.com") && !imageUrl.Contains("picsious.com")
                 && !imageUrl.Contains("imagetwist.com") && !imageUrl.Contains("premiumpics.net")
