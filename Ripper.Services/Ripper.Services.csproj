@@ -122,6 +122,7 @@
     <Compile Include="ImageHosts\ImageZilla.cs" />
     <Compile Include="ImageHosts\ImGah.cs" />
     <Compile Include="ImageHosts\ImgBabes.cs" />
+    <Compile Include="ImageHosts\ImgBanana.cs" />
     <Compile Include="ImageHosts\ImgBox.cs" />
     <Compile Include="ImageHosts\ImgChili.cs" />
     <Compile Include="ImageHosts\ImgClick.cs" />

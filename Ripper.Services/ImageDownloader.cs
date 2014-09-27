@@ -2260,6 +2260,21 @@ namespace Ripper.Services
         }
 
         /// <summary>
+        /// Get ImgBanana Download
+        /// </summary>
+        public void GetImgBanana()
+        {
+            this.xService = new ImgBanana(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+
+        /// <summary>
         /// Get PixLiv Download
         /// </summary>
         public void GetPixLiv()

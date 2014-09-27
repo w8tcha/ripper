@@ -1,7 +1,7 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImgChili.cs" company="The Watcher">
+// <copyright file="ImgBanana.cs" company="The Watcher">
 //   Copyright (c) The Watcher Partial Rights Reserved.
-//  This software is licensed under the MIT license. See license.txt for details.
+//   This software is licensed under the MIT license. See license.txt for details.
 // </copyright>
 // <summary>
 //   Code Named: VG-Ripper
@@ -11,20 +11,17 @@
 
 namespace Ripper.Services.ImageHosts
 {
-    using System;
     using System.Collections;
 
     using Ripper.Core.Components;
-    using Ripper.Core.Objects;
 
     /// <summary>
-    /// Worker class to get images from 
-    /// ImgChili.com
+    /// Worker class to get images from ImgBanana.com
     /// </summary>
-    public class ImgChili : ServiceTemplate
+    public class ImgBanana : ServiceTemplate
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImgChili" /> class.
+        /// Initializes a new instance of the <see cref="ImgBanana" /> class.
         /// </summary>
         /// <param name="savePath">The save Path.</param>
         /// <param name="imageUrl">The image Url.</param>
@@ -32,7 +29,7 @@ namespace Ripper.Services.ImageHosts
         /// <param name="imageName">Name of the image.</param>
         /// <param name="imageNumber">The image number.</param>
         /// <param name="hashtable">The hash table.</param>
-        public ImgChili(
+        public ImgBanana(
             ref string savePath,
             ref string imageUrl,
             ref string thumbUrl,
@@ -47,28 +44,15 @@ namespace Ripper.Services.ImageHosts
         /// Do the Download
         /// </summary>
         /// <returns>
-        /// Return if Downloaded or not
+        /// Returns if the Image was downloaded
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageDownloadURL = ThumbImageURL;
-
-            if (string.IsNullOrEmpty(imageDownloadURL))
-            {
-                ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = false;
-                return false;
-            }
-
             // Set the download Path
-            imageDownloadURL = imageDownloadURL.Replace(@"http://t", @"http://i");
+            var imageDownloadURL = this.ThumbImageURL.Replace("_thumb.", ".");
 
-            // Set Image Name
-            var filePath = this.ImageLinkURL.Substring(this.ImageLinkURL.IndexOf("_", StringComparison.Ordinal) + 1);
-
-            var fileExtension = this.ImageLinkURL.Substring(this.ImageLinkURL.LastIndexOf(".", StringComparison.Ordinal));
-
-            imageDownloadURL = imageDownloadURL.Remove(imageDownloadURL.LastIndexOf(".", StringComparison.Ordinal))
-                               + fileExtension;
+            // Set Image Name instead of using random name
+            var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);
