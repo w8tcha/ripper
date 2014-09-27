@@ -875,6 +875,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetFileSpit;
             }
+            else if (imageUrl.IndexOf(@"imgbanana.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgBanana;
+            }
             /*else if (imageUrl.IndexOf(@"pixliv.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetPixLiv;

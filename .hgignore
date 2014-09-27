@@ -47,3 +47,13 @@ PG-Ripper/bin/PG-RipperX/PGRipper.config
 PG-Ripper/bin/PG-RipperX/PGRipper.exe.config
 PG-Ripper/bin/PG-RipperX/rippedPostHistory.txt
 Thumbs.db
+_ReSharper.PG-Ripper/
+_ReSharper.RiPRipper/
+Output/
+*.nuspec
+Ripper.DotSettings
+PG-Ripper.v12.suo
+PG-Ripper.sln.DotSettings
+App.psd
+VG-Ripper.sln.DotSettings
+VG-Ripper.v12.suo
