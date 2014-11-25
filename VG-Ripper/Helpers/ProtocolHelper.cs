@@ -31,7 +31,7 @@ namespace Ripper
         {
             var protocolRegisterd = false;
 
-            const string UrlProtocol = "vg";
+            const string UrlProtocol = "vgr";
 
             try
             {
@@ -43,7 +43,7 @@ namespace Ripper
                 {
                     registryKey = Registry.ClassesRoot.CreateSubKey(UrlProtocol);
 
-                    registryKey.SetValue(null, "VG-Ripper vg Protocol");
+                    registryKey.SetValue(null, "VG-Ripper vgr Protocol");
                     registryKey.SetValue("URL Protocol", string.Empty);
 
                     Registry.ClassesRoot.CreateSubKey(string.Format("{0}\\Shell", UrlProtocol));
@@ -99,7 +99,7 @@ namespace Ripper
 
             var args = parseArgument.Split(':');
 
-            if (args[0].Trim().ToLower() != "vg")
+            if (args[0].Trim().ToLower() != "vgr")
             {
                 return string.Empty;
             }
