@@ -2005,21 +2005,6 @@ namespace Ripper.Services
         }
 
         /// <summary>
-        /// Get ImgErotic Download
-        /// </summary>
-        public void GetImgErotic()
-        {
-            this.xService = new ImgErotic(
-                ref this.savePath,
-                ref this.imageURL,
-                ref this.thumbImageURL,
-                ref this.imageName,
-                ref this.imageNumber,
-                ref this.eventTable);
-            this.xService.StartDownloadAsync();
-        }
-
-        /// <summary>
         /// Get ImageShack Download
         /// </summary>
         public void GetImageShack()
@@ -2130,21 +2115,6 @@ namespace Ripper.Services
         public void GetImgSee()
         {
             this.xService = new ImgSee(
-                ref this.savePath,
-                ref this.imageURL,
-                ref this.thumbImageURL,
-                ref this.imageName,
-                ref this.imageNumber,
-                ref this.eventTable);
-            this.xService.StartDownloadAsync();
-        }
-
-        /// <summary>
-        /// Get ImgRex Download
-        /// </summary>
-        public void GetImgRex()
-        {
-            this.xService = new ImgRex(
                 ref this.savePath,
                 ref this.imageURL,
                 ref this.thumbImageURL,

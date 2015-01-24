@@ -130,12 +130,10 @@
     <Compile Include="ImageHosts\ImgDepot.cs" />
     <Compile Include="ImageHosts\ImgDino.cs" />
     <Compile Include="ImageHosts\ImgDollar.cs" />
-    <Compile Include="ImageHosts\ImgErotic.cs" />
     <Compile Include="ImageHosts\ImgFlare.cs" />
     <Compile Include="ImageHosts\ImgMega.cs" />
     <Compile Include="ImageHosts\ImgPaying.cs" />
     <Compile Include="ImageHosts\ImgPo.cs" />
-    <Compile Include="ImageHosts\ImgRex.cs" />
     <Compile Include="ImageHosts\ImgSee.cs" />
     <Compile Include="ImageHosts\ImgSpice.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
