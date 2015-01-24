@@ -867,6 +867,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetFileSpit;
             }
+            else if (imageUrl.IndexOf(@"picexposed.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetPicExposed;
+            }
             else if (thumbImageUrl.Contains("_thumb."))
             {
                 threadStart = imageDownloader.GetImgBanana;
