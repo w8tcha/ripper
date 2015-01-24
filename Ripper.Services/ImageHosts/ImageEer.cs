@@ -52,41 +52,44 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageURL = ImageLinkURL;
+            var imageURL = this.ImageLinkURL;
 
             var cookieValue =
                 imageURL.Remove(imageURL.LastIndexOf("/", StringComparison.Ordinal))
                     .Replace("http://imageeer.com/", string.Empty);
 
             // Get Image Link
-            var page = GetImageHostPage(
+            var page = this.GetImageHostPage(
                 ref imageURL,
                 WebRequestMethods.Http.Post,
-                string.Format("op=view&id={0}&pre=3&btn=next", cookieValue));
+                string.Format("op=view&id={0}&pre=1&btn=next", cookieValue));
 
             if (page.Length < 10)
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
-            string imageDownloadURL;
+            string imageDownloadURL, filePath;
 
             var match = Regex.Match(page, @"src=\""(?<inner>[^\""]*)\"" class=""pic""", RegexOptions.Compiled);
 
             if (match.Success)
             {
                 imageDownloadURL = match.Groups["inner"].Value.Replace("&amp;", "&");
+
+                // Set Image Name 
+                filePath = imageURL.Substring(imageURL.LastIndexOf("/", StringComparison.Ordinal) + 1)
+                    .Replace(".htm", string.Empty);
             }
             else
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                return false;
-            }
+                // Set the download Path
+                imageDownloadURL = this.ThumbImageURL.Replace("_t.", ".");
 
-            // Set Image Name 
-            var filePath = imageURL.Substring(imageURL.LastIndexOf("/", StringComparison.Ordinal) + 1)
-                .Replace(".htm", string.Empty);
+                // Set Image Name instead of using random name
+                filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);
+            }
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);
