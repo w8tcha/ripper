@@ -807,10 +807,6 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImagesAholic;
             }
-            else if (imageUrl.IndexOf(@"imgerotic.com/", System.StringComparison.Ordinal) >= 0)
-            {
-                threadStart = imageDownloader.GetImgErotic;
-            }
             else if (imageUrl.IndexOf(@"imageshack.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImageShack;
@@ -843,10 +839,6 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgSee;
             }
-            else if (imageUrl.IndexOf(@"imgrex.com/", System.StringComparison.Ordinal) >= 0)
-            {
-                threadStart = imageDownloader.GetImgRex;
-            }
             else if (imageUrl.IndexOf(@"imgmega.com/", System.StringComparison.Ordinal) >= 0)
             {
                 threadStart = imageDownloader.GetImgMega;
@@ -875,7 +867,7 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetFileSpit;
             }
-            else if (imageUrl.IndexOf(@"imgbanana.com/", System.StringComparison.Ordinal) >= 0)
+            else if (thumbImageUrl.Contains("_thumb."))
             {
                 threadStart = imageDownloader.GetImgBanana;
             }
