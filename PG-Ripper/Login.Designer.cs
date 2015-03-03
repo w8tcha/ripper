@@ -96,7 +96,6 @@ namespace Ripper
             this.ForumList.ItemHeight = 13;
             this.ForumList.Items.AddRange(new object[] {
             "<Select a Forum>",
-            "The Kitty-Kats Forum (perved.com)",
             "ViperGirls Forums",
             "Sexy and Funny Forums",
             "Scanlover Forums",

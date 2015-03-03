@@ -41,7 +41,7 @@ namespace Ripper.Core.Objects
             this.DownloadOptions = "0";
             this.TopMost = false;
             this.Language = "en-EN";
-            this.CurrentForumUrl = "http://kitty-kats.net/";
+            this.CurrentForumUrl = "http://vipergirls.to/";
             this.WindowWidth = 863;
             this.WindowHeight = 611;
 

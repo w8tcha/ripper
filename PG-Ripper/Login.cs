@@ -66,9 +66,9 @@ namespace Ripper
             // Load Language Setting
             try
             {
-                string sLanguage = CacheController.Instance().UserSettings.Language;
+                var language = CacheController.Instance().UserSettings.Language;
 
-                switch (sLanguage)
+                switch (language)
                 {
                     case "de-DE":
                         this.LanuageSelector.SelectedIndex = 0;
@@ -252,9 +252,6 @@ namespace Ripper
         {
             switch (this.ForumList.SelectedIndex)
             {
-                case 1:
-                    this.ForumUrl.Text = "http://kitty-kats.net/";
-                    break;
                 case 2:
                     this.ForumUrl.Text = "http://vipergirls.to/";
                     break;
