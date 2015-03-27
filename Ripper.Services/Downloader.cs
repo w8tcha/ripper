@@ -871,6 +871,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetPicExposed;
             }
+            else if (imageUrl.IndexOf(@"imgtrex.com/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetImgTrex;
+            }
             else if (thumbImageUrl.Contains("_thumb."))
             {
                 threadStart = imageDownloader.GetImgBanana;
