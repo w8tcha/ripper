@@ -2299,5 +2299,16 @@ namespace Ripper.Services
                 ref this.eventTable);
             this.xService.StartDownloadAsync();
         }
+        public void GetGallerynova()
+        {
+            this.xService = new Gallerynova(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
     }
 }

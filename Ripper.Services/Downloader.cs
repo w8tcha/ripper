@@ -875,6 +875,10 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgTrex;
             }
+            else if (imageUrl.IndexOf(@"gallerynova.se/", System.StringComparison.Ordinal) >= 0)
+            {
+                threadStart = imageDownloader.GetGallerynova;
+            }
             else if (thumbImageUrl.Contains("_thumb."))
             {
                 threadStart = imageDownloader.GetImgBanana;

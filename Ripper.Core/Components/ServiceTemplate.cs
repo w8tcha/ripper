@@ -222,6 +222,7 @@ namespace Ripper.Core.Components
                 webRequest.Referer = imageHostURL;
                 webRequest.KeepAlive = true;
                 webRequest.Timeout = 20000;
+                webRequest.CookieContainer = new CookieContainer();
 
                 if (!string.IsNullOrEmpty(cookieValue))
                 {
@@ -230,11 +231,11 @@ namespace Ripper.Core.Components
 
                 return GetResponseStream(webRequest);
             }
-            catch (ThreadAbortException)
+            catch (ThreadAbortException ex)
             {
                 pageContent = string.Empty;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 pageContent = string.Empty;
             }

@@ -136,6 +136,7 @@
     <Compile Include="ImageHosts\ImgPo.cs" />
     <Compile Include="ImageHosts\ImgSee.cs" />
     <Compile Include="ImageHosts\ImgSpice.cs" />
+    <Compile Include="ImageHosts\Gallerynova.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
     <Compile Include="ImageHosts\ImgWoot.cs" />
     <Compile Include="ImageHosts\Immage.cs" />
