@@ -136,6 +136,7 @@
     <Compile Include="ImageHosts\ImgPo.cs" />
     <Compile Include="ImageHosts\ImgSee.cs" />
     <Compile Include="ImageHosts\ImgSpice.cs" />
+    <Compile Include="ImageHosts\Gallerynova.cs" />
     <Compile Include="ImageHosts\ImgUr.cs" />
     <Compile Include="ImageHosts\ImgWoot.cs" />
     <Compile Include="ImageHosts\Immage.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="ImageHosts\PicBux.cs" />
     <Compile Include="ImageHosts\PicDir.cs" />
     <Compile Include="ImageHosts\PicEasy.cs" />
+    <Compile Include="ImageHosts\ImgTrex.cs" />
     <Compile Include="ImageHosts\PicExposed.cs" />
     <Compile Include="ImageHosts\PicHoarder.cs" />
     <Compile Include="ImageHosts\PicJackal.cs" />
