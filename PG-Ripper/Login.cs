@@ -253,7 +253,7 @@ namespace Ripper
             switch (this.ForumList.SelectedIndex)
             {
                 case 2:
-                    this.ForumUrl.Text = "http://vipergirls.to/";
+                    this.ForumUrl.Text = "https://vipergirls.to/";
                     break;
                 case 3:
                     this.ForumUrl.Text = "http://forums.sexyandfunny.com/";

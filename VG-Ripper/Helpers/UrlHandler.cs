@@ -101,7 +101,7 @@ namespace Ripper
                         else if (!xmlUrl.Contains("#post") && xmlUrl.Contains("showthread.php?"))
                         { 
                             // New VB Forums 4.x
-                            // http://vipergirls.to/showthread.php?0123456-Thread-Title
+                            // https://vipergirls.to/showthread.php?0123456-Thread-Title
                             // Threads
                             var threadId = xmlUrl.Substring(xmlUrl.IndexOf(".php?") + 5);
 
@@ -117,7 +117,7 @@ namespace Ripper
                         }
                         else if (xmlUrl.Contains("goto=newpost") && xmlUrl.Contains("showthread.php?"))
                         {
-                            // http://vipergirls.to/showthread.php?0123456-Thread-Title&goto=newpost#post12345
+                            // https://vipergirls.to/showthread.php?0123456-Thread-Title&goto=newpost#post12345
                             // Threads
                             var threadId = xmlUrl.Substring(xmlUrl.IndexOf(".php?") + 5);
 
@@ -133,7 +133,7 @@ namespace Ripper
                         }
                         else if (xmlUrl.Contains("&p=") && xmlUrl.Contains("#post"))
                         {
-                            // http://vipergirls.to/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
+                            // https://vipergirls.to/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
                             // Posts
                             var postId = xmlUrl.Substring(xmlUrl.IndexOf("#post") + 5);
 
@@ -144,7 +144,7 @@ namespace Ripper
                         }
                         else if (!xmlUrl.Contains(".php") && !xmlUrl.Contains("#post"))
                         {
-                            // http://vipergirls.to/subforumname/01234-threadtitle.html
+                            // https://vipergirls.to/subforumname/01234-threadtitle.html
                             // Threads
                             var threadId = xmlUrl.Substring(xmlUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
 

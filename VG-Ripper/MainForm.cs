@@ -913,7 +913,7 @@ namespace Ripper
             ///////////////////////////////////////////////
             this.LockControls();
             ///////////////////////////////////////////////
-
+            
             if (mIsIndexChk.Checked)
             {
                 // Parse Job as Index Thread
@@ -2044,6 +2044,8 @@ namespace Ripper
             listViewJobList.Items.AddRange(new[] { ijobJob });
 
             groupBox5.Text = string.Format("{0} ({1}):", _ResourceManager.GetString("lblRippingQue"), jobsList.Count);
+            
+            Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
         }
         /// <summary>
         /// Removes a Job from the Joblist and ListView
@@ -2058,6 +2060,9 @@ namespace Ripper
             listViewJobList.Items.RemoveAt(iJobIndex);
 
             groupBox5.Text = string.Format("{0} ({1}):", _ResourceManager.GetString("lblRippingQue"), jobsList.Count);
+
+            // Save Current Job to queue list -> in case of exception jobs get loaded on startup
+            Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
         }
 
         /// <summary>
@@ -2165,6 +2170,8 @@ namespace Ripper
             finally
             {
                 this.groupBox5.Text = string.Format("{0} ({1}):", this._ResourceManager.GetString("lblRippingQue"), this.jobsList.Count);
+                // Save Current Job to queue list -> in case of exception jobs get loaded on startup
+                Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
             }
         }
 
@@ -2204,6 +2211,8 @@ namespace Ripper
             }
 
             CheckCurJobFolder(sLastJobFolder);
+            // Save Current Job to queue list -> in case of exception jobs get loaded on startup
+            Utility.ExportCurrentJobsQueue(Path.Combine(Application.StartupPath, "jobs.xml"), this.jobsList);
         }
 
         /// <summary>

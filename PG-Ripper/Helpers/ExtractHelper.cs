@@ -216,10 +216,10 @@ namespace Ripper
         /// </returns>
         public static string RemoveRedirectLink(string linkToCheck)
         {
-            if (linkToCheck.Contains(@"http://vipergirls.to/redirect-to/?redirect="))
+            if (linkToCheck.Contains(@"https://vipergirls.to/redirect-to/?redirect="))
             {
                 linkToCheck =
-                    linkToCheck.Replace(@"http://vipergirls.to/redirect-to/?redirect=", string.Empty);
+                    linkToCheck.Replace(@"https://vipergirls.to/redirect-to/?redirect=", string.Empty);
 
                 linkToCheck = HttpUtility.UrlDecode(linkToCheck);
             }
