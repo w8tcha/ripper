@@ -57,25 +57,26 @@ namespace Ripper.Services.ImageHosts
         {
             var imageURL = ImageLinkURL;
 
-            var cookieValue = this.GetCookieValue(imageURL, @"setCookie\(\""ibpuc\"", \""(?<inner>[^\""]*)\"", 1\)");
+            //var cookieValue = this.GetCookieValue(imageURL, @"setCookie\(\""ibpuc\"", \""(?<inner>[^\""]*)\"", 1\)");
 
-            if (string.IsNullOrEmpty(cookieValue))
-            {
-                return false;
-            }
+            //if (string.IsNullOrEmpty(cookieValue))
+            //{
+            //    return false;
+            //}
 
-            // Get Image Link
-            var page = GetImageHostPage(ref imageURL, string.Format("ibpuc={0};", cookieValue));
+            //// Get Image Link
+            //var page = GetImageHostPage(ref imageURL, string.Format("ibpuc={0};", cookieValue));
 
-            if (page.Length < 10)
-            {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-                return false;
-            }
+            //if (page.Length < 10)
+            //{
+            //    ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+            //    return false;
+            //}
 
+            var page = this.GetImageHostPage(ref imageURL);
             string imageDownloadURL;
 
-            var match = Regex.Match(page, @";\"" src=\""(?<inner>[^\""]*)\"" alt=\""loading\""", RegexOptions.Compiled);
+            var match = Regex.Match(page, @"src=\""(?<inner>[^\""]*)\"" alt=\""loading\""", RegexOptions.Compiled);
 
             if (match.Success)
             {
@@ -83,6 +84,7 @@ namespace Ripper.Services.ImageHosts
             }
             else
             {
+
                 ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }

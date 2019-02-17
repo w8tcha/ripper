@@ -2310,5 +2310,27 @@ namespace Ripper.Services
                 ref this.eventTable);
             this.xService.StartDownloadAsync();
         }
+        public void GetLeechimg()
+        {
+            this.xService = new LeechImg(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
+        public void GetImgDriveCo()
+        {
+            this.xService = new ImgDriveCo(
+                ref this.savePath,
+                ref this.imageURL,
+                ref this.thumbImageURL,
+                ref this.imageName,
+                ref this.imageNumber,
+                ref this.eventTable);
+            this.xService.StartDownloadAsync();
+        }
     }
 }
