@@ -69,7 +69,7 @@
             this.linkLabel1.Size = new System.Drawing.Size(176, 17);
             this.linkLabel1.TabIndex = 3;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Ripper.CodePlex.com";
+            this.linkLabel1.Text = "github.com/w8tcha/ripper";
             this.linkLabel1.UseCompatibleTextRendering = true;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1LinkClicked);
             // 

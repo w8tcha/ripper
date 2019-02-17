@@ -4,7 +4,7 @@
 #define MyAppName "VG-Ripper"
 #define MyAppVersion "2.9.6.5"
 #define MyAppPublisher "The Watcher"
-#define MyAppURL "http://ripper.codeplex.com"
+#define MyAppURL "https://github.com/w8tcha/ripper"
 #define MyAppExeName "VG-Ripper.exe"
 
 [Setup]
@@ -22,10 +22,10 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\license.txt
-InfoBeforeFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\readme.txt
+LicenseFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\license.txt
+InfoBeforeFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\readme.txt
 OutputBaseFilename=VG-Ripper-Setup
-SetupIconFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\App.ico
+SetupIconFile=C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\App.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -37,14 +37,14 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\VG-Ripper.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\ICSharpCode.SharpZipLib.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\Microsoft.WindowsAPICodePack.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\Microsoft.WindowsAPICodePack.Shell.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\Ripper.Services.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\Ripper.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\license.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2013\Projects\rip-ripper\VG-Ripper\bin\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\VG-Ripper.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\ICSharpCode.SharpZipLib.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\Microsoft.WindowsAPICodePack.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\Microsoft.WindowsAPICodePack.Shell.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\Ripper.Services.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\RiPRipper\Ripper.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\license.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\Watcher\Documents\Projects\Visual Studio 2017\Projects\rip-ripper\VG-Ripper\bin\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -5,7 +5,7 @@
 @SET LANGDIR=EN
 
 -- Build X Build
-msbuild.exe PG-Ripper.sln /p:Configuration=PG-RipperX /t:Clean;Build /p:WarningLevel=0
+%MSBUILDPATH% PG-Ripper.sln /p:Configuration=PG-RipperX /t:Clean;Build /p:WarningLevel=0
 
 -- Build Regular Build + Package 
-msbuild.exe PG-Ripper.sln /p:Configuration=PG-Ripper /t:Clean;Build /p:WarningLevel=0
+%MSBUILDPATH% PG-Ripper.sln /p:Configuration=PG-Ripper /t:Clean;Build /p:WarningLevel=0

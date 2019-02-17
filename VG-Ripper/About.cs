@@ -131,7 +131,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.Windows.Forms.LinkLabelLinkClickedEventArgs"/> instance containing the event data.</param>
         private void LinkLabel1LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://Ripper.CodePlex.com/");
+            Process.Start("http://github.com/w8tcha/ripper/");
         }
 
         #endregion

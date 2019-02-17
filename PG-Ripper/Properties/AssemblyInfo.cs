@@ -25,7 +25,7 @@ using System.Reflection;
 
 [assembly: AssemblyDescription("Rips Images from VB Forums")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ripper.CodePlex.com")]
+[assembly: AssemblyCompany("github.com/w8tcha/ripper")]
 
 [assembly: AssemblyCopyright("(c) The Watcher")]
 [assembly: AssemblyTrademark("")]
