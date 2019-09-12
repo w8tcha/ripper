@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VG-Ripper", "VG-Ripper\VG-R
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setups", "Setups", "{8F21200F-10A6-47BB-8942-8CF9D241D926}"
 	ProjectSection(SolutionItems) = preProject
-		VG-Ripper-Setup\VG-Ripper-Setup.iss = VG-Ripper-Setup\VG-Ripper-Setup.iss
+		VG-Ripper-Setup.iss = VG-Ripper-Setup.iss
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ripper.Services", "Ripper.Services\Ripper.Services.csproj", "{8233EB04-64CA-499B-8A45-052C0DB5B7E2}"

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PG-Ripper", "PG-Ripper\PG-R
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setups", "Setups", "{975FA6A0-566E-4789-A366-7667E591030F}"
 	ProjectSection(SolutionItems) = preProject
-		PG-Ripper-Setup\PG-Ripper-Setup.iss = PG-Ripper-Setup\PG-Ripper-Setup.iss
+		PG-Ripper-Setup.iss = PG-Ripper-Setup.iss
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ripper.Services", "Ripper.Services\Ripper.Services.csproj", "{8233EB04-64CA-499B-8A45-052C0DB5B7E2}"

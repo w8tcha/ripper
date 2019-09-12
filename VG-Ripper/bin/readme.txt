@@ -19,8 +19,7 @@ Most major imagehosts are supported.
 
 System requirements
 
-- Microsoft .NET Framework 3.5 SP1 (for Windows)
-  http://www.microsoft.com/downloads/details.aspx?displaylang=en&FamilyID=0a391abd-25c1-4fc0-919f-b21f31ab88b7
+- Microsoft .NET Framework 4.7.2 (for Windows)
 
 - Mono Framework (for Linux, Mac OS and other)
   http://www.mono-project.com/Downloads

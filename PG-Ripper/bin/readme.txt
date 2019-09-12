@@ -1,4 +1,4 @@
-PG-Ripper and PG-Ripper X (http://ripper.codeplex.com/)
+PG-Ripper and PG-Ripper X
 ------------------------
 
 Features
@@ -16,17 +16,11 @@ posted on a vBulletin Forums.
 - You can Pause Downloads
 - When you close the Ripper during ripping and start the programm again you can resume ripping
 
-Optimized for:
-- RiP-Productions....................................http://rip-productions.net/
-- The Kitty-Kats Forum (perved.com)..................http://www.kitty-kats.com/
-- Sexy and Funny Forums..............................http://forums.sexyandfunny.com/
-- Scanlover Forums...................................http://forum.scanlover.com/
-
 ------------------------
 
 System requirements
 
-- Microsoft .NET Framework 3.5 SP 1 (for Windows)
+- Microsoft .NET Framework 4.7.2 (for Windows)
   http://www.microsoft.com/downloads/details.aspx?FamilyID=ab99342f-5d1a-413d-8319-81da479ab0d7&amp;displaylang=en
 
 - Mono Framework (for Linux, Mac OS and other)
