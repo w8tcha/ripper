@@ -44,18 +44,13 @@ namespace Ripper.Core.Components
             {
                 var dbCurrentVersion =
                     double.Parse(
-                        string.Format(
-                            "{0}.{1}.{2}.{3}",
-                            ripperAssembly.GetName().Version.Major,
-                            ripperAssembly.GetName().Version.Minor,
-                            ripperAssembly.GetName().Version.Build,
-                            ripperAssembly.GetName().Version.Revision));
+                        $"{ripperAssembly.GetName().Version.Major}.{ripperAssembly.GetName().Version.Minor}.{ripperAssembly.GetName().Version.Build}.{ripperAssembly.GetName().Version.Revision}");
 
                 var ds = new DataSet();
 
                 ds.ReadXml("http://www.watchersnet.de/rip-ripper/ripperUpdates.xml");
 
-                foreach (DataRow row in
+                foreach (var row in
                     from DataRow row in ds.Tables["ripper"].Rows
                     let nameRow = row["name"].ToString()
                     where nameRow.Equals(name)
@@ -63,7 +58,7 @@ namespace Ripper.Core.Components
                 {
                     var notes = row["notes"].ToString().Replace("\\n", "\n");
 
-                    releaseNotes = string.Format("\n\nChange log:\n{0}", notes);
+                    releaseNotes = $"\n\nChange log:\n{notes}";
                     OnlineVersion = row["version"].ToString();
                 }
 

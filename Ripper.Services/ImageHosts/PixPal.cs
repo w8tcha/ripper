@@ -53,14 +53,14 @@ namespace Ripper.Services.ImageHosts
         {
             string imageDownloadURL;
 
-            var imageURL = ImageLinkURL;
+            var imageURL = this.ImageLinkURL;
 
             // Get Image Link
-            var page = GetImageHostPage(ref imageURL);
+            var page = this.GetImageHostPage(ref imageURL);
 
             if (page.Length < 10)
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
@@ -72,12 +72,12 @@ namespace Ripper.Services.ImageHosts
             }
             else
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
             // Set Image Name
-            string filePath = imageDownloadURL.Substring(imageDownloadURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
+            var filePath = imageDownloadURL.Substring(imageDownloadURL.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath);

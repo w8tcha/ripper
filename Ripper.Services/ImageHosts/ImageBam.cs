@@ -55,24 +55,23 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageURL = ImageLinkURL;
+            var imageURL = this.ImageLinkURL;
 
-            //var cookieValue = this.GetCookieValue(imageURL, @"setCookie\(\""ibpuc\"", \""(?<inner>[^\""]*)\"", 1\)");
+            // var cookieValue = this.GetCookieValue(imageURL, @"setCookie\(\""ibpuc\"", \""(?<inner>[^\""]*)\"", 1\)");
 
-            //if (string.IsNullOrEmpty(cookieValue))
-            //{
-            //    return false;
-            //}
+            // if (string.IsNullOrEmpty(cookieValue))
+            // {
+            // return false;
+            // }
 
             //// Get Image Link
-            //var page = GetImageHostPage(ref imageURL, string.Format("ibpuc={0};", cookieValue));
+            // var page = GetImageHostPage(ref imageURL, string.Format("ibpuc={0};", cookieValue));
 
-            //if (page.Length < 10)
-            //{
-            //    ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
-            //    return false;
-            //}
-
+            // if (page.Length < 10)
+            // {
+            // ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+            // return false;
+            // }
             var page = this.GetImageHostPage(ref imageURL);
             string imageDownloadURL;
 
@@ -85,7 +84,7 @@ namespace Ripper.Services.ImageHosts
             else
             {
 
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 

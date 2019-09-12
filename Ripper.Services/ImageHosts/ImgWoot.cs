@@ -52,24 +52,24 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageDownloadURL = ThumbImageURL;
+            var imageDownloadURL = this.ThumbImageURL;
 
             // Set the download Path
-            if (ThumbImageURL.Contains("/upload/small/"))
+            if (this.ThumbImageURL.Contains("/upload/small/"))
             {
-                imageDownloadURL = ThumbImageURL.Replace(@"/upload/small/", @"/upload/big/");
+                imageDownloadURL = this.ThumbImageURL.Replace(@"/upload/small/", @"/upload/big/");
             }
-            else if (ThumbImageURL.Contains("/uploads/small/"))
+            else if (this.ThumbImageURL.Contains("/uploads/small/"))
             {
-                imageDownloadURL = ThumbImageURL.Replace(@"/uploads/small/", @"/uploads/big/");
+                imageDownloadURL = this.ThumbImageURL.Replace(@"/uploads/small/", @"/uploads/big/");
             }
-            else if (ThumbImageURL.Contains("/img/small/"))
+            else if (this.ThumbImageURL.Contains("/img/small/"))
             {
-                imageDownloadURL = ThumbImageURL.Replace(@"/img/small/", @"/img/big/");
+                imageDownloadURL = this.ThumbImageURL.Replace(@"/img/small/", @"/img/big/");
             }
-            else if (ThumbImageURL.Contains("/images/small/"))
+            else if (this.ThumbImageURL.Contains("/images/small/"))
             {
-                imageDownloadURL = ThumbImageURL.Replace(@"/images/small/", @"/images/big/");
+                imageDownloadURL = this.ThumbImageURL.Replace(@"/images/small/", @"/images/big/");
             }
 
             if (string.IsNullOrEmpty(imageDownloadURL) && this.ImageLinkURL.Contains("images/small"))

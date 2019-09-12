@@ -48,7 +48,7 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageDownloadURL = ImageLinkURL;
+            var imageDownloadURL = this.ImageLinkURL;
 
             // Set Image Name instead of using random name
             var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);

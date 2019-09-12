@@ -57,9 +57,9 @@ namespace Ripper.Core.Components
             var tempFolder = Path.Combine(Application.StartupPath, "temp");
 
             // Delete Backup Files From AutoUpdate
-            if (File.Exists(Path.Combine(Application.StartupPath, string.Format("{0}.bak", programName))))
+            if (File.Exists(Path.Combine(Application.StartupPath, $"{programName}.bak")))
             {
-                File.Delete(Path.Combine(Application.StartupPath, string.Format("{0}.bak", programName)));
+                File.Delete(Path.Combine(Application.StartupPath, $"{programName}.bak"));
             }
 
             if (File.Exists(Path.Combine(Application.StartupPath, "Ripper.Services.bak")))
@@ -92,10 +92,7 @@ namespace Ripper.Core.Components
             try
             {
                 // Download Update 
-                var downloadURL = string.Format(
-                    "http://www.watchersnet.de/rip-ripper/{0}{1}.zip",
-                    programName,
-                    VersionCheck.OnlineVersion);
+                var downloadURL = $"http://www.watchersnet.de/rip-ripper/{programName}{VersionCheck.OnlineVersion}.zip";
 
                 var tempZIP = Path.Combine(Application.StartupPath, "temp.zip");
 
@@ -120,7 +117,7 @@ namespace Ripper.Core.Components
                     programName = "PGRipper";
                 }
 
-                if (!File.Exists(Path.Combine(tempFolder, string.Format("{0}.exe", programName))))
+                if (!File.Exists(Path.Combine(tempFolder, $"{programName}.exe")))
                 {
                     return;
                 }
@@ -171,16 +168,16 @@ namespace Ripper.Core.Components
                        "Ripper.Core.bak");
                 }
 
-                if (!File.Exists(Path.Combine(Application.StartupPath, string.Format("{0}.exe", programName))))
+                if (!File.Exists(Path.Combine(Application.StartupPath, $"{programName}.exe")))
                 {
                     return;
                 }
 
                 // Replace Exe
                 File.Replace(
-                    Path.Combine(tempFolder, string.Format("{0}.exe", programName)),
+                    Path.Combine(tempFolder, $"{programName}.exe"),
                     assembly.Location,
-                    string.Format("{0}.bak", programName));
+                    $"{programName}.bak");
 
                 DeleteFolder(tempFolder);
 

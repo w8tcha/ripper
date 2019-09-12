@@ -52,21 +52,21 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageURL = ImageLinkURL;
+            var imageURL = this.ImageLinkURL;
 
             var cookieValue =
                 imageURL.Remove(imageURL.LastIndexOf("/", StringComparison.Ordinal))
                     .Replace("http://imgdap.com/", string.Empty);
 
             // Get Image Link
-            var page = GetImageHostPage(
+            var page = this.GetImageHostPage(
                 ref imageURL,
                 WebRequestMethods.Http.Post,
-                string.Format("op=view&id={0}&pre=3&btn=next", cookieValue));
+                $"op=view&id={cookieValue}&pre=3&btn=next");
 
             if (page.Length < 10)
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
@@ -80,7 +80,7 @@ namespace Ripper.Services.ImageHosts
             }
             else
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 

@@ -15,6 +15,7 @@ namespace Ripper
     using System.Net;
     using System.Text;
     using System.Text.RegularExpressions;
+    using System.Windows.Forms;
 
     using Ripper.Core.Components;
 
@@ -26,7 +27,7 @@ namespace Ripper
         /// <summary>
         /// Gets or sets the MainForm Instance
         /// </summary>
-        public static System.Windows.Forms.Form Xform { get; set; }
+        public static Form Xform { get; set; }
 
         /// <summary>
         /// Gets or sets the Maintenance Instance
@@ -90,7 +91,7 @@ namespace Ripper
 
                 const string Start = "<span class=\"ctrlcontainer\">";
 
-                int iPageStart = pageContent.IndexOf(Start, StringComparison.Ordinal);
+                var iPageStart = pageContent.IndexOf(Start, StringComparison.Ordinal);
 
                 if (iPageStart < 0)
                 {
@@ -99,7 +100,7 @@ namespace Ripper
 
                 iPageStart += Start.Length;
 
-                int iPageEnd = pageContent.IndexOf("</span></a>", iPageStart, StringComparison.Ordinal);
+                var iPageEnd = pageContent.IndexOf("</span></a>", iPageStart, StringComparison.Ordinal);
 
                 return iPageEnd < 0 ? string.Empty : pageContent.Substring(iPageStart, iPageEnd - iPageStart);
             }
@@ -109,7 +110,7 @@ namespace Ripper
 
                 const string Start = "<li class=\"navbit\">";
 
-                int iPageStart = pageContent.LastIndexOf(Start, StringComparison.Ordinal);
+                var iPageStart = pageContent.LastIndexOf(Start, StringComparison.Ordinal);
 
                 if (iPageStart < 0)
                 {
@@ -122,7 +123,7 @@ namespace Ripper
 
                 iPageStart += 1;
 
-                int iPageEnd = pageContent.IndexOf("</a></li>", iPageStart, StringComparison.Ordinal);
+                var iPageEnd = pageContent.IndexOf("</a></li>", iPageStart, StringComparison.Ordinal);
 
                 return iPageEnd < 0 ? string.Empty : pageContent.Substring(iPageStart, iPageEnd - iPageStart);
             }
@@ -147,31 +148,30 @@ namespace Ripper
 
             ////////////////////////////////////
             // Extract Current Post first
-            string sPostId = url.Substring(url.IndexOf("#post") + 5);
+            var sPostId = url.Substring(url.IndexOf("#post") + 5);
 
             // use only message content
-            string sMessageStart = string.Format(
+            var sMessageStart = string.Format(
                 "<li class=\"postbitlegacy postbitim postcontainer\" id=\"post_{0}\">",
                 sPostId);
             const string MessageEnd = "</blockquote>";
 
-            int iStart = content.IndexOf(sMessageStart);
+            var iStart = content.IndexOf(sMessageStart);
 
             iStart += sMessageStart.Length;
 
-            int iEnd = content.IndexOf(MessageEnd, iStart);
+            var iEnd = content.IndexOf(MessageEnd, iStart);
 
             var pageContent = content.Substring(iStart, iEnd - iStart);
 
             /////////////////////////////////
-
             const string TitleStart = "<h2 class=\"title icon\">";
 
-            int iTitleStart = pageContent.IndexOf(TitleStart);
+            var iTitleStart = pageContent.IndexOf(TitleStart);
 
             iTitleStart += TitleStart.Length;
 
-            int iTitleEnd = pageContent.IndexOf("</h2>", iTitleStart);
+            var iTitleEnd = pageContent.IndexOf("</h2>", iTitleStart);
 
             try
             {

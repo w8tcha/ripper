@@ -12,12 +12,9 @@
 //////////////////////////////////////////////////////////////////////////
 // This file is part of the RiP Ripper project base.
 
-using System;
 using System.Collections;
-using System.Web;
-using System.Net;
 using System.IO;
-using System.Text;
+using System.Net;
 using System.Threading;
 
 namespace Ripper
@@ -36,91 +33,89 @@ namespace Ripper
 		}
 
 		protected override bool DoDownload()
-		{
-		
-			string strImgURL = ImageLinkURL;
+        {
+            var strImgURL = this.ImageLinkURL;
 
-			if (EventTable.ContainsKey(strImgURL))	
-			{
-				return true;;
-			}
+            if (this.EventTable.ContainsKey(strImgURL))
+            {
+                return true;
+            }
 
-			string strFilePath = string.Empty;
+            var strFilePath = string.Empty;
 
-			
-			strFilePath = strImgURL.Substring(  strImgURL.IndexOf( "f=" ) + 2 );
+            strFilePath = strImgURL.Substring(strImgURL.IndexOf("f=") + 2);
 
             try
             {
-                if (!Directory.Exists(SavePath))
-                    Directory.CreateDirectory(SavePath);
+                if (!Directory.Exists(this.SavePath))
+                    Directory.CreateDirectory(this.SavePath);
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
                 return false;
             }
 
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
-			CacheObject CCObj = new CacheObject();
-			CCObj.IsDownloaded = false;
-			CCObj.FilePath = strFilePath ;
-			CCObj.Url = strImgURL;
-			try
-			{
-				EventTable.Add(strImgURL, CCObj);
-			}
-			catch (ThreadAbortException)
-			{
-				return true;
-			}
-			catch(System.Exception)
-			{
+            var CCObj = new CacheObject();
+            CCObj.IsDownloaded = false;
+            CCObj.FilePath = strFilePath;
+            CCObj.Url = strImgURL;
+            try
+            {
+                this.EventTable.Add(strImgURL, CCObj);
+            }
+            catch (ThreadAbortException)
+            {
+                return true;
+            }
+            catch (System.Exception)
+            {
+                if (this.EventTable.ContainsKey(strImgURL))
+                {
+                    return false;
+                }
+                else
+                {
+                    this.EventTable.Add(strImgURL, CCObj);
+                }
+            }
 
-				if (EventTable.ContainsKey(strImgURL))	
-				{
-					return false;
-				}
-				else
-				{
-					EventTable.Add(strImgURL, CCObj);
-				}
-			}
-			
-			int iLocStart = strImgURL.IndexOf( "loc=" );
-			if (iLocStart < 0)
-			{
-				return false;
-			}
-			iLocStart += 4;
+            var iLocStart = strImgURL.IndexOf("loc=");
+            if (iLocStart < 0)
+            {
+                return false;
+            }
 
-            int iNameStart = strImgURL.IndexOf("f=");
+            iLocStart += 4;
+
+            var iNameStart = strImgURL.IndexOf("f=");
             if (iNameStart < 0)
             {
                 return false;
             }
+
             iNameStart += 2;
 
-			string strNewURL = string.Format("http://fapomatic.com/{0}/{1}", 
-                strImgURL.Substring(iLocStart, strImgURL.IndexOf( "&", iLocStart ) - iLocStart  ),
-                strImgURL.Substring(iNameStart));
-			
-			//////////////////////////////////////////////////////////////////////////
-			string NewAlteredPath = Utility.GetSuitableName(strFilePath);
-			if (strFilePath != NewAlteredPath)
-			{
-				strFilePath = NewAlteredPath;
-				((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
-			}
+            var strNewURL =
+                $"http://fapomatic.com/{strImgURL.Substring(iLocStart, strImgURL.IndexOf("&", iLocStart) - iLocStart)}/{strImgURL.Substring(iNameStart)}";
+
+            //////////////////////////////////////////////////////////////////////////
+            var NewAlteredPath = Utility.GetSuitableName(strFilePath);
+            if (strFilePath != NewAlteredPath)
+            {
+                strFilePath = NewAlteredPath;
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
+            }
 
             try
-			{
-                WebClient client = new WebClient();
+            {
+                var client = new WebClient();
                 client.Headers.Add("Referer: " + strImgURL);
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
+                client.Headers.Add(
+                    "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
 
@@ -128,36 +123,35 @@ namespace Ripper
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.Instance().LastPic =((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
 
-			return true;
-		}
+            // CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
+            CacheController.Instance().LastPic =
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
 
-        
-	}
+            return true;
+        }
+    }
 }

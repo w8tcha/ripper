@@ -49,7 +49,7 @@ namespace Ripper.Services.ImageHosts
         protected override bool DoDownload()
         {
             // Set the download Path
-            var imageDownloadURL = ThumbImageURL.Replace("_t.", ".");
+            var imageDownloadURL = this.ThumbImageURL.Replace("_t.", ".");
 
             // Set Image Name instead of using random name
             var filePath = this.GetImageName(this.PostTitle, imageDownloadURL, this.ImageNumber);

@@ -44,9 +44,9 @@ namespace Ripper
         /// <returns>The Content of all Thread Pages</returns>
         public string GetThreadPages(string sURL)
         {
-            string sPageContent = GetRipPage(sURL);
+            var sPageContent = GetRipPage(sURL);
 
-            int iStart = 0;
+            var iStart = 0;
             int iThreadPages;
             try
             {
@@ -59,7 +59,7 @@ namespace Ripper
 
             if (iStart >= 0)
             {
-                int iEnd = sPageContent.IndexOf("</td>", iStart);
+                var iEnd = sPageContent.IndexOf("</td>", iStart);
                 iThreadPages = int.Parse(sPageContent.Substring(iStart + 10, iEnd - (iStart + 10)));
             }
             else
@@ -67,11 +67,11 @@ namespace Ripper
                 return sPageContent;
             }
 
-            string szThreadBaseURL = sURL;
+            var szThreadBaseURL = sURL;
 
-            for (int i = 1; i <= iThreadPages; i++)
+            for (var i = 1; i <= iThreadPages; i++)
             {
-                string szComposed = string.Format("{0}&page={1}", szThreadBaseURL, i);
+                var szComposed = string.Format("{0}&page={1}", szThreadBaseURL, i);
 
                 sPageContent += GetRipPage(szComposed);
             }
@@ -92,10 +92,9 @@ namespace Ripper
             int threadPagesCount;
 
             // <span><a href="javascript://" class="popupctrl">Page 1 of 3</a></span>
-
             try
             {
-                int iPagerStart = pageContent.IndexOf("<span><a href=\"javascript://\" class=\"popupctrl\">Page ");
+                var iPagerStart = pageContent.IndexOf("<span><a href=\"javascript://\" class=\"popupctrl\">Page ");
                 iStart = pageContent.IndexOf("of ", iPagerStart);
 
                 iStart += 3;
@@ -107,7 +106,7 @@ namespace Ripper
 
             if (iStart >= 0)
             {
-                int iEnd = pageContent.IndexOf("</a></span>", iStart);
+                var iEnd = pageContent.IndexOf("</a></span>", iStart);
 
                 threadPagesCount = int.Parse(pageContent.Substring(iStart, iEnd - iStart));
             }
@@ -116,12 +115,12 @@ namespace Ripper
                 return pageContent;
             }
 
-            string szThreadBaseURL = sURL;
+            var szThreadBaseURL = sURL;
 
-            for (int i = 1; i <= threadPagesCount; i++)
+            for (var i = 1; i <= threadPagesCount; i++)
             {
                 // -2.html
-                string szComposed = szThreadBaseURL.Contains(".html") ? szThreadBaseURL.Replace(".html", string.Format("-{0}.html", i)) : string.Format("{0}&page={1}", szThreadBaseURL, i);
+                var szComposed = szThreadBaseURL.Contains(".html") ? szThreadBaseURL.Replace(".html", string.Format("-{0}.html", i)) : string.Format("{0}&page={1}", szThreadBaseURL, i);
 
                 pageContent += GetRipPage(szComposed);
             }
@@ -148,13 +147,13 @@ namespace Ripper
         /// </returns>
         private static string GetRipPage(string strURL)
         {
-            Uri uURL = new Uri(strURL);
+            var uURL = new Uri(strURL);
 
             string sResult;
 
             try
             {
-                WebClient wc = new WebClient();
+                var wc = new WebClient();
                 
                 if (!CacheController.Instance().UserSettings.CurrentUserName.Equals("Guest"))
                 {
@@ -166,6 +165,7 @@ namespace Ripper
                 while (wc.IsBusy)
                 {
                     System.Threading.Thread.Sleep(10);
+
                     ////Application.DoEvents();
                 }
 

@@ -34,7 +34,7 @@ namespace Ripper
         /// </returns>
         public static List<ImageInfo> ExtractAttachmentImagesHtml(string htmlDump, string postId)
         {
-            List<ImageInfo> rtnList = new List<ImageInfo>();
+            var rtnList = new List<ImageInfo>();
 
             htmlDump = htmlDump.Replace("&amp;", "&");
 
@@ -254,7 +254,7 @@ namespace Ripper
         /// </returns>
         public static List<ImageInfo> ExtractIndexUrlsHtml(string htmlDump, string url)
         {
-            List<ImageInfo> rtnList = new List<ImageInfo>();
+            var rtnList = new List<ImageInfo>();
 
             const string StartHref = "<a ";
             const string Href = "href=\"";
@@ -265,22 +265,22 @@ namespace Ripper
             {
                 url = url.Substring(url.IndexOf("#post") + 5);
 
-                string sMessageStart = string.Format("<div id=\"post_message_{0}\">", url);
+                var sMessageStart = string.Format("<div id=\"post_message_{0}\">", url);
                 const string MessageEnd = "</blockquote>";
 
-                int iStart = htmlDump.IndexOf(sMessageStart);
+                var iStart = htmlDump.IndexOf(sMessageStart);
 
                 iStart += sMessageStart.Length;
 
-                int iEnd = htmlDump.IndexOf(MessageEnd, iStart);
+                var iEnd = htmlDump.IndexOf(MessageEnd, iStart);
 
                 htmlDump = htmlDump.Substring(iStart, iEnd - iStart);
             }
 
-            string sCopy = htmlDump;
+            var sCopy = htmlDump;
 
             ///////////////////////////////////////////////
-            int iStartHref = sCopy.IndexOf(StartHref);
+            var iStartHref = sCopy.IndexOf(StartHref);
 
             if (iStartHref < 0)
             {
@@ -288,11 +288,10 @@ namespace Ripper
             }
 
             //////////////////////////////////////////////////////////////////////////
-
             while (iStartHref >= 0)
             {
                 // Thread.Sleep(1);
-                int iHref = sCopy.IndexOf(Href, iStartHref);
+                var iHref = sCopy.IndexOf(Href, iStartHref);
 
                 if (!(iHref >= 0))
                 {
@@ -300,18 +299,18 @@ namespace Ripper
                     continue;
                 }
 
-                int iEndHref = sCopy.IndexOf(EndHref, iHref);
+                var iEndHref = sCopy.IndexOf(EndHref, iHref);
 
                 if (iEndHref >= 0)
                 {
-                    string substring = sCopy.Substring(iHref + Href.Length, iEndHref - (iHref + Href.Length));
+                    var substring = sCopy.Substring(iHref + Href.Length, iEndHref - (iHref + Href.Length));
                     sCopy = sCopy.Remove(iStartHref, iEndHref + EndHref.Length - iStartHref);
 
                     iStartHref = substring.IndexOf("\" target=\"_blank\">");
 
                     if (iStartHref >= 0)
                     {
-                        ImageInfo imgInfoIndexLink = new ImageInfo { ThumbnailUrl = string.Empty, ImageUrl = substring.Substring(0, iStartHref) };
+                        var imgInfoIndexLink = new ImageInfo { ThumbnailUrl = string.Empty, ImageUrl = substring.Substring(0, iStartHref) };
 
                         if (imgInfoIndexLink.ImageUrl.Contains(@"showthread.php") ||
                             imgInfoIndexLink.ImageUrl.Contains(@"showpost.php"))
@@ -332,7 +331,6 @@ namespace Ripper
             }
 
             //////////////////////////////////////////////////////////////////////////
-
             return rtnList;
         }
 
@@ -348,25 +346,25 @@ namespace Ripper
         /// </returns>
         public static List<ImageInfo> ExtractThreadtoPostsHtml(string htmlDump)
         {
-            List<ImageInfo> rtnList = new List<ImageInfo>();
+            var rtnList = new List<ImageInfo>();
 
             const string Start = "<a name=\"post";
 
-            string sEnd = "\" href";
+            var sEnd = "\" href";
 
-            string sCopy = htmlDump;
+            var sCopy = htmlDump;
 
-            int iStart = 0;
+            var iStart = 0;
 
             iStart = sCopy.IndexOf(Start, iStart);
 
             while (iStart >= 0)
             {
-                int iEnd = sCopy.IndexOf(sEnd, iStart);
+                var iEnd = sCopy.IndexOf(sEnd, iStart);
 
-                string sPostId = sCopy.Substring(iStart + Start.Length, iEnd - (iStart + Start.Length));
+                var sPostId = sCopy.Substring(iStart + Start.Length, iEnd - (iStart + Start.Length));
 
-                ImageInfo newThumbPicPool = new ImageInfo { ImageUrl = sPostId };
+                var newThumbPicPool = new ImageInfo { ImageUrl = sPostId };
 
                 // iEnd = 0;
                 if (Utility.IsNumeric(sPostId) && !string.IsNullOrEmpty(sPostId))

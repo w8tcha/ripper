@@ -66,7 +66,7 @@ namespace Ripper.Services.ImageHosts
             if (match.Success)
             {
                 imageDownloadURL = match.Groups["inner"].Value.Replace("&amp;", "&");
-                System.Uri uri = new System.Uri(imageDownloadURL);
+                var uri = new System.Uri(imageDownloadURL);
                 filePath = System.IO.Path.GetFileName(uri.AbsolutePath);
                 
             }

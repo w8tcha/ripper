@@ -13,6 +13,7 @@ namespace Ripper.Core.Components
 {
     using System;
     using System.Collections;
+    using System.ComponentModel;
     using System.IO;
     using System.Net;
     using System.Text;
@@ -267,7 +268,7 @@ namespace Ripper.Core.Components
                 {
                     var reader = new StreamReader(stream);
 
-                    string page = reader.ReadToEnd();
+                    var page = reader.ReadToEnd();
 
                     res.Close();
                     reader.Close();
@@ -306,21 +307,14 @@ namespace Ripper.Core.Components
                                      ? ".jpg"
                                      : imageUrl.Substring(imageUrl.LastIndexOf(".", StringComparison.Ordinal));
 
-            var imageName = string.Format(
-                "{0}_{1}{2}",
-                postTitle,
-                imageNumber,
-                imageExtension);
+            var imageName = $"{postTitle}_{imageNumber}{imageExtension}";
 
             // Check if folder path is too long
             var savePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(imageName));
             
             if (savePath.Length > 250)
             {
-                return string.Format(
-                "{0}{1}",
-                imageNumber,
-                imageExtension);
+                return $"{imageNumber}{imageExtension}";
             }
 
             return imageName;
@@ -351,7 +345,7 @@ namespace Ripper.Core.Components
 
             if (addReferer)
             {
-                this.WebClient.Headers.Add(string.Format("Referer: {0}", this.ThumbImageURL)); 
+                this.WebClient.Headers.Add($"Referer: {this.ThumbImageURL}"); 
             }
 
             if (addForumCookie)
@@ -409,12 +403,13 @@ namespace Ripper.Core.Components
             return pageContent;
         } 
         
+
         /// <summary>
         /// Downloads the image completed.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.AsyncCompletedEventArgs" /> instance containing the event data.</param>
-        private void DownloadImageCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        private void DownloadImageCompleted(object sender, AsyncCompletedEventArgs e)
         {
             var cacheObject = (CacheObject)this.EventTable[this.ImageLinkURL];
 
@@ -433,7 +428,6 @@ namespace Ripper.Core.Components
                 {
                     File.Delete(cacheObject.FilePath);
                 }*/
-
                 ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
             }
 

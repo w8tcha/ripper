@@ -15,8 +15,6 @@ namespace Ripper
 
     using Microsoft.VisualBasic.ApplicationServices;
 
-    using Ripper.Core.Components;
-
     /// <summary>
     /// Single Instance Controller
     /// </summary>

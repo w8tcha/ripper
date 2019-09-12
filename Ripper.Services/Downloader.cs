@@ -14,7 +14,6 @@ namespace Ripper.Services
     #region
 
     using System.Threading;
-    using System.Windows.Forms.VisualStyles;
 
     using Ripper.Core.Components;
 
@@ -38,7 +37,6 @@ namespace Ripper.Services
         {
             // TODO : Check which image host needs that check
             ////imageUrl = imageUrl.ToLower();
-
             if (string.IsNullOrEmpty(thumbImageUrl))
             {
                 thumbImageUrl = imageUrl;
@@ -895,10 +893,11 @@ namespace Ripper.Services
             {
                 threadStart = imageDownloader.GetImgBanana;
             }
+
             /*else if (imageUrl.IndexOf(@"pixliv.com/", System.StringComparison.Ordinal) >= 0)
-            {
-                threadStart = imageDownloader.GetPixLiv;
-            }*/
+                        {
+                            threadStart = imageDownloader.GetPixLiv;
+                        }*/
             else if (thumbImageUrl.Contains("/upload/small/"))
             {
                 threadStart = imageDownloader.GetImgWoot;

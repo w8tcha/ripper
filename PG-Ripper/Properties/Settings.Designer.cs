@@ -30,6 +30,7 @@ namespace Ripper.Properties {
             get {
                 return ((string)(this["DownloadFolder"]));
             }
+
             set {
                 this["DownloadFolder"] = value;
             }

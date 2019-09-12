@@ -35,14 +35,14 @@ namespace Ripper
         /// <returns>The Content of all Thread Pages</returns>
         public string GetThreadPagesNew(string sURL)
         {
-            string sPageContent = GetRipPage(sURL);
+            var sPageContent = GetRipPage(sURL);
 
             int iStart;
             int iThreadPages;
 
             try
             {
-                int iPagerStart = sPageContent.IndexOf("<span><a href=\"javascript://\" class=\"popupctrl\">Page ");
+                var iPagerStart = sPageContent.IndexOf("<span><a href=\"javascript://\" class=\"popupctrl\">Page ");
                 iStart = sPageContent.IndexOf("of ", iPagerStart);
 
                 iStart += 3;
@@ -54,7 +54,7 @@ namespace Ripper
 
             if (iStart >= 0)
             {
-                int iEnd = sPageContent.IndexOf("</a></span>", iStart);
+                var iEnd = sPageContent.IndexOf("</a></span>", iStart);
 
                 iThreadPages = int.Parse(sPageContent.Substring(iStart, iEnd - iStart));
             }
@@ -63,12 +63,12 @@ namespace Ripper
                 return sPageContent;
             }
 
-            string szThreadBaseURL = sURL;
+            var szThreadBaseURL = sURL;
 
-            for (int i = 1; i <= iThreadPages; i++)
+            for (var i = 1; i <= iThreadPages; i++)
             {
-                //-2.html
-                string szComposed = szThreadBaseURL.Contains(".html")
+                // -2.html
+                var szComposed = szThreadBaseURL.Contains(".html")
                                         ? szThreadBaseURL.Replace(".html", string.Format("-{0}.html", i))
                                         : string.Format("{0}/page{1}", szThreadBaseURL, i);
 
@@ -95,11 +95,11 @@ namespace Ripper
         /// <returns></returns>
         private static string GetRipPage(string strURL)
         {
-            string strPageRead = string.Empty;
+            var strPageRead = string.Empty;
 
             try
             {
-                HttpWebRequest lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strURL);
+                var lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strURL);
                 lHttpWebRequest.UserAgent =
                     "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
                 lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
@@ -108,22 +108,24 @@ namespace Ripper
                 lHttpWebRequest.Accept =
                     "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
                 lHttpWebRequest.KeepAlive = true;
-                //lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
+
+                // lHttpWebRequest.Credentials = new NetworkCredential(Utility.Username, Utility.Password);
                 lHttpWebRequest.Referer = CacheController.Instance().UserSettings.CurrentForumUrl;
 
-                Stream lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
-                Encoding encode = Encoding.GetEncoding("utf-8");
+                var lHttpWebResponseStream = lHttpWebRequest.GetResponse().GetResponseStream();
+                var encode = Encoding.GetEncoding("utf-8");
 
-                StreamReader readStream = new StreamReader(lHttpWebResponseStream, encode);
+                var readStream = new StreamReader(lHttpWebResponseStream, encode);
 
-                Char[] read = new Char[256];
-                int count = readStream.Read(read, 0, 256);
+                var read = new char[256];
+                var count = readStream.Read(read, 0, 256);
                 while (count > 0)
                 {
-                    String str = new String(read, 0, count);
+                    var str = new String(read, 0, count);
                     strPageRead += str;
                     count = readStream.Read(read, 0, 256);
                 }
+
                 lHttpWebResponseStream.Close();
             }
             catch (Exception)

@@ -53,14 +53,14 @@ namespace Ripper.Core.Components
         public static DialogResult Show(string message, string title, MessageBoxButtons buttons)
         {
             // Create a host form that is a TopMost window which will be the parent of the MessageBox.
-            Form topmostForm = new Form
+            var topmostForm = new Form
                                    {
                                        Size = new Size(1, 1),
                                        StartPosition = FormStartPosition.Manual
                                    };
             
             // We do not want anyone to see this window so position it off the visible screen and make it as small as possible
-            Rectangle rect = SystemInformation.VirtualScreen;
+            var rect = SystemInformation.VirtualScreen;
             topmostForm.Location = new Point(rect.Bottom + 10, rect.Right + 10);
             topmostForm.Show();
             
@@ -70,7 +70,7 @@ namespace Ripper.Core.Components
             topmostForm.TopMost = true;
             
             // Finally show the MessageBox with the form just created as its owner
-            DialogResult result = MessageBox.Show(topmostForm, message, title, buttons);
+            var result = MessageBox.Show(topmostForm, message, title, buttons);
             topmostForm.Dispose(); // clean it up all the way
 
             return result;
@@ -87,14 +87,14 @@ namespace Ripper.Core.Components
         public static DialogResult Show(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             // Create a host form that is a TopMost window which will be the parent of the MessageBox.
-            Form topmostForm = new Form
+            var topmostForm = new Form
                                    {
                                        Size = new Size(1, 1),
                                        StartPosition = FormStartPosition.Manual
                                    };
             
             // We do not want anyone to see this window so position it off the visible screen and make it as small as possible
-            Rectangle rect = SystemInformation.VirtualScreen;
+            var rect = SystemInformation.VirtualScreen;
             topmostForm.Location = new Point(rect.Bottom + 10, rect.Right + 10);
             topmostForm.Show();
             
@@ -104,7 +104,7 @@ namespace Ripper.Core.Components
             topmostForm.TopMost = true;
             
             // Finally show the MessageBox with the form just created as its owner
-            DialogResult result = MessageBox.Show(topmostForm, message, title, buttons, icon);
+            var result = MessageBox.Show(topmostForm, message, title, buttons, icon);
             topmostForm.Dispose(); // clean it up all the way
 
             return result;

@@ -75,7 +75,7 @@ namespace Ripper
         /// <returns>Setting value</returns>
         public static string LoadSetting(string sKey)
         {
-            string setting = App.Settings[sKey].Value;
+            var setting = App.Settings[sKey].Value;
 
             return setting;
         }

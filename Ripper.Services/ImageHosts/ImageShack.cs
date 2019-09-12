@@ -44,14 +44,14 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageURL = ImageLinkURL;
+            var imageURL = this.ImageLinkURL;
 
             // Get Image Link
-            var page = GetImageHostPage(ref imageURL);
+            var page = this.GetImageHostPage(ref imageURL);
 
             if (page.Length < 10)
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
@@ -64,11 +64,11 @@ namespace Ripper.Services.ImageHosts
 
             if (match.Success)
             {
-                imageDownloadURL = string.Format("https:{0}", match.Groups["inner"].Value.Replace("&amp;", "&"));
+                imageDownloadURL = $"https:{match.Groups["inner"].Value.Replace("&amp;", "&")}";
             }
             else
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 
@@ -83,7 +83,7 @@ namespace Ripper.Services.ImageHosts
             }
             else
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 

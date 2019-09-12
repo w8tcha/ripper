@@ -40,12 +40,12 @@ namespace Ripper
         /// </returns>
         public static List<ImageInfo> ExtractImages(string strDump)
         {
-            List<ImageInfo> rtnList = new List<ImageInfo>();
-            Hashtable rtnHashChk = new Hashtable();
+            var rtnList = new List<ImageInfo>();
+            var rtnHashChk = new Hashtable();
 
             try
             {
-                DataSet ds = new DataSet();
+                var ds = new DataSet();
 
                 ds.ReadXml(new StringReader(strDump));
 
@@ -62,7 +62,7 @@ namespace Ripper
                         thumbUrl = string.Empty;
                     }
 
-                    ImageInfo newPicPool = new ImageInfo
+                    var newPicPool = new ImageInfo
                                                {
                                                    ImageUrl = row["main_url"].ToString(),
                                                    ThumbnailUrl = thumbUrl
@@ -89,9 +89,7 @@ namespace Ripper
                     {
                         newPicPool.ImageUrl =
                             newPicPool.ImageUrl.Replace(
-                                string.Format(
-                                    "{0}redirect-to/?redirect=",
-                                    CacheController.Instance().UserSettings.ForumURL),
+                                $"{CacheController.Instance().UserSettings.ForumURL}redirect-to/?redirect=",
                                 string.Empty);
                     }
 
@@ -121,7 +119,7 @@ namespace Ripper
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
+                MessageBox.Show($"{ex.Message}\n{ex.StackTrace}");
             }
 
             return rtnList;
@@ -138,16 +136,16 @@ namespace Ripper
         /// </returns>
         public static List<ImageInfo> ExtractRiPUrls(string xmlDump)
         {
-            List<ImageInfo> rtnList = new List<ImageInfo>();
-            Hashtable rtnHashChk = new Hashtable();
+            var rtnList = new List<ImageInfo>();
+            var rtnHashChk = new Hashtable();
 
             try
             {
-                DataSet ds = new DataSet();
+                var ds = new DataSet();
 
                 ds.ReadXml(new StringReader(xmlDump));
 
-                foreach (ImageInfo newPicPool in
+                foreach (var newPicPool in
                     from DataRow row in ds.Tables["Image"].Rows
                     select
                         new ImageInfo
@@ -170,7 +168,7 @@ namespace Ripper
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
+                MessageBox.Show($"{ex.Message}\n{ex.StackTrace}");
             }
 
             return rtnList;
@@ -187,16 +185,16 @@ namespace Ripper
         /// </returns>
         public static List<ImageInfo> ExtractThreadtoPosts(string xmlDump)
         {
-            List<ImageInfo> rtnList = new List<ImageInfo>();
-            Hashtable rtnHashChk = new Hashtable();
+            var rtnList = new List<ImageInfo>();
+            var rtnHashChk = new Hashtable();
 
             try
             {
-                DataSet ds = new DataSet();
+                var ds = new DataSet();
 
                 ds.ReadXml(new StringReader(xmlDump));
 
-                foreach (ImageInfo newPicPool in
+                foreach (var newPicPool in
                     ds.Tables["post"].Rows.Cast<DataRow>()
                         .Where(row => row["id"] != null)
                         .Select(row => new ImageInfo { ImageUrl = row["id"].ToString() }))

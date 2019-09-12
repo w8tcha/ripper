@@ -46,9 +46,9 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageURL = ImageLinkURL;
+            var imageURL = this.ImageLinkURL;
 
-            if (EventTable.ContainsKey(imageURL))
+            if (this.EventTable.ContainsKey(imageURL))
             {
                 return true;
             }
@@ -64,9 +64,8 @@ namespace Ripper.Services.ImageHosts
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
                 return false;
             }
 
@@ -74,7 +73,7 @@ namespace Ripper.Services.ImageHosts
 
             try
             {
-                EventTable.Add(imageURL, cacheObject);
+                this.EventTable.Add(imageURL, cacheObject);
             }
             catch (ThreadAbortException)
             {
@@ -82,12 +81,12 @@ namespace Ripper.Services.ImageHosts
             }
             catch (Exception)
             {
-                if (EventTable.ContainsKey(imageURL))
+                if (this.EventTable.ContainsKey(imageURL))
                 {
                     return false;
                 }
 
-                EventTable.Add(imageURL, cacheObject);
+                this.EventTable.Add(imageURL, cacheObject);
             }
 
             // Set the download Path
@@ -105,46 +104,44 @@ namespace Ripper.Services.ImageHosts
             filePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(filePath));
 
             //////////////////////////////////////////////////////////////////////////
-
             filePath = Utility.GetSuitableName(filePath, true);
 
-            ((CacheObject)EventTable[imageURL]).FilePath = filePath;
+            ((CacheObject)this.EventTable[imageURL]).FilePath = filePath;
 
             try
             {
                 var client = new WebClient();
-                client.Headers.Add(string.Format("Referer: {0}", imageURL));
+                client.Headers.Add($"Referer: {imageURL}");
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(imageDownloadURL, filePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
 
                 return true;
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 ThreadManager.GetInstance().RemoveThreadbyId(imageURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[imageURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic = ((CacheObject)EventTable[imageURL]).FilePath = filePath;
+            ((CacheObject)this.EventTable[imageURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic = ((CacheObject)this.EventTable[imageURL]).FilePath = filePath;
 
             return true;
         }

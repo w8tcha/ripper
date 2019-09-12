@@ -63,12 +63,8 @@ namespace Ripper
                 Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"));
 #else
-            this.label1.Text = string.Format(
-                "Viper Girls Ripper {0}.{1}.{2}{3}", 
-                Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0"), 
-                Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"));
+            this.label1.Text =
+                $"Viper Girls Ripper {Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0")}.{Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0")}.{Assembly.GetExecutingAssembly().GetName().Version.Build.ToString("0")}{Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0")}";
 #endif
         }
 

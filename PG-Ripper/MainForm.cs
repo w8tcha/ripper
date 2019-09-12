@@ -11,9 +11,11 @@
 
 namespace Ripper
 {
+#if (!PGRIPPERX)
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Drawing;
     using System.IO;
     using System.Linq;
@@ -22,15 +24,16 @@ namespace Ripper
     using System.Resources;
     using System.Text.RegularExpressions;
     using System.Threading;
+    using System.Timers;
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
-    using Ripper.Core.Objects;
+    using Microsoft.WindowsAPICodePack.Taskbar;
+
     using Ripper.Core.Components;
+    using Ripper.Core.Objects;
     using Ripper.Services;
 
-#if (!PGRIPPERX)
-    using Microsoft.WindowsAPICodePack.Taskbar;
 #endif
 
     /// <summary>
@@ -49,6 +52,7 @@ namespace Ripper
         private readonly ArrayList sRippedPosts = new ArrayList();
 
 #if (!PGRIPPERX)
+
         /// <summary>
         /// TaskBar Manager Instance
         /// </summary>
@@ -101,31 +105,32 @@ namespace Ripper
         public MainForm()
         {
 #if (!PGRIPPERX)
+
             // Tray Menue
-            trayMenu = new ContextMenu();
+            this.trayMenu = new ContextMenu();
 
-            MenuItem hide = new MenuItem("Hide PG-Ripper", this.HideClick);
-            MenuItem sDownload = new MenuItem("Start Download", this.SDownloadClick);
-            MenuItem exit = new MenuItem("Exit Program", this.ExitClick);
+            var hide = new MenuItem("Hide PG-Ripper", this.HideClick);
+            var sDownload = new MenuItem("Start Download", this.SDownloadClick);
+            var exit = new MenuItem("Exit Program", this.ExitClick);
 
-            trayMenu.MenuItems.Add(0, hide);
-            trayMenu.MenuItems.Add(1, sDownload);
-            trayMenu.MenuItems.Add(2, exit);
+            this.trayMenu.MenuItems.Add(0, hide);
+            this.trayMenu.MenuItems.Add(1, sDownload);
+            this.trayMenu.MenuItems.Add(2, exit);
 
             // Tray Icon
-            trayIcon = new NotifyIcon
-                {
-                    Text = "Right click for context menu",
-                    Visible = false,
-                    Icon = new Icon(GetType(), "App.ico"),
-                    ContextMenu = trayMenu
-                };
+            this.trayIcon = new NotifyIcon
+                                {
+                                    Text = "Right click for context menu",
+                                    Visible = false,
+                                    Icon = new Icon(this.GetType(), "App.ico"),
+                                    ContextMenu = this.trayMenu
+                                };
 
             this.trayIcon.MouseDoubleClick += this.HideClick;
 #endif
-            InitializeComponent();
+            this.InitializeComponent();
 
-            jobsList = new List<JobInfo>();
+            this.jobsList = new List<JobInfo>();
         }
 
         /// <summary>
@@ -152,6 +157,7 @@ namespace Ripper
         public ResourceManager _ResourceManager { get; set; }
 
 #if (!PGRIPPERX)
+
         /// <summary>
         /// the download click.
         /// </summary>
@@ -169,9 +175,9 @@ namespace Ripper
 
             this.textBox1.Text = Clipboard.GetText();
 
-            if (InvokeRequired)
+            if (this.InvokeRequired)
             {
-                Invoke((MethodInvoker)this.EnqueueJob);
+                this.Invoke((MethodInvoker)this.EnqueueJob);
             }
             else
             {
@@ -186,7 +192,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void ExitClick(object sender, EventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         /// <summary>
@@ -199,9 +205,9 @@ namespace Ripper
             this.Hide();
             this.isHiddenInTray = true;
 
-            trayMenu.MenuItems.RemoveAt(0);
-            MenuItem show = new MenuItem("Show PG-Ripper", this.ShowClick);
-            trayMenu.MenuItems.Add(0, show);
+            this.trayMenu.MenuItems.RemoveAt(0);
+            var show = new MenuItem("Show PG-Ripper", this.ShowClick);
+            this.trayMenu.MenuItems.Add(0, show);
 
             this.trayIcon.MouseDoubleClick -= this.HideClick;
             this.trayIcon.MouseDoubleClick += this.ShowClick;
@@ -211,10 +217,10 @@ namespace Ripper
                 return;
             }
 
-            trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
-            trayIcon.BalloonTipTitle = "Hidden in Tray";
-            trayIcon.BalloonTipText = "PG-Ripper is hidden in the Tray";
-            trayIcon.ShowBalloonTip(10);
+            this.trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
+            this.trayIcon.BalloonTipTitle = "Hidden in Tray";
+            this.trayIcon.BalloonTipText = "PG-Ripper is hidden in the Tray";
+            this.trayIcon.ShowBalloonTip(10);
         }
 
         /// <summary>
@@ -240,6 +246,7 @@ namespace Ripper
                 this.WindowState = FormWindowState.Normal;
             }
         }
+
 #endif
 
         /// <summary>
@@ -261,6 +268,7 @@ namespace Ripper
             }
         }
         
+
         /// <summary>
         /// Checks the Download Folder of the Current Finished Job, if Empty delete the folder.
         /// </summary>
@@ -397,7 +405,7 @@ namespace Ripper
             }
             catch (Exception)
             {
-                Login frmLgn = new Login();
+                var frmLgn = new Login();
                 frmLgn.ShowDialog(this);
 
                 if (this.cameThroughCorrectLogin)
@@ -484,7 +492,7 @@ namespace Ripper
                 var mbUpdate = this._ResourceManager.GetString("mbUpdate");
                 var mbUpdate2 = this._ResourceManager.GetString("mbUpdate2");
 
-                DialogResult result = TopMostMessageBox.Show(
+                var result = TopMostMessageBox.Show(
                     string.Format("{0}{1}", mbUpdate, updateNotes),
                     mbUpdate2,
                     MessageBoxButtons.YesNo,
@@ -614,7 +622,7 @@ namespace Ripper
         {
             this.Visible = false;
 
-            Login frmLgn = new Login();
+            var frmLgn = new Login();
             frmLgn.ShowDialog(this);
 
             this.CheckAccountMenu();
@@ -711,7 +719,6 @@ namespace Ripper
                 this.IdleRipper();
             }*/
             ////
-
             if (sender == null)
             {
                 return;
@@ -761,7 +768,7 @@ namespace Ripper
                     {
                         this.Visible = false;
 
-                        Login frmLgn = new Login();
+                        var frmLgn = new Login();
                         frmLgn.ShowDialog(this);
 
                         this.Visible = true;
@@ -791,7 +798,7 @@ namespace Ripper
                     Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString("0"),
                     string.Format("{0}{1}\" @ {2} ]", header, CacheController.Instance().UserSettings.CurrentUserName, CacheController.Instance().UserSettings.CurrentForumUrl));
 #else
-            Text = string.Format(
+            this.Text = string.Format(
                 "PG-Ripper {0}.{1}.{2}{3}{4}",
                 Assembly.GetExecutingAssembly().GetName().Version.Major.ToString("0"),
                 Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString("0"),
@@ -808,7 +815,7 @@ namespace Ripper
         /// </summary>
         private void AutoLogin()
         {
-            bool accountExists = false;
+            var accountExists = false;
             var currentForumAccount = new ForumAccount();
 
             foreach (var forumAccount in CacheController.Instance().UserSettings.ForumsAccount.Where(
@@ -828,7 +835,7 @@ namespace Ripper
                 }
                 else
                 {
-                    LoginManager lgnMgr = new LoginManager(currentForumAccount.UserName, currentForumAccount.UserPassWord);
+                    var lgnMgr = new LoginManager(currentForumAccount.UserName, currentForumAccount.UserPassWord);
 
                     if (lgnMgr.DoLogin(CacheController.Instance().UserSettings.CurrentForumUrl))
                     {
@@ -836,10 +843,10 @@ namespace Ripper
                     }
                     else
                     {
-                        Login frmLgn = new Login();
+                        var frmLgn = new Login();
                         frmLgn.ShowDialog(this);
 
-                        DialogResult result = TopMostMessageBox.Show(
+                        var result = TopMostMessageBox.Show(
                             this._ResourceManager.GetString("mbExit"),
                             this._ResourceManager.GetString("mbExitTtl"),
                             MessageBoxButtons.YesNo,
@@ -854,7 +861,7 @@ namespace Ripper
             }
             else
             {
-                Login frmLgn = new Login();
+                var frmLgn = new Login();
                 frmLgn.ShowDialog(this);
 
                 Application.Exit();
@@ -933,7 +940,6 @@ namespace Ripper
                 this.CheckUrlForumAccount(this.textBox1.Text);
             }
 
-
             this.tmrPageUpdate.Enabled = true;
 
             if (!this.IsValidJob())
@@ -974,8 +980,11 @@ namespace Ripper
 
                     if (this.IsPostAlreadyRipped(sPostId))
                     {
-                        DialogResult result = TopMostMessageBox.Show(
-                            this._ResourceManager.GetString("mBAlready"), "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        var result = TopMostMessageBox.Show(
+                            this._ResourceManager.GetString("mBAlready"),
+                            "Info",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
 
                         if (result != DialogResult.Yes)
                         {
@@ -988,9 +997,9 @@ namespace Ripper
 
             ///////////////////////////////////////////////
             this.LockControls();
-            ///////////////////////////////////////////////
 
-            if (mIsIndexChk.Checked)
+            ///////////////////////////////////////////////
+            if (this.mIsIndexChk.Checked)
             {
                 // Parse Job as Index Thread
                 this.EnqueueIndexThread(sHtmlUrl);
@@ -1014,16 +1023,16 @@ namespace Ripper
         /// <returns>Returns true or false</returns>
         private bool IsValidJob()
         {
-            if (!Utility.IsNumeric(textBox1.Text) && comboBox1.SelectedIndex != 2)
+            if (!Utility.IsNumeric(this.textBox1.Text) && this.comboBox1.SelectedIndex != 2)
             {
-                TopMostMessageBox.Show(mTNumericMsg, "Info");
+                TopMostMessageBox.Show(this.mTNumericMsg, "Info");
 
                 return false;
             }
 
             if (string.IsNullOrEmpty(CacheController.Instance().UserSettings.DownloadFolder))
             {
-                DialogResult result = TopMostMessageBox.Show(
+                var result = TopMostMessageBox.Show(
                     "Please Set Up Download Folder before starting download",
                     "Info",
                     MessageBoxButtons.YesNo,
@@ -1050,6 +1059,7 @@ namespace Ripper
             {
                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
             }
+
 #endif
 
             try
@@ -1058,16 +1068,21 @@ namespace Ripper
                     string.IsNullOrEmpty(
                         Maintenance.GetInstance().ExtractTopicTitleFromHtml(Maintenance.GetInstance().GetPostPages(sHtmlUrl))))
                 {
-                    TopMostMessageBox.Show(sHtmlUrl.IndexOf("showthread.php") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(
+                        sHtmlUrl.IndexOf("showthread.php") > 0 ? this.mNoThreadMsg : this.mNoPostMsg,
+                        "Info");
 
 #if (!PGRIPPERX)
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
-                        Environment.OSVersion.Version.Minor >= 1)
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6
+                                                                             && Environment.OSVersion.Version.Minor
+                                                                             >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                         this.windowsTaskbar.SetProgressValue(10, 100);
                     }
+
 #endif
+
                     // Unlock Controls
                     this.UnlockControls();
 
@@ -1076,27 +1091,31 @@ namespace Ripper
             }
             catch (Exception)
             {
-                TopMostMessageBox.Show(sHtmlUrl.IndexOf("showthread.php") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                TopMostMessageBox.Show(
+                    sHtmlUrl.IndexOf("showthread.php") > 0 ? this.mNoThreadMsg : this.mNoPostMsg,
+                    "Info");
 
 #if (!PGRIPPERX)
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
-                    Environment.OSVersion.Version.Minor >= 1)
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6
+                                                                         && Environment.OSVersion.Version.Minor >= 1)
                 {
                     this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                     this.windowsTaskbar.SetProgressValue(10, 100);
                 }
+
 #endif
+
                 // Unlock Controls
                 this.UnlockControls();
 
                 return;
             }
 
-            mIsIndexChk.Checked = false;
+            this.mIsIndexChk.Checked = false;
 
-            GetIdxsWorker.RunWorkerAsync(sHtmlUrl);
+            this.GetIdxsWorker.RunWorkerAsync(sHtmlUrl);
 
-            while (GetIdxsWorker.IsBusy)
+            while (this.GetIdxsWorker.IsBusy)
             {
                 Application.DoEvents();
             }
@@ -1114,6 +1133,7 @@ namespace Ripper
             {
                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
             }
+
 #endif
 
            try
@@ -1122,42 +1142,51 @@ namespace Ripper
                     string.IsNullOrEmpty(
                         Maintenance.GetInstance().ExtractTopicTitleFromHtml(Maintenance.GetInstance().GetPostPages(sHtmlUrl))))
                 {
-                    TopMostMessageBox.Show(sHtmlUrl.IndexOf("showthread.php") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                    TopMostMessageBox.Show(
+                        sHtmlUrl.IndexOf("showthread.php") > 0 ? this.mNoThreadMsg : this.mNoPostMsg,
+                        "Info");
 
 #if (!PGRIPPERX)
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
-                        Environment.OSVersion.Version.Minor >= 1)
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6
+                                                                             && Environment.OSVersion.Version.Minor
+                                                                             >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
                         this.windowsTaskbar.SetProgressValue(10, 100);
                     }
+
 #endif
+
                     // Unlock Controls
                     this.UnlockControls();
 
                     return;
                 }
-           }
+            }
             catch (Exception)
-            {
-                TopMostMessageBox.Show(sHtmlUrl.IndexOf("showthread.php") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+           {
+               TopMostMessageBox.Show(
+                   sHtmlUrl.IndexOf("showthread.php") > 0 ? this.mNoThreadMsg : this.mNoPostMsg,
+                   "Info");
 
 #if (!PGRIPPERX)
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
-                    Environment.OSVersion.Version.Minor >= 1)
-                {
-                    this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-                    this.windowsTaskbar.SetProgressValue(10, 100);
-                }
+               if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6
+                                                                        && Environment.OSVersion.Version.Minor >= 1)
+               {
+                   this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+                   this.windowsTaskbar.SetProgressValue(10, 100);
+               }
+
 #endif
-                // Unlock Controls
-                this.UnlockControls();
 
-                return;
-            }
+               // Unlock Controls
+               this.UnlockControls();
 
-            ///////
-            while (GetPostsWorker.IsBusy)
+               return;
+           }
+
+           ///////
+            while (this.GetPostsWorker.IsBusy)
             {
                 Application.DoEvents();
             }
@@ -1171,15 +1200,19 @@ namespace Ripper
         /// <param name="sHtmlUrl">The Thread/Post Url</param>
         private void EnqueueThreadOrPost(string sHtmlUrl)
         {
-            if (jobsList.Any(t => t.HtmlUrl == sHtmlUrl))
+            if (this.jobsList.Any(t => t.HtmlUrl == sHtmlUrl))
             {
-                TopMostMessageBox.Show(mAlreadyQueuedMsg, "Info");
+                TopMostMessageBox.Show(this.mAlreadyQueuedMsg, "Info");
                 return;
             }
 
-            JobInfo job = new JobInfo { HtmlUrl = sHtmlUrl, HtmlPayLoad = Maintenance.GetInstance().GetPostPages(sHtmlUrl) };
+            var job = new JobInfo
+                          {
+                              HtmlUrl = sHtmlUrl, HtmlPayLoad = Maintenance.GetInstance().GetPostPages(sHtmlUrl)
+                          };
 
-            job.TopicTitle = Utility.ReplaceHexWithAscii(Maintenance.GetInstance().ExtractTopicTitleFromHtml(job.HtmlPayLoad));
+            job.TopicTitle =
+                Utility.ReplaceHexWithAscii(Maintenance.GetInstance().ExtractTopicTitleFromHtml(job.HtmlPayLoad));
 
             if (CacheController.Instance().UserSettings.AutoThank)
             {
@@ -1188,9 +1221,8 @@ namespace Ripper
 
             if (!sHtmlUrl.Contains(@"showthread") || sHtmlUrl.Contains(@"#post"))
             {
-                job.PostTitle =
-                    Utility.ReplaceHexWithAscii(
-                        Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sHtmlUrl));
+                job.PostTitle = Utility.ReplaceHexWithAscii(
+                    Maintenance.GetInstance().ExtractPostTitleFromHtml(job.HtmlPayLoad, sHtmlUrl));
 
                 job.ForumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(job.HtmlUrl, true);
             }
@@ -1212,7 +1244,7 @@ namespace Ripper
 
             if (string.IsNullOrEmpty(job.TopicTitle))
             {
-                TopMostMessageBox.Show(sHtmlUrl.IndexOf("threadid=") > 0 ? mNoThreadMsg : mNoPostMsg, "Info");
+                TopMostMessageBox.Show(sHtmlUrl.IndexOf("threadid=") > 0 ? this.mNoThreadMsg : this.mNoPostMsg, "Info");
 
                 // Unlock Controls
                 this.UnlockControls();
@@ -1224,10 +1256,11 @@ namespace Ripper
 
             JobListAddDelegate newJob = this.JobListAdd;
 
-            Invoke(newJob, new object[] { job });
+            this.Invoke(newJob, new object[] { job });
 
             ///////////////////////////////////////////////
             this.UnlockControls();
+
             ///////////////////////////////////////////////
         }
 
@@ -1294,12 +1327,12 @@ namespace Ripper
         /// <param name="aUrl">A URL.</param>
         private void SendThankYou(string aUrl)
         {
-            string tyURLRef = CacheController.Instance().UserSettings.CurrentForumUrl;
+            var tyURLRef = CacheController.Instance().UserSettings.CurrentForumUrl;
 
             HttpWebResponse lHttpWebResponse = null;
             Stream lHttpWebResponseStream = null;
 
-            HttpWebRequest lHttpWebRequest = (HttpWebRequest)WebRequest.Create(aUrl);
+            var lHttpWebRequest = (HttpWebRequest)WebRequest.Create(aUrl);
             lHttpWebRequest.UserAgent =
                 "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
             lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
@@ -1311,8 +1344,8 @@ namespace Ripper
             lHttpWebRequest.Referer = tyURLRef;
             lHttpWebRequest.AllowAutoRedirect = false;
             lHttpWebRequest.Timeout = 1500;
-            ///////////////////////////////////
 
+            ///////////////////////////////////
             try
             {
                 lHttpWebResponse = (HttpWebResponse)lHttpWebRequest.GetResponse();
@@ -1331,7 +1364,7 @@ namespace Ripper
         /// <param name="sHtmlUrl">The s HTML URL.</param>
         private void ThrdGetIndexes(string sHtmlUrl)
         {
-            Indexes idxs = new Indexes();
+            var idxs = new Indexes();
 
             var pagecontent = idxs.GetThreadPagesNew(sHtmlUrl);
 
@@ -1346,15 +1379,15 @@ namespace Ripper
         /// </param>
         private void ThrdGetPosts(string htmlUrl)
         {
-            ThreadToPost threads = new ThreadToPost();
+            var threads = new ThreadToPost();
 
-            string pagecontent = threads.GetThreadPagesNew(htmlUrl);
+            var pagecontent = threads.GetThreadPagesNew(htmlUrl);
 
-            string forumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(htmlUrl, false);
+            var forumTitle = Maintenance.GetInstance().ExtractForumTitleFromHtml(htmlUrl, false);
            
-            List<ImageInfo> arlst = threads.ParseHtml(pagecontent);
+            var arlst = threads.ParseHtml(pagecontent);
 
-            for (int po = 0; po < arlst.Count; po++)
+            for (var po = 0; po < arlst.Count; po++)
             {
                 var po1 = po;
 
@@ -1376,19 +1409,18 @@ namespace Ripper
                     this.StatusLabelInfo.ForeColor = Color.Green;
                 }
 
-                string postId = arlst[po].ImageUrl;
+                var postId = arlst[po].ImageUrl;
 
                 //////////////////////////////////////////////////////////////////////////
-
                 if (CacheController.Instance().UserSettings.SavePids && this.IsPostAlreadyRipped(postId))
                 {
                     continue;
                 }
 
-                string newPostUrl = string.Format(
+                var newPostUrl = string.Format(
                     "{0}showpost.php?p={1}#post{1}", CacheController.Instance().UserSettings.CurrentForumUrl, postId);
                 
-                JobInfo jobInfoDouble = this.jobsList.Find(doubleJob => doubleJob.HtmlUrl.Equals(newPostUrl));
+                var jobInfoDouble = this.jobsList.Find(doubleJob => doubleJob.HtmlUrl.Equals(newPostUrl));
 
                 if (jobInfoDouble != null)
                 {
@@ -1455,7 +1487,7 @@ namespace Ripper
         /// <param name="e">
         /// The Elapsed Event Arguments.
         /// </param>
-        private void TmrPageUpdateElapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void TmrPageUpdateElapsed(object sender, ElapsedEventArgs e)
         {
             if (this.working && !this.parseActive || this.jobsList.Count > 0 && !this.parseActive)
             {
@@ -1484,13 +1516,13 @@ namespace Ripper
                 this.FullDisc();
             }
 
-            if (mrefTM.GetThreadCount() > 0)
+            if (this.mrefTM.GetThreadCount() > 0)
             {
                 // If Joblist empty and the last Threads of Current Job are parsed
                 if (this.currentJob == null && this.jobsList.Count.Equals(0) && !this.parseActive)
                 {
                     this.StatusLabelInfo.Text = this._ResourceManager.GetString("StatusLabelInfo");
-                    StatusLabelInfo.ForeColor = Color.Red;
+                    this.StatusLabelInfo.ForeColor = Color.Red;
 
                     this.groupBox5.Text = string.Format("{0} (-):", this._ResourceManager.GetString("lblRippingQue"));
                 }
@@ -1505,18 +1537,18 @@ namespace Ripper
 
                 if (!CacheController.Instance().UserSettings.CurrentlyPauseThreads)
                 {
-                    lvCurJob.Items.Clear();
+                    this.lvCurJob.Items.Clear();
                     if (this.InvokeRequired)
                     {
                         this.Invoke(
                             (MethodInvoker)delegate
                             {
-                                StatusLabelImageC.Text = string.Empty;
+                                this.StatusLabelImageC.Text = string.Empty;
                             });
                     }
                     else
                     {
-                        StatusLabelImageC.Text = string.Empty;
+                        this.StatusLabelImageC.Text = string.Empty;
                     }
 
                     if (this.currentJob == null)
@@ -1533,6 +1565,7 @@ namespace Ripper
                             {
                                 this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
                             }
+
 #endif
 
                             // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
@@ -1550,49 +1583,49 @@ namespace Ripper
         {
             this.working = true;
 
-            deleteJob.Enabled = true;
-            stopCurrentThreads.Enabled = true;
+            this.deleteJob.Enabled = true;
+            this.stopCurrentThreads.Enabled = true;
 
-            if (jobsList.Count == 0)
+            if (this.jobsList.Count == 0)
             {
                 return;
             }
 
-            currentJob = jobsList[0];
+            this.currentJob = this.jobsList[0];
 
             this.JobListRemove(0);
 
-            string bSystemExtr = this._ResourceManager.GetString("bSystemExtr");
+            var bSystemExtr = this._ResourceManager.GetString("bSystemExtr");
 
             this.ParseJob();
 
             // NO IMAGES TO PROCESS SO ABANDON CURRENT THREAD
-            if (mImagesList == null || mImagesList.Count <= 0)
+            if (this.mImagesList == null || this.mImagesList.Count <= 0)
             {
-                currentJob = null;
-                deleteJob.Enabled = true;
-                stopCurrentThreads.Enabled = true;
+                this.currentJob = null;
+                this.deleteJob.Enabled = true;
+                this.stopCurrentThreads.Enabled = true;
                 return;
             }
 
             this.groupBox2.Text = string.Format("{0}...", this._ResourceManager.GetString("gbCurrentlyExtract"));
 
-            if (currentJob.TopicTitle.Equals(currentJob.PostTitle))
+            if (this.currentJob.TopicTitle.Equals(this.currentJob.PostTitle))
             {
-                Text = string.Format(
+                this.Text = string.Format(
                     "{0}: {1} - x{2}", this._ResourceManager.GetString("gbCurrentlyExtract"), this.currentJob.TopicTitle, this.mImagesList.Count);
             }
             else
             {
-                Text = string.Format(
+                this.Text = string.Format(
                     "{0}: {1} - {2} - x{3}",
                     this._ResourceManager.GetString("gbCurrentlyExtract"),
-                    currentJob.TopicTitle,
-                    currentJob.PostTitle,
-                    mImagesList.Count);
+                    this.currentJob.TopicTitle,
+                    this.currentJob.PostTitle,
+                    this.mImagesList.Count);
             }
 
-            lvCurJob.Columns[0].Text = string.Format("{0} - x{1}", currentJob.PostTitle, mImagesList.Count);
+            this.lvCurJob.Columns[0].Text = string.Format("{0} - x{1}", this.currentJob.PostTitle, this.mImagesList.Count);
 
 #if (!PGRIPPERX)
             try
@@ -1600,31 +1633,32 @@ namespace Ripper
                 if (CacheController.Instance().UserSettings.ShowPopUps)
                 {
                     this.trayIcon.Text = this._ResourceManager.GetString("gbCurrentlyExtract") + this.currentJob.TopicTitle;
-                    trayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                    this.trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                     this.trayIcon.BalloonTipTitle = this._ResourceManager.GetString("gbCurrentlyExtract");
-                    trayIcon.BalloonTipText = currentJob.TopicTitle;
-                    trayIcon.ShowBalloonTip(10);
+                    this.trayIcon.BalloonTipText = this.currentJob.TopicTitle;
+                    this.trayIcon.ShowBalloonTip(10);
                 }
             }
             catch (Exception)
             {
                 if (CacheController.Instance().UserSettings.ShowPopUps)
                 {
-                    trayIcon.Text = bSystemExtr;
-                    trayIcon.BalloonTipTitle = bSystemExtr;
-                    trayIcon.BalloonTipText = bSystemExtr;
-                    trayIcon.ShowBalloonTip(10);
+                    this.trayIcon.Text = bSystemExtr;
+                    this.trayIcon.BalloonTipTitle = bSystemExtr;
+                    this.trayIcon.BalloonTipText = bSystemExtr;
+                    this.trayIcon.ShowBalloonTip(10);
                 }
             }
+
 #endif
 
             try
             {
-                progressBar1.Maximum = mImagesList.Count;
+                this.progressBar1.Maximum = this.mImagesList.Count;
             }
             catch (Exception)
             {
-                progressBar1.Maximum = 10000;
+                this.progressBar1.Maximum = 10000;
             }
 
             this.ProcessCurImgLst();
@@ -1635,46 +1669,42 @@ namespace Ripper
         /// </summary>
         private void ProcessCurImgLst()
         {
-            stopCurrentThreads.Enabled = true;
+            this.stopCurrentThreads.Enabled = true;
             this.stopingJob = false;
             this.working = true;
 
             this.lastDownFolder = null;
 
-            ThreadManager lTdm = ThreadManager.GetInstance();
+            var lTdm = ThreadManager.GetInstance();
 
-            this.lastDownFolder = currentJob.StorePath;
+            this.lastDownFolder = this.currentJob.StorePath;
 
-            if (mImagesList.Count > 0)
+            if (this.mImagesList.Count > 0)
             {
-                string tiImagesRemain = this._ResourceManager.GetString("tiImagesRemain");
+                var tiImagesRemain = this._ResourceManager.GetString("tiImagesRemain");
 
                 ////////////////
-                lvCurJob.Items.Clear();
+                this.lvCurJob.Items.Clear();
                 if (this.InvokeRequired)
                 {
-                    this.Invoke(
-                        (MethodInvoker)delegate
-                        {
-                            StatusLabelImageC.Text = string.Empty;
-                        });
+                    this.Invoke((MethodInvoker)delegate { this.StatusLabelImageC.Text = string.Empty; });
                 }
                 else
                 {
-                    StatusLabelImageC.Text = string.Empty;
+                    this.StatusLabelImageC.Text = string.Empty;
                 }
 
-                for (int i = 0; i < mImagesList.Count; i++)
+                for (var i = 0; i < this.mImagesList.Count; i++)
                 {
-                    lvCurJob.Items.Add(
-                        string.Format("{0}/{1} - {2}", i + 1, mImagesList.Count, mImagesList[i].ImageUrl),
-                        mImagesList[i].ImageUrl);
+                    this.lvCurJob.Items.Add(
+                        string.Format("{0}/{1} - {2}", i + 1, this.mImagesList.Count, this.mImagesList[i].ImageUrl),
+                        this.mImagesList[i].ImageUrl);
                 }
+
                 ///////////////////
+                this.progressBar1.Maximum = this.mImagesList.Count;
 
-                progressBar1.Maximum = mImagesList.Count;
-
-                for (int i = 0; i < mImagesList.Count; i++)
+                for (var i = 0; i < this.mImagesList.Count; i++)
                 {
                     if (this.stopingJob || this.ripperClosing)
                     {
@@ -1682,13 +1712,18 @@ namespace Ripper
                     }
 
 #if (!PGRIPPERX)
-                    this.trayIcon.Text = string.Format(tiImagesRemain, this.mImagesList.Count - i, i * 100 / this.mImagesList.Count);
+                    this.trayIcon.Text = string.Format(
+                        tiImagesRemain,
+                        this.mImagesList.Count - i,
+                        i * 100 / this.mImagesList.Count);
 
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
-                        Environment.OSVersion.Version.Minor >= 1)
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6
+                                                                             && Environment.OSVersion.Version.Minor
+                                                                             >= 1)
                     {
-                        this.windowsTaskbar.SetProgressValue(i, mImagesList.Count);
+                        this.windowsTaskbar.SetProgressValue(i, this.mImagesList.Count);
                     }
+
 #endif
                     while (!lTdm.IsSystemReadyForNewThread())
                     {
@@ -1704,7 +1739,9 @@ namespace Ripper
                         }
 
                         this.StatusLabelImageC.Text = string.Format(
-                            tiImagesRemain, mImagesList.Count - i, i * 100 / mImagesList.Count);
+                            tiImagesRemain,
+                            this.mImagesList.Count - i,
+                            i * 100 / this.mImagesList.Count);
                     }
 
                     try
@@ -1764,22 +1801,25 @@ namespace Ripper
                 }
 
                 // FINISED A THREAD/POST DOWNLOAD JOB
-                currentJob = null;
+                this.currentJob = null;
 
                 if (!string.IsNullOrEmpty(this.lastDownFolder))
                 {
                     CheckCurJobFolder(this.lastDownFolder);
                 }
 
-                if (jobsList.Count > 0)
+                if (this.jobsList.Count > 0)
                 {
 #if (!PGRIPPERX)
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6 &&
-                        Environment.OSVersion.Version.Minor >= 1)
+                    if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6
+                                                                             && Environment.OSVersion.Version.Minor
+                                                                             >= 1)
                     {
                         this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
                     }
+
 #endif
+
                     // STARTING TO PROCESS NEXT THREAD IN DOWNLOAD JOBS LIST
                     this.ProcessNextJob();
                 }
@@ -1787,19 +1827,19 @@ namespace Ripper
             else
             {
                 // NO IMAGES TO PROCESS SO ABANDON CURRENT THREAD
-                lvCurJob.Items.Clear();
-                currentJob = null;
+                this.lvCurJob.Items.Clear();
+                this.currentJob = null;
                 if (this.InvokeRequired)
                 {
                     this.Invoke(
                         (MethodInvoker)delegate
                         {
-                            StatusLabelImageC.Text = string.Empty;
+                            this.StatusLabelImageC.Text = string.Empty;
                         });
                 }
                 else
                 {
-                    StatusLabelImageC.Text = string.Empty;
+                    this.StatusLabelImageC.Text = string.Empty;
                 }
             }
         }
@@ -1827,8 +1867,8 @@ namespace Ripper
                 this.pictureBox1.BackgroundImage.Dispose();
                 this.pictureBox1.BackgroundImage = null;
             }
-            ///////////////////////////
 
+            ///////////////////////////
             this.sLastPic = this.mrefCC.LastPic;
 
             if (!File.Exists(this.sLastPic))
@@ -1858,9 +1898,8 @@ namespace Ripper
                 {
                     // This statement causes file locking until the
                     // process exits unless cleared when not visible
-                    //this.imgLastPic = Image.FromFile(this.sLastPic);
-
-                    using (FileStream stream = new FileStream(this.sLastPic, FileMode.Open, FileAccess.Read))
+                    // this.imgLastPic = Image.FromFile(this.sLastPic);
+                    using (var stream = new FileStream(this.sLastPic, FileMode.Open, FileAccess.Read))
                     {
                         this.imgLastPic = Image.FromStream(stream);
                     }
@@ -1890,14 +1929,14 @@ namespace Ripper
         {
             this.working = true;
 
-            jobsList.Add(job);
+            this.jobsList.Add(job);
 
-            ListViewItem ijobJob = new ListViewItem { Text = job.TopicTitle };
+            var ijobJob = new ListViewItem { Text = job.TopicTitle };
 
             ijobJob.SubItems.Add(job.PostTitle);
             ijobJob.SubItems.Add(job.ImageCount.ToString());
 
-            listViewJobList.Items.AddRange(new[] { ijobJob });
+            this.listViewJobList.Items.AddRange(new[] { ijobJob });
 
             this.groupBox5.Text = string.Format("{0} ({1}):", this._ResourceManager.GetString("lblRippingQue"), this.jobsList.Count);
         }
@@ -1908,9 +1947,9 @@ namespace Ripper
         /// <param name="iJobIndex">The Index of the Job inside the Joblist</param>
         private void JobListRemove(int iJobIndex)
         {
-            jobsList.RemoveAt(iJobIndex);
+            this.jobsList.RemoveAt(iJobIndex);
 
-            listViewJobList.Items.RemoveAt(iJobIndex);
+            this.listViewJobList.Items.RemoveAt(iJobIndex);
 
             this.groupBox5.Text = string.Format("{0} ({1}):", this._ResourceManager.GetString("lblRippingQue"), this.jobsList.Count);
         }
@@ -1938,6 +1977,7 @@ namespace Ripper
                 this.trayIcon.BalloonTipText = btexExit;
                 this.trayIcon.ShowBalloonTip(10);
             }
+
 #endif
             if (endingAllRip && CacheController.Instance().UserSettings.AfterDownloads.Equals(1))
             {
@@ -1952,30 +1992,26 @@ namespace Ripper
 
                 if (this.InvokeRequired)
                 {
-                    this.Invoke(
-                        (MethodInvoker)delegate
-                            {
-                                StatusLabelImageC.Text = string.Empty;
-                            });
+                    this.Invoke((MethodInvoker)delegate { this.StatusLabelImageC.Text = string.Empty; });
                 }
                 else
                 {
-                    StatusLabelImageC.Text = string.Empty;
+                    this.StatusLabelImageC.Text = string.Empty;
                 }
 
-                textBox1.Text = string.Empty;
+                this.textBox1.Text = string.Empty;
 
-                progressBar1.Value = 0;
+                this.progressBar1.Value = 0;
 
                 this.parseActive = false;
 
-                string ttlHeader = this._ResourceManager.GetString("ttlHeader");
+                var ttlHeader = this._ResourceManager.GetString("ttlHeader");
 
                 this.groupBox2.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
                 this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbCurrentlyIdle");
-                StatusLabelInfo.ForeColor = Color.Gray;
+                this.StatusLabelInfo.ForeColor = Color.Gray;
 
-                lvCurJob.Columns[0].Text = "  ";
+                this.lvCurJob.Columns[0].Text = "  ";
 
 #if (PGRIPPER)
             this.Text = string.Format(
@@ -2007,8 +2043,9 @@ namespace Ripper
                         CacheController.Instance().UserSettings.CurrentUserName,
                         CacheController.Instance().UserSettings.CurrentForumUrl));
 
-                trayIcon.Text = "Right click for context menu";
+                this.trayIcon.Text = "Right click for context menu";
 #endif
+
                 // Since no picbox image will be visible until another job is queued,
                 // reclaim resources used by any previous image in the picturebox
                 // This prevents file locking of downloaded images until the process exits
@@ -2017,30 +2054,29 @@ namespace Ripper
                     pictureBox1.Image.Dispose();
                     pictureBox1.Image = null;
                 }*/
-
                 if (this.imgLastPic != null)
                 {
                     this.imgLastPic.Dispose();
                     this.imgLastPic = null;
                 }
 
-                if (pictureBox1.Image != null)
+                if (this.pictureBox1.Image != null)
                 {
-                    pictureBox1.Image.Dispose();
-                    pictureBox1.Image = null;
+                    this.pictureBox1.Image.Dispose();
+                    this.pictureBox1.Image = null;
                 }
 
-                if (pictureBox1.BackgroundImage != null)
+                if (this.pictureBox1.BackgroundImage != null)
                 {
-                    pictureBox1.BackgroundImage.Dispose();
-                    pictureBox1.BackgroundImage = null;
+                    this.pictureBox1.BackgroundImage.Dispose();
+                    this.pictureBox1.BackgroundImage = null;
                 }
 
                 // Hide any image last displayed in the picturebox
-                pictureBox1.Visible = false;
+                this.pictureBox1.Visible = false;
 
-                deleteJob.Enabled = false;
-                stopCurrentThreads.Enabled = false;
+                this.deleteJob.Enabled = false;
+                this.stopCurrentThreads.Enabled = false;
 
                 this.working = false;
             }
@@ -2054,11 +2090,11 @@ namespace Ripper
             this.working = false;
             this.fullDisc = true;
 
-            pauseCurrentThreads.Text = "Resume Download(s)";
+            this.pauseCurrentThreads.Text = "Resume Download(s)";
             ThreadManager.GetInstance().HoldAllThreads();
 
-            StatusLabelInfo.Text = DeleteMessage;
-            StatusLabelInfo.ForeColor = Color.Red;
+            this.StatusLabelInfo.Text = DeleteMessage;
+            this.StatusLabelInfo.ForeColor = Color.Red;
 
             TopMostMessageBox.Show(
                 string.Format(
@@ -2067,27 +2103,27 @@ namespace Ripper
 
             JobListAddDelegate updateJob = this.JobListAdd;
 
-            Invoke(updateJob, new object[] { currentJob });
+            this.Invoke(updateJob, new object[] { this.currentJob });
 
-            lvCurJob.Items.Clear();
+            this.lvCurJob.Items.Clear();
             if (this.InvokeRequired)
             {
                 this.Invoke(
                     (MethodInvoker)delegate
                     {
-                        StatusLabelImageC.Text = string.Empty;
+                        this.StatusLabelImageC.Text = string.Empty;
                     });
             }
             else
             {
-                StatusLabelImageC.Text = string.Empty;
+                this.StatusLabelImageC.Text = string.Empty;
             }
 
-            currentJob = null;
+            this.currentJob = null;
 
             this.UpdateDownloadFolder();
 
-            for (int i = 0; i != jobsList.Count; i++)
+            for (var i = 0; i != this.jobsList.Count; i++)
             {
                 /* JobInfo updatedJob = new JobInfo
                                           {
@@ -2115,24 +2151,23 @@ namespace Ripper
                  JobListRemove(i);
 
                  mJobsList.Insert(i, updatedJob);*/
-
-                jobsList[i].StorePath = CacheController.Instance().UserSettings.DownloadFolder;
+                this.jobsList[i].StorePath = CacheController.Instance().UserSettings.DownloadFolder;
 
                 if (!CacheController.Instance().UserSettings.SubDirs)
                 {
                     continue;
                 }
 
-                if (comboBox1.SelectedIndex == 0)
+                if (this.comboBox1.SelectedIndex == 0)
                 {
-                    jobsList[i].StorePath = Path.Combine(CacheController.Instance().UserSettings.DownloadFolder, jobsList[i].TopicTitle);
+                    this.jobsList[i].StorePath = Path.Combine(CacheController.Instance().UserSettings.DownloadFolder, this.jobsList[i].TopicTitle);
                 }
 
-                if (comboBox1.SelectedIndex == 1 || comboBox1.SelectedIndex == 2)
+                if (this.comboBox1.SelectedIndex == 1 || this.comboBox1.SelectedIndex == 2)
                 {
-                    jobsList[i].StorePath = Path.Combine(
+                    this.jobsList[i].StorePath = Path.Combine(
                         CacheController.Instance().UserSettings.DownloadFolder,
-                        jobsList[i].TopicTitle + Path.DirectorySeparatorChar + jobsList[i].PostTitle);
+                        this.jobsList[i].TopicTitle + Path.DirectorySeparatorChar + this.jobsList[i].PostTitle);
                 }
             }
 
@@ -2147,23 +2182,23 @@ namespace Ripper
         {
             string sPostIdStart = null;
 
-            if (currentJob.HtmlUrl.Contains("showpost.php"))
+            if (this.currentJob.HtmlUrl.Contains("showpost.php"))
             {
                 sPostIdStart = "showpost.php?p=";
             }
-            else if (currentJob.HtmlUrl.Contains("#post"))
+            else if (this.currentJob.HtmlUrl.Contains("#post"))
             {
                 sPostIdStart = "#post";
             }
 
-            string postId = currentJob.HtmlUrl.Substring(currentJob.HtmlUrl.IndexOf(sPostIdStart) + sPostIdStart.Length);
+            var postId = this.currentJob.HtmlUrl.Substring(this.currentJob.HtmlUrl.IndexOf(sPostIdStart) + sPostIdStart.Length);
 
             if (postId.Contains(@"postcount"))
             {
                 postId = Regex.Replace(postId, postId.Substring(postId.IndexOf("postcount=") - 1), string.Empty);
             }
 
-            mImagesList = currentJob.ImageList;
+            this.mImagesList = this.currentJob.ImageList;
 
             this.ProcessAutoThankYou(postId, this.mImagesList.Count, this.currentJob.SecurityToken);
         }
@@ -2193,7 +2228,7 @@ namespace Ripper
             {
                 this.listViewJobList.Items.Clear();
 
-                for (int i = 0; i < this.jobsList.Count; i++)
+                for (var i = 0; i < this.jobsList.Count; i++)
                 {
                     this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this._ResourceManager.GetString("gbParse2"), i, this.jobsList.Count);
                     this.StatusLabelInfo.ForeColor = Color.Green;
@@ -2219,31 +2254,31 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void StopCurrentThreadsClick(object sender, EventArgs e)
         {
-            if (currentJob == null)
+            if (this.currentJob == null)
             {
                 return;
             }
 
-            stopCurrentThreads.Enabled = false;
+            this.stopCurrentThreads.Enabled = false;
             this.stopingJob = true;
 
             ThreadManager.GetInstance().DismantleAllThreads();
 
-            string sLastJobFolder = currentJob.StorePath;
+            var sLastJobFolder = this.currentJob.StorePath;
 
-            lvCurJob.Items.Clear();
-            currentJob = null;
+            this.lvCurJob.Items.Clear();
+            this.currentJob = null;
             if (this.InvokeRequired)
             {
                 this.Invoke(
                     (MethodInvoker)delegate
                     {
-                        StatusLabelImageC.Text = string.Empty;
+                        this.StatusLabelImageC.Text = string.Empty;
                     });
             }
             else
             {
-                StatusLabelImageC.Text = string.Empty;
+                this.StatusLabelImageC.Text = string.Empty;
             }
 
             CheckCurJobFolder(sLastJobFolder);
@@ -2275,7 +2310,7 @@ namespace Ripper
                     }
                     else
                     {
-                        StatusLabelImageC.Text = string.Empty;
+                        this.StatusLabelImageC.Text = string.Empty;
                     }
 
                     CacheController.Instance().UserSettings.CurrentlyPauseThreads = false;
@@ -2295,7 +2330,7 @@ namespace Ripper
                     }
                     else
                     {
-                        StatusLabelImageC.Text = string.Empty;
+                        this.StatusLabelImageC.Text = string.Empty;
                     }
 
                     CacheController.Instance().UserSettings.CurrentlyPauseThreads = false;
@@ -2327,7 +2362,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ComboBox1SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (comboBox1.SelectedIndex)
+            switch (this.comboBox1.SelectedIndex)
             {
                 case 0:
                     CacheController.Instance().UserSettings.DownloadOptions = "0";
@@ -2351,7 +2386,7 @@ namespace Ripper
         private void MainFormResize(object sender, EventArgs e)
         {
 #if (!PGRIPPERX)
-            if (WindowState == FormWindowState.Minimized)
+            if (this.WindowState == FormWindowState.Minimized)
             {
                 this.Hide();
                 this.isHiddenInTray = true;
@@ -2359,20 +2394,21 @@ namespace Ripper
                 this.trayIcon.MouseDoubleClick -= this.HideClick;
                 this.trayIcon.MouseDoubleClick += this.ShowClick;
 
-                trayMenu.MenuItems.RemoveAt(0);
-                MenuItem show = new MenuItem("Show PG-Ripper", this.ShowClick);
-                trayMenu.MenuItems.Add(0, show);
+                this.trayMenu.MenuItems.RemoveAt(0);
+                var show = new MenuItem("Show PG-Ripper", this.ShowClick);
+                this.trayMenu.MenuItems.Add(0, show);
 
                 if (CacheController.Instance().UserSettings.ShowPopUps)
                 {
-                    trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
-                    trayIcon.BalloonTipTitle = "Hidden in Tray";
-                    trayIcon.BalloonTipText = "PG-Ripper is hidden in the Tray";
-                    trayIcon.ShowBalloonTip(10);
+                    this.trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
+                    this.trayIcon.BalloonTipTitle = "Hidden in Tray";
+                    this.trayIcon.BalloonTipText = "PG-Ripper is hidden in the Tray";
+                    this.trayIcon.ShowBalloonTip(10);
                 }
             }
+
 #endif
-            lvCurJob.Columns[0].Width = lvCurJob.Width - 22;
+            this.lvCurJob.Columns[0].Width = this.lvCurJob.Width - 22;
         }
 
         /// <summary>
@@ -2382,7 +2418,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ExitToolStripMenuItemClick(object sender, EventArgs e)
         {
-            Close();
+            this.Close();
         }
 
         /// <summary>
@@ -2424,11 +2460,11 @@ namespace Ripper
         /// </summary>
         private void LoadHistory()
         {
-            string sFile = Path.Combine(Application.StartupPath, "rippedPostHistory.txt");
+            var sFile = Path.Combine(Application.StartupPath, "rippedPostHistory.txt");
 
-            FileStream file = new FileStream(sFile, FileMode.OpenOrCreate, FileAccess.Read);
-            StreamReader sr = new StreamReader(file);
-            string srRead = sr.ReadToEnd();
+            var file = new FileStream(sFile, FileMode.OpenOrCreate, FileAccess.Read);
+            var sr = new StreamReader(file);
+            var srRead = sr.ReadToEnd();
 
             if (srRead.Contains("\r\n"))
             {
@@ -2438,11 +2474,11 @@ namespace Ripper
             sr.Close();
             file.Close();
 
-            string[] sPostIDs = srRead.Split(';');
+            var sPostIDs = srRead.Split(';');
 
             this.sRippedPosts.Clear();
 
-            foreach (string sSavedId in sPostIDs.Where(sSavedId => !string.IsNullOrEmpty(sSavedId)))
+            foreach (var sSavedId in sPostIDs.Where(sSavedId => !string.IsNullOrEmpty(sSavedId)))
             {
                 this.sRippedPosts.Add(
                     sSavedId.Contains("&postcount") ? sSavedId.Remove(sSavedId.IndexOf("&postcount")) : sSavedId);
@@ -2469,10 +2505,10 @@ namespace Ripper
         /// </summary>
         private void SaveHistory()
         {
-            string sFile = Path.Combine(Application.StartupPath, "rippedPostHistory.txt");
+            var sFile = Path.Combine(Application.StartupPath, "rippedPostHistory.txt");
 
-            FileStream file = new FileStream(sFile, FileMode.Create);
-            StreamWriter sw = new StreamWriter(file);
+            var file = new FileStream(sFile, FileMode.Create);
+            var sw = new StreamWriter(file);
 
             foreach (string sSavedId in this.sRippedPosts)
             {
@@ -2490,7 +2526,7 @@ namespace Ripper
         /// <returns>Returns true or false</returns>
         private bool IsPostAlreadyRipped(string sPostId)
         {
-            bool bCheck = false;
+            var bCheck = false;
 
             if (!Utility.IsNumeric(sPostId))
             {
@@ -2546,7 +2582,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void HelpToolStripMenuItemClick(object sender, EventArgs e)
         {
-            About aForm = new About();
+            var aForm = new About();
             aForm.ShowDialog();
         }
 
@@ -2593,16 +2629,16 @@ namespace Ripper
         {
             try
             {
-                Left = CacheController.Instance().UserSettings.WindowLeft;
-                Top = CacheController.Instance().UserSettings.WindowTop;
+                this.Left = CacheController.Instance().UserSettings.WindowLeft;
+                this.Top = CacheController.Instance().UserSettings.WindowTop;
             }
             catch (Exception)
             {
-                StartPosition = FormStartPosition.CenterScreen;
+                this.StartPosition = FormStartPosition.CenterScreen;
             }
 
-            Width = CacheController.Instance().UserSettings.WindowWidth;
-            Height = CacheController.Instance().UserSettings.WindowHeight;
+            this.Width = CacheController.Instance().UserSettings.WindowWidth;
+            this.Height = CacheController.Instance().UserSettings.WindowHeight;
         }
 
         /// <summary>
@@ -2660,7 +2696,7 @@ namespace Ripper
                 {
                     this.CheckUrlForumAccount(this.textBox1.Text);
 
-                    string sClipBoardURLNew = clipBoardURL;
+                    var sClipBoardURLNew = clipBoardURL;
 
                     if (sClipBoardURLNew.Contains("\r"))
                     {
@@ -2700,7 +2736,7 @@ namespace Ripper
             }
             catch (Exception)
             {
-                //Clipboard.Clear();
+                // Clipboard.Clear();
             }
         }
 
@@ -2732,6 +2768,7 @@ namespace Ripper
             {
                 this.windowsTaskbar = TaskbarManager.Instance;
             }
+
 #endif
 
             this.IdleRipper();
@@ -2739,44 +2776,44 @@ namespace Ripper
             try
             {
                 // Reading Saved Jobs
-                XmlSerializer serializer = new XmlSerializer(typeof(List<JobInfo>));
+                var serializer = new XmlSerializer(typeof(List<JobInfo>));
                 TextReader tr = new StreamReader(Path.Combine(Application.StartupPath, "jobs.xml"));
-                jobsList = (List<JobInfo>)serializer.Deserialize(tr);
+                this.jobsList = (List<JobInfo>)serializer.Deserialize(tr);
                 tr.Close();
 
                 if (CacheController.Instance().UserSettings.CurrentlyPauseThreads)
                 {
-                    pauseCurrentThreads.Text = "(Re)Start Download(s)";
-                    pauseCurrentThreads.Image = Languages.english.play;
+                    this.pauseCurrentThreads.Text = "(Re)Start Download(s)";
+                    this.pauseCurrentThreads.Image = Languages.english.play;
                 }
 
                 File.Delete(Path.Combine(Application.StartupPath, "jobs.xml"));
             }
             catch (Exception)
             {
-                jobsList = new List<JobInfo>();
+                this.jobsList = new List<JobInfo>();
             }
 
-            if (jobsList.Count != 0)
+            if (this.jobsList.Count != 0)
             {
-                StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse2");
-                StatusLabelInfo.ForeColor = Color.Green;
+                this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse2");
+                this.StatusLabelInfo.ForeColor = Color.Green;
 
-                for (int i = 0; i < jobsList.Count; i++)
+                for (var i = 0; i < this.jobsList.Count; i++)
                 {
                     this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", this._ResourceManager.GetString("gbParse2"), i, this.jobsList.Count);
-                    StatusLabelInfo.ForeColor = Color.Green;
+                    this.StatusLabelInfo.ForeColor = Color.Green;
 
-                    ListViewItem ijobJob = new ListViewItem { Text = jobsList[i].TopicTitle };
+                    var ijobJob = new ListViewItem { Text = this.jobsList[i].TopicTitle };
 
-                    ijobJob.SubItems.Add(jobsList[i].PostTitle);
-                    ijobJob.SubItems.Add(jobsList[i].ImageCount.ToString());
-                    listViewJobList.Items.AddRange(new[] { ijobJob });
+                    ijobJob.SubItems.Add(this.jobsList[i].PostTitle);
+                    ijobJob.SubItems.Add(this.jobsList[i].ImageCount.ToString());
+                    this.listViewJobList.Items.AddRange(new[] { ijobJob });
                 }
 
                 this.working = true;
 
-                StatusLabelInfo.Text = string.Empty;
+                this.StatusLabelInfo.Text = string.Empty;
             }
 
             AutoUpdater.CleanupAfterUpdate("PG-Ripper");
@@ -2837,24 +2874,24 @@ namespace Ripper
 
             try
             {
-                FileStream file = new FileStream(sTextFolder, FileMode.Open, FileAccess.Read);
-                StreamReader sr = new StreamReader(file);
-                string srRead = sr.ReadToEnd();
+                var file = new FileStream(sTextFolder, FileMode.Open, FileAccess.Read);
+                var sr = new StreamReader(file);
+                var srRead = sr.ReadToEnd();
                 sr.Close();
                 file.Close();
 
                 File.Delete(sTextFolder);
 
-                string[] sRipUrls = srRead.Split(new[] { '\n' });
+                var sRipUrls = srRead.Split(new[] { '\n' });
 
-                foreach (string sRipUrl in sRipUrls)
+                foreach (var sRipUrl in sRipUrls)
                 {
                     if (!sRipUrl.StartsWith(CacheController.Instance().UserSettings.CurrentForumUrl))
                     {
                         continue;
                     }
 
-                    string sClipBoardURLNew = sRipUrl;
+                    var sClipBoardURLNew = sRipUrl;
 
                     if (sClipBoardURLNew.Contains("\r"))
                     {
@@ -2887,7 +2924,7 @@ namespace Ripper
         /// </param>
         private void UnhandledExceptionFunction(object sender, UnhandledExceptionEventArgs e)
         {
-            Exception ex = (Exception)e.ExceptionObject;
+            var ex = (Exception)e.ExceptionObject;
 
             Utility.SaveOnCrash(ex.Message, ex.StackTrace, this.currentJob);
 
@@ -2913,7 +2950,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.Threading.ThreadExceptionEventArgs"/> instance containing the event data.</param>
         private void ThreadExceptionFunction(object sender, ThreadExceptionEventArgs e)
         {
-            Exception ex = e.Exception;
+            var ex = e.Exception;
 
             Utility.SaveOnCrash(ex.Message, ex.StackTrace, this.currentJob);
 
@@ -2952,7 +2989,7 @@ namespace Ripper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.DoWorkEventArgs"/> instance containing the event data.</param>
-        private void GetPostsWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void GetPostsWorkerDoWork(object sender, DoWorkEventArgs e)
         {
             this.ThrdGetPosts(Convert.ToString(e.Argument));
         }
@@ -2962,7 +2999,7 @@ namespace Ripper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
-        private void GetPostsWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void GetPostsWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.UnlockControls();
         }
@@ -2972,7 +3009,7 @@ namespace Ripper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.DoWorkEventArgs"/> instance containing the event data.</param>
-        private void GetIdxsWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void GetIdxsWorkerDoWork(object sender, DoWorkEventArgs e)
         {
             this.ThrdGetIndexes(Convert.ToString(e.Argument));
         }
@@ -2982,7 +3019,7 @@ namespace Ripper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
-        private void GetIdxsWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void GetIdxsWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.UnlockControls();
 
@@ -2993,7 +3030,7 @@ namespace Ripper
                 return;
             }
 
-            for (int po = 0; po < this.indexedTopicsList.Count; po++)
+            for (var po = 0; po < this.indexedTopicsList.Count; po++)
             {
                 this.StatusLabelInfo.ForeColor = Color.Green;
                 this.StatusLabelInfo.Text = string.Format("{0}{1}/{2}", "Analyse Index(es)", po, this.indexedTopicsList.Count);
@@ -3087,7 +3124,7 @@ namespace Ripper
                 {
                     var path = storePath;
 
-                    foreach (JobInfo t in
+                    foreach (var t in
                         this.jobsList.Where(
                             t =>
                             t.PostTitle.Equals(job.PostTitle) ||
@@ -3175,7 +3212,7 @@ namespace Ripper
         {
             this.parseActive = false;
 
-            if (InvokeRequired)
+            if (this.InvokeRequired)
             {
                 this.Invoke((MethodInvoker)this.UnlockControlsElements);
             }
@@ -3190,11 +3227,11 @@ namespace Ripper
         /// </summary>
         private void UnlockControlsElements()
         {
-            textBox1.Text = string.Empty;
-            textBox1.Enabled = true;
-            mStartDownloadBtn.Enabled = true;
+            this.textBox1.Text = string.Empty;
+            this.textBox1.Enabled = true;
+            this.mStartDownloadBtn.Enabled = true;
 
-            StatusLabelInfo.Text = string.Empty;
+            this.StatusLabelInfo.Text = string.Empty;
         }
 
         /// <summary>
@@ -3204,11 +3241,11 @@ namespace Ripper
         {
             this.parseActive = true;
 
-            textBox1.Enabled = false;
-            mStartDownloadBtn.Enabled = false;
+            this.textBox1.Enabled = false;
+            this.mStartDownloadBtn.Enabled = false;
 
             this.StatusLabelInfo.Text = this._ResourceManager.GetString("gbParse");
-            StatusLabelInfo.ForeColor = Color.Green;
+            this.StatusLabelInfo.ForeColor = Color.Green;
         }
 
         /// <summary>

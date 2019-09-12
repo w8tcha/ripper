@@ -86,6 +86,7 @@ namespace Ripper.Core.Components
             return _instance ?? (_instance = new CacheController());
         }
         
+
         /// <summary>
         /// Erase the Event Table
         /// </summary>
@@ -110,6 +111,7 @@ namespace Ripper.Core.Components
 
             return null;
         }
+
         #endregion
     }
 }

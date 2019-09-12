@@ -91,7 +91,7 @@ namespace Ripper.Core.Components
                 return;
             }
 
-            foreach (object t in cookieKeys)
+            foreach (var t in cookieKeys)
             {
                 this.DeleteCookie((string)t);
             }
@@ -142,7 +142,7 @@ namespace Ripper.Core.Components
 
             while (cookiePair != null)
             {
-                cookies += string.Format("{0}={1};", cookiePair.Key, cookiePair.Value);
+                cookies += $"{cookiePair.Key}={cookiePair.Value};";
 
                 cookiePair = this.NextCookie();
             }

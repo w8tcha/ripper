@@ -121,7 +121,7 @@ namespace Ripper
         /// </returns>
         public string ExtractForumTitleFromXML(string xmlPayload)
         {
-            string forumTitle = string.Empty;
+            var forumTitle = string.Empty;
 
             try
             {
@@ -169,11 +169,11 @@ namespace Ripper
 
                     if (postTitle == string.Empty)
                     {
-                        postTitle = string.Format("post# {0}", row["id"]);
+                        postTitle = $"post# {row["id"]}";
                     }
-                    else if (postTitle == string.Format("Re: {0}", this.ExtractTopicTitleFromXML(xmlPayload)))
+                    else if (postTitle == $"Re: {this.ExtractTopicTitleFromXML(xmlPayload)}")
                     {
-                        postTitle = string.Format("post# {0}", row["id"]);
+                        postTitle = $"post# {row["id"]}";
                     }
                 }
             }
@@ -205,14 +205,10 @@ namespace Ripper
             var postId = url.Substring(url.IndexOf("p=", StringComparison.Ordinal) + 2);
 
             var check =
-                string.Format(
-                    @"<h2 class=\""title icon\"">\r\n\t\t\t\t\t(?<inner>[^\r]*)\r\n\t\t\t\t</h2>\r\n\t\t\t\t\r\n\r\n\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t<div class=\""content\"">\r\n\t\t\t\t\t<div id=\""post_message_{0}\"">",
-                    postId);
+                $@"<h2 class=\""title icon\"">\r\n\t\t\t\t\t(?<inner>[^\r]*)\r\n\t\t\t\t</h2>\r\n\t\t\t\t\r\n\r\n\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t<div class=\""content\"">\r\n\t\t\t\t\t<div id=\""post_message_{postId}\"">";
 
             var check2 =
-                string.Format(
-                    @"<h2 class=\""title icon\"">\r\n\t\t\t\t\t(?<inner>[^\r]*)\r\n\t\t\t\t</h2>\r\n\t\t\t\t\r\n\r\n\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t<div class=\""content\"">\r\n\t\t\t\t\t<div id=\""post_message_{0}\"">",
-                    postId);
+                $@"<h2 class=\""title icon\"">\r\n\t\t\t\t\t(?<inner>[^\r]*)\r\n\t\t\t\t</h2>\r\n\t\t\t\t\r\n\r\n\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t<div class=\""content\"">\r\n\t\t\t\t\t<div id=\""post_message_{postId}\"">";
 
             var match = Regex.Match(content, check, RegexOptions.Compiled);
 
@@ -232,11 +228,11 @@ namespace Ripper
 
             if (postTitle == string.Empty)
             {
-                postTitle = string.Format("post# {0}", postId);
+                postTitle = $"post# {postId}";
             }
-            else if (postTitle == string.Format("Re: {0}", this.ExtractTopicTitleFromHtml(content)))
+            else if (postTitle == $"Re: {this.ExtractTopicTitleFromHtml(content)}")
             {
-                postTitle = string.Format("post# {0}", postId);
+                postTitle = $"post# {postId}";
             }
 
             // Remove Topic Icons if found

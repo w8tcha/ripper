@@ -56,19 +56,15 @@ namespace Ripper
             {
                 case 0:
                     {
-                        xmlUrl = string.Format(
-                            "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                            CacheController.Instance().UserSettings.ForumURL,
-                            Convert.ToInt64(inputUrl));
+                        xmlUrl =
+                            $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&threadid={Convert.ToInt64(inputUrl)}";
                         break;
                     }
 
                 case 1:
                     {
-                        xmlUrl = string.Format(
-                            "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                            CacheController.Instance().UserSettings.ForumURL,
-                            Convert.ToInt64(inputUrl));
+                        xmlUrl =
+                            $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&postid={Convert.ToInt64(inputUrl)}";
                         break;
                     }
 
@@ -110,10 +106,8 @@ namespace Ripper
                                 threadId = threadId.Remove(threadId.IndexOf("-"));
                             }
 
-                            xmlUrl = string.Format(
-                                "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                                CacheController.Instance().UserSettings.ForumURL,
-                                Convert.ToInt64(threadId));
+                            xmlUrl =
+                                $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&threadid={Convert.ToInt64(threadId)}";
                         }
                         else if (xmlUrl.Contains("goto=newpost") && xmlUrl.Contains("showthread.php?"))
                         {
@@ -126,10 +120,8 @@ namespace Ripper
                                 threadId = threadId.Remove(threadId.IndexOf("-"));
                             }
 
-                            xmlUrl = string.Format(
-                                "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                                CacheController.Instance().UserSettings.ForumURL,
-                                Convert.ToInt64(threadId));
+                            xmlUrl =
+                                $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&threadid={Convert.ToInt64(threadId)}";
                         }
                         else if (xmlUrl.Contains("&p=") && xmlUrl.Contains("#post"))
                         {
@@ -137,10 +129,8 @@ namespace Ripper
                             // Posts
                             var postId = xmlUrl.Substring(xmlUrl.IndexOf("#post") + 5);
 
-                            xmlUrl = string.Format(
-                                "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                                CacheController.Instance().UserSettings.ForumURL,
-                                Convert.ToInt64(postId));
+                            xmlUrl =
+                                $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&postid={Convert.ToInt64(postId)}";
                         }
                         else if (!xmlUrl.Contains(".php") && !xmlUrl.Contains("#post"))
                         {
@@ -153,20 +143,16 @@ namespace Ripper
                                 threadId = threadId.Remove(threadId.IndexOf("-"));
                             }
 
-                            xmlUrl = string.Format(
-                                "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                                CacheController.Instance().UserSettings.ForumURL,
-                                Convert.ToInt64(threadId));
+                            xmlUrl =
+                                $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&threadid={Convert.ToInt64(threadId)}";
                         }
                         else if (!xmlUrl.Contains(".php") && xmlUrl.Contains("#post"))
                         {
                             // Posts
                             var postId = xmlUrl.Substring(xmlUrl.IndexOf("#post") + 5);
 
-                            xmlUrl = string.Format(
-                                "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                                CacheController.Instance().UserSettings.ForumURL,
-                                Convert.ToInt64(postId));
+                            xmlUrl =
+                                $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&postid={Convert.ToInt64(postId)}";
                         }
 
                         break;
@@ -202,65 +188,55 @@ namespace Ripper
             else if (!newUrl.Contains("#post") && newUrl.Contains("showthread.php?"))
             {
                 // Threads
-                string sThreadId = newUrl.Substring(newUrl.IndexOf(".php?") + 5);
+                var sThreadId = newUrl.Substring(newUrl.IndexOf(".php?") + 5);
 
                 if (newUrl.Contains("-"))
                 {
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                newUrl = string.Format(
-                    "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                    CacheController.Instance().UserSettings.ForumURL,
-                    Convert.ToInt64(sThreadId));
+                newUrl =
+                    $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&threadid={Convert.ToInt64(sThreadId)}";
             }
             else if (newUrl.Contains("goto=newpost") && newUrl.Contains("showthread.php?"))
             {
                 // Threads
-                string sThreadId = newUrl.Substring(newUrl.IndexOf(".php?") + 5);
+                var sThreadId = newUrl.Substring(newUrl.IndexOf(".php?") + 5);
 
                 if (newUrl.Contains("-"))
                 {
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                newUrl = string.Format(
-                    "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                    CacheController.Instance().UserSettings.ForumURL,
-                    Convert.ToInt64(sThreadId));
+                newUrl =
+                    $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&threadid={Convert.ToInt64(sThreadId)}";
             }
             else if (newUrl.Contains("&p=") && newUrl.Contains("#post"))
             {
                 // Posts
-                string sPostId = newUrl.Substring(newUrl.IndexOf("#post") + 5);
-                newUrl = string.Format(
-                    "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                    CacheController.Instance().UserSettings.ForumURL,
-                    Convert.ToInt64(sPostId));
+                var sPostId = newUrl.Substring(newUrl.IndexOf("#post") + 5);
+                newUrl =
+                    $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&postid={Convert.ToInt64(sPostId)}";
             }
             else if (!newUrl.Contains(".php") && !newUrl.Contains("#post"))
             {
                 // Threads
-                string sThreadId = newUrl.Substring(newUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
+                var sThreadId = newUrl.Substring(newUrl.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
                 if (newUrl.Contains("-"))
                 {
                     sThreadId = sThreadId.Remove(sThreadId.IndexOf("-"));
                 }
 
-                newUrl = string.Format(
-                    "{0}getSTDpost-imgXML.php?dpver=2&threadid={1}",
-                    CacheController.Instance().UserSettings.ForumURL,
-                    Convert.ToInt64(sThreadId));
+                newUrl =
+                    $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&threadid={Convert.ToInt64(sThreadId)}";
             }
             else if (!newUrl.Contains(".php") && newUrl.Contains("#post"))
             {
                 // Posts
-                string sPostId = newUrl.Substring(newUrl.IndexOf("#post") + 5);
-                newUrl = string.Format(
-                    "{0}getSTDpost-imgXML.php?dpver=2&postid={1}",
-                    CacheController.Instance().UserSettings.ForumURL,
-                    Convert.ToInt64(sPostId));
+                var sPostId = newUrl.Substring(newUrl.IndexOf("#post") + 5);
+                newUrl =
+                    $"{CacheController.Instance().UserSettings.ForumURL}getSTDpost-imgXML.php?dpver=2&postid={Convert.ToInt64(sPostId)}";
             }
 
             return newUrl;

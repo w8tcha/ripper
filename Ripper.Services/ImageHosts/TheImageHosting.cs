@@ -14,13 +14,9 @@
 
 using System;
 using System.Collections;
-using System.Web;
-using System.Net;
 using System.IO;
-using System.Text;
+using System.Net;
 using System.Threading;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace Ripper
 {
@@ -40,14 +36,14 @@ namespace Ripper
 
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            var strImgURL = this.ImageLinkURL;
 
-            if (EventTable.ContainsKey(strImgURL))
+            if (this.EventTable.ContainsKey(strImgURL))
             {
                 return true;
             }
 
-            string strFilePath = string.Empty;
+            var strFilePath = string.Empty;
 
             strFilePath = strImgURL.Substring(strImgURL.LastIndexOf("img=") + 4);
 
@@ -55,26 +51,25 @@ namespace Ripper
 
             try
             {
-                if (!Directory.Exists(SavePath))
-                    Directory.CreateDirectory(SavePath);
+                if (!Directory.Exists(this.SavePath))
+                    Directory.CreateDirectory(this.SavePath);
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
                 return false;
             }
 
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
-            CacheObject CCObj = new CacheObject();
+            var CCObj = new CacheObject();
             CCObj.IsDownloaded = false;
             CCObj.FilePath = strFilePath;
             CCObj.Url = strImgURL;
             try
             {
-                EventTable.Add(strImgURL, CCObj);
+                this.EventTable.Add(strImgURL, CCObj);
             }
             catch (ThreadAbortException)
             {
@@ -82,34 +77,34 @@ namespace Ripper
             }
             catch (Exception)
             {
-                if (EventTable.ContainsKey(strImgURL))
+                if (this.EventTable.ContainsKey(strImgURL))
                 {
                     return false;
                 }
                 else
                 {
-                    EventTable.Add(strImgURL, CCObj);
+                    this.EventTable.Add(strImgURL, CCObj);
                 }
             }
 
-            string strNewURL = "http://images" + strImgURL.Substring(strImgURL.IndexOf("server") + 6, 1) + ".theimagehosting.com/" + strImgURL.Substring(strImgURL.IndexOf("img=") + 4);
-
+            var strNewURL = "http://images" + strImgURL.Substring(strImgURL.IndexOf("server") + 6, 1)
+                                            + ".theimagehosting.com/"
+                                            + strImgURL.Substring(strImgURL.IndexOf("img=") + 4);
 
             //////////////////////////////////////////////////////////////////////////
             HttpWebRequest lHttpWebRequest;
             HttpWebResponse lHttpWebResponse;
             Stream lHttpWebResponseStream;
 
-            //FileStream lFileStream = null;
+            // FileStream lFileStream = null;
 
-            
-            //int bytesRead;
-
+            // int bytesRead;
             try
             {
                 lHttpWebRequest = (HttpWebRequest)WebRequest.Create(strNewURL);
 
-                lHttpWebRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
+                lHttpWebRequest.UserAgent =
+                    "Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6";
                 lHttpWebRequest.Headers.Add("Accept-Language: en-us,en;q=0.5");
                 lHttpWebRequest.Headers.Add("Accept-Encoding: gzip,deflate");
                 lHttpWebRequest.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
@@ -122,10 +117,11 @@ namespace Ripper
 
                 if (lHttpWebResponse.ContentType.IndexOf("image") < 0)
                 {
-                    //if (lFileStream != null)
-                    //	lFileStream.Close();
+                    // if (lFileStream != null)
+                    // 	lFileStream.Close();
                     return false;
                 }
+
                 if (lHttpWebResponse.ContentType.ToLower() == "image/jpeg")
                     strFilePath += ".jpg";
                 else if (lHttpWebResponse.ContentType.ToLower() == "image/gif")
@@ -133,23 +129,23 @@ namespace Ripper
                 else if (lHttpWebResponse.ContentType.ToLower() == "image/png")
                     strFilePath += ".png";
 
-                string NewAlteredPath = Utility.GetSuitableName(strFilePath);
+                var NewAlteredPath = Utility.GetSuitableName(strFilePath);
                 if (strFilePath != NewAlteredPath)
                 {
                     strFilePath = NewAlteredPath;
-                    ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+                    ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
                 }
 
-                //lFileStream = new FileStream(strFilePath, FileMode.Create);
-
+                // lFileStream = new FileStream(strFilePath, FileMode.Create);
                 lHttpWebResponseStream.Close();
 
-                WebClient client = new WebClient();
+                var client = new WebClient();
                 client.Headers.Add("Accept-Language: en-us,en;q=0.5");
                 client.Headers.Add("Accept-Encoding: gzip,deflate");
                 client.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7");
                 client.Headers.Add("Referer: " + strImgURL);
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
+                client.Headers.Add(
+                    "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
 
                 /*do
@@ -160,42 +156,41 @@ namespace Ripper
                 }while(bytesRead > 0);
 
                 lHttpWebResponseStream.Close();*/
-
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.Instance().LastPic =((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
+
+            // CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
+            CacheController.Instance().LastPic =
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
 
             return true;
         }
 
         //////////////////////////////////////////////////////////////////////////
-
         
     }
 }

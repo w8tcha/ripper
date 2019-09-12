@@ -11,7 +11,6 @@
 
 namespace Ripper.Services.ImageHosts
 {
-    using System;
     using System.Collections;
 
     using Ripper.Core.Components;

@@ -16,6 +16,7 @@ namespace Ripper
     using System.Drawing;
     using System.Reflection;
     using System.Resources;
+    using System.Timers;
     using System.Windows.Forms;
 
     using Ripper.Core.Components;
@@ -79,9 +80,10 @@ namespace Ripper
                     case "en-EN":
                         this.comboBox2.SelectedIndex = 2;
                         break;
+
                     /*case "zh-CN":
-                        this.comboBox2.SelectedIndex = 3;
-                        break;*/
+                                            this.comboBox2.SelectedIndex = 3;
+                                            break;*/
                     default:
                         this.comboBox2.SelectedIndex = 2;
                         break;
@@ -110,7 +112,7 @@ namespace Ripper
 
             if (loginManager.DoLogin(CacheController.Instance().UserSettings.ForumURL))
             {
-                this.label3.Text = string.Format("{0}{1}", welcomeMessage, this.textBox1.Text);
+                this.label3.Text = $"{welcomeMessage}{this.textBox1.Text}";
                 this.label3.ForeColor = Color.Green;
                 this.LoginBtn.Enabled = false;
 
@@ -132,10 +134,10 @@ namespace Ripper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
-        private void Timer1Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void Timer1Elapsed(object sender, ElapsedEventArgs e)
         {
             this.timer1.Enabled = false;
-            ((MainForm)Owner).cameThroughCorrectLogin = true;
+            ((MainForm)this.Owner).cameThroughCorrectLogin = true;
 
             var cacheController = CacheController.Instance();
 
@@ -155,21 +157,28 @@ namespace Ripper
             switch (this.comboBox2.SelectedIndex)
             {
                 case 0:
-                    this._ResourceManager = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager(
+                        "Ripper.Languages.german",
+                        Assembly.GetExecutingAssembly());
                     SettingsHelper.SaveSetting("UserLanguage", "de-DE");
                     break;
                 case 1:
-                    this._ResourceManager = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager(
+                        "Ripper.Languages.french",
+                        Assembly.GetExecutingAssembly());
                     SettingsHelper.SaveSetting("UserLanguage", "fr-FR");
                     break;
                 case 2:
-                    this._ResourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
+                    this._ResourceManager = new ResourceManager(
+                        "Ripper.Languages.english",
+                        Assembly.GetExecutingAssembly());
                     SettingsHelper.SaveSetting("UserLanguage", "en-EN");
                     break;
+
                 /*case 3:
-                    this._ResourceManager = new ResourceManager("Ripper.Languages.chinese-cn", Assembly.GetExecutingAssembly());
-                    SettingsHelper.SaveSetting("UserLanguage", "zh-CN");
-                    break;*/
+                                    this._ResourceManager = new ResourceManager("Ripper.Languages.chinese-cn", Assembly.GetExecutingAssembly());
+                                    SettingsHelper.SaveSetting("UserLanguage", "zh-CN");
+                                    break;*/
             }
 
             this.AdjustCulture();
@@ -182,7 +191,7 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void GuestLoginButton_Click(object sender, EventArgs e)
         {
-            ((MainForm)Owner).cameThroughCorrectLogin = true;
+            ((MainForm)this.Owner).cameThroughCorrectLogin = true;
 
             var cacheController = CacheController.Instance();
 
@@ -200,7 +209,7 @@ namespace Ripper
         /// <param name="e">The <see cref="LinkLabelLinkClickedEventArgs"/> instance containing the event data.</param>
         private void RegisterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(string.Format("{0}register.php", CacheController.Instance().UserSettings.ForumURL));
+            Process.Start($"{CacheController.Instance().UserSettings.ForumURL}register.php");
         }
     }
 }

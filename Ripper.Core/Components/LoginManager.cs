@@ -54,7 +54,7 @@ namespace Ripper.Core.Components
         /// </returns>
         public bool DoLogin(string url)
         {
-            var loginURL = string.Format("{0}login.php", url);
+            var loginURL = $"{url}login.php";
 
             var postData =
                 "do=login&forceredirect=1&url=%2Fforum%2F&vb_login_md5password=%md5pass%&vb_login_md5password_utf=%md5pass%&s=&vb_login_username=%md5user%&vb_login_password=&cookieuser=1";
@@ -76,7 +76,7 @@ namespace Ripper.Core.Components
                 req.KeepAlive = true;
 
                 var encoding = new ASCIIEncoding();
-                byte[] loginDataBytes = encoding.GetBytes(postData);
+                var loginDataBytes = encoding.GetBytes(postData);
 
                 req.ContentLength = loginDataBytes.Length;
 
@@ -101,7 +101,7 @@ namespace Ripper.Core.Components
            }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
+                MessageBox.Show($"{ex.Message}\n{ex.StackTrace}");
             }
 
             return loginSuccessfully;

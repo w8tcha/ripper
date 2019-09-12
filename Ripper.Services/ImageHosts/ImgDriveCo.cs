@@ -14,14 +14,13 @@ namespace Ripper.Services.ImageHosts
     #region
 
     using System.Collections;
-    using System.Text.RegularExpressions;
-    using System.Web;
+    using System.Collections.Specialized;
     using System.Net;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
     using Ripper.Core.Components;
     using Ripper.Core.Objects;
-    using System.Collections.Specialized;
-    using System.Text;
 
     #endregion
 
@@ -62,29 +61,31 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageURL = ImageLinkURL;
-            string filePath = "";
+            var imageURL = this.ImageLinkURL;
+            var filePath = string.Empty;
             var page = this.GetImageHostPage(ref imageURL);
-            string imageDownloadURL = "";
+            var imageDownloadURL = string.Empty;
 
             var matches = Regex.Matches(page, @"<input type=""(hidden|submit)"" name=""(?<name>\w+)"" value=""(?<value>\w+)""", RegexOptions.Compiled);
 
             if (matches.Count > 0)
             {
-                NameValueCollection values = new NameValueCollection();
+                var values = new NameValueCollection();
                     
                 foreach (Match m in matches)
                 {
                     values.Add(m.Groups["name"].Value, m.Groups["value"].Value);
                 }
+
                 string html;
 
-                using (WebClient client = new WebClient())
+                using (var client = new WebClient())
                 {
                     client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
-                    byte[] result = client.UploadValues(imageURL, "POST", values);
+                    var result = client.UploadValues(imageURL, "POST", values);
                     html = Encoding.UTF8.GetString(result);
                 }
+
                 var match = Regex.Match(html,
                         @"src=""(?<url>[^\""""]+)"" class=""pic"" alt=""(?<name>[^\""""]+)""",
                         RegexOptions.Compiled);
@@ -97,7 +98,7 @@ namespace Ripper.Services.ImageHosts
             else
             {
 
-                ((CacheObject)EventTable[imageURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[imageURL]).IsDownloaded = false;
                 return false;
             }
 

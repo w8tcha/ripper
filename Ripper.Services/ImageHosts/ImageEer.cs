@@ -62,7 +62,7 @@ namespace Ripper.Services.ImageHosts
             var page = this.GetImageHostPage(
                 ref imageURL,
                 WebRequestMethods.Http.Post,
-                string.Format("op=view&id={0}&pre=1&btn=next", cookieValue));
+                $"op=view&id={cookieValue}&pre=1&btn=next");
 
             if (page.Length < 10)
             {

@@ -44,9 +44,9 @@ namespace Ripper.Services.ImageHosts
         protected override bool DoDownload()
         {
             // Set the download Path
-            var imageDownloadURL = ImageLinkURL.Replace("/show/", "/images/");
+            var imageDownloadURL = this.ImageLinkURL.Replace("/show/", "/images/");
 
-            var filePath = ImageLinkURL.Substring(ImageLinkURL.IndexOf("-", StringComparison.Ordinal) + 1);
+            var filePath = this.ImageLinkURL.Substring(this.ImageLinkURL.IndexOf("-", StringComparison.Ordinal) + 1);
 
             // Finally Download the Image
             return this.DownloadImageAsync(imageDownloadURL, filePath, true);

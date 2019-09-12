@@ -110,38 +110,47 @@ namespace Ripper
                 switch (cacheController.UserSettings.Language)
                 {
                     case "de-DE":
-                        resourceManager = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 0;
-                        pictureBox2.Image = Languages.english.de;
+                        this.resourceManager = new ResourceManager(
+                            "Ripper.Languages.german",
+                            Assembly.GetExecutingAssembly());
+                        this.languageSelector.SelectedIndex = 0;
+                        this.pictureBox2.Image = Languages.english.de;
                         break;
                     case "fr-FR":
-                        resourceManager = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 1;
-                        pictureBox2.Image = Languages.english.fr;
+                        this.resourceManager = new ResourceManager(
+                            "Ripper.Languages.french",
+                            Assembly.GetExecutingAssembly());
+                        this.languageSelector.SelectedIndex = 1;
+                        this.pictureBox2.Image = Languages.english.fr;
                         break;
                     case "en-EN":
-                        resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 2;
-                        pictureBox2.Image = Languages.english.us;
+                        this.resourceManager = new ResourceManager(
+                            "Ripper.Languages.english",
+                            Assembly.GetExecutingAssembly());
+                        this.languageSelector.SelectedIndex = 2;
+                        this.pictureBox2.Image = Languages.english.us;
                         break;
+
                     /*case "zh-CN":
-                        resourceManager = new ResourceManager("Ripper.Languages.chinese-cn", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 3;
-                        pictureBox2.Image = Languages.english.cn;
-                        break;*/
+                                            resourceManager = new ResourceManager("Ripper.Languages.chinese-cn", Assembly.GetExecutingAssembly());
+                                            languageSelector.SelectedIndex = 3;
+                                            pictureBox2.Image = Languages.english.cn;
+                                            break;*/
                     default:
-                        resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 2;
-                        pictureBox2.Image = Languages.english.us;
+                        this.resourceManager = new ResourceManager(
+                            "Ripper.Languages.english",
+                            Assembly.GetExecutingAssembly());
+                        this.languageSelector.SelectedIndex = 2;
+                        this.pictureBox2.Image = Languages.english.us;
                         break;
                 }
 
-                AdjustCulture();
+                this.AdjustCulture();
             }
             catch (Exception)
             {
-                languageSelector.SelectedIndex = 2;
-                pictureBox2.Image = Languages.english.us;
+                this.languageSelector.SelectedIndex = 2;
+                this.pictureBox2.Image = Languages.english.us;
             }
         }
 
@@ -221,43 +230,43 @@ namespace Ripper
         /// <param name="e"></param>
         private void OkButtonClick(object sender, EventArgs e)
         {
-            string mbThreadNum = resourceManager.GetString("mbThreadNum"),
-                mbThreadbetw = resourceManager.GetString("mbThreadbetw"),
-                mbNum = resourceManager.GetString("mbNum");
+            string mbThreadNum = this.resourceManager.GetString("mbThreadNum"),
+                mbThreadbetw = this.resourceManager.GetString("mbThreadbetw"),
+                mbNum = this.resourceManager.GetString("mbNum");
 
-            if (!Utility.IsNumeric(numericUDThreads.Text))
+            if (!Utility.IsNumeric(this.numericUDThreads.Text))
             {
                 MessageBox.Show(this, mbThreadNum);
                 return;
             }
 
-            if (!Utility.IsNumeric(numericUDThanks.Text))
+            if (!Utility.IsNumeric(this.numericUDThanks.Text))
             {
                 MessageBox.Show(this, mbNum);
                 return;
             }
 
-            if (Convert.ToInt32(numericUDThreads.Text) > 20 || Convert.ToInt32(numericUDThreads.Text) < 1)
+            if (Convert.ToInt32(this.numericUDThreads.Text) > 20 || Convert.ToInt32(this.numericUDThreads.Text) < 1)
             {
                 MessageBox.Show(this, mbThreadbetw);
                 return;
             }
 
-            ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
+            ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(this.numericUDThreads.Text));
 
-            SettingsHelper.SaveSetting("Thread Limit", numericUDThreads.Text);
-            SettingsHelper.SaveSetting("minImageCountThanks", numericUDThanks.Text);
-            SettingsHelper.SaveSetting("SubDirs", checkBox1.Checked.ToString());
-            SettingsHelper.SaveSetting("Auto TK Button", checkBox8.Checked.ToString());
-            SettingsHelper.SaveSetting("clipBoardWatch", checkBox10.Checked.ToString());
-            SettingsHelper.SaveSetting("Show Popups", showTrayPopups.Checked.ToString());
-            SettingsHelper.SaveSetting("Always OnTop", checkBox5.Checked.ToString());
-            SettingsHelper.SaveSetting("DownInSepFolder", mDownInSepFolderChk.Checked.ToString());
-            SettingsHelper.SaveSetting("SaveRippedPosts", saveHistoryChk.Checked.ToString());
-            SettingsHelper.SaveSetting("Show Downloads Complete PopUp", checkBox9.Checked.ToString());
-            SettingsHelper.SaveSetting("ShowLastDownloaded", checkBox11.Checked.ToString());
+            SettingsHelper.SaveSetting("Thread Limit", this.numericUDThreads.Text);
+            SettingsHelper.SaveSetting("minImageCountThanks", this.numericUDThanks.Text);
+            SettingsHelper.SaveSetting("SubDirs", this.checkBox1.Checked.ToString());
+            SettingsHelper.SaveSetting("Auto TK Button", this.checkBox8.Checked.ToString());
+            SettingsHelper.SaveSetting("clipBoardWatch", this.checkBox10.Checked.ToString());
+            SettingsHelper.SaveSetting("Show Popups", this.showTrayPopups.Checked.ToString());
+            SettingsHelper.SaveSetting("Always OnTop", this.checkBox5.Checked.ToString());
+            SettingsHelper.SaveSetting("DownInSepFolder", this.mDownInSepFolderChk.Checked.ToString());
+            SettingsHelper.SaveSetting("SaveRippedPosts", this.saveHistoryChk.Checked.ToString());
+            SettingsHelper.SaveSetting("Show Downloads Complete PopUp", this.checkBox9.Checked.ToString());
+            SettingsHelper.SaveSetting("ShowLastDownloaded", this.checkBox11.Checked.ToString());
             
-            switch (languageSelector.SelectedIndex)
+            switch (this.languageSelector.SelectedIndex)
             {
                 case 0:
                     SettingsHelper.SaveSetting("UserLanguage", "de-DE");
@@ -268,12 +277,13 @@ namespace Ripper
                 case 2:
                     SettingsHelper.SaveSetting("UserLanguage", "en-EN");
                     break;
+
                 /*case 3:
-                    SettingsHelper.SaveSetting("UserLanguage", "zh-CN");
-                    break;*/
+                                    SettingsHelper.SaveSetting("UserLanguage", "zh-CN");
+                                    break;*/
             }
-              
-            Close();
+
+            this.Close();
         }
 
         /// <summary>
@@ -293,14 +303,14 @@ namespace Ripper
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (this.checkBox1.Checked)
             {
-                mDownInSepFolderChk.Enabled = true;
+                this.mDownInSepFolderChk.Enabled = true;
             }
             else
             {
-                mDownInSepFolderChk.Enabled = false;
-                mDownInSepFolderChk.Checked = false;
+                this.mDownInSepFolderChk.Enabled = false;
+                this.mDownInSepFolderChk.Checked = false;
             }
         }
 
@@ -311,7 +321,7 @@ namespace Ripper
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void NumericUdThreadsValueChanged(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(numericUDThreads.Text) <= 20 && Convert.ToInt32(numericUDThreads.Text) >= 1)
+            if (Convert.ToInt32(this.numericUDThreads.Text) <= 20 && Convert.ToInt32(this.numericUDThreads.Text) >= 1)
             {
                 return;
             }

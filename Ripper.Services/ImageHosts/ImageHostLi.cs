@@ -35,33 +35,32 @@ namespace Ripper.Services.ImageHosts
 
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            var strImgURL = this.ImageLinkURL;
 
-            if (EventTable.ContainsKey(strImgURL))
+            if (this.EventTable.ContainsKey(strImgURL))
             {
                 return true;
             }
 
-            string strFilePath = string.Empty;
+            var strFilePath = string.Empty;
 
             try
             {
-                if (!Directory.Exists(SavePath))
-                    Directory.CreateDirectory(SavePath);
+                if (!Directory.Exists(this.SavePath))
+                    Directory.CreateDirectory(this.SavePath);
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
                 return false;
             }
 
-            CacheObject ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
+            var ccObj = new CacheObject { IsDownloaded = false, FilePath = strFilePath, Url = strImgURL };
 
             try
             {
-                EventTable.Add(strImgURL, ccObj);
+                this.EventTable.Add(strImgURL, ccObj);
             }
             catch (ThreadAbortException)
             {
@@ -69,26 +68,26 @@ namespace Ripper.Services.ImageHosts
             }
             catch (Exception)
             {
-                if (EventTable.ContainsKey(strImgURL))
+                if (this.EventTable.ContainsKey(strImgURL))
                 {
                     return false;
                 }
 
-                EventTable.Add(strImgURL, ccObj);
+                this.EventTable.Add(strImgURL, ccObj);
             }
 
-            string strNewURL = strImgURL.Replace("viewer.php?file=", "images/");
+            var strNewURL = strImgURL.Replace("viewer.php?file=", "images/");
 
-            string sStartSrc = string.Format("<img src=\"{0}\" alt=\"", strNewURL.Substring(strNewURL.LastIndexOf(".li/") + 4));
+            var sStartSrc = $"<img src=\"{strNewURL.Substring(strNewURL.LastIndexOf(".li/") + 4)}\" alt=\"";
 
-            string sPage = GetImageHostPage(ref strImgURL);
+            var sPage = this.GetImageHostPage(ref strImgURL);
 
             if (sPage.Length < 10)
             {
                 return false;
             }
 
-            int iStartSrc = sPage.IndexOf(sStartSrc);
+            var iStartSrc = sPage.IndexOf(sStartSrc);
 
             if (iStartSrc < 0)
             {
@@ -97,7 +96,7 @@ namespace Ripper.Services.ImageHosts
 
             iStartSrc += sStartSrc.Length;
 
-            int iEndSrc = sPage.IndexOf("\"", iStartSrc);
+            var iEndSrc = sPage.IndexOf("\"", iStartSrc);
 
             if (iEndSrc < 0)
             {
@@ -106,25 +105,24 @@ namespace Ripper.Services.ImageHosts
 
             strFilePath = sPage.Substring(iStartSrc, iEndSrc - iStartSrc);
 
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
             //////////////////////////////////////////////////////////////////////////
-
-            string newAlteredPath = Utility.GetSuitableName(strFilePath);
+            var newAlteredPath = Utility.GetSuitableName(strFilePath);
 
             if (strFilePath != newAlteredPath)
             {
                 strFilePath = newAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
             }
 
             strFilePath = Utility.CheckPathLength(strFilePath);
-            ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
 
 
             try
             {
-                WebClient client = new WebClient();
+                var client = new WebClient();
                 client.Headers.Add("Referer: " + strImgURL);
                 client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
@@ -133,37 +131,35 @@ namespace Ripper.Services.ImageHosts
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            CacheController.Instance().LastPic =((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
+            CacheController.Instance().LastPic =((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
 
             return true;
         }
 
         //////////////////////////////////////////////////////////////////////////
-
         
     }
 }

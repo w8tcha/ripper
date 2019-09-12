@@ -28,7 +28,7 @@ namespace Ripper
         /// <returns>The Settings Class</returns>
         public static SettingBase LoadSettings()
         {
-            SettingBase settings = new SettingBase();
+            var settings = new SettingBase();
 
             if (File.Exists(Path.Combine(Application.StartupPath, "Settings.xml")))
             {

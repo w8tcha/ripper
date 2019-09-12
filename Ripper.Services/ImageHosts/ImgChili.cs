@@ -51,11 +51,11 @@ namespace Ripper.Services.ImageHosts
         /// </returns>
         protected override bool DoDownload()
         {
-            var imageDownloadURL = ThumbImageURL;
+            var imageDownloadURL = this.ThumbImageURL;
 
             if (string.IsNullOrEmpty(imageDownloadURL))
             {
-                ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = false;
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = false;
                 return false;
             }
 

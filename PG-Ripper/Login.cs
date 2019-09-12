@@ -16,6 +16,7 @@ namespace Ripper
     using System.Linq;
     using System.Reflection;
     using System.Resources;
+    using System.Timers;
     using System.Windows.Forms;
 
     using Ripper.Core.Components;
@@ -187,11 +188,11 @@ namespace Ripper
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
-        private void Timer1Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        private void Timer1Elapsed(object sender, ElapsedEventArgs e)
         {
             this.timer1.Enabled = false;
 
-            ((MainForm)Owner).cameThroughCorrectLogin = true;
+            ((MainForm)this.Owner).cameThroughCorrectLogin = true;
 
             if (CacheController.Instance().UserSettings.ForumsAccount.Any(item => item.ForumURL == CacheController.Instance().UserSettings.CurrentForumUrl))
             {

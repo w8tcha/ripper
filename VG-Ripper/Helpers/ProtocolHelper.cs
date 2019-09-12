@@ -37,7 +37,7 @@ namespace Ripper
             {
                 var registryKey = Registry.ClassesRoot.OpenSubKey(UrlProtocol, true);
 
-                var currentApplicationPath = string.Format("\"{0}\" %1", Application.ExecutablePath);
+                var currentApplicationPath = $"\"{Application.ExecutablePath}\" %1";
 
                 if (registryKey == null)
                 {
@@ -46,11 +46,11 @@ namespace Ripper
                     registryKey.SetValue(null, "VG-Ripper vgr Protocol");
                     registryKey.SetValue("URL Protocol", string.Empty);
 
-                    Registry.ClassesRoot.CreateSubKey(string.Format("{0}\\Shell", UrlProtocol));
-                    Registry.ClassesRoot.CreateSubKey(string.Format("{0}\\Shell\\open", UrlProtocol));
+                    Registry.ClassesRoot.CreateSubKey($"{UrlProtocol}\\Shell");
+                    Registry.ClassesRoot.CreateSubKey($"{UrlProtocol}\\Shell\\open");
 
                     registryKey =
-                        Registry.ClassesRoot.CreateSubKey(string.Format("{0}\\Shell\\open\\command", UrlProtocol));
+                        Registry.ClassesRoot.CreateSubKey($"{UrlProtocol}\\Shell\\open\\command");
 
                     registryKey.SetValue(null, currentApplicationPath);
 
@@ -59,7 +59,7 @@ namespace Ripper
                 else
                 {
                     registryKey =
-                        Registry.ClassesRoot.OpenSubKey(string.Format("{0}\\Shell\\open\\command", UrlProtocol));
+                        Registry.ClassesRoot.OpenSubKey($"{UrlProtocol}\\Shell\\open\\command");
 
                     var applicationPath = registryKey.GetValue(string.Empty);
 
@@ -67,7 +67,7 @@ namespace Ripper
                     {
                         // Update Path if Incorrect?!
                         Registry.SetValue(
-                            string.Format("HKEY_CLASSES_ROOT\\{0}\\Shell\\open\\command", UrlProtocol),
+                            $"HKEY_CLASSES_ROOT\\{UrlProtocol}\\Shell\\open\\command",
                             null,
                             currentApplicationPath);
                     }
@@ -116,13 +116,11 @@ namespace Ripper
                 case "RIPTHREAD":
                     {
                         // "vg:RipThread?id=123"
-                        string[] details = ripType[1].Split('=');
+                        var details = ripType[1].Split('=');
                         if (details.Length > 1)
                         {
-                            return string.Format(
-                                "{0}showthread.php?t={1}",
-                                CacheController.Instance().UserSettings.ForumURL,
-                                details[1].Trim());
+                            return
+                                $"{CacheController.Instance().UserSettings.ForumURL}showthread.php?t={details[1].Trim()}";
                         }
                     }
 
@@ -130,14 +128,12 @@ namespace Ripper
                 case "RIPPOST":
                     {
                         // "vg:RipPost?id=123"
-                        string[] details = ripType[1].Split('=');
+                        var details = ripType[1].Split('=');
 
                         if (details.Length > 1)
                         {
-                            return string.Format(
-                                "{0}showpost.php?p={1}",
-                                CacheController.Instance().UserSettings.ForumURL,
-                                details[1].Trim());
+                            return
+                                $"{CacheController.Instance().UserSettings.ForumURL}showpost.php?p={details[1].Trim()}";
                         }
                     }
 

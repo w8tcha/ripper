@@ -9,21 +9,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Reflection;
 using System.Runtime.InteropServices;
-
-[assembly: AssemblyTitle("Ripper.Services")]
-[assembly: AssemblyDescription("Rips Images from VB Forums")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("github.com/w8tcha/ripper")]
-[assembly: AssemblyProduct("Ripper.ImageHosts")]
-[assembly: AssemblyCopyright("(c) The Watcher")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
 
 [assembly: Guid("3a261291-7dce-4bb7-a6df-8b4dcfaa7ea9")]
-
-// 1.0.YYYY.1.MM.DD
-[assembly: AssemblyVersion("1.0.2015.10124")]

@@ -66,7 +66,6 @@ namespace Ripper
                             // http://mydomain.com/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
                             // Posts
                             ////string sPostId = sHtmlUrl.Substring(sHtmlUrl.IndexOf("#post") + 5);
-
                             return sHtmlUrl;
                         }
 
@@ -82,7 +81,7 @@ namespace Ripper
                             // New VB Forums 4.x
                             // http://mydomain.com/showthread.php?0123456-Thread-Title
                             // Threads
-                            string sThreadId = sHtmlUrl.Substring(sHtmlUrl.IndexOf(".php?") + 5);
+                            var sThreadId = sHtmlUrl.Substring(sHtmlUrl.IndexOf(".php?") + 5);
 
                             if (sHtmlUrl.Contains("-"))
                             {
@@ -98,7 +97,7 @@ namespace Ripper
                         {
                             // http://mydomain.com/showthread.php?0123456-Thread-Title&goto=newpost#post12345
                             // Threads
-                            string sThreadId = sHtmlUrl.Substring(sHtmlUrl.IndexOf(".php?") + 5);
+                            var sThreadId = sHtmlUrl.Substring(sHtmlUrl.IndexOf(".php?") + 5);
 
                             if (sHtmlUrl.Contains("-"))
                             {
@@ -115,7 +114,6 @@ namespace Ripper
                             // http://mydomain.com/showthread.php?0123456-Thread-Title&p=123456&viewfull=1#post123456
                             // Posts
                             ////string sPostId = sHtmlUrl.Substring(sHtmlUrl.IndexOf("#post") + 5);
-
                             return sHtmlUrl;
                         }
 

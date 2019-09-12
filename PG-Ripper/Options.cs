@@ -11,11 +11,12 @@
 
 namespace Ripper
 {
-    using Ripper.Core.Components;
     using System;
     using System.Reflection;
     using System.Resources;
     using System.Windows.Forms;
+
+    using Ripper.Core.Components;
 
     /// <summary>
     /// Options Dialog
@@ -55,7 +56,7 @@ namespace Ripper
 
             // Load "Thread Limit" Setting
             this.numericUDThreads.Text = CacheController.Instance().UserSettings.ThreadLimit.ToString();
-            ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
+            ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(this.numericUDThreads.Text));
 
             // min. Image Count for Thanks
             this.numericUDThanks.Text = CacheController.Instance().UserSettings.MinImageCount.ToString();
@@ -78,26 +79,26 @@ namespace Ripper
             }
 
             // Load "Clipboard Watch" Setting
-            checkBox10.Checked = CacheController.Instance().UserSettings.ClipBWatch;
+            this.checkBox10.Checked = CacheController.Instance().UserSettings.ClipBWatch;
 
             // Load "Always on Top" Setting
-            checkBox5.Checked = CacheController.Instance().UserSettings.TopMost;
-            TopMost = CacheController.Instance().UserSettings.TopMost;
+            this.checkBox5.Checked = CacheController.Instance().UserSettings.TopMost;
+            this.TopMost = CacheController.Instance().UserSettings.TopMost;
 
             // Load "Download each post in its own folder" Setting
-            mDownInSepFolderChk.Checked = CacheController.Instance().UserSettings.DownInSepFolder;
+            this.mDownInSepFolderChk.Checked = CacheController.Instance().UserSettings.DownInSepFolder;
 
-            if (!checkBox1.Checked)
+            if (!this.checkBox1.Checked)
             {
-                mDownInSepFolderChk.Checked = false;
-                mDownInSepFolderChk.Enabled = false;
+                this.mDownInSepFolderChk.Checked = false;
+                this.mDownInSepFolderChk.Enabled = false;
             }
 
             // Load "Save Ripped posts for checking" Setting
-            saveHistoryChk.Checked = CacheController.Instance().UserSettings.SavePids;
+            this.saveHistoryChk.Checked = CacheController.Instance().UserSettings.SavePids;
 
             // Load "Show Downloads Complete PopUp" Setting
-            checkBox9.Checked = CacheController.Instance().UserSettings.ShowCompletePopUp;
+            this.checkBox9.Checked = CacheController.Instance().UserSettings.ShowCompletePopUp;
 
             // Load Language Setting
             try
@@ -106,23 +107,23 @@ namespace Ripper
                 {
                     case "de-DE":
                         this.resourceManager = new ResourceManager("Ripper.Languages.german", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 0;
-                        pictureBox2.Image = Languages.english.de;
+                        this.languageSelector.SelectedIndex = 0;
+                        this.pictureBox2.Image = Languages.english.de;
                         break;
                     case "fr-FR":
                         this.resourceManager = new ResourceManager("Ripper.Languages.french", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 1;
-                        pictureBox2.Image = Languages.english.fr;
+                        this.languageSelector.SelectedIndex = 1;
+                        this.pictureBox2.Image = Languages.english.fr;
                         break;
                     case "en-EN":
                         this.resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 2;
-                        pictureBox2.Image = Languages.english.us;
+                        this.languageSelector.SelectedIndex = 2;
+                        this.pictureBox2.Image = Languages.english.us;
                         break;
                     default:
                         this.resourceManager = new ResourceManager("Ripper.Languages.english", Assembly.GetExecutingAssembly());
-                        languageSelector.SelectedIndex = 2;
-                        pictureBox2.Image = Languages.english.us;
+                        this.languageSelector.SelectedIndex = 2;
+                        this.pictureBox2.Image = Languages.english.us;
                         break;
                 }
 
@@ -130,8 +131,8 @@ namespace Ripper
             }
             catch (Exception)
             {
-                languageSelector.SelectedIndex = 2;
-                pictureBox2.Image = Languages.english.us;
+                this.languageSelector.SelectedIndex = 2;
+                this.pictureBox2.Image = Languages.english.us;
             }
         }
 
@@ -185,16 +186,16 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void Button4Click(object sender, EventArgs e)
         {
-            FBD.ShowDialog(this);
+            this.FBD.ShowDialog(this);
 
-            if (FBD.SelectedPath.Length <= 1)
+            if (this.FBD.SelectedPath.Length <= 1)
             {
                 return;
             }
 
-            textBox2.Text = FBD.SelectedPath;
+            this.textBox2.Text = this.FBD.SelectedPath;
 
-            CacheController.Instance().UserSettings.DownloadFolder = textBox2.Text;
+            CacheController.Instance().UserSettings.DownloadFolder = this.textBox2.Text;
 
             SettingsHelper.SaveSettings(CacheController.Instance().UserSettings);
         }
@@ -212,39 +213,39 @@ namespace Ripper
                     mbThreadbetw = this.resourceManager.GetString("mbThreadbetw"),
                     mbNum = this.resourceManager.GetString("mbNum");
 
-                if (!Utility.IsNumeric(numericUDThreads.Text))
+                if (!Utility.IsNumeric(this.numericUDThreads.Text))
                 {
                     MessageBox.Show(this, mbThreadNum);
                     return;
                 }
 
-                if (!Utility.IsNumeric(numericUDThanks.Text))
+                if (!Utility.IsNumeric(this.numericUDThanks.Text))
                 {
                     MessageBox.Show(this, mbNum);
                     return;
                 }
 
-                if (Convert.ToInt32(numericUDThreads.Text) > 20 || Convert.ToInt32(numericUDThreads.Text) < 1)
+                if (Convert.ToInt32(this.numericUDThreads.Text) > 20 || Convert.ToInt32(this.numericUDThreads.Text) < 1)
                 {
                     MessageBox.Show(this, mbThreadbetw);
                     return;
                 }
 
-                ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(numericUDThreads.Text));
+                ThreadManager.GetInstance().SetThreadThreshHold(Convert.ToInt32(this.numericUDThreads.Text));
 
                 CacheController.Instance().UserSettings.ThreadLimit = Convert.ToInt32(this.numericUDThreads.Text);
                 CacheController.Instance().UserSettings.MinImageCount = Convert.ToInt32(this.numericUDThanks.Text);
-                CacheController.Instance().UserSettings.SubDirs = checkBox1.Checked;
-                CacheController.Instance().UserSettings.AutoThank = checkBox8.Checked;
-                CacheController.Instance().UserSettings.ClipBWatch = checkBox10.Checked;
-                CacheController.Instance().UserSettings.ShowPopUps = showTrayPopups.Checked;
-                CacheController.Instance().UserSettings.TopMost = checkBox5.Checked;
-                CacheController.Instance().UserSettings.DownInSepFolder = mDownInSepFolderChk.Checked;
-                CacheController.Instance().UserSettings.SavePids = saveHistoryChk.Checked;
-                CacheController.Instance().UserSettings.ShowCompletePopUp = checkBox9.Checked;
-                CacheController.Instance().UserSettings.ShowLastDownloaded = checkBox11.Checked;
+                CacheController.Instance().UserSettings.SubDirs = this.checkBox1.Checked;
+                CacheController.Instance().UserSettings.AutoThank = this.checkBox8.Checked;
+                CacheController.Instance().UserSettings.ClipBWatch = this.checkBox10.Checked;
+                CacheController.Instance().UserSettings.ShowPopUps = this.showTrayPopups.Checked;
+                CacheController.Instance().UserSettings.TopMost = this.checkBox5.Checked;
+                CacheController.Instance().UserSettings.DownInSepFolder = this.mDownInSepFolderChk.Checked;
+                CacheController.Instance().UserSettings.SavePids = this.saveHistoryChk.Checked;
+                CacheController.Instance().UserSettings.ShowCompletePopUp = this.checkBox9.Checked;
+                CacheController.Instance().UserSettings.ShowLastDownloaded = this.checkBox11.Checked;
 
-                switch (languageSelector.SelectedIndex)
+                switch (this.languageSelector.SelectedIndex)
                 {
                     case 0:
                         CacheController.Instance().UserSettings.Language = "de-DE";
@@ -260,7 +261,7 @@ namespace Ripper
             finally
             {
                 SettingsHelper.SaveSettings(CacheController.Instance().UserSettings);
-                Close();
+                this.Close();
             }
         }
 
@@ -281,14 +282,14 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (this.checkBox1.Checked)
             {
-                mDownInSepFolderChk.Enabled = true;
+                this.mDownInSepFolderChk.Enabled = true;
             }
             else
             {
-                mDownInSepFolderChk.Enabled = false;
-                mDownInSepFolderChk.Checked = false;
+                this.mDownInSepFolderChk.Enabled = false;
+                this.mDownInSepFolderChk.Checked = false;
             }
         }
 
@@ -299,14 +300,14 @@ namespace Ripper
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void NumericUdThreadsValueChanged(object sender, EventArgs e)
         {
-            if (Convert.ToInt32(numericUDThreads.Text) <= 20 && Convert.ToInt32(numericUDThreads.Text) >= 1)
+            if (Convert.ToInt32(this.numericUDThreads.Text) <= 20 && Convert.ToInt32(this.numericUDThreads.Text) >= 1)
             {
                 return;
             }
 
             MessageBox.Show(this, this.resourceManager.GetString("mbThreadbetw"));
-                
-            numericUDThreads.Text = "3";
+
+            this.numericUDThreads.Text = "3";
         }
     }
 }

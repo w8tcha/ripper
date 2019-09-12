@@ -31,33 +31,32 @@ namespace Ripper
         public ImageBeaver(ref string sSavePath, ref string strURL, ref string thumbURL, ref string imageName, ref int imageNumber, ref Hashtable hashtable)
             : base(sSavePath, strURL, thumbURL, imageName, imageNumber, ref hashtable)
         {
-            //
             // Add constructor logic here
-            //
         }
 
 
         protected override bool DoDownload()
         {
-            string strImgURL = ImageLinkURL;
+            var strImgURL = this.ImageLinkURL;
 
-            if (EventTable.ContainsKey(strImgURL))
+            if (this.EventTable.ContainsKey(strImgURL))
             {
                 return true;
             }
 
-            string strImgURLNew = strImgURL;
+            var strImgURLNew = strImgURL;
 
-            strImgURLNew = strImgURLNew.Replace("view.php?mode=gallery&g=", "photos/").Replace("&photo=", "_") + "-.html";
+            strImgURLNew = strImgURLNew.Replace("view.php?mode=gallery&g=", "photos/").Replace("&photo=", "_")
+                           + "-.html";
 
-            string strIVPage = GetImageHostPage(ref strImgURLNew);
+            var strIVPage = this.GetImageHostPage(ref strImgURLNew);
 
             // Adult Warning
-            int iStartConfirm = 0;
-            int iEndConfirm = 0;
+            var iStartConfirm = 0;
+            var iEndConfirm = 0;
 
             iStartConfirm = strIVPage.IndexOf("<title>");
-            
+
             iStartConfirm += 7;
 
             if (iStartConfirm < 0)
@@ -79,7 +78,7 @@ namespace Ripper
                 return false;
             }
 
-            string sConfirmURL = strIVPage.Substring(iStartConfirm, iEndConfirm - iStartConfirm);
+            var sConfirmURL = strIVPage.Substring(iStartConfirm, iEndConfirm - iStartConfirm);
 
             if (sConfirmURL == "ImageBeaver Warning")
             {
@@ -92,28 +91,26 @@ namespace Ripper
 
                 iEndConfirm = strIVPage.IndexOf("\">", iStartConfirm);
 
-                string strURL = "http://www.imagebeaver.com/" + strIVPage.Substring(iStartConfirm, iEndConfirm - iStartConfirm);
+                var strURL = "http://www.imagebeaver.com/"
+                             + strIVPage.Substring(iStartConfirm, iEndConfirm - iStartConfirm);
 
-                strIVPage = GetImageHostsPage(ref strURL);
+                strIVPage = this.GetImageHostsPage(ref strURL);
             }
 
-            
             if (strIVPage.Length < 10)
             {
-               
                 return false;
             }
 
-            string strNewURL = string.Empty;
+            var strNewURL = string.Empty;
 
-            int iStartSRC = 0;
-            int iEndSRC = 0;
+            var iStartSRC = 0;
+            var iEndSRC = 0;
 
             iStartSRC = strIVPage.IndexOf("onLoad=\"scaleImg('thepic')\" src=\"");
 
             if (iStartSRC < 0)
             {
-                
                 return false;
             }
 
@@ -128,7 +125,7 @@ namespace Ripper
 
             strNewURL = strIVPage.Substring(iStartSRC, iEndSRC - iStartSRC);
 
-            string strFilePath = string.Empty;
+            var strFilePath = string.Empty;
 
             if (strImgURL.Contains(@"view.php?"))
             {
@@ -140,30 +137,27 @@ namespace Ripper
                 strFilePath = strFilePath.Replace(".html", ".jpg");
             }
 
-            
-
             try
             {
-                if (!Directory.Exists(SavePath))
-                    Directory.CreateDirectory(SavePath);
+                if (!Directory.Exists(this.SavePath))
+                    Directory.CreateDirectory(this.SavePath);
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
                 return false;
             }
 
-            strFilePath = Path.Combine(SavePath, Utility.RemoveIllegalCharecters(strFilePath));
+            strFilePath = Path.Combine(this.SavePath, Utility.RemoveIllegalCharecters(strFilePath));
 
-            CacheObject CCObj = new CacheObject();
+            var CCObj = new CacheObject();
             CCObj.IsDownloaded = false;
             CCObj.FilePath = strFilePath;
             CCObj.Url = strImgURL;
             try
             {
-                EventTable.Add(strImgURL, CCObj);
+                this.EventTable.Add(strImgURL, CCObj);
             }
             catch (ThreadAbortException)
             {
@@ -171,64 +165,66 @@ namespace Ripper
             }
             catch (Exception)
             {
-                if (EventTable.ContainsKey(strImgURL))
+                if (this.EventTable.ContainsKey(strImgURL))
                 {
                     return false;
                 }
                 else
                 {
-                    EventTable.Add(strImgURL, CCObj);
+                    this.EventTable.Add(strImgURL, CCObj);
                 }
             }
 
             //////////////////////////////////////////////////////////////////////////
-
-            string NewAlteredPath = Utility.GetSuitableName(strFilePath);
+            var NewAlteredPath = Utility.GetSuitableName(strFilePath);
             if (strFilePath != NewAlteredPath)
             {
                 strFilePath = NewAlteredPath;
-                ((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
             }
 
             try
             {
-                WebClient client = new WebClient();
+                var client = new WebClient();
                 client.Headers.Add("Referer: " + strImgURL);
-                client.Headers.Add("User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
+                client.Headers.Add(
+                    "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.7.10) Gecko/20050716 Firefox/1.0.6");
                 client.DownloadFile(strNewURL, strFilePath);
                 client.Dispose();
             }
             catch (ThreadAbortException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (IOException ex)
             {
-                //MainForm.DeleteMessage = ex.Message;
-                //MainForm.Delete = true;
-
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                // MainForm.DeleteMessage = ex.Message;
+                // MainForm.Delete = true;
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return true;
             }
             catch (WebException)
             {
-                ((CacheObject)EventTable[strImgURL]).IsDownloaded = false;
-                ThreadManager.GetInstance().RemoveThreadbyId(ImageLinkURL);
+                ((CacheObject)this.EventTable[strImgURL]).IsDownloaded = false;
+                ThreadManager.GetInstance().RemoveThreadbyId(this.ImageLinkURL);
 
                 return false;
             }
 
-            ((CacheObject)EventTable[ImageLinkURL]).IsDownloaded = true;
-            //CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
-            CacheController.Instance().LastPic =((CacheObject)EventTable[ImageLinkURL]).FilePath = strFilePath;
+            ((CacheObject)this.EventTable[this.ImageLinkURL]).IsDownloaded = true;
+
+            // CacheController.GetInstance().u_s_LastPic = ((CacheObject)eventTable[mstrURL]).FilePath;
+            CacheController.Instance().LastPic =
+                ((CacheObject)this.EventTable[this.ImageLinkURL]).FilePath = strFilePath;
 
             return true;
         }
+
         /// <summary>
         /// a generic function to fetch urls including cookie
         /// </summary>
@@ -239,13 +235,13 @@ namespace Ripper
             HttpWebRequest req;
             StreamReader reader;
             HttpWebResponse res;
-            string strPageRead = string.Empty;
+            var strPageRead = string.Empty;
 
             try
             {
-                CookieContainer cookieContainer = new CookieContainer();
+                var cookieContainer = new CookieContainer();
 
-                req = (HttpWebRequest)HttpWebRequest.Create(strURL);
+                req = (HttpWebRequest)WebRequest.Create(strURL);
 
                 req.UserAgent = "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1";
                 req.CookieContainer = cookieContainer;
@@ -254,7 +250,7 @@ namespace Ripper
                 res = (HttpWebResponse)req.GetResponse();
                 res.Cookies = req.CookieContainer.GetCookies(req.RequestUri);
 
-                Stream stream = res.GetResponseStream();
+                var stream = res.GetResponseStream();
                 reader = new StreamReader(stream);
 
                 strPageRead = reader.ReadToEnd();
@@ -264,18 +260,18 @@ namespace Ripper
             }
             catch (ThreadAbortException)
             {
-                return "";
+                return string.Empty;
             }
             catch (Exception)
             {
                 // Debug only
-                //MessageBox.Show(ex.Message);
+                // MessageBox.Show(ex.Message);
             }
+
             return strPageRead;
         }
 
         //////////////////////////////////////////////////////////////////////////
-
         
     }
 }
