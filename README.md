@@ -1,9 +1,6 @@
 # ripper
 VG-Ripper is a Utility that Downloads (Rips) all Images posted on the ViperGirls Forums, and PG-Ripper on all VB (vBulletin) Forums.
 
-![](http://watchersnet.de/Portals/0/MainWindow.jpg)
-![](http://watchersnet.de/Portals/0/MainWindowPG.png)
-
 ## Features
 ### Auto Image Renaming
 If there is already an Image with The Same name in the Current Download folder it will automatically renames the image and adds an "_xxx" to the Filename
