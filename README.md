@@ -31,11 +31,7 @@ You can Pause/Resume Downloads (Currently it will pause all Downloads)
  Ripper automatically saves all ongoing Downloads when you Close the Ripper, and Resumes Downloading if you Start it again. 
 
 ## Supported Forums
-*PG-Ripper* works on all vBulletin Forums, the following forums are tested and specially optimized....
-* [Big Naturals Only](http://bignaturalsonly.com/)
-* [Sexy and Funny Forums](http://forums.sexyandfunny.com/)
-* [Scanlover Forums](http://forum.scanlover.com/)
-* [ViperGirls](http://vipergirls.to/)
+*PG-Ripper* works on all vBulletin Forums
 You can manage Multiple Accounts from different Forums. If you want to switch to an Account Simply select the Forum from the Accounts Menu, or add a new Forum Account there.
 
 *RiP-Ripper* works only with ViperGirls Forums and is optimized.
